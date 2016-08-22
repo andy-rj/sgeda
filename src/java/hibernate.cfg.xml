@@ -7,5 +7,40 @@
     <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/sgeda?zeroDateTimeBehavior=convertToNull</property>
     <property name="hibernate.connection.username">root</property>
     <property name="hibernate.connection.password">1234</property>
+    <mapping class="entidade.AlunoHasSimulado"/>
+    <mapping class="entidade.Pessoa"/>
+    <mapping class="entidade.Curso"/>
+    <mapping class="entidade.Questao"/>
+    <mapping class="entidade.Telefone"/>
+    <mapping class="entidade.AlunoHasTurma"/>
+    <mapping class="entidade.Aluno"/>
+    <mapping class="entidade.Endereco"/>
+    <mapping class="entidade.SimuladoHasTurma"/>
+    <mapping class="entidade.UsuarioId"/>
+    <mapping class="entidade.TelefoneId"/>
+    <mapping class="entidade.Professor"/>
+    <mapping class="entidade.SubdisciplinaId"/>
+    <mapping class="entidade.Turma"/>
+    <mapping class="entidade.Figura"/>
+    <mapping class="entidade.Objetiva"/>
+    <mapping class="entidade.Disciplina"/>
+    <mapping class="entidade.EnderecoId"/>
+    <mapping class="entidade.TurmaId"/>
+    <mapping class="entidade.Funcionario"/>
+    <mapping class="entidade.Discursiva"/>
+    <mapping class="entidade.Enunciadogrupo"/>
+    <mapping class="entidade.SimuladoHasQuestaoId"/>
+    <mapping class="entidade.AlunoHasTurmaId"/>
+    <mapping class="entidade.SimuladoHasQuestao"/>
+    <mapping class="entidade.Resposta"/>
+    <mapping class="entidade.SimuladoHasTurmaId"/>
+    <mapping class="entidade.Subdisciplina"/>
+    <mapping class="entidade.Redacao"/>
+    <mapping class="entidade.AlunoHasSimuladoId"/>
+    <mapping class="entidade.Usuario"/>
+    <mapping class="entidade.Papel"/>
+    <mapping class="entidade.Opcao"/>
+    <mapping class="entidade.FiguraId"/>
+    <mapping class="entidade.Simulado"/>
   </session-factory>
 </hibernate-configuration>
