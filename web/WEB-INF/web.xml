@@ -4,6 +4,14 @@
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Development</param-value>
     </context-param>
+    <context-param>
+        <param-name>primefaces.THEME</param-name>
+        <param-value>bootstrap</param-value>
+    </context-param>
+    <context-param>
+        <param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
+        <param-value>true</param-value>
+    </context-param>
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -21,4 +29,55 @@
     <welcome-file-list>
         <welcome-file>faces/index.xhtml</welcome-file>
     </welcome-file-list>
+    
+    <context-param>
+        <param-name>BootsFaces_THEME</param-name>
+        <param-value>cerulean</param-value>
+    </context-param>
+    
+    <filter>
+        <filter-name>LoginFilter</filter-name>
+        <filter-class>filter.LoginFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>LoginFilter</filter-name>
+        <url-pattern>/faces/restrito/*</url-pattern>
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>AdministradorFilter</filter-name>
+        <filter-class>filter.AuthorizationAdministradorFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AdministradorFilter</filter-name>
+        <url-pattern>/faces/restrito/administrador/*</url-pattern>
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>ProfessorFilter</filter-name>
+        <filter-class>filter.AuthorizationProfessorFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>ProfessorFilter</filter-name>
+        <url-pattern>/faces/restrito/professor/*</url-pattern>
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>AlunoFilter</filter-name>
+        <filter-class>filter.AuthorizationAlunoFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AlunoFilter</filter-name>
+        <url-pattern>/faces/restrito/aluno/*</url-pattern>
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>CadastroFilter</filter-name>
+        <filter-class>filter.AuthorizationTecnicoFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CadastroFilter</filter-name>
+        <url-pattern>/faces/restrito/cadastro/*</url-pattern>
+    </filter-mapping>
+    
 </web-app>

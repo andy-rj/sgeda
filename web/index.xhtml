@@ -1,12 +1,30 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <title>Facelet Title</title>
+        <title>Sistema de Gerenciamento</title>
     </h:head>
-    <h:body>
-        Hello from Facelets
+    <h:body style="background-color: #e3e3e3">
+        <h:form>
+            <h:panelGrid columns="1" style="width: 100%">
+                <h:panelGroup style="display:block; text-align:center">
+                    <b:row>
+                        <p:inputText value="#{loginController.usuario}" placeholder="Matrícula" size="30" style="width: 170px;"/>
+                    </b:row>
+                    <b:row>
+                        <p:password value="#{loginController.senha}" placeholder="Senha" size ="10" style="width: 170px;margin-top: 5px;"/>
+                    </b:row>
+                    <br/>
+                    <b:row>
+                        <b:commandButton  action="#{loginController.entrar}" ajax="true" update="@form" size="sm" iconAwesome="sign-in" value="Entrar" look="info"/>
+                    </b:row>
+                </h:panelGroup>
+            </h:panelGrid>
+
+        </h:form>
     </h:body>
 </html>
 
