@@ -32,8 +32,8 @@ public class Aluno  implements java.io.Serializable {
      private String escolaridade;
      private String cpfResponsavel;
      private String telefoneResponsavel;
-     private Set alunoHasTurmas = new HashSet(0);
-     private Set alunoHasSimulados = new HashSet(0);
+     private Set<AlunoHasTurma> alunoHasTurmas;
+     private Set<AlunoHasSimulado> alunoHasSimulados;
 
     public Aluno() {
     }
@@ -114,7 +114,7 @@ public class Aluno  implements java.io.Serializable {
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="aluno")
-    public Set getAlunoHasTurmas() {
+    public Set<AlunoHasTurma> getAlunoHasTurmas() {
         return this.alunoHasTurmas;
     }
     
@@ -123,7 +123,7 @@ public class Aluno  implements java.io.Serializable {
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="aluno")
-    public Set getAlunoHasSimulados() {
+    public Set<AlunoHasSimulado> getAlunoHasSimulados() {
         return this.alunoHasSimulados;
     }
     

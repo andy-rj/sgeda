@@ -35,7 +35,7 @@ public class AlunoHasTurma  implements java.io.Serializable {
      private Turma turma;
      private Date dataIncricao;
      private Boolean aprovado;
-     private Set cursos = new HashSet(0);
+     private Set<Curso> cursos;
 
     public AlunoHasTurma() {
     }
@@ -118,7 +118,7 @@ public class AlunoHasTurma  implements java.io.Serializable {
         @JoinColumn(name="aluno_has_turma_turma_idTurma", nullable=false, updatable=false), 
         @JoinColumn(name="aluno_has_turma_turma_idDisciplina", nullable=false, updatable=false) }, inverseJoinColumns = { 
         @JoinColumn(name="curso_idCurso", nullable=false, updatable=false) })
-    public Set getCursos() {
+    public Set<Curso> getCursos() {
         return this.cursos;
     }
     

@@ -32,7 +32,7 @@ public class AlunoHasSimulado  implements java.io.Serializable {
      private Aluno aluno;
      private Simulado simulado;
      private Date data;
-     private Set respostas = new HashSet(0);
+     private Set<Resposta> respostas;
 
     public AlunoHasSimulado() {
     }
@@ -96,7 +96,7 @@ public class AlunoHasSimulado  implements java.io.Serializable {
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="alunoHasSimulado")
-    public Set getRespostas() {
+    public Set<Resposta> getRespostas() {
         return this.respostas;
     }
     

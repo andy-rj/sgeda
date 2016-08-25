@@ -3,7 +3,6 @@ package entidade;
 
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -37,12 +36,8 @@ public class Pessoa  implements java.io.Serializable {
      private String sexo;
      private Date dataCadastro;
      private String email;
-     private Set telefones = new HashSet(0);
-     private Professor professor;
-     private Aluno aluno;
-     private Set usuarios = new HashSet(0);
-     private Set enderecos = new HashSet(0);
-     private Funcionario funcionario;
+     private Set<Telefone> telefones;
+     private Endereco endereco;
 
     public Pessoa() {
     }
@@ -52,7 +47,7 @@ public class Pessoa  implements java.io.Serializable {
         this.cpf = cpf;
         this.matricula = matricula;
     }
-    public Pessoa(String cpf, String matricula, String nome, Date dataNascimento, String sexo, Date dataCadastro, String email, Set telefones, Professor professor, Aluno aluno, Set usuarios, Set enderecos, Funcionario funcionario) {
+    public Pessoa(String cpf, String matricula, String nome, Date dataNascimento, String sexo, Date dataCadastro, String email, Set telefones, Professor professor, Aluno aluno, Endereco endereco, Funcionario funcionario) {
        this.cpf = cpf;
        this.matricula = matricula;
        this.nome = nome;
@@ -61,11 +56,7 @@ public class Pessoa  implements java.io.Serializable {
        this.dataCadastro = dataCadastro;
        this.email = email;
        this.telefones = telefones;
-       this.professor = professor;
-       this.aluno = aluno;
-       this.usuarios = usuarios;
-       this.enderecos = enderecos;
-       this.funcionario = funcionario;
+       this.endereco = endereco;
     }
    
      @Id @GeneratedValue(strategy=IDENTITY)
@@ -151,7 +142,7 @@ public class Pessoa  implements java.io.Serializable {
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="pessoa")
-    public Set getTelefones() {
+    public Set<Telefone> getTelefones() {
         return this.telefones;
     }
     
@@ -159,53 +150,15 @@ public class Pessoa  implements java.io.Serializable {
         this.telefones = telefones;
     }
 
-@OneToOne(fetch=FetchType.LAZY, mappedBy="pessoa")
-    public Professor getProfessor() {
-        return this.professor;
-    }
-    
-    public void setProfessor(Professor professor) {
-        this.professor = professor;
-    }
 
 @OneToOne(fetch=FetchType.LAZY, mappedBy="pessoa")
-    public Aluno getAluno() {
-        return this.aluno;
+    public Endereco getEndereco() {
+        return this.endereco;
     }
     
-    public void setAluno(Aluno aluno) {
-        this.aluno = aluno;
+    public void setEndereco(Endereco enderecos) {
+        this.endereco = enderecos;
     }
-
-@OneToMany(fetch=FetchType.LAZY, mappedBy="pessoa")
-    public Set getUsuarios() {
-        return this.usuarios;
-    }
-    
-    public void setUsuarios(Set usuarios) {
-        this.usuarios = usuarios;
-    }
-
-@OneToMany(fetch=FetchType.LAZY, mappedBy="pessoa")
-    public Set getEnderecos() {
-        return this.enderecos;
-    }
-    
-    public void setEnderecos(Set enderecos) {
-        this.enderecos = enderecos;
-    }
-
-@OneToOne(fetch=FetchType.LAZY, mappedBy="pessoa")
-    public Funcionario getFuncionario() {
-        return this.funcionario;
-    }
-    
-    public void setFuncionario(Funcionario funcionario) {
-        this.funcionario = funcionario;
-    }
-
-
-
 
 }
 

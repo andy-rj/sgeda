@@ -29,11 +29,7 @@ public class Disciplina  implements java.io.Serializable {
      private Integer idDisciplina;
      private String nome;
      private String descricao;
-     private Set subdisciplinas = new HashSet(0);
-     private Set cursos = new HashSet(0);
-     private Set turmas = new HashSet(0);
-     private Set professors = new HashSet(0);
-     private Set questaos = new HashSet(0);
+     private Set<Subdisciplina> subdisciplinas;
 
     public Disciplina() {
     }
@@ -42,10 +38,6 @@ public class Disciplina  implements java.io.Serializable {
        this.nome = nome;
        this.descricao = descricao;
        this.subdisciplinas = subdisciplinas;
-       this.cursos = cursos;
-       this.turmas = turmas;
-       this.professors = professors;
-       this.questaos = questaos;
     }
    
      @Id @GeneratedValue(strategy=IDENTITY)
@@ -81,7 +73,7 @@ public class Disciplina  implements java.io.Serializable {
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="disciplina")
-    public Set getSubdisciplinas() {
+    public Set<Subdisciplina> getSubdisciplinas() {
         return this.subdisciplinas;
     }
     
@@ -89,54 +81,4 @@ public class Disciplina  implements java.io.Serializable {
         this.subdisciplinas = subdisciplinas;
     }
 
-@ManyToMany(fetch=FetchType.LAZY)
-    @JoinTable(name="curso_has_disciplina", catalog="sgeda", joinColumns = { 
-        @JoinColumn(name="disciplina_idDisciplina", nullable=false, updatable=false) }, inverseJoinColumns = { 
-        @JoinColumn(name="curso_idCurso", nullable=false, updatable=false) })
-    public Set getCursos() {
-        return this.cursos;
-    }
-    
-    public void setCursos(Set cursos) {
-        this.cursos = cursos;
-    }
-
-@OneToMany(fetch=FetchType.LAZY, mappedBy="disciplina")
-    public Set getTurmas() {
-        return this.turmas;
-    }
-    
-    public void setTurmas(Set turmas) {
-        this.turmas = turmas;
-    }
-
-@ManyToMany(fetch=FetchType.LAZY)
-    @JoinTable(name="professor_habilitado_disciplina", catalog="sgeda", joinColumns = { 
-        @JoinColumn(name="disciplina_idDisciplina", nullable=false, updatable=false) }, inverseJoinColumns = { 
-        @JoinColumn(name="professor_idProfessor", nullable=false, updatable=false) })
-    public Set getProfessors() {
-        return this.professors;
-    }
-    
-    public void setProfessors(Set professors) {
-        this.professors = professors;
-    }
-
-@ManyToMany(fetch=FetchType.LAZY)
-    @JoinTable(name="questao_has_disciplina", catalog="sgeda", joinColumns = { 
-        @JoinColumn(name="disciplina_idDisciplina", nullable=false, updatable=false) }, inverseJoinColumns = { 
-        @JoinColumn(name="questao_idQuestao", nullable=false, updatable=false) })
-    public Set getQuestaos() {
-        return this.questaos;
-    }
-    
-    public void setQuestaos(Set questaos) {
-        this.questaos = questaos;
-    }
-
-
-
-
 }
-
-

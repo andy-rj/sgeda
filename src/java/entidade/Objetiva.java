@@ -28,7 +28,7 @@ public class Objetiva  implements java.io.Serializable {
 
      private int idObjetiva;
      private Questao questao;
-     private Set opcaos = new HashSet(0);
+     private Set<Opcao> opcoes;
 
     public Objetiva() {
     }
@@ -39,7 +39,7 @@ public class Objetiva  implements java.io.Serializable {
     }
     public Objetiva(Questao questao, Set opcaos) {
        this.questao = questao;
-       this.opcaos = opcaos;
+       this.opcoes = opcaos;
     }
    
      @GenericGenerator(name="generator", strategy="foreign", parameters=@Parameter(name="property", value="questao"))@Id @GeneratedValue(generator="generator")
@@ -64,12 +64,12 @@ public class Objetiva  implements java.io.Serializable {
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="objetiva")
-    public Set getOpcaos() {
-        return this.opcaos;
+    public Set<Opcao> getOpcoes() {
+        return this.opcoes;
     }
     
-    public void setOpcaos(Set opcaos) {
-        this.opcaos = opcaos;
+    public void setOpcoes(Set opcaos) {
+        this.opcoes = opcaos;
     }
 
 

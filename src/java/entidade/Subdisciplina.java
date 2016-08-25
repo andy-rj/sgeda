@@ -29,7 +29,7 @@ public class Subdisciplina  implements java.io.Serializable {
      private Disciplina disciplina;
      private String nome;
      private String descricao;
-     private Set questaos = new HashSet(0);
+     private Set<Questao> questaos;
 
     public Subdisciplina() {
     }
@@ -92,11 +92,11 @@ public class Subdisciplina  implements java.io.Serializable {
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="subdisciplina")
-    public Set getQuestaos() {
+    public Set<Questao> getQuestaos() {
         return this.questaos;
     }
     
-    public void setQuestaos(Set questaos) {
+    public void setQuestaos(Set<Questao> questaos) {
         this.questaos = questaos;
     }
 

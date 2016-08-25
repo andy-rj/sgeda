@@ -36,8 +36,8 @@ public class Turma  implements java.io.Serializable {
      private Date dataInicio;
      private Date dataFim;
      private String turno;
-     private Set simuladoHasTurmas = new HashSet(0);
-     private Set alunoHasTurmas = new HashSet(0);
+     private Set<SimuladoHasTurma> simuladoHasTurmas;
+     private Set<AlunoHasTurma> alunoHasTurmas;
 
     public Turma() {
     }
@@ -146,20 +146,20 @@ public class Turma  implements java.io.Serializable {
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="turma")
-    public Set getSimuladoHasTurmas() {
+    public Set<SimuladoHasTurma> getSimuladoHasTurmas() {
         return this.simuladoHasTurmas;
     }
     
-    public void setSimuladoHasTurmas(Set simuladoHasTurmas) {
+    public void setSimuladoHasTurmas(Set<SimuladoHasTurma> simuladoHasTurmas) {
         this.simuladoHasTurmas = simuladoHasTurmas;
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="turma")
-    public Set getAlunoHasTurmas() {
+    public Set<AlunoHasTurma> getAlunoHasTurmas() {
         return this.alunoHasTurmas;
     }
     
-    public void setAlunoHasTurmas(Set alunoHasTurmas) {
+    public void setAlunoHasTurmas(Set<AlunoHasTurma> alunoHasTurmas) {
         this.alunoHasTurmas = alunoHasTurmas;
     }
 

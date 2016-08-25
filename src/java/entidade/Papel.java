@@ -28,7 +28,6 @@ public class Papel  implements java.io.Serializable {
      private Integer idPapel;
      private String nome;
      private String descricao;
-     private Set usuarios = new HashSet(0);
 
     public Papel() {
     }
@@ -36,7 +35,6 @@ public class Papel  implements java.io.Serializable {
     public Papel(String nome, String descricao, Set usuarios) {
        this.nome = nome;
        this.descricao = descricao;
-       this.usuarios = usuarios;
     }
    
      @Id @GeneratedValue(strategy=IDENTITY)
@@ -70,21 +68,6 @@ public class Papel  implements java.io.Serializable {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
-
-@ManyToMany(fetch=FetchType.LAZY)
-    @JoinTable(name="papel_has_usuario", catalog="sgeda", joinColumns = { 
-        @JoinColumn(name="papel_idPapel", nullable=false, updatable=false) }, inverseJoinColumns = { 
-        @JoinColumn(name="usuario_idUsuario", nullable=false, updatable=false) })
-    public Set getUsuarios() {
-        return this.usuarios;
-    }
-    
-    public void setUsuarios(Set usuarios) {
-        this.usuarios = usuarios;
-    }
-
-
-
 
 }
 

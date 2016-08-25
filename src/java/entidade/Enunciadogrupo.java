@@ -25,7 +25,7 @@ public class Enunciadogrupo  implements java.io.Serializable {
 
      private Integer idEnunciadoGrupo;
      private String enunciado;
-     private Set questaos = new HashSet(0);
+     private Set<Questao> questaos;
 
     public Enunciadogrupo() {
     }
@@ -58,7 +58,7 @@ public class Enunciadogrupo  implements java.io.Serializable {
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="enunciadogrupo")
-    public Set getQuestaos() {
+    public Set<Questao> getQuestaos() {
         return this.questaos;
     }
     

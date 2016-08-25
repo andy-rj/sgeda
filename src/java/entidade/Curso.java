@@ -28,8 +28,8 @@ public class Curso  implements java.io.Serializable {
      private Integer idCurso;
      private String nome;
      private String descricao;
-     private Set disciplinas = new HashSet(0);
-     private Set alunoHasTurmas = new HashSet(0);
+     private Set<Disciplina> disciplinas = new HashSet(0);
+     private Set<AlunoHasTurma> alunoHasTurmas = new HashSet(0);
 
     public Curso() {
     }
@@ -77,7 +77,7 @@ public class Curso  implements java.io.Serializable {
     @JoinTable(name="curso_has_disciplina", catalog="sgeda", joinColumns = { 
         @JoinColumn(name="curso_idCurso", nullable=false, updatable=false) }, inverseJoinColumns = { 
         @JoinColumn(name="disciplina_idDisciplina", nullable=false, updatable=false) })
-    public Set getDisciplinas() {
+    public Set<Disciplina> getDisciplinas() {
         return this.disciplinas;
     }
     
@@ -88,8 +88,10 @@ public class Curso  implements java.io.Serializable {
 @ManyToMany(fetch=FetchType.LAZY)
     @JoinTable(name="aluno_has_turma_has_curso", catalog="sgeda", joinColumns = { 
         @JoinColumn(name="curso_idCurso", nullable=false, updatable=false) }, inverseJoinColumns = { 
-        @JoinColumn(name="aluno_has_turma_aluno_idAluno", nullable=false, updatable=false) })
-    public Set getAlunoHasTurmas() {
+        @JoinColumn(name="aluno_has_turma_aluno_idAluno", nullable=false, updatable=false), 
+        @JoinColumn(name="aluno_has_turma_aluno_idTurma", nullable=false, updatable=false),
+        @JoinColumn(name="aluno_has_turma_aluno_idDisciplina", nullable=false, updatable=false)})
+    public Set<AlunoHasTurma> getAlunoHasTurmas() {
         return this.alunoHasTurmas;
     }
     

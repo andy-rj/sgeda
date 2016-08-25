@@ -18,7 +18,7 @@ import entidade.Usuario;
  * Filtro utilizado para restringir o acesso as paginas da aplicação
  *
  */
-public class AuthorizationAdministradorFilter implements Filter {
+public class AuthorizationAlunoFilter implements Filter {
 
     @Override
     public void destroy() {
@@ -31,7 +31,7 @@ public class AuthorizationAdministradorFilter implements Filter {
         LoginController login = (LoginController) ((HttpServletRequest) request).getSession().getAttribute("loginController");
         boolean autorizado = false;
         for(Papel papel : login.getUsuarioLogado().getPapels()){
-            if(papel.getIdPapel() == Usuario.PAPEL_ADMINSTRADOR){
+            if(papel.getIdPapel() == Usuario.PAPEL_ALUNO){
                 autorizado = true;
                 break;
             }

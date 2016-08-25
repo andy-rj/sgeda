@@ -36,13 +36,7 @@ public class Questao  implements java.io.Serializable {
      private String enunciado;
      private String ano;
      private String instituicao;
-     private Discursiva discursiva;
-     private Set simuladoHasQuestaos = new HashSet(0);
-     private Set figuras = new HashSet(0);
-     private Redacao redacao;
-     private Objetiva objetiva;
-     private Set disciplinas = new HashSet(0);
-     private Set respostas = new HashSet(0);
+     private Set<Figura> figuras = new HashSet(0);
 
     public Questao() {
     }
@@ -52,20 +46,14 @@ public class Questao  implements java.io.Serializable {
         this.professor = professor;
         this.subdisciplina = subdisciplina;
     }
-    public Questao(Enunciadogrupo enunciadogrupo, Professor professor, Subdisciplina subdisciplina, String enunciado, String ano, String instituicao, Discursiva discursiva, Set simuladoHasQuestaos, Set figuras, Redacao redacao, Objetiva objetiva, Set disciplinas, Set respostas) {
+    public Questao(Enunciadogrupo enunciadogrupo, Professor professor, Subdisciplina subdisciplina, String enunciado, String ano, String instituicao, Discursiva discursiva, Set<Figura> figuras) {
        this.enunciadogrupo = enunciadogrupo;
        this.professor = professor;
        this.subdisciplina = subdisciplina;
        this.enunciado = enunciado;
        this.ano = ano;
        this.instituicao = instituicao;
-       this.discursiva = discursiva;
-       this.simuladoHasQuestaos = simuladoHasQuestaos;
        this.figuras = figuras;
-       this.redacao = redacao;
-       this.objetiva = objetiva;
-       this.disciplinas = disciplinas;
-       this.respostas = respostas;
     }
    
      @Id @GeneratedValue(strategy=IDENTITY)
@@ -142,74 +130,15 @@ public class Questao  implements java.io.Serializable {
         this.instituicao = instituicao;
     }
 
-@OneToOne(fetch=FetchType.LAZY, mappedBy="questao")
-    public Discursiva getDiscursiva() {
-        return this.discursiva;
-    }
-    
-    public void setDiscursiva(Discursiva discursiva) {
-        this.discursiva = discursiva;
-    }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="questao")
-    public Set getSimuladoHasQuestaos() {
-        return this.simuladoHasQuestaos;
-    }
-    
-    public void setSimuladoHasQuestaos(Set simuladoHasQuestaos) {
-        this.simuladoHasQuestaos = simuladoHasQuestaos;
-    }
-
-@OneToMany(fetch=FetchType.LAZY, mappedBy="questao")
-    public Set getFiguras() {
+    public Set<Figura> getFiguras() {
         return this.figuras;
     }
     
-    public void setFiguras(Set figuras) {
+    public void setFiguras(Set<Figura> figuras) {
         this.figuras = figuras;
     }
-
-@OneToOne(fetch=FetchType.LAZY, mappedBy="questao")
-    public Redacao getRedacao() {
-        return this.redacao;
-    }
-    
-    public void setRedacao(Redacao redacao) {
-        this.redacao = redacao;
-    }
-
-@OneToOne(fetch=FetchType.LAZY, mappedBy="questao")
-    public Objetiva getObjetiva() {
-        return this.objetiva;
-    }
-    
-    public void setObjetiva(Objetiva objetiva) {
-        this.objetiva = objetiva;
-    }
-
-@ManyToMany(fetch=FetchType.LAZY)
-    @JoinTable(name="questao_has_disciplina", catalog="sgeda", joinColumns = { 
-        @JoinColumn(name="questao_idQuestao", nullable=false, updatable=false) }, inverseJoinColumns = { 
-        @JoinColumn(name="disciplina_idDisciplina", nullable=false, updatable=false) })
-    public Set getDisciplinas() {
-        return this.disciplinas;
-    }
-    
-    public void setDisciplinas(Set disciplinas) {
-        this.disciplinas = disciplinas;
-    }
-
-@OneToMany(fetch=FetchType.LAZY, mappedBy="questao")
-    public Set getRespostas() {
-        return this.respostas;
-    }
-    
-    public void setRespostas(Set respostas) {
-        this.respostas = respostas;
-    }
-
-
-
 
 }
 

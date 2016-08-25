@@ -33,10 +33,7 @@ public class Professor  implements java.io.Serializable {
      private Pessoa pessoa;
      private String especializacao;
      private String intituicaoFormacao;
-     private Set disciplinas = new HashSet(0);
-     private Set turmas = new HashSet(0);
-     private Set simulados = new HashSet(0);
-     private Set questaos = new HashSet(0);
+     private Set disciplinas;
 
     public Professor() {
     }
@@ -45,14 +42,12 @@ public class Professor  implements java.io.Serializable {
     public Professor(Pessoa pessoa) {
         this.pessoa = pessoa;
     }
-    public Professor(Pessoa pessoa, String especializacao, String intituicaoFormacao, Set disciplinas, Set turmas, Set simulados, Set questaos) {
+    public Professor(Pessoa pessoa, String especializacao, String intituicaoFormacao, Set<Disciplina> disciplinas) {
        this.pessoa = pessoa;
        this.especializacao = especializacao;
        this.intituicaoFormacao = intituicaoFormacao;
        this.disciplinas = disciplinas;
-       this.turmas = turmas;
-       this.simulados = simulados;
-       this.questaos = questaos;
+
     }
    
      @GenericGenerator(name="generator", strategy="foreign", parameters=@Parameter(name="property", value="pessoa"))@Id @GeneratedValue(generator="generator")
@@ -100,44 +95,13 @@ public class Professor  implements java.io.Serializable {
     @JoinTable(name="professor_habilitado_disciplina", catalog="sgeda", joinColumns = { 
         @JoinColumn(name="professor_idProfessor", nullable=false, updatable=false) }, inverseJoinColumns = { 
         @JoinColumn(name="disciplina_idDisciplina", nullable=false, updatable=false) })
-    public Set getDisciplinas() {
+    public Set<Disciplina> getDisciplinas() {
         return this.disciplinas;
     }
     
     public void setDisciplinas(Set disciplinas) {
         this.disciplinas = disciplinas;
     }
-
-@OneToMany(fetch=FetchType.LAZY, mappedBy="professor")
-    public Set getTurmas() {
-        return this.turmas;
-    }
-    
-    public void setTurmas(Set turmas) {
-        this.turmas = turmas;
-    }
-
-@OneToMany(fetch=FetchType.LAZY, mappedBy="professor")
-    public Set getSimulados() {
-        return this.simulados;
-    }
-    
-    public void setSimulados(Set simulados) {
-        this.simulados = simulados;
-    }
-
-@OneToMany(fetch=FetchType.LAZY, mappedBy="professor")
-    public Set getQuestaos() {
-        return this.questaos;
-    }
-    
-    public void setQuestaos(Set questaos) {
-        this.questaos = questaos;
-    }
-
-
-
-
 }
 
 
