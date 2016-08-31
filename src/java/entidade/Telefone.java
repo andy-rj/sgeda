@@ -26,15 +26,17 @@ public class Telefone  implements java.io.Serializable {
      private Pessoa pessoa;
      private String ddd;
      private String numero;
+     private String descricao;
 
     public Telefone() {
     }
 
-    public Telefone(TelefoneId id, Pessoa pessoa, String ddd, String numero) {
+    public Telefone(TelefoneId id, Pessoa pessoa, String ddd, String numero, String descricao) {
        this.id = id;
        this.pessoa = pessoa;
        this.ddd = ddd;
        this.numero = numero;
+       this.descricao = descricao;
     }
    
      @EmbeddedId
@@ -79,6 +81,15 @@ public class Telefone  implements java.io.Serializable {
     
     public void setNumero(String numero) {
         this.numero = numero;
+    }
+    
+    @Column(name="descricao", nullable=false, length=50)
+    public String getDescricao() {
+        return this.descricao;
+    }
+    
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
 

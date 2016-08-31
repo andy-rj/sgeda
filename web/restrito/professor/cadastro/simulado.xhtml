@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Sistema de Gerenciamento</title>
+    </h:head>
+    <h:body>
+
+        <h:form id="cadastro">
+            <b:fetchBeanInfos/>
+            <ui:insert name="navbar">
+                <ui:include src="/template/navbar.xhtml"/>
+            </ui:insert>
+            <b:container fluid="true">
+                <b:row>
+                    <b:column colSm="8">
+                        <b:panel title="Cadastro de Simulado" collapsible="false" style="margin-top: 66px; " look="info">
+                            <b:row>
+                                <b:column>
+                                    <font color ='red' >*</font><h:outputText style="font-size: 12px;color: red;" value="Preenchimento Obrigatório." />
+                                </b:column>
+                            </b:row>
+                            <br/>
+                            
+                            <b:row>
+                                <b:column colSm="2">
+                                    <h:outputLabel value="Título" ><font color ='red' >*</font></h:outputLabel>
+                                </b:column>
+                                <b:column colSm="7">
+                                    <p:inputText id="nome" value="#{simuladoController.nome}" maxlength="50" validatorMessage="Nome é obrigatório e deve ter até 50 caracteres" >
+                                        <f:validateRequired />
+                                    </p:inputText>
+                                </b:column>
+                                <b:column colSm="3">
+                                    <b:message for="nome"  />
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column colSm="2">
+                                    <h:outputLabel value="Descrição" ><font color ='red' >*</font></h:outputLabel>
+                                </b:column>
+                                <b:column colSm="7">
+                                    <p:inputText id="descricao" value="#{simuladoController.descricao}" maxlength="11"/>
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column colSm="2">
+                                    <h:outputLabel value="Disciplina" ><font color ='red' >*</font></h:outputLabel>
+                                </b:column>
+                                <b:column colSm="7">
+                                    <p:selectOneMenu id="disciplina" value="#{simuladoController.disciplina}" style="width:125px">
+                                        <f:selectItem itemLabel="Selecione..." itemValue="" />
+                                        <f:selectItem itemLabel="Matemática" itemValue="Matemática" />
+                                        <f:selectItem itemLabel="Português" itemValue="Português" />
+                                        <f:selectItem itemLabel="História" itemValue="História" />
+                                    </p:selectOneMenu>
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column col-sm="12">
+                                    <strong style="color: #999999;">Questões</strong>
+                                    <hr style= "border-top: 1px solid #999999;"/>
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                 <b:column colSm="3">
+                                     <p:inputText id="Questão" value="#{simuladoController.questao}" placeholder="Selecione..." maxlength="9">
+                                    </p:inputText>
+                                </b:column>
+                                <b:column colSm="2">
+                                    <p:commandButton id="incluirTelefone" value="incluir"/>
+                                </b:column>
+                            </b:row>
+                           
+                            <b:row>
+                                <br/>
+                                <p:commandButton value="Cadastrar" action="#{simuladoController.cadastrar}"/>
+                                <p:commandButton value="Limpar" action="#{simuladoController.limparFormularioCadastro}" immediate="true"/>
+                            </b:row>
+
+                        </b:panel>
+                    </b:column>
+                </b:row>
+            </b:container>
+        </h:form>
+    </h:body>
+</html>
+

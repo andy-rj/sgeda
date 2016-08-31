@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui">
+    <h:head>
+    </h:head>
+    <h:body>
+        <h:outputStylesheet>
+            .navbar-default {
+    background-color: #014E7A;
+    border-color: #062436;
+}
+        </h:outputStylesheet>
+        
+        <b:navBar brandImg="/sgeda/resource/imagens/idealizar.png" brandHref="/../../sgeda/faces/home.xhtml" brandAlign="left" brand-img-style="width:125px;" static="true" fixed="top">
+                <b:navbarLinks>
+                    <b:dropMenu rendered="#{loginController.usuarioLogado.administrador or loginController.usuarioLogado.cadastro}" value="Aluno">
+                        <b:navCommandLink value="Cadastrar" action="#{alunoController.novoCadastro}" immediate="true"/>
+                        <b:navCommandLink value="Consultar" action ="#{alunoController.novaConsulta}" immediate="true"/>
+                    </b:dropMenu>
+                    <b:dropMenu rendered="#{loginController.usuarioLogado.administrador}" value="Professor">
+                        <b:navCommandLink value="Cadastrar" action="#{professorController.novoCadastro}" immediate="true"/>
+                        <b:navCommandLink value="Consultar" action ="#{professorController.novaConsulta}" immediate="true"/>
+                    </b:dropMenu>
+                    <b:dropMenu rendered="#{loginController.usuarioLogado.administrador}" value="Funcionário">
+                        <b:navCommandLink value="Cadastrar" action="#{funcionarioController.novoCadastro}" immediate="true"/>
+                        <b:navCommandLink value="Consultar" action ="#{funcionarioController.novaConsulta}" immediate="true"/>
+                    </b:dropMenu>                    
+                    <b:dropMenu rendered="#{loginController.usuarioLogado.administrador or loginController.usuarioLogado.professor}" value="Simulado">
+                        <b:navCommandLink value="Cadastrar" action="#{simuladoController.novoCadastro}" immediate="true"/>
+                        <b:navCommandLink value="Consultar" action ="#{simuladoController.novaConsulta}" immediate="true"/>
+                    </b:dropMenu>
+                    <b:dropMenu rendered="#{loginController.usuarioLogado.administrador or loginController.usuarioLogado.professor}" value="Questão">
+                        <b:navCommandLink value="Cadastrar" action="#{questaoController.novoCadastro}" immediate="true"/>
+                        <b:navCommandLink value="Consultar" action ="#{questaoController.novaConsulta}" immediate="true"/>
+                    </b:dropMenu>
+                    <b:navCommandLink rendered="#{loginController.usuarioLogado.aluno}" value="Turmas" action="#{alunoController.turmas}" immediate="true"/>
+                    <b:navCommandLink rendered="#{loginController.usuarioLogado.professor}" value="Turmas" action="#{professorController.turmas}" immediate="true"/>
+                    <b:navCommandLink rendered="#{loginController.usuarioLogado.aluno}" value="Desempenho" action="#{alunoController.desempenho}" immediate="true"/>
+                    <b:navCommandLink rendered="#{loginController.usuarioLogado.administrador}" value="Relatório" action="#{relatorioController.relatorios}" immediate="true"/>
+                </b:navbarLinks>
+                <b:navbarLinks pull="right">
+                    <b:dropMenu value="#{loginController.usuarioLogado.pessoa.nome}">
+                        <b:navCommandLink value="Sair" action="#{loginController.sair}" immediate="true"/>
+                    </b:dropMenu>
+                </b:navbarLinks>
+            </b:navBar>
+    </h:body>
+</html>

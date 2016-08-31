@@ -2,9 +2,11 @@ package controller;
 
 import entidade.Usuario;
 import helper.LoginHelper;
+import java.io.IOException;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 @ManagedBean
@@ -28,11 +30,8 @@ public class LoginController {
             return null;
         }
         //helper.atualizarDataAcesso(usuarioLogado);
-        if(usuarioLogado.isAdminstrador()) return "/restrito/administrador/home?faces-redirect=true";
-        if(usuarioLogado.isProfessor()) return "/restrito/professor/home?faces-redirect=true";
-        if(usuarioLogado.isAluno()) return "/restrito/aluno/home?faces-redirect=true";
         
-        return "/restrito/cadastro/home?faces-redirect=true";
+        return "/home?faces-redirect=true";
     }
 
     public String getSenha() {
@@ -61,6 +60,23 @@ public class LoginController {
         senha = null;
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return "/index?faces-redirect=true";
+    }
+    
+    public String redirecionarHome() throws IOException{
+ 
+        if(usuarioLogado==null)
+             return "/index?faces-redirect=true"; 
+        if(usuarioLogado.isAdministrador())
+             return "/restrito/administrador/home.xhtml?faces-redirect=true";
+        if(usuarioLogado.isCadastro())
+            return "/restrito/cadastro/home.xhtml?faces-redirect=true";
+        if(usuarioLogado.isProfessor())
+            return "/restrito/professor/home.xhtml?faces-redirect=true";
+        if(usuarioLogado.isAluno())
+            return "/restrito/aluno/home.xhtml?faces-redirect=true";
+        
+       return "/index?faces-redirect=true"; 
+
     }
 
 }

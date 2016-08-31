@@ -14,7 +14,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -78,7 +78,7 @@ public class Usuario  implements java.io.Serializable {
         this.id = id;
     }
 
-@ManyToOne(fetch=FetchType.LAZY)
+    @OneToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="idPessoa", nullable=false, insertable=false, updatable=false)
     public Pessoa getPessoa() {
         return this.pessoa;
@@ -142,7 +142,7 @@ public class Usuario  implements java.io.Serializable {
     }
 
     @Transient
-    public boolean isAdminstrador(){
+    public boolean isAdministrador(){
         for(Papel papel: papels){
             if(papel.getIdPapel() == PAPEL_ADMINSTRADOR) return true;
         }

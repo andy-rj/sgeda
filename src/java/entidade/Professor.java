@@ -33,7 +33,7 @@ public class Professor  implements java.io.Serializable {
      private Pessoa pessoa;
      private String especializacao;
      private String intituicaoFormacao;
-     private Set disciplinas;
+     private Set<Disciplina> disciplinas;
 
     public Professor() {
     }
