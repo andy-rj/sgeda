@@ -1,5 +1,5 @@
 package entidade;
-// Generated 22/08/2016 17:01:00 by Hibernate Tools 4.3.1
+// Generated 09/09/2016 09:36:48 by Hibernate Tools 4.3.1
 
 
 import java.util.HashSet;
@@ -29,15 +29,23 @@ public class Disciplina  implements java.io.Serializable {
      private Integer idDisciplina;
      private String nome;
      private String descricao;
-     private Set<Subdisciplina> subdisciplinas;
+     private Set<Subdisciplina> subdisciplinas = new HashSet(0);
+     private Set<Curso> cursos = new HashSet(0);
+     private Set<Turma> turmas = new HashSet(0);
+     private Set<Professor> professors = new HashSet(0);
+     private Set<Questao> questaos = new HashSet(0);
 
     public Disciplina() {
     }
 
-    public Disciplina(String nome, String descricao, Set subdisciplinas, Set cursos, Set turmas, Set professors, Set questaos) {
+    public Disciplina(String nome, String descricao, Set<Subdisciplina> subdisciplinas, Set<Curso> cursos, Set<Turma> turmas, Set<Professor> professors, Set<Questao> questaos) {
        this.nome = nome;
        this.descricao = descricao;
        this.subdisciplinas = subdisciplinas;
+       this.cursos = cursos;
+       this.turmas = turmas;
+       this.professors = professors;
+       this.questaos = questaos;
     }
    
      @Id @GeneratedValue(strategy=IDENTITY)
@@ -77,8 +85,55 @@ public class Disciplina  implements java.io.Serializable {
         return this.subdisciplinas;
     }
     
-    public void setSubdisciplinas(Set subdisciplinas) {
+    public void setSubdisciplinas(Set<Subdisciplina> subdisciplinas) {
         this.subdisciplinas = subdisciplinas;
     }
 
+@ManyToMany(fetch=FetchType.LAZY)
+    @JoinTable(name="curso_disciplina", catalog="sgeda", joinColumns = { 
+        @JoinColumn(name="disciplina_idDisciplina", nullable=false, updatable=false) }, inverseJoinColumns = { 
+        @JoinColumn(name="curso_idCurso", nullable=false, updatable=false) })
+    public Set<Curso> getCursos() {
+        return this.cursos;
+    }
+    
+    public void setCursos(Set<Curso> cursos) {
+        this.cursos = cursos;
+    }
+
+@OneToMany(fetch=FetchType.LAZY, mappedBy="disciplina")
+    public Set<Turma> getTurmas() {
+        return this.turmas;
+    }
+    
+    public void setTurmas(Set<Turma> turmas) {
+        this.turmas = turmas;
+    }
+
+@ManyToMany(fetch=FetchType.LAZY)
+    @JoinTable(name="professor_habilitado_disciplina", catalog="sgeda", joinColumns = { 
+        @JoinColumn(name="disciplina_idDisciplina", nullable=false, updatable=false) }, inverseJoinColumns = { 
+        @JoinColumn(name="professor_idProfessor", nullable=false, updatable=false) })
+    public Set<Professor> getProfessors() {
+        return this.professors;
+    }
+    
+    public void setProfessors(Set<Professor> professors) {
+        this.professors = professors;
+    }
+    
+@OneToMany(fetch=FetchType.LAZY, mappedBy="disciplina")
+    public Set<Questao> getQuestaos() {
+        return this.questaos;
+    }
+    
+    public void setQuestaos(Set<Questao> questaos) {
+        this.questaos = questaos;
+    }
+
+
+
+
 }
+
+

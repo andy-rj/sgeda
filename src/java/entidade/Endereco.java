@@ -1,13 +1,13 @@
 package entidade;
-// Generated 22/08/2016 17:01:00 by Hibernate Tools 4.3.1
+// Generated 09/09/2016 09:36:48 by Hibernate Tools 4.3.1
 
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import static javax.persistence.GenerationType.IDENTITY;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -22,7 +22,7 @@ import javax.persistence.Table;
 public class Endereco  implements java.io.Serializable {
 
 
-     private EnderecoId id;
+     private Integer idEndereco;
      private Pessoa pessoa;
      private String logradouro;
      private String numero;
@@ -36,13 +36,11 @@ public class Endereco  implements java.io.Serializable {
     }
 
 	
-    public Endereco(EnderecoId id, Pessoa pessoa, String cep) {
-        this.id = id;
+    public Endereco(Pessoa pessoa, String cep) {
         this.pessoa = pessoa;
         this.cep = cep;
     }
-    public Endereco(EnderecoId id, Pessoa pessoa, String logradouro, String numero, String complemento, String cep, String bairro, String cidade, String estado) {
-       this.id = id;
+    public Endereco(Pessoa pessoa, String logradouro, String numero, String complemento, String cep, String bairro, String cidade, String estado) {
        this.pessoa = pessoa;
        this.logradouro = logradouro;
        this.numero = numero;
@@ -53,22 +51,20 @@ public class Endereco  implements java.io.Serializable {
        this.estado = estado;
     }
    
-     @EmbeddedId
+     @Id @GeneratedValue(strategy=IDENTITY)
 
     
-    @AttributeOverrides( {
-        @AttributeOverride(name="idEndereco", column=@Column(name="idEndereco", nullable=false) ), 
-        @AttributeOverride(name="idPessoa", column=@Column(name="idPessoa", nullable=false) ) } )
-    public EnderecoId getId() {
-        return this.id;
+    @Column(name="idEndereco", unique=true, nullable=false)
+    public Integer getIdEndereco() {
+        return this.idEndereco;
     }
     
-    public void setId(EnderecoId id) {
-        this.id = id;
+    public void setIdEndereco(Integer idEndereco) {
+        this.idEndereco = idEndereco;
     }
 
 @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="idPessoa", nullable=false, insertable=false, updatable=false)
+    @JoinColumn(name="idPessoa", nullable=false)
     public Pessoa getPessoa() {
         return this.pessoa;
     }

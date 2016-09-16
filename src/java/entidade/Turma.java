@@ -1,16 +1,16 @@
 package entidade;
-// Generated 22/08/2016 17:01:00 by Hibernate Tools 4.3.1
+// Generated 09/09/2016 09:36:48 by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import static javax.persistence.GenerationType.IDENTITY;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -28,7 +28,7 @@ import javax.persistence.TemporalType;
 public class Turma  implements java.io.Serializable {
 
 
-     private TurmaId id;
+     private Integer idTurma;
      private Disciplina disciplina;
      private Professor professor;
      private String nome;
@@ -36,20 +36,19 @@ public class Turma  implements java.io.Serializable {
      private Date dataInicio;
      private Date dataFim;
      private String turno;
-     private Set<SimuladoHasTurma> simuladoHasTurmas;
-     private Set<AlunoHasTurma> alunoHasTurmas;
+     private Set<TurmaSimulado> turmaSimulados = new HashSet(0);
+     private Set<TurmaAluno> turmaAlunos = new HashSet(0);
+     private Curso curso;
 
     public Turma() {
     }
 
 	
-    public Turma(TurmaId id, Disciplina disciplina, Professor professor) {
-        this.id = id;
+    public Turma(Disciplina disciplina, Professor professor) {
         this.disciplina = disciplina;
         this.professor = professor;
     }
-    public Turma(TurmaId id, Disciplina disciplina, Professor professor, String nome, String descricao, Date dataInicio, Date dataFim, String turno, Set simuladoHasTurmas, Set alunoHasTurmas) {
-       this.id = id;
+    public Turma(Disciplina disciplina, Professor professor, String nome, String descricao, Date dataInicio, Date dataFim, String turno, Set<TurmaSimulado> turmaSimulados, Set<TurmaAluno> turmaAlunos) {
        this.disciplina = disciplina;
        this.professor = professor;
        this.nome = nome;
@@ -57,26 +56,24 @@ public class Turma  implements java.io.Serializable {
        this.dataInicio = dataInicio;
        this.dataFim = dataFim;
        this.turno = turno;
-       this.simuladoHasTurmas = simuladoHasTurmas;
-       this.alunoHasTurmas = alunoHasTurmas;
+       this.turmaSimulados = turmaSimulados;
+       this.turmaAlunos = turmaAlunos;
     }
    
-     @EmbeddedId
+     @Id @GeneratedValue(strategy=IDENTITY)
 
     
-    @AttributeOverrides( {
-        @AttributeOverride(name="idTurma", column=@Column(name="idTurma", nullable=false) ), 
-        @AttributeOverride(name="idDisciplina", column=@Column(name="idDisciplina", nullable=false) ) } )
-    public TurmaId getId() {
-        return this.id;
+    @Column(name="idTurma", unique=true, nullable=false)
+    public Integer getIdTurma() {
+        return this.idTurma;
     }
     
-    public void setId(TurmaId id) {
-        this.id = id;
+    public void setIdTurma(Integer idTurma) {
+        this.idTurma = idTurma;
     }
 
 @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="idDisciplina", nullable=false, insertable=false, updatable=false)
+    @JoinColumn(name="idDisciplina", nullable=false)
     public Disciplina getDisciplina() {
         return this.disciplina;
     }
@@ -146,24 +143,32 @@ public class Turma  implements java.io.Serializable {
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="turma")
-    public Set<SimuladoHasTurma> getSimuladoHasTurmas() {
-        return this.simuladoHasTurmas;
+    public Set<TurmaSimulado> getTurmaSimulados() {
+        return this.turmaSimulados;
     }
     
-    public void setSimuladoHasTurmas(Set<SimuladoHasTurma> simuladoHasTurmas) {
-        this.simuladoHasTurmas = simuladoHasTurmas;
+    public void setTurmaSimulados(Set<TurmaSimulado> turmaSimulados) {
+        this.turmaSimulados = turmaSimulados;
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="turma")
-    public Set<AlunoHasTurma> getAlunoHasTurmas() {
-        return this.alunoHasTurmas;
+    public Set<TurmaAluno> getTurmaAlunos() {
+        return this.turmaAlunos;
     }
     
-    public void setAlunoHasTurmas(Set<AlunoHasTurma> alunoHasTurmas) {
-        this.alunoHasTurmas = alunoHasTurmas;
+    public void setTurmaAlunos(Set<TurmaAluno> turmaAlunos) {
+        this.turmaAlunos = turmaAlunos;
     }
 
-
+@ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="idCurso", nullable=false)
+    public Curso getCurso() {
+        return this.curso;
+    }
+    
+    public void setCurso(Curso curso) {
+        this.curso = curso;
+    }
 
 
 }

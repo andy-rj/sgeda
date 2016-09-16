@@ -1,13 +1,13 @@
 package entidade;
-// Generated 22/08/2016 17:01:00 by Hibernate Tools 4.3.1
+// Generated 09/09/2016 09:36:48 by Hibernate Tools 4.3.1
 
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import static javax.persistence.GenerationType.IDENTITY;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -22,24 +22,22 @@ import javax.persistence.Table;
 public class Figura  implements java.io.Serializable {
 
 
-     private FiguraId id;
-     private Questao questao;
-     private String nome;
-     private String descricao;
-     private String tamanho;
-     private String tipo;
-     private byte[] imagem;
-
+    private Integer idFigura;
+    private Questao questao;
+    private String nome;
+    private String descricao;
+    private String tamanho;
+    private String tipo;
+    private byte[] imagem;
+    
     public Figura() {
     }
 
 	
-    public Figura(FiguraId id, Questao questao) {
-        this.id = id;
+    public Figura(Questao questao) {
         this.questao = questao;
     }
-    public Figura(FiguraId id, Questao questao, String nome, String descricao, String tamanho, String tipo, byte[] imagem) {
-       this.id = id;
+    public Figura(Questao questao, String nome, String descricao, String tamanho, String tipo, byte[] imagem) {
        this.questao = questao;
        this.nome = nome;
        this.descricao = descricao;
@@ -48,22 +46,20 @@ public class Figura  implements java.io.Serializable {
        this.imagem = imagem;
     }
    
-     @EmbeddedId
+     @Id @GeneratedValue(strategy=IDENTITY)
 
     
-    @AttributeOverrides( {
-        @AttributeOverride(name="idFigura", column=@Column(name="idFigura", nullable=false) ), 
-        @AttributeOverride(name="idQuestao", column=@Column(name="idQuestao", nullable=false) ) } )
-    public FiguraId getId() {
-        return this.id;
+    @Column(name="idFigura", unique=true, nullable=false)
+    public Integer getIdFigura() {
+        return this.idFigura;
     }
     
-    public void setId(FiguraId id) {
-        this.id = id;
+    public void setIdFigura(Integer idFigura) {
+        this.idFigura = idFigura;
     }
 
 @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="idQuestao", nullable=false, insertable=false, updatable=false)
+    @JoinColumn(name="idQuestao", nullable=false)
     public Questao getQuestao() {
         return this.questao;
     }

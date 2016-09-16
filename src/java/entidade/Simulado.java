@@ -1,5 +1,5 @@
 package entidade;
-// Generated 22/08/2016 17:01:00 by Hibernate Tools 4.3.1
+// Generated 09/09/2016 09:36:48 by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
@@ -35,7 +35,9 @@ public class Simulado  implements java.io.Serializable {
      private String status;
      private String tipo;
      private Date dataCadastro;
-     private Set<SimuladoHasQuestao> simuladoHasQuestaos;
+     private Set<SimuladoQuestao> simuladoQuestaos = new HashSet(0);
+     private Set<TurmaSimulado> turmaSimulados = new HashSet(0);
+     private Set<AlunoSimulado> alunoSimulados = new HashSet(0);
 
     public Simulado() {
     }
@@ -44,14 +46,16 @@ public class Simulado  implements java.io.Serializable {
     public Simulado(Professor professor) {
         this.professor = professor;
     }
-    public Simulado(Professor professor, String nome, String descricao, String status, String tipo, Date dataCadastro, Set<SimuladoHasQuestao> simuladoHasQuestaos) {
+    public Simulado(Professor professor, String nome, String descricao, String status, String tipo, Date dataCadastro, Set<SimuladoQuestao> simuladoQuestaos, Set<TurmaSimulado> turmaSimulados, Set<AlunoSimulado> alunoSimulados) {
        this.professor = professor;
        this.nome = nome;
        this.descricao = descricao;
        this.status = status;
        this.tipo = tipo;
        this.dataCadastro = dataCadastro;
-       this.simuladoHasQuestaos = simuladoHasQuestaos;
+       this.simuladoQuestaos = simuladoQuestaos;
+       this.turmaSimulados = turmaSimulados;
+       this.alunoSimulados = alunoSimulados;
     }
    
      @Id @GeneratedValue(strategy=IDENTITY)
@@ -127,13 +131,34 @@ public class Simulado  implements java.io.Serializable {
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="simulado")
-    public Set<SimuladoHasQuestao> getSimuladoHasQuestaos() {
-        return this.simuladoHasQuestaos;
+    public Set<SimuladoQuestao> getSimuladoQuestaos() {
+        return this.simuladoQuestaos;
     }
     
-    public void setSimuladoHasQuestaos(Set<SimuladoHasQuestao> simuladoHasQuestaos) {
-        this.simuladoHasQuestaos = simuladoHasQuestaos;
+    public void setSimuladoQuestaos(Set<SimuladoQuestao> simuladoQuestaos) {
+        this.simuladoQuestaos = simuladoQuestaos;
     }
+
+@OneToMany(fetch=FetchType.LAZY, mappedBy="simulado")
+    public Set<TurmaSimulado> getTurmaSimulados() {
+        return this.turmaSimulados;
+    }
+    
+    public void setTurmaSimulados(Set<TurmaSimulado> turmaSimulados) {
+        this.turmaSimulados = turmaSimulados;
+    }
+
+@OneToMany(fetch=FetchType.LAZY, mappedBy="simulado")
+    public Set<AlunoSimulado> getAlunoSimulados() {
+        return this.alunoSimulados;
+    }
+    
+    public void setAlunoSimulados(Set<AlunoSimulado> alunoSimulados) {
+        this.alunoSimulados = alunoSimulados;
+    }
+
+
+
 
 }
 

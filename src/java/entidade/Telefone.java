@@ -1,13 +1,13 @@
 package entidade;
-// Generated 22/08/2016 17:01:00 by Hibernate Tools 4.3.1
+// Generated 09/09/2016 09:36:48 by Hibernate Tools 4.3.1
 
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import static javax.persistence.GenerationType.IDENTITY;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -22,7 +22,7 @@ import javax.persistence.Table;
 public class Telefone  implements java.io.Serializable {
 
 
-     private TelefoneId id;
+     private Integer idTelefone;
      private Pessoa pessoa;
      private String ddd;
      private String numero;
@@ -31,30 +31,33 @@ public class Telefone  implements java.io.Serializable {
     public Telefone() {
     }
 
-    public Telefone(TelefoneId id, Pessoa pessoa, String ddd, String numero, String descricao) {
-       this.id = id;
+	
+    public Telefone(Pessoa pessoa, String ddd, String numero) {
+        this.pessoa = pessoa;
+        this.ddd = ddd;
+        this.numero = numero;
+    }
+    public Telefone(Pessoa pessoa, String ddd, String numero, String descricao) {
        this.pessoa = pessoa;
        this.ddd = ddd;
        this.numero = numero;
        this.descricao = descricao;
     }
    
-     @EmbeddedId
+     @Id @GeneratedValue(strategy=IDENTITY)
 
     
-    @AttributeOverrides( {
-        @AttributeOverride(name="idTelefone", column=@Column(name="idTelefone", nullable=false) ), 
-        @AttributeOverride(name="idPessoa", column=@Column(name="idPessoa", nullable=false) ) } )
-    public TelefoneId getId() {
-        return this.id;
+    @Column(name="idTelefone", unique=true, nullable=false)
+    public Integer getIdTelefone() {
+        return this.idTelefone;
     }
     
-    public void setId(TelefoneId id) {
-        this.id = id;
+    public void setIdTelefone(Integer idTelefone) {
+        this.idTelefone = idTelefone;
     }
 
 @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="idPessoa", nullable=false, insertable=false, updatable=false)
+    @JoinColumn(name="idPessoa", nullable=false)
     public Pessoa getPessoa() {
         return this.pessoa;
     }
@@ -82,8 +85,9 @@ public class Telefone  implements java.io.Serializable {
     public void setNumero(String numero) {
         this.numero = numero;
     }
+
     
-    @Column(name="descricao", nullable=false, length=50)
+    @Column(name="descricao", length=50)
     public String getDescricao() {
         return this.descricao;
     }

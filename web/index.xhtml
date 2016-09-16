@@ -9,28 +9,45 @@
     </h:head>
     <h:body style="background-color: #e3e3e3">
         <h:form>
-            <h:panelGrid columns="1" style="width: 100%">
-                <h:panelGroup style="display:block; text-align:center">
+            <b:container>
                     <b:row style="margin-top: 200px;">
+                        <b:column colSm="4"></b:column>
+                        <b:column colSm="4" style="text-align: center">
                         <b:image style="width:205px;" value="/resource/imagens/idealizar.png"/>
+                        </b:column>
+                        <b:column colSm="4"></b:column>
                     </b:row>
                     <br/><br/>
                     <b:row>
+                        <b:column colSm="4"></b:column>
+                        <b:column colSm="4" style="text-align: center">
                         <b:messages/>
+                        </b:column>
+                        <b:column colSm="4"></b:column>
                     </b:row>
                     <b:row>
-                        <p:inputText value="#{loginController.usuario}" placeholder="Matrícula" size="30" style="width: 170px;"/>
+                        <b:column colSm="4"></b:column>
+                        <b:column colSm="4" style="text-align: center">
+                        <p:inputText id="sgedaUsuario" value="#{loginController.usuario}" placeholder="Matrícula" size="30" style="width: 170px;"/>
+                        </b:column>
+                        <b:column colSm="4"></b:column>
                     </b:row>
                     <b:row>
-                        <p:password value="#{loginController.senha}" placeholder="Senha" size ="10" style="width: 170px;margin-top: 5px;"/>
+                        <b:column colSm="4"></b:column>
+                        <b:column colSm="4" style="text-align: center">
+                        <p:password id="sgedaSenha" value="#{loginController.senha}" placeholder="Senha" size ="10" style="width: 170px;margin-top: 5px;"/>
+                        </b:column>
+                        <b:column colSm="4"></b:column>
                     </b:row>
                     <br/>
                     <b:row>
+                        <b:column colSm="4"></b:column>
+                        <b:column colSm="4" style="text-align: center">
                         <b:commandButton  action="#{loginController.entrar}" ajax="true" update="@form" size="sm" iconAwesome="sign-in" value="Entrar" look="info"/>
+                        </b:column>
+                        <b:column colSm="4"></b:column>
                     </b:row>
-                </h:panelGroup>
-            </h:panelGrid>
-
+            </b:container>
         </h:form>
     </h:body>
 </html>

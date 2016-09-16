@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Sistema de Gerenciamento</title>
+    </h:head>
+    <h:body>
+
+        <h:form id="cadastro">
+            <b:fetchBeanInfos/>
+            <ui:insert name="navbar">
+                <ui:include src="/template/navbar.xhtml"/>
+            </ui:insert>
+            <b:container fluid="true">
+                <b:row>
+                    <b:column colSm="8">
+                        <b:panel title="Resultado da Consulta de Disciplina" collapsible="false" style="margin-top: 66px; " look="info">
+                           
+                            <b:dataTable  value="#{disciplinaController.resultadoConsulta}" var="disciplina" id="datatable" styleClass="table table-striped table-bordered"
+                                          style="width:100%">
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Nome" />
+                                    </f:facet>
+                                    <h:outputText id="matricula" value="#{disciplina.nome}" />
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Descrição" />
+                                    </f:facet>
+                                    <h:outputText value="#{disciplina.descricao}" />
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="" />
+                                    </f:facet>
+                                    <p:commandButton action="#{disciplinaController.exibirDetalhes(disciplina)}" value="Detalhes" style="width: 100%"/>
+                                </h:column>
+                            </b:dataTable>
+                            <b:row>
+                                <br/>
+                                <b:column colSm="2" offset="10">
+                                    <b:button value="Voltar" look="info" outcome="/restrito/cadastro/consulta/disciplina" style="width: 100%"/>
+                                </b:column>
+
+                            </b:row>
+
+                        </b:panel>
+                    </b:column>
+                </b:row>
+            </b:container>
+        </h:form>
+    </h:body>
+</html>
+

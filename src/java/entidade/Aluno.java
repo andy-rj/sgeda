@@ -1,5 +1,5 @@
 package entidade;
-// Generated 22/08/2016 17:01:00 by Hibernate Tools 4.3.1
+// Generated 09/09/2016 09:36:48 by Hibernate Tools 4.3.1
 
 
 import java.util.HashSet;
@@ -32,8 +32,8 @@ public class Aluno  implements java.io.Serializable {
      private String escolaridade;
      private String cpfResponsavel;
      private String telefoneResponsavel;
-     private Set<AlunoHasTurma> alunoHasTurmas;
-     private Set<AlunoHasSimulado> alunoHasSimulados;
+     private Set<TurmaAluno> turmaAlunos = new HashSet(0);
+     private Set<AlunoSimulado> alunoSimulados = new HashSet(0);
 
     public Aluno() {
     }
@@ -42,19 +42,18 @@ public class Aluno  implements java.io.Serializable {
     public Aluno(Pessoa pessoa) {
         this.pessoa = pessoa;
     }
-    public Aluno(Pessoa pessoa, String nomeResponsavel, String escolaridade, String cpfResponsavel, String telefoneResponsavel, Set alunoHasTurmas, Set alunoHasSimulados) {
+    public Aluno(Pessoa pessoa, String nomeResponsavel, String escolaridade, String cpfResponsavel, String telefoneResponsavel, Set<TurmaAluno> turmaAlunos, Set<AlunoSimulado> alunoSimulados) {
        this.pessoa = pessoa;
        this.nomeResponsavel = nomeResponsavel;
        this.escolaridade = escolaridade;
        this.cpfResponsavel = cpfResponsavel;
        this.telefoneResponsavel = telefoneResponsavel;
-       this.alunoHasTurmas = alunoHasTurmas;
-       this.alunoHasSimulados = alunoHasSimulados;
+       this.turmaAlunos = turmaAlunos;
+       this.alunoSimulados = alunoSimulados;
     }
    
-     @GenericGenerator(name="generator", strategy="foreign", parameters=@Parameter(name="property", value="pessoa"))@Id @GeneratedValue(generator="generator")
-
-    
+    @GenericGenerator(name="generator", strategy="foreign", parameters=@Parameter(name="property", value="pessoa"))
+    @Id @GeneratedValue(generator="generator")
     @Column(name="idAluno", unique=true, nullable=false)
     public int getIdAluno() {
         return this.idAluno;
@@ -64,7 +63,7 @@ public class Aluno  implements java.io.Serializable {
         this.idAluno = idAluno;
     }
 
-@OneToOne(fetch=FetchType.LAZY)@PrimaryKeyJoinColumn
+    @OneToOne(fetch=FetchType.EAGER)@PrimaryKeyJoinColumn
     public Pessoa getPessoa() {
         return this.pessoa;
     }
@@ -113,22 +112,22 @@ public class Aluno  implements java.io.Serializable {
         this.telefoneResponsavel = telefoneResponsavel;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="aluno")
-    public Set<AlunoHasTurma> getAlunoHasTurmas() {
-        return this.alunoHasTurmas;
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="aluno")
+    public Set<TurmaAluno> getTurmaAlunos() {
+        return this.turmaAlunos;
     }
     
-    public void setAlunoHasTurmas(Set alunoHasTurmas) {
-        this.alunoHasTurmas = alunoHasTurmas;
+    public void setTurmaAlunos(Set<TurmaAluno> turmaAlunos) {
+        this.turmaAlunos = turmaAlunos;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="aluno")
-    public Set<AlunoHasSimulado> getAlunoHasSimulados() {
-        return this.alunoHasSimulados;
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="aluno")
+    public Set<AlunoSimulado> getAlunoSimulados() {
+        return this.alunoSimulados;
     }
     
-    public void setAlunoHasSimulados(Set alunoHasSimulados) {
-        this.alunoHasSimulados = alunoHasSimulados;
+    public void setAlunoSimulados(Set<AlunoSimulado> alunoSimulados) {
+        this.alunoSimulados = alunoSimulados;
     }
 
 

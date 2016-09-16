@@ -1,20 +1,20 @@
 package entidade;
-// Generated 22/08/2016 17:01:00 by Hibernate Tools 4.3.1
+// Generated 09/09/2016 09:36:48 by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import static javax.persistence.GenerationType.IDENTITY;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -30,32 +30,26 @@ import javax.persistence.Transient;
 public class Usuario  implements java.io.Serializable {
 
 
-     private UsuarioId id;
+     private Integer idUsuario;
      private Pessoa pessoa;
      private String login;
      private String senha;
      private Boolean ativo;
      private Date ultimoLogin;
-     private Set<Papel> papels;
-     public static final int PAPEL_PROFESSOR = 1;
-     public static final int PAPEL_ALUNO = 2;
-     public static final int PAPEL_CADASTRO = 3;
-     public static final int PAPEL_ADMINSTRADOR = 4;
-
+     private Set<Papel> papels = new HashSet(0);
+     public static final int PAPEL_PROFESSOR = 3;
+     public static final int PAPEL_ALUNO = 4;
+     public static final int PAPEL_CADASTRO = 2;
+     public static final int PAPEL_ADMINSTRADOR = 1;
 
     public Usuario() {
-        this.papels = new HashSet(0);
     }
 
 	
-    public Usuario(UsuarioId id, Pessoa pessoa) {
-        this.papels = new HashSet(0);
-        this.id = id;
+    public Usuario(Pessoa pessoa) {
         this.pessoa = pessoa;
     }
-    public Usuario(UsuarioId id, Pessoa pessoa, String login, String senha, Boolean ativo, Date ultimoLogin, Set papels) {
-        this.papels = new HashSet(0);
-       this.id = id;
+    public Usuario(Pessoa pessoa, String login, String senha, Boolean ativo, Date ultimoLogin, Set<Papel> papels) {
        this.pessoa = pessoa;
        this.login = login;
        this.senha = senha;
@@ -64,22 +58,20 @@ public class Usuario  implements java.io.Serializable {
        this.papels = papels;
     }
    
-     @EmbeddedId
+     @Id @GeneratedValue(strategy=IDENTITY)
 
     
-    @AttributeOverrides( {
-        @AttributeOverride(name="idUsuario", column=@Column(name="idUsuario", nullable=false) ), 
-        @AttributeOverride(name="idPessoa", column=@Column(name="idPessoa", nullable=false) ) } )
-    public UsuarioId getId() {
-        return this.id;
+    @Column(name="idUsuario", unique=true, nullable=false)
+    public Integer getIdUsuario() {
+        return this.idUsuario;
     }
     
-    public void setId(UsuarioId id) {
-        this.id = id;
+    public void setIdUsuario(Integer idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
-    @OneToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="idPessoa", nullable=false, insertable=false, updatable=false)
+@ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="idPessoa", nullable=false)
     public Pessoa getPessoa() {
         return this.pessoa;
     }
@@ -129,19 +121,18 @@ public class Usuario  implements java.io.Serializable {
     }
 
 @ManyToMany(fetch=FetchType.EAGER)
-    @JoinTable(name="papel_has_usuario", catalog="sgeda", joinColumns = { 
-        @JoinColumn(name="usuario_idUsuario", nullable=false, updatable=false), 
-        @JoinColumn(name="usuario_idPessoa", nullable=false, updatable=false) }, inverseJoinColumns = { 
+    @JoinTable(name="usuario_papel", catalog="sgeda", joinColumns = { 
+        @JoinColumn(name="usuario_idUsuario", nullable=false, updatable=false) }, inverseJoinColumns = { 
         @JoinColumn(name="papel_idPapel", nullable=false, updatable=false) })
     public Set<Papel> getPapels() {
         return this.papels;
     }
     
-    public void setPapels(Set papels) {
+    public void setPapels(Set<Papel> papels) {
         this.papels = papels;
     }
 
-    @Transient
+ @Transient
     public boolean isAdministrador(){
         for(Papel papel: papels){
             if(papel.getIdPapel() == PAPEL_ADMINSTRADOR) return true;
@@ -172,7 +163,6 @@ public class Usuario  implements java.io.Serializable {
         }
         return false;
     }
-
 
 
 }

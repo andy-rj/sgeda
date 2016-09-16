@@ -1,5 +1,5 @@
 package entidade;
-// Generated 22/08/2016 17:01:00 by Hibernate Tools 4.3.1
+// Generated 09/09/2016 09:36:48 by Hibernate Tools 4.3.1
 
 
 import java.util.HashSet;
@@ -33,7 +33,10 @@ public class Professor  implements java.io.Serializable {
      private Pessoa pessoa;
      private String especializacao;
      private String intituicaoFormacao;
-     private Set<Disciplina> disciplinas;
+     private Set<Disciplina> disciplinas = new HashSet(0);
+     private Set<Turma> turmas = new HashSet(0);
+     private Set<Simulado> simulados = new HashSet(0);
+     private Set<Questao> questaos = new HashSet(0);
 
     public Professor() {
     }
@@ -42,12 +45,21 @@ public class Professor  implements java.io.Serializable {
     public Professor(Pessoa pessoa) {
         this.pessoa = pessoa;
     }
+    public Professor(Pessoa pessoa, String especializacao, String intituicaoFormacao, Set<Disciplina> disciplinas, Set<Turma> turmas, Set<Simulado> simulados, Set<Questao> questaos) {
+       this.pessoa = pessoa;
+       this.especializacao = especializacao;
+       this.intituicaoFormacao = intituicaoFormacao;
+       this.disciplinas = disciplinas;
+       this.turmas = turmas;
+       this.simulados = simulados;
+       this.questaos = questaos;
+    }
+    
     public Professor(Pessoa pessoa, String especializacao, String intituicaoFormacao, Set<Disciplina> disciplinas) {
        this.pessoa = pessoa;
        this.especializacao = especializacao;
        this.intituicaoFormacao = intituicaoFormacao;
        this.disciplinas = disciplinas;
-
     }
    
      @GenericGenerator(name="generator", strategy="foreign", parameters=@Parameter(name="property", value="pessoa"))@Id @GeneratedValue(generator="generator")
@@ -62,7 +74,7 @@ public class Professor  implements java.io.Serializable {
         this.idProfessor = idProfessor;
     }
 
-@OneToOne(fetch=FetchType.LAZY)@PrimaryKeyJoinColumn
+@OneToOne(fetch=FetchType.EAGER)@PrimaryKeyJoinColumn
     public Pessoa getPessoa() {
         return this.pessoa;
     }
@@ -99,9 +111,40 @@ public class Professor  implements java.io.Serializable {
         return this.disciplinas;
     }
     
-    public void setDisciplinas(Set disciplinas) {
+    public void setDisciplinas(Set<Disciplina> disciplinas) {
         this.disciplinas = disciplinas;
     }
+
+@OneToMany(fetch=FetchType.LAZY, mappedBy="professor")
+    public Set<Turma> getTurmas() {
+        return this.turmas;
+    }
+    
+    public void setTurmas(Set<Turma> turmas) {
+        this.turmas = turmas;
+    }
+
+@OneToMany(fetch=FetchType.LAZY, mappedBy="professor")
+    public Set<Simulado> getSimulados() {
+        return this.simulados;
+    }
+    
+    public void setSimulados(Set<Simulado> simulados) {
+        this.simulados = simulados;
+    }
+
+@OneToMany(fetch=FetchType.LAZY, mappedBy="professor")
+    public Set<Questao> getQuestaos() {
+        return this.questaos;
+    }
+    
+    public void setQuestaos(Set<Questao> questaos) {
+        this.questaos = questaos;
+    }
+
+
+
+
 }
 
 

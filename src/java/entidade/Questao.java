@@ -1,5 +1,5 @@
 package entidade;
-// Generated 22/08/2016 17:01:00 by Hibernate Tools 4.3.1
+// Generated 09/09/2016 09:36:48 by Hibernate Tools 4.3.1
 
 
 import java.util.HashSet;
@@ -11,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -30,30 +29,42 @@ public class Questao  implements java.io.Serializable {
 
 
      private Integer idQuestao;
-     private Enunciadogrupo enunciadogrupo;
+     private Grupo grupo;
      private Professor professor;
-     private Subdisciplina subdisciplina;
+     private Disciplina disciplina;
      private String enunciado;
      private String ano;
      private String instituicao;
+     private Discursiva discursiva;
+     private Set<SimuladoQuestao> simuladoQuestaos = new HashSet(0);
      private Set<Figura> figuras = new HashSet(0);
+     private Redacao redacao;
+     private Objetiva objetiva;
+     private Set<Subdisciplina> subdisciplinas = new HashSet(0);
+     private Set<Resposta> respostas = new HashSet(0);
 
     public Questao() {
     }
 
 	
-    public Questao(Professor professor, Subdisciplina subdisciplina) {
+    public Questao(Professor professor, Disciplina disciplina) {
         this.professor = professor;
-        this.subdisciplina = subdisciplina;
+        this.disciplina = disciplina;
     }
-    public Questao(Enunciadogrupo enunciadogrupo, Professor professor, Subdisciplina subdisciplina, String enunciado, String ano, String instituicao, Discursiva discursiva, Set<Figura> figuras) {
-       this.enunciadogrupo = enunciadogrupo;
+    public Questao(Grupo grupo, Professor professor, Disciplina disciplina, String enunciado, String ano, String instituicao, Discursiva discursiva, Set<SimuladoQuestao> simuladoQuestaos, Set<Figura> figuras, Redacao redacao, Objetiva objetiva, Set<Subdisciplina> subdisciplinas, Set<Resposta> respostas) {
+       this.grupo = grupo;
        this.professor = professor;
-       this.subdisciplina = subdisciplina;
+       this.disciplina = disciplina;
        this.enunciado = enunciado;
        this.ano = ano;
        this.instituicao = instituicao;
+       this.discursiva = discursiva;
+       this.simuladoQuestaos = simuladoQuestaos;
        this.figuras = figuras;
+       this.redacao = redacao;
+       this.objetiva = objetiva;
+       this.subdisciplinas = subdisciplinas;
+       this.respostas = respostas;
     }
    
      @Id @GeneratedValue(strategy=IDENTITY)
@@ -69,13 +80,13 @@ public class Questao  implements java.io.Serializable {
     }
 
 @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="idEnunciadoGrupo")
-    public Enunciadogrupo getEnunciadogrupo() {
-        return this.enunciadogrupo;
+    @JoinColumn(name="idQuestaoGrupo")
+    public Grupo getGrupo() {
+        return this.grupo;
     }
     
-    public void setEnunciadogrupo(Enunciadogrupo enunciadogrupo) {
-        this.enunciadogrupo = enunciadogrupo;
+    public void setGrupo(Grupo grupo) {
+        this.grupo = grupo;
     }
 
 @ManyToOne(fetch=FetchType.LAZY)
@@ -89,15 +100,13 @@ public class Questao  implements java.io.Serializable {
     }
 
 @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumns( { 
-        @JoinColumn(name="idSubdisciplina", referencedColumnName="idSubdisciplina", nullable=false), 
-        @JoinColumn(name="idDisciplina", referencedColumnName="idDisciplina", nullable=false) } )
-    public Subdisciplina getSubdisciplina() {
-        return this.subdisciplina;
+    @JoinColumn(name="idDisciplina", nullable=false)
+    public Disciplina getDisciplina() {
+        return this.disciplina;
     }
     
-    public void setSubdisciplina(Subdisciplina subdisciplina) {
-        this.subdisciplina = subdisciplina;
+    public void setDisciplina(Disciplina disciplina) {
+        this.disciplina = disciplina;
     }
 
     
@@ -130,6 +139,23 @@ public class Questao  implements java.io.Serializable {
         this.instituicao = instituicao;
     }
 
+@OneToOne(fetch=FetchType.LAZY, mappedBy="questao")
+    public Discursiva getDiscursiva() {
+        return this.discursiva;
+    }
+    
+    public void setDiscursiva(Discursiva discursiva) {
+        this.discursiva = discursiva;
+    }
+
+@OneToMany(fetch=FetchType.LAZY, mappedBy="questao")
+    public Set<SimuladoQuestao> getSimuladoQuestaos() {
+        return this.simuladoQuestaos;
+    }
+    
+    public void setSimuladoQuestaos(Set<SimuladoQuestao> simuladoQuestaos) {
+        this.simuladoQuestaos = simuladoQuestaos;
+    }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="questao")
     public Set<Figura> getFiguras() {
@@ -139,6 +165,48 @@ public class Questao  implements java.io.Serializable {
     public void setFiguras(Set<Figura> figuras) {
         this.figuras = figuras;
     }
+
+@OneToOne(fetch=FetchType.LAZY, mappedBy="questao")
+    public Redacao getRedacao() {
+        return this.redacao;
+    }
+    
+    public void setRedacao(Redacao redacao) {
+        this.redacao = redacao;
+    }
+
+@OneToOne(fetch=FetchType.LAZY, mappedBy="questao")
+    public Objetiva getObjetiva() {
+        return this.objetiva;
+    }
+    
+    public void setObjetiva(Objetiva objetiva) {
+        this.objetiva = objetiva;
+    }
+
+@ManyToMany(fetch=FetchType.LAZY)
+    @JoinTable(name="questao_subdisciplina", catalog="sgeda", joinColumns = { 
+        @JoinColumn(name="questao_idQuestao", nullable=false, updatable=false) }, inverseJoinColumns = { 
+        @JoinColumn(name="subdisciplina_idSubdisciplina", nullable=false, updatable=false) })
+    public Set<Subdisciplina> getSubdisciplinas() {
+        return this.subdisciplinas;
+    }
+    
+    public void setSubdisciplinas(Set<Subdisciplina> subdisciplinas) {
+        this.subdisciplinas = subdisciplinas;
+    }
+
+@OneToMany(fetch=FetchType.LAZY, mappedBy="questao")
+    public Set<Resposta> getRespostas() {
+        return this.respostas;
+    }
+    
+    public void setRespostas(Set<Resposta> respostas) {
+        this.respostas = respostas;
+    }
+
+
+
 
 }
 

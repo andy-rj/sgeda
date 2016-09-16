@@ -1,5 +1,5 @@
 package entidade;
-// Generated 22/08/2016 17:01:00 by Hibernate Tools 4.3.1
+// Generated 09/09/2016 09:36:48 by Hibernate Tools 4.3.1
 
 
 import java.math.BigDecimal;
@@ -25,7 +25,7 @@ public class Resposta  implements java.io.Serializable {
 
 
      private Integer idResposta;
-     private AlunoHasSimulado alunoHasSimulado;
+     private AlunoSimulado alunoSimulado;
      private Questao questao;
      private BigDecimal nota;
      private String resposta;
@@ -34,12 +34,12 @@ public class Resposta  implements java.io.Serializable {
     }
 
 	
-    public Resposta(AlunoHasSimulado alunoHasSimulado, Questao questao) {
-        this.alunoHasSimulado = alunoHasSimulado;
+    public Resposta(AlunoSimulado alunoSimulado, Questao questao) {
+        this.alunoSimulado = alunoSimulado;
         this.questao = questao;
     }
-    public Resposta(AlunoHasSimulado alunoHasSimulado, Questao questao, BigDecimal nota, String resposta) {
-       this.alunoHasSimulado = alunoHasSimulado;
+    public Resposta(AlunoSimulado alunoSimulado, Questao questao, BigDecimal nota, String resposta) {
+       this.alunoSimulado = alunoSimulado;
        this.questao = questao;
        this.nota = nota;
        this.resposta = resposta;
@@ -61,12 +61,12 @@ public class Resposta  implements java.io.Serializable {
     @JoinColumns( { 
         @JoinColumn(name="idAluno", referencedColumnName="aluno_idAluno", nullable=false), 
         @JoinColumn(name="idSimulado", referencedColumnName="simulado_idSimulado", nullable=false) } )
-    public AlunoHasSimulado getAlunoHasSimulado() {
-        return this.alunoHasSimulado;
+    public AlunoSimulado getAlunoSimulado() {
+        return this.alunoSimulado;
     }
     
-    public void setAlunoHasSimulado(AlunoHasSimulado alunoHasSimulado) {
-        this.alunoHasSimulado = alunoHasSimulado;
+    public void setAlunoSimulado(AlunoSimulado alunoSimulado) {
+        this.alunoSimulado = alunoSimulado;
     }
 
 @ManyToOne(fetch=FetchType.LAZY)

@@ -9,16 +9,35 @@
     </h:head>
     <h:body style="background-color: #e3e3e3">
         <h:form>
-            <ui:insert name="navbar">
-                <ui:include src="/template/navbar.xhtml"/>
-            </ui:insert>
-
-            <h:panelGrid columns="1" style="width: 100%">
-                <h:panelGroup style="display:block; text-align:center">
-
-                </h:panelGroup>
-            </h:panelGrid>
-
+            <b:container>
+                <b:row>
+                    <ui:insert name="navbar">
+                        <ui:include src="/template/navbar.xhtml"/>
+                    </ui:insert>
+                </b:row>
+                <b:row style="margin-left: -45px; margin-right: -45px;">
+                    <b:row>
+                        <b:column colSm="6">
+                            <b:panel title="Teste1">
+                            </b:panel>
+                        </b:column>
+                        <b:column colSm="6">
+                            <b:panel title="Teste2">
+                            </b:panel>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="6">
+                            <b:panel title="Teste3">
+                            </b:panel>
+                        </b:column>
+                        <b:column colSm="6">
+                            <b:panel title="Teste4">
+                            </b:panel>
+                        </b:column>
+                    </b:row>
+                </b:row>
+            </b:container>
         </h:form>
     </h:body>
 </html>

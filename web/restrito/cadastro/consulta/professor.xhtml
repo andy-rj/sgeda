@@ -8,10 +8,20 @@
       xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>Sistema de Gerenciamento</title>
+        <style type="text/css">
+            .ui-growl {
+                z-index:9999 !important;
+            }
+            .row{
+                margin-top: 7px;
+                margin-bottom:7px;
+            }
+        </style>
     </h:head>
     <h:body>
 
-        <h:form id="cadastro">
+        <h:form id="consulta">
+            <p:growl globalOnly="true" id="info" sticky="true" />
             <b:fetchBeanInfos/>
             <ui:insert name="navbar">
                 <ui:include src="/template/navbar.xhtml"/>
@@ -25,8 +35,7 @@
                                     <h:outputLabel value="Matrícula" />
                                 </b:column>
                                 <b:column colSm="7">
-                                    <p:inputText id="matricula" value="#{professorController.nome}" maxlength="50" validatorMessage="Nome é obrigatório e deve ter até 50 caracteres" >
-                                        <f:validateRequired />
+                                    <p:inputText id="matricula" value="#{professorController.matriculaConsulta}" maxlength="20">
                                     </p:inputText>
                                 </b:column>
                                 
@@ -36,8 +45,7 @@
                                     <h:outputLabel value="Nome" />
                                 </b:column>
                                 <b:column colSm="7">
-                                    <p:inputText id="nome" value="#{professorController.nome}" maxlength="50" validatorMessage="Nome é obrigatório e deve ter até 50 caracteres" >
-                                        <f:validateRequired />
+                                    <p:inputText id="nome" value="#{professorController.nomeConsulta}" maxlength="50">
                                     </p:inputText>
                                 </b:column>
                                 
@@ -47,17 +55,16 @@
                                     <h:outputLabel value="CPF" />
                                 </b:column>
                                 <b:column colSm="7">
-                                    <p:inputMask id="cpf" value="#{professorController.cpf}" maxlength="11" validatorMessage="Nome é obrigatório e deve ter até 50 caracteres" mask="999.999.999-99"/>
-                                </b:column>
-                                <b:column colSm="3">
-                                    <b:message for="cpf"  />
+                                    <p:inputMask id="cpf" value="#{professorController.cpfConsulta}" maxlength="11" mask="999.999.999-99" converter="converter.cpfConverter"/>
                                 </b:column>
                             </b:row>
                             
                             <b:row>
                                 <br/>
-                                <p:commandButton value="Consultar" action="#{professorController.cadastrar}"/>
-                                <p:commandButton value="Limpar" action="#{professorController.limparFormularioCadastro}" immediate="true"/>
+                                <b:column colSm="12">
+                                    <p:commandButton ajax="false" value="Consultar" action="#{professorController.consultar}"/>
+                                    <p:commandButton value="Limpar" action="#{professorController.limparFormularioConsulta}" immediate="true"/>
+                                </b:column>
                             </b:row>
 
                         </b:panel>

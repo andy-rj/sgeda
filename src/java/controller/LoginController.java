@@ -1,18 +1,23 @@
 package controller;
 
+import entidade.Foto;
 import entidade.Usuario;
 import helper.LoginHelper;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.event.PhaseId;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 @ManagedBean
 @SessionScoped
 public class LoginController {
-
+    
+    private Foto foto;
     private final LoginHelper helper;
     private String senha;
     private String usuario;
@@ -30,7 +35,7 @@ public class LoginController {
             return null;
         }
         //helper.atualizarDataAcesso(usuarioLogado);
-        
+        carregarFotoPerfil();
         return "/home?faces-redirect=true";
     }
 
@@ -77,6 +82,23 @@ public class LoginController {
         
        return "/index?faces-redirect=true"; 
 
+    }
+    
+    private void carregarFotoPerfil() {
+        foto = helper.getFotoPerfil(usuarioLogado.getPessoa());        
+    }
+    
+     public StreamedContent getImage() throws IOException {
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
+            // So, we're rendering the HTML. Return a stub StreamedContent so that it will generate right URL.
+            return new DefaultStreamedContent();
+        }
+        else {
+            // So, browser is requesting the image. Return a real StreamedContent with the image bytes.
+            return new DefaultStreamedContent(new ByteArrayInputStream(foto.getImagem()));
+        }
     }
 
 }

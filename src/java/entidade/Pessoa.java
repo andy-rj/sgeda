@@ -1,8 +1,9 @@
 package entidade;
-// Generated 22/08/2016 17:01:00 by Hibernate Tools 4.3.1
+// Generated 09/09/2016 09:36:48 by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -36,8 +38,9 @@ public class Pessoa  implements java.io.Serializable {
      private String sexo;
      private Date dataCadastro;
      private String email;
-     private Set<Telefone> telefones;
-     private Endereco endereco;
+     private Set<Telefone> telefones = new HashSet(0);
+     private Endereco enderecos;
+     private Foto foto;
 
     public Pessoa() {
     }
@@ -47,7 +50,7 @@ public class Pessoa  implements java.io.Serializable {
         this.cpf = cpf;
         this.matricula = matricula;
     }
-    public Pessoa(String cpf, String matricula, String nome, Date dataNascimento, String sexo, Date dataCadastro, String email, Set telefones, Professor professor, Aluno aluno, Endereco endereco, Funcionario funcionario) {
+    public Pessoa(String cpf, String matricula, String nome, Date dataNascimento, String sexo, Date dataCadastro, String email, Set<Telefone> telefones, Endereco enderecos) {
        this.cpf = cpf;
        this.matricula = matricula;
        this.nome = nome;
@@ -56,7 +59,7 @@ public class Pessoa  implements java.io.Serializable {
        this.dataCadastro = dataCadastro;
        this.email = email;
        this.telefones = telefones;
-       this.endereco = endereco;
+       this.enderecos = enderecos;
     }
    
      @Id @GeneratedValue(strategy=IDENTITY)
@@ -146,18 +149,27 @@ public class Pessoa  implements java.io.Serializable {
         return this.telefones;
     }
     
-    public void setTelefones(Set telefones) {
+    public void setTelefones(Set<Telefone> telefones) {
         this.telefones = telefones;
     }
 
-
 @OneToOne(fetch=FetchType.LAZY, mappedBy="pessoa")
-    public Endereco getEndereco() {
-        return this.endereco;
+    public Endereco getEnderecos() {
+        return this.enderecos;
     }
     
-    public void setEndereco(Endereco enderecos) {
-        this.endereco = enderecos;
+    public void setEnderecos(Endereco enderecos) {
+        this.enderecos = enderecos;
+    }
+    
+    @OneToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="idFoto", nullable=false)
+    public Foto getFoto() {
+        return this.foto;
+    }
+    
+    public void setFoto(Foto foto) {
+        this.foto = foto;
     }
 
 }

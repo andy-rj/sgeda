@@ -1,5 +1,5 @@
 package entidade;
-// Generated 22/08/2016 17:01:00 by Hibernate Tools 4.3.1
+// Generated 09/09/2016 09:36:48 by Hibernate Tools 4.3.1
 
 
 import java.util.HashSet;
@@ -28,13 +28,15 @@ public class Papel  implements java.io.Serializable {
      private Integer idPapel;
      private String nome;
      private String descricao;
+     private Set<Usuario> usuarios = new HashSet(0);
 
     public Papel() {
     }
 
-    public Papel(String nome, String descricao, Set usuarios) {
+    public Papel(String nome, String descricao, Set<Usuario> usuarios) {
        this.nome = nome;
        this.descricao = descricao;
+       this.usuarios = usuarios;
     }
    
      @Id @GeneratedValue(strategy=IDENTITY)
@@ -68,6 +70,21 @@ public class Papel  implements java.io.Serializable {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
+
+@ManyToMany(fetch=FetchType.LAZY)
+    @JoinTable(name="usuario_papel", catalog="sgeda", joinColumns = { 
+        @JoinColumn(name="papel_idPapel", nullable=false, updatable=false) }, inverseJoinColumns = { 
+        @JoinColumn(name="usuario_idUsuario", nullable=false, updatable=false) })
+    public Set<Usuario> getUsuarios() {
+        return this.usuarios;
+    }
+    
+    public void setUsuarios(Set<Usuario> usuarios) {
+        this.usuarios = usuarios;
+    }
+
+
+
 
 }
 

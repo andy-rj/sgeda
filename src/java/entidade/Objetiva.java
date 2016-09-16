@@ -1,5 +1,5 @@
 package entidade;
-// Generated 22/08/2016 17:01:00 by Hibernate Tools 4.3.1
+// Generated 09/09/2016 09:36:48 by Hibernate Tools 4.3.1
 
 
 import java.util.HashSet;
@@ -28,7 +28,7 @@ public class Objetiva  implements java.io.Serializable {
 
      private int idObjetiva;
      private Questao questao;
-     private Set<Opcao> opcoes;
+     private Set<Opcao> opcaos = new HashSet(0);
 
     public Objetiva() {
     }
@@ -37,9 +37,9 @@ public class Objetiva  implements java.io.Serializable {
     public Objetiva(Questao questao) {
         this.questao = questao;
     }
-    public Objetiva(Questao questao, Set opcaos) {
+    public Objetiva(Questao questao, Set<Opcao> opcaos) {
        this.questao = questao;
-       this.opcoes = opcaos;
+       this.opcaos = opcaos;
     }
    
      @GenericGenerator(name="generator", strategy="foreign", parameters=@Parameter(name="property", value="questao"))@Id @GeneratedValue(generator="generator")
@@ -64,12 +64,12 @@ public class Objetiva  implements java.io.Serializable {
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="objetiva")
-    public Set<Opcao> getOpcoes() {
-        return this.opcoes;
+    public Set<Opcao> getOpcaos() {
+        return this.opcaos;
     }
     
-    public void setOpcoes(Set opcaos) {
-        this.opcoes = opcaos;
+    public void setOpcaos(Set<Opcao> opcaos) {
+        this.opcaos = opcaos;
     }
 
 

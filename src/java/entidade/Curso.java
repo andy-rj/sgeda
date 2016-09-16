@@ -1,5 +1,5 @@
 package entidade;
-// Generated 22/08/2016 17:01:00 by Hibernate Tools 4.3.1
+// Generated 09/09/2016 09:36:48 by Hibernate Tools 4.3.1
 
 
 import java.util.HashSet;
@@ -29,16 +29,14 @@ public class Curso  implements java.io.Serializable {
      private String nome;
      private String descricao;
      private Set<Disciplina> disciplinas = new HashSet(0);
-     private Set<AlunoHasTurma> alunoHasTurmas = new HashSet(0);
-
+     
     public Curso() {
     }
 
-    public Curso(String nome, String descricao, Set disciplinas, Set alunoHasTurmas) {
+    public Curso(String nome, String descricao, Set<Disciplina> disciplinas) {
        this.nome = nome;
        this.descricao = descricao;
        this.disciplinas = disciplinas;
-       this.alunoHasTurmas = alunoHasTurmas;
     }
    
      @Id @GeneratedValue(strategy=IDENTITY)
@@ -74,33 +72,16 @@ public class Curso  implements java.io.Serializable {
     }
 
 @ManyToMany(fetch=FetchType.LAZY)
-    @JoinTable(name="curso_has_disciplina", catalog="sgeda", joinColumns = { 
+    @JoinTable(name="curso_disciplina", catalog="sgeda", joinColumns = { 
         @JoinColumn(name="curso_idCurso", nullable=false, updatable=false) }, inverseJoinColumns = { 
         @JoinColumn(name="disciplina_idDisciplina", nullable=false, updatable=false) })
     public Set<Disciplina> getDisciplinas() {
         return this.disciplinas;
     }
     
-    public void setDisciplinas(Set disciplinas) {
+    public void setDisciplinas(Set<Disciplina> disciplinas) {
         this.disciplinas = disciplinas;
     }
-
-@ManyToMany(fetch=FetchType.LAZY)
-    @JoinTable(name="aluno_has_turma_has_curso", catalog="sgeda", joinColumns = { 
-        @JoinColumn(name="curso_idCurso", nullable=false, updatable=false) }, inverseJoinColumns = { 
-        @JoinColumn(name="aluno_has_turma_aluno_idAluno", nullable=false, updatable=false), 
-        @JoinColumn(name="aluno_has_turma_aluno_idTurma", nullable=false, updatable=false),
-        @JoinColumn(name="aluno_has_turma_aluno_idDisciplina", nullable=false, updatable=false)})
-    public Set<AlunoHasTurma> getAlunoHasTurmas() {
-        return this.alunoHasTurmas;
-    }
-    
-    public void setAlunoHasTurmas(Set alunoHasTurmas) {
-        this.alunoHasTurmas = alunoHasTurmas;
-    }
-
-
-
 
 }
 

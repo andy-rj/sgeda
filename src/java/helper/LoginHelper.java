@@ -5,10 +5,14 @@
  */
 package helper;
 
+import entidade.Foto;
+import entidade.Papel;
+import entidade.Pessoa;
 import entidade.Usuario;
 import hibernate.HibernateUtil;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashSet;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -19,9 +23,30 @@ import org.hibernate.criterion.Restrictions;
  * @author anderson
  */
 public class LoginHelper {
-    
+
+    public Foto getFotoPerfil(Pessoa pessoa) {
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+
+        Transaction tx = session.getTransaction();
+
+        try {
+            tx.begin();
+            Criteria crit = session.createCriteria(Foto.class);
+            crit.createAlias("pessoa", "pessoa");
+            crit.add(Restrictions.eq("pessoa.idPessoa", pessoa.getIdPessoa()));
+            Foto foto = (Foto) crit.uniqueResult();
+            tx.commit();
+            return foto;
+        } catch (Exception e) {
+            tx.rollback();
+        }
+
+        return null;
+
+    }
+
     Session session = null;
-    
+
     /**
      * Encriptar a senha utilizndo md5
      *
@@ -46,6 +71,8 @@ public class LoginHelper {
 
         return sb.toString();
     }
+
+   
     
     public String encriptar(String senha) {
 
@@ -83,5 +110,61 @@ public class LoginHelper {
         return null;
 
     }
+    
+    public Papel getPapelProfessor(){
+         session = HibernateUtil.getSessionFactory().getCurrentSession();
+
+        Transaction tx = session.getTransaction();
+
+        try {
+            tx.begin();
+            Criteria crit = session.createCriteria(Papel.class);
+            crit.add(Restrictions.eq("idPapel", 1));
+            Papel papel = (Papel) crit.uniqueResult();
+            tx.commit();
+            return papel;
+        } catch (Exception e) {
+            tx.rollback();
+        }
+
+        return null;
+    }
+    
+     public boolean cadastrar(Usuario usuario, String senha){
+        
+        try {
+            senha = md5(senha);
+        } catch (NoSuchAlgorithmException e) {
+
+        }
+        
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+         try {
+            session.beginTransaction();
+            usuario.setSenha(senha);
+            session.save(usuario);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+     
+      public void addPapel(Usuario usuario, Papel papelProfessor) {
+          session = HibernateUtil.getSessionFactory().getCurrentSession();
+          try{
+            session.beginTransaction();
+            usuario.setPapels(new HashSet());
+            usuario.getPapels().add(papelProfessor);
+            session.update(usuario);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+            e.printStackTrace();
+        }    
+      }
+        
     
 }

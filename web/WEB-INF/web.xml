@@ -80,4 +80,15 @@
         <url-pattern>/faces/restrito/cadastro/*</url-pattern>
     </filter-mapping>
     
+    <filter>
+        <filter-name>PrimeFacesFileUploadFilter</filter-name>
+        <filter-class>
+            org.primefaces.webapp.filter.FileUploadFilter
+        </filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>PrimeFacesFileUploadFilter</filter-name>
+        <servlet-name>Faces Servlet</servlet-name>
+    </filter-mapping>
+    
 </web-app>
