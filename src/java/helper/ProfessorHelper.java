@@ -29,7 +29,7 @@ public class ProfessorHelper {
         }
         try{
             session.beginTransaction();
-            session.save(pessoa.getFoto());
+            if(pessoa.getFoto() != null) session.save(pessoa.getFoto());
             session.save(pessoa);
             Integer idPessoa = pessoa.getIdPessoa();
             String matricula = Integer.toString(idPessoa);
@@ -64,26 +64,21 @@ public class ProfessorHelper {
         return professor;
     }
 
-    public List<Professor> getProfessores(String nome, String cpf, String matricula) {
+    public List<Professor> getProfessores(String stringConsulta) {
         session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
         Criteria crit = session.createCriteria(Professor.class);
 
         crit.createAlias("pessoa", "pessoa");
 
-        if (cpf != null && !cpf.isEmpty()) {
-            crit.add(Restrictions.eq("pessoa.cpf", cpf));
+        if (stringConsulta != null && !stringConsulta.isEmpty()) {
+            crit.add(Restrictions.disjunction()
+                    .add(Restrictions.ilike("pessoa.cpf", "%" + stringConsulta + "%"))
+                    .add(Restrictions.ilike("pessoa.matricula", "%" + stringConsulta + "%"))
+                    .add(Restrictions.ilike("pessoa.nome", "%" + stringConsulta + "%"))
+            );
         }
-
-        if (matricula != null && !matricula.isEmpty()) {
-            crit.add(Restrictions.ilike("pessoa.matricula", "%" + matricula + "%"));
-        }
-
-        if (nome != null && !nome.isEmpty()) {
-
-            crit.add(Restrictions.ilike("pessoa.nome", "%" + nome + "%"));
-
-        }
+        
         crit.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
         List<Professor> retorno = crit.list();

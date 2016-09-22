@@ -11,10 +11,10 @@ import javax.mail.internet.MimeMessage;
 
 public class EmailSender {
 
-    private final String username = "andersonnapoleaodemello@gmail.com";
-    private final String password = "padaria123";
+    private final String username = "cursoidealizar@gmail.com";
+    private final String password = "idealizar";
 
-    public void sendTo(String para, String assunto, String corpo) {
+    public boolean sendTo(String para, String assunto, String corpo) {
 
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
@@ -39,9 +39,12 @@ public class EmailSender {
             message.setText(corpo);
 
             Transport.send(message);
+            
+            return true;
 
         } catch (MessagingException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            return false;
         }
     }
 }

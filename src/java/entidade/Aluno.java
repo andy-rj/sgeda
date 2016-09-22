@@ -21,7 +21,7 @@ import org.hibernate.annotations.Parameter;
  */
 @Entity
 @Table(name="aluno"
-    ,catalog="sgeda"
+    ,catalog="kemdixip_sgeda"
 )
 public class Aluno  implements java.io.Serializable {
 

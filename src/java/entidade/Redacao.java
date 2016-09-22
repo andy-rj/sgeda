@@ -18,7 +18,7 @@ import org.hibernate.annotations.Parameter;
  */
 @Entity
 @Table(name="redacao"
-    ,catalog="sgeda"
+    ,catalog="kemdixip_sgeda"
 )
 public class Redacao  implements java.io.Serializable {
 

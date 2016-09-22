@@ -23,7 +23,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="questao"
-    ,catalog="sgeda"
+    ,catalog="kemdixip_sgeda"
 )
 public class Questao  implements java.io.Serializable {
 
@@ -185,7 +185,7 @@ public class Questao  implements java.io.Serializable {
     }
 
 @ManyToMany(fetch=FetchType.LAZY)
-    @JoinTable(name="questao_subdisciplina", catalog="sgeda", joinColumns = { 
+    @JoinTable(name="questao_subdisciplina", catalog="kemdixip_sgeda", joinColumns = { 
         @JoinColumn(name="questao_idQuestao", nullable=false, updatable=false) }, inverseJoinColumns = { 
         @JoinColumn(name="subdisciplina_idSubdisciplina", nullable=false, updatable=false) })
     public Set<Subdisciplina> getSubdisciplinas() {

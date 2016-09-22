@@ -17,7 +17,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="telefone"
-    ,catalog="sgeda"
+    ,catalog="kemdixip_sgeda"
 )
 public class Telefone  implements java.io.Serializable {
 

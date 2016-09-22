@@ -9,13 +9,13 @@
     <h:head>
         <title>Sistema de Gerenciamento</title>
     </h:head>
-    <h:body>
+    <h:body style="background-color: #e3e3e3">
         <h:outputStylesheet>
              .ui-growl {
                 z-index:9999 !important;
             }
         </h:outputStylesheet>
-        <h:form id="cadastro" enctype="multipart/form-data">
+        <h:form id="cadastro">
             <p:growl globalOnly="true" id="info" sticky="true" />
             <b:fetchBeanInfos/>
             <ui:insert name="navbar">
@@ -39,19 +39,7 @@
                                     <hr style= "border-top: 1px solid #999999;"/>
                                 </b:column>
                             </b:row>
-                            <b:row>
-                                    <b:column colSm="2">
-                                        <h:outputLabel value="Foto" />
-                                    </b:column>
-                                    <b:column colSm="7">
-                                        <p:fileUpload id="foto" fileUploadListener="#{professorController.upload}" 
-                                                      allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
-                                                      update="foto"/>
-                                    </b:column>
-                                    <b:column colSm="3">
-                                        <b:message for="foto"/>
-                                    </b:column>
-                            </b:row>
+                            
                             <b:row>
                                 <b:column colSm="2">
                                     <h:outputLabel value="Nome" ><font color ='red' >*</font></h:outputLabel>
@@ -125,7 +113,7 @@
                                 </b:column>
                             </b:row>
                             <b:row id="tabelaTelefone">
-                                <b:column colSm="12">
+                                <b:column colSm="9">
                                     <p:dataTable   rendered="#{not empty professorController.telefones}" var="telefone" value="#{professorController.telefones}">
                                         <p:column headerText="DDD">
                                             <p:inplace id="dddTabela" editor="true">
@@ -210,7 +198,7 @@
                                 </b:column>
                             </b:row>
                             <b:row>
-                                <b:column>
+                                <b:column colSm="9">
                                 <p:outputPanel id="display" >
                                     <p:dataList value="#{professorController.disciplinas}" var="disciplina" emptyMessage="Nenhuma disciplina selecionada">
                                         #{disciplina.nome}
@@ -232,7 +220,7 @@
                                     <h:outputLabel value="CEP" ><font color ='red' >*</font></h:outputLabel>
                                 </b:column>
                                 <b:column colSm="3">
-                                    <p:inputMask  id="cep" onblur="pesquisacep(this.value)" value="#{professorController.cep}" mask="99999-999" converter="converter.cepConverter" required="true" requiredMessage="Cep é obrigatório!"/>
+                                    <p:inputMask  id="cep" value="#{professorController.cep}" mask="99999-999" converter="converter.cepConverter" required="true" requiredMessage="Cep é obrigatório!"/>
                                 </b:column>
                                  <b:column colSm="4">
                                      <p:commandButton process="@this cep" update="messageCep logradouro cidade bairro uf complemento" id="buscaCep" value="Pesquisar" icon="ui-icon-circle-zoomin" action="#{professorController.buscarCep}"/>

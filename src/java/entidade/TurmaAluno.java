@@ -24,7 +24,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name="turma_aluno"
-    ,catalog="sgeda"
+    ,catalog="kemdixip_sgeda"
 )
 public class TurmaAluno  implements java.io.Serializable {
 

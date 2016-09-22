@@ -24,7 +24,7 @@ import javax.persistence.UniqueConstraint;
  */
 @Entity
 @Table(name="pessoa"
-    ,catalog="sgeda"
+    ,catalog="kemdixip_sgeda"
     , uniqueConstraints = {@UniqueConstraint(columnNames="cpf"), @UniqueConstraint(columnNames="matricula")} 
 )
 public class Pessoa  implements java.io.Serializable {

@@ -23,7 +23,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name="simulado"
-    ,catalog="sgeda"
+    ,catalog="kemdixip_sgeda"
 )
 public class Simulado  implements java.io.Serializable {
 

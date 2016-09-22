@@ -12,8 +12,10 @@ import helper.DisciplinaHelper;
 import helper.LoginHelper;
 import helper.ProfessorHelper;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -77,9 +79,7 @@ public class ProfessorController {
         this.foto = foto;
     }
     
-    private String cpfConsulta;
-    private String nomeConsulta;
-    private String matriculaConsulta;
+    private String stringConsulta;
     
     public ProfessorController() {
         telefones = new HashSet<>();
@@ -91,28 +91,12 @@ public class ProfessorController {
                 
     }
 
-    public String getCpfConsulta() {
-        return cpfConsulta;
+    public String getStringConsulta() {
+        return stringConsulta;
     }
 
-    public void setCpfConsulta(String cpfConsulta) {
-        this.cpfConsulta = cpfConsulta;
-    }
-
-    public String getNomeConsulta() {
-        return nomeConsulta;
-    }
-
-    public void setNomeConsulta(String nomeConsulta) {
-        this.nomeConsulta = nomeConsulta;
-    }
-
-    public String getMatriculaConsulta() {
-        return matriculaConsulta;
-    }
-
-    public void setMatriculaConsulta(String matriculaConsulta) {
-        this.matriculaConsulta = matriculaConsulta;
+    public void setStringConsulta(String stringConsulta) {
+        this.stringConsulta = stringConsulta;
     }
 
     public void cadastrar() {
@@ -131,6 +115,7 @@ public class ProfessorController {
         Pessoa pessoa = new Pessoa(cpf, "0", nome, dataNascimento, sexo, new Timestamp(new Date().getTime()), email, telefones, endereco);
         endereco.setPessoa(pessoa);
         Professor professor = new Professor(pessoa, especializacao, instituicaoFormacao, disciplinas);
+                
         pessoa.setFoto(foto);
         
         for(Telefone telefone:telefones){
@@ -153,7 +138,12 @@ public class ProfessorController {
         }
         
         addMessage(null, FacesMessage.SEVERITY_INFO ,"Professor Cadastrado com Sucesso!");
-        emailSender.sendTo(email, "Idealizar", "usuário: "+pessoa.getMatricula()+"\n Senha: "+senha);
+        
+        if(emailSender.sendTo(email, "Idealizar", "usuário: "+pessoa.getMatricula()+"\n Senha: "+senha)){
+            addMessage(null, FacesMessage.SEVERITY_INFO ,"Email enviado com informações de login!");
+        }else{
+            addMessage(null, FacesMessage.SEVERITY_ERROR ,"Email com informações de login não pode ser enviado! Verifique sua conexão e tente reeviar através da página de detalhes");
+        }
 
         limparCampos();
         
@@ -358,6 +348,8 @@ public class ProfessorController {
       sexo = null;
       numeroTelefone = null;
       telefones = new HashSet<>();
+      foto=null;
+      resultadoConsulta = new ArrayList<>();
     }
     
     public String limparFormularioCadastro(){
@@ -367,7 +359,7 @@ public class ProfessorController {
     
     public String novoCadastro(){
         limparCampos();
-        return "/restrito/cadastro/professor?faces-redirect=true";
+        return "/restrito/administrador/cadastro/professor?faces-redirect=true";
     }
     
     public String novaConsulta(){
@@ -390,6 +382,7 @@ public class ProfessorController {
         telefone.setNumero(numeroTelefone);
         telefone.setDescricao(descricaoTelefone);
         
+        if(telefones == null) telefones = new HashSet<>();
         telefones.add(telefone);
         
         ddd = null;
@@ -470,9 +463,8 @@ public class ProfessorController {
     }
      
      public void limparFormularioConsulta(){
-         nomeConsulta = null;
-         matriculaConsulta = null;
-         cpfConsulta = null;
+         stringConsulta = null;
+         resultadoConsulta = new ArrayList<>();
      }
      
      private List<Professor> resultadoConsulta;
@@ -482,12 +474,11 @@ public class ProfessorController {
     }
      
      public String consultar(){
-         resultadoConsulta = professorHelper.getProfessores(nomeConsulta, cpfConsulta, matriculaConsulta);
+         resultadoConsulta = professorHelper.getProfessores(stringConsulta);
          if(resultadoConsulta == null || resultadoConsulta.isEmpty()){
              addMessage(null, FacesMessage.SEVERITY_INFO ,"Nenhum resultado encontrado!");
-             return "";
          }
-         return "/restrito/cadastro/consulta/resultadoProfessor?faces-redirect=true";
+         return "";
      }
      
      private Professor professorDetalhe;
@@ -502,20 +493,18 @@ public class ProfessorController {
      }
      
      public String alterarProfessor(){
-         return null;
+         return "/restrito/cadastro/detalhe/professor?faces-redirect=true";
      }
      
      public String inativar(){
-         return null;
+         return "/restrito/cadastro/detalhe/professor?faces-redirect=true";
      }
      
     public void upload(FileUploadEvent event) {
         UploadedFile uploadedFile = event.getFile();
-        String fileName = uploadedFile.getFileName();
         String contentType = uploadedFile.getContentType();
         foto = new Foto();
         foto.setImagem(uploadedFile.getContents());
-        
         image = new DefaultStreamedContent(new ByteArrayInputStream(foto.getImagem()), contentType);
     }
     

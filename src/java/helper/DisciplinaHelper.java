@@ -58,20 +58,32 @@ public class DisciplinaHelper {
 
     }
 
-    public List<Disciplina> getDisciplinas(String nome, String descricao) {
+    public Disciplina getByNome(String nome) {
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        try {
+            session.beginTransaction();
+            Disciplina disciplina = (Disciplina) session.createCriteria(Disciplina.class).add(Restrictions.eq("nome", nome)).uniqueResult();;
+            session.getTransaction().commit();
+            return disciplina;
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+        }
+
+        return null;
+    }
+
+    public List<Disciplina> getDisciplinas(String string) {
         session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
         Criteria crit = session.createCriteria(Disciplina.class);
 
-        if (descricao != null && !descricao.isEmpty()) {
-            crit.add(Restrictions.ilike("descricao", "%" + descricao + "%"));
+        if (string != null && !string.isEmpty()) {
+            crit.add(Restrictions.disjunction()
+                    .add(Restrictions.ilike("descricao", "%" + string + "%"))
+                    .add(Restrictions.ilike("nome", "%" + string + "%"))
+            );
         }
 
-        if (nome != null && !nome.isEmpty()) {
-
-            crit.add(Restrictions.ilike("nome", "%" + nome + "%"));
-
-        }
         crit.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
         List<Disciplina> retorno = crit.list();

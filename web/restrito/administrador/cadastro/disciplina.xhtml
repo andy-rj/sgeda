@@ -12,26 +12,19 @@
             .ui-growl {
                 z-index:9999 !important;
             }
-            .row{
-                margin-top: 7px;
-                margin-bottom:7px;
-            }
         </style>
     </h:head>
-    <h:body>
-        <h:outputStylesheet>
-            
-        </h:outputStylesheet>
+    <h:body style="background-color: #e3e3e3">
         <h:form id="cadastro">
             <p:growl globalOnly="true" id="info" sticky="true" />
             <b:fetchBeanInfos/>
             <ui:insert name="navbar">
                 <ui:include src="/template/navbar.xhtml"/>
             </ui:insert>
-            <b:container id="cont" fluid="true">
-                <b:row>
-                    <b:column colSm="8">
-                        <b:panel title="Cadastro de Disciplina" collapsible="false" style="margin-top: 66px; " look="info">
+            <b:container id="container">
+                <b:row style="margin-left: -45px; margin-right: -45px;">
+                    <b:column>
+                        <b:panel title="Cadastro de Disciplina" collapsible="false" look="info">
                             <b:row>
                                 <b:column>
                                     <font color ='red' >*</font><h:outputText style="font-size: 12px;color: red;" value="Preenchimento Obrigatório." />
@@ -69,7 +62,7 @@
                             <b:row>
                                 <br/>
                                 <b:column colSm="12">
-                                    <p:commandButton update=":#{p:component('cont')} :#{p:component('info')}" value="Cadastrar" action="#{disciplinaController.cadastrar}"/>
+                                    <p:commandButton update=":#{p:component('container')} :#{p:component('info')}" value="Cadastrar" action="#{disciplinaController.cadastrar}"/>
                                     <p:commandButton value="Limpar" action="#{disciplinaController.limparFormularioCadastro}" immediate="true"/>
                                 </b:column>
                             </b:row>

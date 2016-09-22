@@ -19,7 +19,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="resposta"
-    ,catalog="sgeda"
+    ,catalog="kemdixip_sgeda"
 )
 public class Resposta  implements java.io.Serializable {
 

@@ -4,7 +4,6 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:b="http://bootsfaces.net/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>Sistema de Gerenciamento</title>
@@ -12,34 +11,20 @@
             .ui-growl {
                 z-index:9999 !important;
             }
-            .row{
-                margin-top: 7px;
-                margin-bottom:7px;
-            }
         </style>
     </h:head>
-    <h:body>
-        <h:outputStylesheet>
-            
-        </h:outputStylesheet>
+    <h:body style="background-color: #e3e3e3">
         <h:form id="cadastro">
             <p:growl globalOnly="true" id="info" sticky="true" />
             <b:fetchBeanInfos/>
             <ui:insert name="navbar">
                 <ui:include src="/template/navbar.xhtml"/>
             </ui:insert>
-            <b:container id="cont" fluid="true">
-                <b:row>
-                    <b:column colSm="8">
-                        <b:panel title="Detalhes Disciplina" collapsible="false" style="margin-top: 66px; " look="info">
-                            <!--Dados Pessoais-->
-                            <b:row>
-                                <b:column col-sm="12">
-                                    <strong style="color: #999999;">Dados Pessoais</strong>
-                                    <hr style= "border-top: 1px solid #999999;" />
-                                </b:column>
-                            </b:row>
-                            
+            <b:container id="cont">
+                <b:row style="margin-left: -45px; margin-right: -45px;">
+                    <b:column>
+                        <b:panel title="Detalhes Disciplina" collapsible="false" look="info">
+                                                       
                             <b:row>
                                 <b:column colSm="2">
                                     <h:outputLabel value="Nome:" />
@@ -60,7 +45,7 @@
                             <b:row>
                                 <br/>
                                 <b:column colSm="2" offset="5">
-                                    <p:button value="Voltar" outcome="/restrito/cadastro/consulta/resultadoDisciplina" style="width: 100%"/>
+                                    <p:button value="Voltar" outcome="/restrito/cadastro/consulta/disciplina" style="width: 100%"/>
                                 </b:column>
                                 <b:column colSm="2">
                                     <p:commandButton rendered="#{loginController.usuarioLogado.administrador}" action="#{disciplinaController.alterarDisciplina}" value="Alterar" style="width: 100%"/>

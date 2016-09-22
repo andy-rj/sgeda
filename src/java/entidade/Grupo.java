@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -21,13 +22,12 @@ import org.hibernate.annotations.Parameter;
  */
 @Entity
 @Table(name="grupo"
-    ,catalog="sgeda"
+    ,catalog="kemdixip_sgeda"
 )
 public class Grupo  implements java.io.Serializable {
 
 
      private int idGrupo;
-     private Questao questao;
      private String enunciado;
      private Set<Questao> questaos = new HashSet(0);
 
@@ -35,18 +35,13 @@ public class Grupo  implements java.io.Serializable {
     }
 
 	
-    public Grupo(Questao questao) {
-        this.questao = questao;
-    }
-    public Grupo(Questao questao, String enunciado, Set<Questao> questaos) {
-       this.questao = questao;
+    public Grupo( String enunciado, Set<Questao> questaos) {
        this.enunciado = enunciado;
        this.questaos = questaos;
     }
    
-     @GenericGenerator(name="generator", strategy="foreign", parameters=@Parameter(name="property", value="questao"))@Id @GeneratedValue(generator="generator")
+     @Id @GeneratedValue(strategy=IDENTITY)
 
-    
     @Column(name="idGrupo", unique=true, nullable=false)
     public int getIdGrupo() {
         return this.idGrupo;
@@ -55,16 +50,6 @@ public class Grupo  implements java.io.Serializable {
     public void setIdGrupo(int idGrupo) {
         this.idGrupo = idGrupo;
     }
-
-@OneToOne(fetch=FetchType.LAZY)@PrimaryKeyJoinColumn
-    public Questao getQuestao() {
-        return this.questao;
-    }
-    
-    public void setQuestao(Questao questao) {
-        this.questao = questao;
-    }
-
     
     @Column(name="enunciado", length=3000)
     public String getEnunciado() {

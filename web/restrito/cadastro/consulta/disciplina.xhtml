@@ -12,13 +12,9 @@
             .ui-growl {
                 z-index:9999 !important;
             }
-            .row{
-                margin-top: 7px;
-                margin-bottom:7px;
-            }
         </style>
     </h:head>
-    <h:body>
+    <h:body style="background-color: #e3e3e3">
 
         <h:form id="consulta">
             <p:growl globalOnly="true" id="info" sticky="true" />
@@ -26,39 +22,45 @@
             <ui:insert name="navbar">
                 <ui:include src="/template/navbar.xhtml"/>
             </ui:insert>
-            <b:container fluid="true">
-                <b:row>
-                    <b:column colSm="8">
-                        <b:panel title="Consulta de Disciplina" collapsible="false" style="margin-top: 66px; " look="info">
+            <b:container >
+                <b:row style="margin-left: -45px; margin-right: -45px;">
+                    <b:column >
+                        <b:panel title="Consulta de Disciplina" collapsible="false" look="info">
                             <b:row>
-                                <b:column colSm="2">
-                                    <h:outputLabel value="Nome" />
+                                <b:column colSm="5" offset="2">
+                                    <p:inputText id="entradaConsulta" placeholder="Nome ou Descrição" value="#{disciplinaController.stringConsulta}" maxlength="50" style="width: 100%"/>
                                 </b:column>
-                                <b:column colSm="7">
-                                    <p:inputText id="nomeDisciplinaConsulta" value="#{disciplinaController.nomeConsulta}" maxlength="255">
-                                    </p:inputText>
-                                </b:column>
-                                
-                            </b:row>
-                            <b:row>
-                                <b:column colSm="2">
-                                    <h:outputLabel value="Descricao" />
-                                </b:column>
-                                <b:column colSm="7">
-                                    <p:inputText id="descricaoDisciplinaConsulta" value="#{disciplinaController.descricaoConsulta}" maxlength="255">
-                                    </p:inputText>
-                                </b:column>
-                                
-                            </b:row>
-                            
-                            <b:row>
-                                <br/>
-                                <b:column colSm="12">
-                                    <p:commandButton ajax="false" value="Consultar" action="#{disciplinaController.consultar}"/>
-                                    <p:commandButton value="Limpar" action="#{disciplinaController.limparFormularioConsulta}" immediate="true"/>
+                                 <b:column colSm="5">
+                                     <p:commandButton update="resultado " value="Buscar" action="#{disciplinaController.consultar}" icon=" ui-icon-search "/>
+                                     <p:commandButton value="Limpar" update="entradaConsulta resultado" action="#{disciplinaController.limparFormularioConsulta}" immediate="true"/>
                                 </b:column>
                             </b:row>
-
+                            <b:row id="resultado">
+                                <b:column>
+                                <b:dataTable rendered="#{not empty disciplinaController.resultadoConsulta}" value="#{disciplinaController.resultadoConsulta}" var="disciplina" id="datatable" styleClass="table table-striped table-bordered"
+                                             style="width:100%" searching="false">
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <h:outputText value="Nome" />
+                                            </f:facet>
+                                            <h:outputText id="matricula" value="#{disciplina.nome}" />
+                                        </h:column>
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <h:outputText value="Descrição" />
+                                            </f:facet>
+                                            <h:outputText value="#{disciplina.descricao}" />
+                                        </h:column>
+                                        
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <h:outputText value="" />
+                                            </f:facet>
+                                            <p:commandButton action="#{disciplinaController.exibirDetalhes(disciplina)}" value="Detalhes" style="width: 100%"/>
+                                        </h:column>
+                                    </b:dataTable>
+                                </b:column>
+                            </b:row>
                         </b:panel>
                     </b:column>
                 </b:row>

@@ -12,26 +12,19 @@
             .ui-growl {
                 z-index:9999 !important;
             }
-            .row{
-                margin-top: 7px;
-                margin-bottom:7px;
-            }
         </style>
     </h:head>
-    <h:body>
-        <h:outputStylesheet>
-            
-        </h:outputStylesheet>
+    <h:body style="background-color: #e3e3e3">      
         <h:form id="cadastro">
             <p:growl globalOnly="true" id="info" sticky="true" />
             <b:fetchBeanInfos/>
             <ui:insert name="navbar">
                 <ui:include src="/template/navbar.xhtml"/>
             </ui:insert>
-            <b:container id="cont" fluid="true">
-                <b:row>
-                    <b:column colSm="8">
-                        <b:panel title="Detalhes Professor" collapsible="false" style="margin-top: 66px; " look="info">
+            <b:container>
+                <b:row style="margin-left: -45px; margin-right: -45px;">
+                    <b:column>
+                        <b:panel title="Detalhes Professor" collapsible="false" look="info">
                             <!--Dados Pessoais-->
                             <b:row>
                                 <b:column col-sm="12">
@@ -88,7 +81,7 @@
                                 </b:column>
                             </b:row>
                             <b:row>
-                                <b:column colSm="12">
+                                <b:column colSm="7">
                                     <p:dataTable  var="telefone" value="#{professorController.professorDetalhe.pessoa.telefones}">
                                         <p:column headerText="DDD">
                                             <h:outputText value="#{telefone.ddd}" />
@@ -138,7 +131,7 @@
                                 </b:column>
                              </b:row>
                             <b:row>
-                                <b:column colSm="12">
+                                <b:column colSm="7">
                                     <p:dataTable  var="disciplina" value="#{professorController.professorDetalhe.disciplinas}">
                                         <p:column headerText="Nome">
                                             <h:outputText value="#{disciplina.nome}" />
@@ -218,7 +211,7 @@
                             <b:row>
                                 <br/>
                                 <b:column colSm="2" offset="5">
-                                    <p:button value="Voltar" outcome="/restrito/cadastro/consulta/resultadoProfessor" style="width: 100%"/>
+                                    <p:button value="Voltar" outcome="/restrito/cadastro/consulta/professor" style="width: 100%"/>
                                 </b:column>
                                 <b:column colSm="2">
                                     <p:commandButton action="#{professorController.alterarProfessor}" value="Alterar" style="width: 100%"/>

@@ -17,7 +17,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="opcao"
-    ,catalog="sgeda"
+    ,catalog="kemdixip_sgeda"
 )
 public class Opcao  implements java.io.Serializable {
 

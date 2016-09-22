@@ -48,6 +48,11 @@ public class DisciplinaController {
         disciplina.setDescricao(descricao);
         disciplina.setNome(nome);
         
+        if(disciplinaHelper.getByNome(nome) != null){
+            addMessage(null,FacesMessage.SEVERITY_ERROR, "Disciplina com nome " + nome + " ja está cadastrada no sistema!");
+            return;
+        }
+        
         if(!disciplinaHelper.cadastrar(disciplina)){
             addMessage(null,FacesMessage.SEVERITY_ERROR, "Erro ao Cadastrar Disciplina, Tente novamente!");
             return;
@@ -60,7 +65,7 @@ public class DisciplinaController {
         
     }
 
-   private String nomeConsulta;
+   private String stringConsulta;
 
     public List<Disciplina> getResultadoConsulta() {
         return resultadoConsulta;
@@ -70,31 +75,21 @@ public class DisciplinaController {
         this.resultadoConsulta = resultadoConsulta;
     }
 
-    public String getNomeConsulta() {
-        return nomeConsulta;
+    public String getStringConsulta() {
+        return stringConsulta;
     }
 
-    public void setNomeConsulta(String nomeConsulta) {
-        this.nomeConsulta = nomeConsulta;
+    public void setStringConsulta(String nomeConsulta) {
+        this.stringConsulta = nomeConsulta;
     }
-   private String descricaoConsulta;
     
     public String consultar(){
-        resultadoConsulta = disciplinaHelper.getDisciplinas(nomeConsulta, descricaoConsulta);
+        resultadoConsulta = disciplinaHelper.getDisciplinas(stringConsulta);
         if(resultadoConsulta == null || resultadoConsulta.isEmpty()){
             addMessage(null, FacesMessage.SEVERITY_INFO ,"Nenhum resultado encontrado!");
-            return "";
         }
-        return "/restrito/cadastro/consulta/resultadoDisciplina?faces-redirect=true";
+        return "";
      }
-
-    public String getDescricaoConsulta() {
-        return descricaoConsulta;
-    }
-
-    public void setDescricaoConsulta(String descricaoConsulta) {
-        this.descricaoConsulta = descricaoConsulta;
-    }
     
     private Disciplina disciplinaDetalhe;
 
@@ -142,6 +137,8 @@ public class DisciplinaController {
     }
 
     public void limparFormularioConsulta() {
+        stringConsulta = null;
+        resultadoConsulta = null;
     }
 
     public String novaConsulta() {

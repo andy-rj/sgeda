@@ -6,25 +6,25 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
-    </h:head>
-    <h:body>
-        <h:outputStylesheet>
+        <style>
             .navbar-default {
-                background-color: #014E7A;
-                border-color: #062436;
+            background-color: #6F2222;
+            border: none;
             }
             .navbar-default .navbar-nav > li > a:hover,.navbar-default .navbar-nav > li > a:focus {
-                color: #fff;
-                background-color: #014E7A;
+            color: #fff;
+            background-color: #014E7A;
             }
             .navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
-                background-color: #014E7A;
-                color: #fff;
+            background-color: #014E7A;
+            color: #fff;
             }
-
-        </h:outputStylesheet>
+        </style>
+    </h:head>
+    <h:body>
+        
         <b:row>
-        <b:navBar brandImg="/sgeda/resource/imagens/idealizar.png" brandHref="/../../sgeda/faces/home.xhtml" brandAlign="left" brand-img-style="width:145px;" style="margin-bottom: 0px; border-bottom: none;border-radius: 0%" >
+            <b:navBar brandImg="/sgeda/resource/imagens/idealizar.png" brandHref="/../../sgeda/faces/home.xhtml" brandAlign="left" brand-img-style="width:145px;" style="margin-bottom: 0px; border-bottom: none;border-radius: 0%" >
                 <b:navbarLinks pull="right">
                     <b:dropMenu value="#{loginController.usuarioLogado.pessoa.nome}">
                         <b:navCommandLink value="Sair" action="#{loginController.sair}" immediate="true"/>
@@ -32,60 +32,91 @@
                 </b:navbarLinks>
             </b:navBar>
         </b:row>
-        <b:row style="background-color: rgb(1, 78, 122);height: 85px;">
-                <p:graphicImage cache="false" id="fotoPerfil" rendered="#{loginController.image != null}" value="#{loginController.image}" 
-                                width="110" height="110" 
-                                style="border-radius: 50%; margin-left: 38px;position: absolute;z-index: 5000;">
-                </p:graphicImage>
+        <b:row style="background-color: #6F2222;height: 85px;">
+            <p:graphicImage cache="false" rendered="#{loginController.usuarioLogado.pessoa.foto != null}" value="#{loginController.image}" 
+                            width="110" height="110" 
+                            style="border-radius: 50%; margin-left: 150px;position: absolute;z-index: 5000; margin-top: 5px;">
+            </p:graphicImage>
+            <h:graphicImage rendered="#{loginController.usuarioLogado.pessoa.foto == null}" value="/resource/imagens/fotoPerfil.png" 
+                            width="110" height="110" 
+                            style="border-radius: 50%; margin-left: 150px;position: absolute;z-index: 5000; margin-top: 5px;">
+            </h:graphicImage>
         </b:row>
-        <b:navBar style="border-top: none; border-radius: 0%;background-color: #6F2222;border-color: #480C0C;" >
+        <b:navBar id="navBarAdm" rendered="#{loginController.usuarioLogado.administrador}" style="border-top: none; border-radius: 0%;background-color: rgb(10, 58, 86);border:none;" >
             <b:navbarLinks style="margin-left: 130px;">
-                    <b:dropMenu rendered="#{loginController.usuarioLogado.administrador or loginController.usuarioLogado.cadastro}" value="Aluno">
-                        <b:navCommandLink value="Cadastrar" action="#{alunoController.novoCadastro}" immediate="true"/>
-                        <b:navCommandLink value="Consultar" action ="#{alunoController.novaConsulta}" immediate="true"/>
-                    </b:dropMenu>
-                    <b:dropMenu rendered="#{loginController.usuarioLogado.administrador}" value="Professor">
-                        <b:navCommandLink value="Cadastrar" action="#{professorController.novoCadastro}" immediate="true"/>
-                        <b:navCommandLink value="Consultar" action ="#{professorController.novaConsulta}" immediate="true"/>
-                    </b:dropMenu>
-                    <b:dropMenu rendered="#{loginController.usuarioLogado.administrador}" value="Funcionário">
-                        <b:navCommandLink value="Cadastrar" action="#{funcionarioController.novoCadastro}" immediate="true"/>
-                        <b:navCommandLink value="Consultar" action ="#{funcionarioController.novaConsulta}" immediate="true"/>
-                    </b:dropMenu> 
-                    <b:dropMenu rendered="#{loginController.usuarioLogado.administrador}" value="Curso">
-                        <b:navCommandLink value="Cadastrar" action="#{cursoController.novoCadastro}" immediate="true"/>
-                        <b:navCommandLink value="Consultar" action ="#{cursoController.novaConsulta}" immediate="true"/>
-                    </b:dropMenu>
-                    <b:dropMenu rendered="#{loginController.usuarioLogado.administrador}" value="Disciplina">
-                        <b:navCommandLink value="Cadastrar" action="#{disciplinaController.novoCadastro}" immediate="true"/>
-                        <b:navCommandLink value="Consultar" action ="#{disciplinaController.novaConsulta}" immediate="true"/>
-                        <b:dropMenu rendered="#{loginController.usuarioLogado.administrador}" value="Subdisciplina">
-                            <b:navCommandLink value="Cadastrar" action="#{subdisciplinaController.novoCadastro}" immediate="true"/>
-                            <b:navCommandLink value="Consultar" action ="#{subdisciplinaController.novaConsulta}" immediate="true"/>
-                        </b:dropMenu>
-                    </b:dropMenu>
-                    <b:dropMenu rendered="#{loginController.usuarioLogado.administrador}" value="Turma">
-                        <b:navCommandLink value="Cadastrar" action="#{alunoController.novoCadastro}" immediate="true"/>
-                        <b:navCommandLink value="Consultar" action ="#{alunoController.novaConsulta}" immediate="true"/>
-                    </b:dropMenu>
-                    <b:dropMenu rendered="#{loginController.usuarioLogado.professor}" value="Simulado">
-                        <b:navCommandLink value="Cadastrar" action="#{simuladoController.novoCadastro}" immediate="true"/>
-                        <b:navCommandLink value="Consultar" action ="#{simuladoController.novaConsulta}" immediate="true"/>
-                    </b:dropMenu>
-                    <b:dropMenu rendered="#{loginController.usuarioLogado.professor}" value="Questão">
-                        <b:navCommandLink value="Cadastrar" action="#{questaoController.novoCadastro}" immediate="true"/>
-                        <b:navCommandLink value="Consultar" action ="#{questaoController.novaConsulta}" immediate="true"/>
-                    </b:dropMenu>
-                    <b:navCommandLink rendered="#{loginController.usuarioLogado.aluno}" value="Turmas" action="#{alunoController.turmas}" immediate="true"/>
-                    <b:navCommandLink rendered="#{loginController.usuarioLogado.professor}" value="Turmas" action="#{professorController.turmas}" immediate="true"/>
-                    <b:navCommandLink rendered="#{loginController.usuarioLogado.aluno}" value="Desempenho" action="#{alunoController.desempenho}" immediate="true"/>
-                    <b:dropMenu rendered="#{loginController.usuarioLogado.administrador}" value="Relatórios">
-                        <b:navCommandLink value="Relatório 1" action="#{questaoController.novoCadastro}" immediate="true"/>
-                        <b:navCommandLink value="Relatório 2" action ="#{questaoController.novaConsulta}" immediate="true"/>
-                        <b:navCommandLink value="Relatório 3" action ="#{questaoController.novaConsulta}" immediate="true"/>
-                        <b:navCommandLink value="Relatório 4" action ="#{questaoController.novaConsulta}" immediate="true"/>
-                    </b:dropMenu>
-                </b:navbarLinks>
-            </b:navBar>
+                <b:dropMenu value="Aluno">
+                    <b:navCommandLink value="Cadastrar" action="#{alunoController.novoCadastro}" immediate="true"/>
+                    <b:navCommandLink value="Consultar" action="#{alunoController.novaConsulta}" immediate="true"/>
+                </b:dropMenu>
+                <b:dropMenu value="Professor">
+                    <b:navCommandLink value="Cadastrar" action="#{professorController.novoCadastro}" immediate="true"/>
+                    <b:navCommandLink value="Consultar" action="#{professorController.novaConsulta}" immediate="true"/>
+                </b:dropMenu>
+                <b:dropMenu value="Funcionário">
+                    <b:navCommandLink value="Cadastrar" action="#{funcionarioController.novoCadastro}" immediate="true"/>
+                    <b:navCommandLink value="Consultar" action="#{funcionarioController.novaConsulta}" immediate="true"/>
+                </b:dropMenu> 
+                <b:dropMenu value="Curso">
+                    <b:navCommandLink value="Cadastrar" action="#{cursoController.novoCadastro}" immediate="true"/>
+                    <b:navCommandLink value="Consultar" action="#{cursoController.novaConsulta}" immediate="true"/>
+                </b:dropMenu>
+                <b:dropMenu value="Disciplina">
+                    <b:navCommandLink value="Cadastrar" action="#{disciplinaController.novoCadastro}" immediate="true"/>
+                    <b:navCommandLink value="Consultar" action="#{disciplinaController.novaConsulta}" immediate="true"/>
+                </b:dropMenu>
+                <b:dropMenu value="Turma">
+                    <b:navCommandLink value="Cadastrar" action="#{alunoController.novoCadastro}" immediate="true"/>
+                    <b:navCommandLink value="Consultar" action="#{alunoController.novaConsulta}" immediate="true"/>
+                </b:dropMenu>
+                <b:dropMenu value="Relatórios">
+                    <b:navCommandLink value="Relatório 1" action="#{questaoController.novoCadastro}" immediate="true"/>
+                    <b:navCommandLink value="Relatório 2" action="#{questaoController.novaConsulta}" immediate="true"/>
+                    <b:navCommandLink value="Relatório 3" action="#{questaoController.novaConsulta}" immediate="true"/>
+                    <b:navCommandLink value="Relatório 4" action="#{questaoController.novaConsulta}" immediate="true"/>
+                </b:dropMenu>
+            </b:navbarLinks>
+        </b:navBar>
+        <b:navBar id="navBarFuncionario" rendered="#{loginController.usuarioLogado.cadastro}" style="border-top: none; border-radius: 0%;background-color: rgb(10, 58, 86);border:none;" >
+            <b:navbarLinks style="margin-left: 130px;">
+                <b:dropMenu value="Aluno">
+                    <b:navCommandLink value="Cadastrar" action="#{alunoController.novoCadastro}" immediate="true"/>
+                    <b:navCommandLink value="Consultar" action="#{alunoController.novaConsulta}" immediate="true"/>
+                </b:dropMenu>
+                <b:dropMenu value="Professor">
+                    <b:navCommandLink value="Consultar" action="#{professorController.novaConsulta}" immediate="true"/>
+                </b:dropMenu>
+                <b:dropMenu value="Curso">
+                    <b:navCommandLink value="Consultar" action="#{cursoController.novaConsulta}" immediate="true"/>
+                </b:dropMenu>
+                <b:dropMenu value="Turma">
+                    <b:navCommandLink value="Consultar" action="#{alunoController.novaConsulta}" immediate="true"/>
+                </b:dropMenu>
+            </b:navbarLinks>
+        </b:navBar>
+        <b:navBar id="navBarAluno" rendered="#{loginController.usuarioLogado.aluno}" style="border-top: none; border-radius: 0%;background-color: rgb(10, 58, 86);border:none;" >
+            <b:navbarLinks style="margin-left: 130px;">
+                <b:navCommandLink value="Turmas" action="#{alunoController.turmas}" immediate="true"/>
+                <b:navCommandLink value="Simulados" action="#{professorController.turmas}" immediate="true"/>
+                <b:navCommandLink value="Notas" action="#{alunoController.desempenho}" immediate="true"/>
+                <b:navCommandLink value="Desempenho" action="#{alunoController.desempenho}" immediate="true"/>
+            </b:navbarLinks>
+        </b:navBar>
+        <b:navBar id="navBarProfessor" rendered="#{loginController.usuarioLogado.professor}" style="border-top: none; border-radius: 0%;background-color: rgb(10, 58, 86);border:none;" >
+            <b:navbarLinks style="margin-left: 130px;">
+                <b:dropMenu value="Aluno">
+                    <b:navCommandLink value="Cadastrar" action="#{alunoController.novoCadastro}" immediate="true"/>
+                    <b:navCommandLink value="Consultar" action="#{alunoController.novaConsulta}" immediate="true"/>
+                </b:dropMenu>
+                <b:dropMenu value="Professor">
+                    <b:navCommandLink value="Consultar" action="#{professorController.novaConsulta}" immediate="true"/>
+                </b:dropMenu>
+                <b:dropMenu value="Curso">
+                    <b:navCommandLink value="Consultar" action="#{cursoController.novaConsulta}" immediate="true"/>
+                </b:dropMenu>
+                <b:dropMenu value="Turma">
+                    <b:navCommandLink value="Consultar" action="#{alunoController.novaConsulta}" immediate="true"/>
+                </b:dropMenu>
+            </b:navbarLinks>
+        </b:navBar>
     </h:body>
 </html>

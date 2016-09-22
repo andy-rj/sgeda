@@ -25,7 +25,7 @@ import javax.persistence.Transient;
  */
 @Entity
 @Table(name="usuario"
-    ,catalog="sgeda"
+    ,catalog="kemdixip_sgeda"
 )
 public class Usuario  implements java.io.Serializable {
 
@@ -121,7 +121,7 @@ public class Usuario  implements java.io.Serializable {
     }
 
 @ManyToMany(fetch=FetchType.EAGER)
-    @JoinTable(name="usuario_papel", catalog="sgeda", joinColumns = { 
+    @JoinTable(name="usuario_papel", catalog="kemdixip_sgeda", joinColumns = { 
         @JoinColumn(name="usuario_idUsuario", nullable=false, updatable=false) }, inverseJoinColumns = { 
         @JoinColumn(name="papel_idPapel", nullable=false, updatable=false) })
     public Set<Papel> getPapels() {
@@ -142,26 +142,35 @@ public class Usuario  implements java.io.Serializable {
     
     @Transient
     public boolean isAluno(){
+        boolean aluno = false;
+        boolean adm = false;
         for(Papel papel: papels){
-            if(papel.getIdPapel() == PAPEL_ALUNO) return true;
+            if(papel.getIdPapel() == PAPEL_ALUNO) aluno = true;
+            if(papel.getIdPapel() == PAPEL_ADMINSTRADOR) adm = true;
         }
-        return false;
+        return !adm && aluno;
     }
     
     @Transient
     public boolean isProfessor(){
+        boolean professor = false;
+        boolean adm = false;
         for(Papel papel: papels){
-            if(papel.getIdPapel() == PAPEL_PROFESSOR) return true;
+            if(papel.getIdPapel() == PAPEL_PROFESSOR) professor = true;
+            if(papel.getIdPapel() == PAPEL_ADMINSTRADOR) adm = true;
         }
-        return false;
+        return !adm && professor;
     }
     
     @Transient
     public boolean isCadastro(){
+        boolean cadastro = false;
+        boolean adm = false;
         for(Papel papel: papels){
-            if(papel.getIdPapel() == PAPEL_CADASTRO) return true;
+            if(papel.getIdPapel() == PAPEL_CADASTRO) cadastro = true;
+            if(papel.getIdPapel() == PAPEL_ADMINSTRADOR) adm = true;
         }
-        return false;
+        return !adm && cadastro;
     }
 
 

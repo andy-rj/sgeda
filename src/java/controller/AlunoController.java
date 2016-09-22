@@ -5,9 +5,14 @@ import entidade.Endereco;
 import entidade.Pessoa;
 import entidade.Telefone;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+import util.EnvelopeEndereco;
+import webservice.CepWebService;
 
 @ManagedBean
 @SessionScoped
@@ -22,21 +27,19 @@ public class AlunoController {
     private String ddd;
     private String descricaoTelefone;
     private String email;
-    private Endereco endereco;
     private String estado;
     private String logradouro;
     private String nome;
     private String numero;
     private Pessoa pessoa;
     private String sexo;
-    private String telefone;
+    private String numeroTelefone;
     private Set<Telefone> telefones;
     private String nomeResponsavel;
     private String escolaridade;
     private String cpfResponsavel;
     private String telefoneResponsavel;
     private String curso;
-    private Set<String> disciplinas;
 
     public String getCurso() {
         return curso;
@@ -44,14 +47,6 @@ public class AlunoController {
 
     public void setCurso(String curso) {
         this.curso = curso;
-    }
-
-    public Set<String> getDisciplinas() {
-        return disciplinas;
-    }
-
-    public void setDisciplinas(Set<String> disciplinas) {
-        this.disciplinas = disciplinas;
     }
 
     public String getBairro() {
@@ -125,13 +120,9 @@ public class AlunoController {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    public Endereco getEndereco() {
-        return endereco;
-    }
-
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
+    
+    public void excluirTelefone(Telefone telefone) {
+        telefones.remove(telefone);
     }
 
     public String getEstado() {
@@ -182,12 +173,12 @@ public class AlunoController {
         this.sexo = sexo;
     }
 
-    public String getTelefone() {
-        return telefone;
+    public String getNumeroTelefone() {
+        return numeroTelefone;
     }
 
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
+    public void setNumeroTelefone(String telefone) {
+        this.numero = telefone;
     }
 
     public Set<Telefone> getTelefones() {
@@ -231,6 +222,7 @@ public class AlunoController {
     }
     
     public AlunoController() {
+        enderecoEncontrado = true;
     }
     
         public String novoCadastro(){
@@ -244,6 +236,51 @@ public class AlunoController {
     }
     
     public void limparCampos(){
+        bairro = null;
+        cep = null;
+        cidade = null;
+        complemento = null;
+        cpf = null;
+        cpfResponsavel = null;
+        curso = null;
+        dataNascimento = null;
+        ddd = null;
+        descricaoTelefone = null;
+        email = null;
+        enderecoEncontrado = true;
+        escolaridade = null;
+        estado = null;
+        logradouro = null;
+        nome = null;
+        nomeResponsavel = null;
+        numero = null;
+        numeroTelefone = null;
+        telefoneResponsavel = null;
+        telefones = new HashSet<>();
+        sexo = null;
+    }
+    
+    public void incluirTelefone() {
+        if(ddd==null || ddd.isEmpty()){
+            addMessage("cadastro:ddd","DDD inválido!");
+            return;
+        }
+        if(numeroTelefone == null || numeroTelefone.isEmpty()){
+            addMessage("cadastro:telefone","Número do telefone inválido");
+            return;
+        }
+        
+        Telefone telefone = new Telefone();
+        telefone.setDdd(ddd);
+        telefone.setNumero(numeroTelefone);
+        telefone.setDescricao(descricaoTelefone);
+        
+        if(telefones == null) telefones = new HashSet<>();
+        telefones.add(telefone);
+        
+        ddd = null;
+        numeroTelefone = null;
+        descricaoTelefone = null;
         
     }
     
@@ -254,6 +291,43 @@ public class AlunoController {
     
     public String cadastrar() {
         return "";
+    }
+    
+    public void addMessage(String id, String summary) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, summary,  null);
+        FacesContext.getCurrentInstance().addMessage(id, message);
+    }
+    
+    public void addMessage(String id, FacesMessage.Severity severidade, String summary) {
+        FacesMessage message = new FacesMessage(severidade, summary,  null);
+        FacesContext.getCurrentInstance().addMessage(id, message);
+    }
+    
+    private boolean enderecoEncontrado;
+
+    public boolean isEnderecoEncontrado() {
+        return enderecoEncontrado;
+    }
+    
+    public void buscarCep(){
+        EnvelopeEndereco endereco = CepWebService.buscaEndereco(cep);
+        if(endereco == null){
+            addMessage("cadastro:cep", "Cep não encontrado! Verifique e tente novamente ou preencha manualmente!");
+            cidade = null;
+            bairro = null;
+            estado = null;
+            logradouro = null;
+            complemento = null;
+            enderecoEncontrado = false;
+            return;
+        }
+        cidade = endereco.getLocalidade();
+        bairro = endereco.getBairro();
+        estado = endereco.getUf();
+        logradouro = endereco.getLogradouro();
+        complemento = endereco.getComplemento();
+        enderecoEncontrado = true;
+        
     }
     
 }
