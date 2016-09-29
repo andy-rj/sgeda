@@ -24,7 +24,7 @@
             <b:container>
                 <b:row style="margin-left: -45px; margin-right: -45px;">
                     <b:column>
-                        <b:panel title="Detalhes Professor" collapsible="false" look="info">
+                        <b:panel title="Detalhes Funcionario" collapsible="false" look="info">
                             <!--Dados Pessoais-->
                             <b:row>
                                 <b:column col-sm="12">
@@ -37,7 +37,7 @@
                                     <h:outputLabel value="Matrícula:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText id="matricula" value="#{professorController.professorDetalhe.pessoa.matricula}" />   
+                                    <h:outputText id="matricula" value="#{funcionarioController.funcionarioDetalhe.pessoa.matricula}" />   
                                 </b:column>
                             </b:row>
                             <b:row>
@@ -45,7 +45,7 @@
                                     <h:outputLabel value="Nome:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText id="nome" value="#{professorController.professorDetalhe.pessoa.nome}" />   
+                                    <h:outputText id="nome" value="#{funcionarioController.funcionarioDetalhe.pessoa.nome}" />   
                                 </b:column>
                             </b:row>
                             <b:row>
@@ -53,7 +53,7 @@
                                     <h:outputLabel value="CPF:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText converter="converter.cpfConverter" id="cpf" value="#{professorController.professorDetalhe.pessoa.cpf}" />   
+                                    <h:outputText converter="converter.cpfConverter" id="cpf" value="#{funcionarioController.funcionarioDetalhe.pessoa.cpf}" />   
                                 </b:column>
                             </b:row>
                             <b:row>
@@ -61,7 +61,7 @@
                                     <h:outputLabel value="Data de Nascimento:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText id="dataNascimento" value="#{professorController.professorDetalhe.pessoa.dataNascimento}" >
+                                    <h:outputText id="dataNascimento" value="#{funcionarioController.funcionarioDetalhe.pessoa.dataNascimento}" >
                                         <f:convertDateTime pattern="dd/MM/yyyy" type="date" />
                                     </h:outputText>
                                 </b:column>
@@ -71,8 +71,8 @@
                                     <h:outputLabel value="Sexo:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText id="sexo1" rendered="#{professorController.professorDetalhe.pessoa.sexo == 'M'}" value="Masculino" />
-                                    <h:outputText id="sexo2" rendered="#{professorController.professorDetalhe.pessoa.sexo != 'M'}" value="Feminino" />
+                                    <h:outputText id="sexo1" rendered="#{funcionarioController.funcionarioDetalhe.pessoa.sexo == 'M'}" value="Masculino" />
+                                    <h:outputText id="sexo2" rendered="#{funcionarioController.funcionarioDetalhe.pessoa.sexo != 'M'}" value="Feminino" />
                                 </b:column>
                             </b:row>
                             <b:row>
@@ -82,7 +82,7 @@
                             </b:row>
                             <b:row>
                                 <b:column colSm="7">
-                                    <p:dataTable  var="telefone" value="#{professorController.professorDetalhe.pessoa.telefones}">
+                                    <p:dataTable  var="telefone" value="#{funcionarioController.funcionarioDetalhe.pessoa.telefones}">
                                         <p:column headerText="DDD">
                                             <h:outputText value="#{telefone.ddd}" />
                                         </p:column>
@@ -103,46 +103,19 @@
                                     <h:outputLabel value="Email:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText id="email" value="#{professorController.professorDetalhe.pessoa.email}"/>
+                                    <h:outputText id="email" value="#{funcionarioController.funcionarioDetalhe.pessoa.email}"/>
                                 </b:column>    
                             </b:row>
                             
                             <b:row>
                                 <b:column colSm="2">
-                                    <h:outputLabel value="Intituição:" />
+                                    <h:outputLabel value="Cargo:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText id="instituicao" value="#{professorController.professorDetalhe.intituicaoFormacao}"/>
+                                    <h:outputText id="instituicao" value="#{funcionarioController.funcionarioDetalhe.cargo}"/>
                                 </b:column>    
                             </b:row>
                             
-                            <b:row>
-                                <b:column colSm="2">
-                                    <h:outputLabel value="Especialização:" />
-                                </b:column>
-                                <b:column colSm="10">
-                                    <h:outputText id="especializacao" value="#{professorController.professorDetalhe.especializacao}"/>
-                                </b:column>    
-                            </b:row>
-                            
-                             <b:row>
-                                <b:column colSm="2">
-                                    <h:outputLabel value="Habilitação:" />
-                                </b:column>
-                             </b:row>
-                            <b:row>
-                                <b:column colSm="7">
-                                    <p:dataTable  var="disciplina" value="#{professorController.professorDetalhe.disciplinas}">
-                                        <p:column headerText="Nome">
-                                            <h:outputText value="#{disciplina.nome}" />
-                                        </p:column>
-                                        <p:column headerText="Descrição">
-                                            <h:outputText value="#{disciplina.descricao}" />
-                                        </p:column>
-                                    </p:dataTable> 
-                                </b:column>
-                            </b:row>
-
                             <!--Dados de endereço-->
                             <b:row>
                                 <b:column col-sm="12">
@@ -156,7 +129,7 @@
                                     <h:outputLabel value="Logradouro:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText id="logradouro" value="#{professorController.professorDetalhe.pessoa.enderecos.logradouro}" />
+                                    <h:outputText id="logradouro" value="#{funcionarioController.funcionarioDetalhe.pessoa.enderecos.logradouro}" />
                                 </b:column>
                             </b:row>
                             <b:row>
@@ -164,7 +137,7 @@
                                     <h:outputLabel value="Número:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText id="numero" value="#{professorController.professorDetalhe.pessoa.enderecos.numero}" />
+                                    <h:outputText id="numero" value="#{funcionarioController.funcionarioDetalhe.pessoa.enderecos.numero}" />
                                 </b:column>
                             </b:row>
                             <b:row>
@@ -172,7 +145,7 @@
                                     <h:outputLabel value="Complemento:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText id="complemento" value="#{professorController.professorDetalhe.pessoa.enderecos.complemento}" />
+                                    <h:outputText id="complemento" value="#{funcionarioController.funcionarioDetalhe.pessoa.enderecos.complemento}" />
                                 </b:column>
                                 
                             </b:row>
@@ -181,7 +154,7 @@
                                     <h:outputLabel value="CEP:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText id="cep" value="#{professorController.professorDetalhe.pessoa.enderecos.cep}" converter="converter.cepConverter"/>
+                                    <h:outputText id="cep" value="#{funcionarioController.funcionarioDetalhe.pessoa.enderecos.cep}" converter="converter.cepConverter"/>
                                 </b:column>
                             </b:row>
                             <b:row>
@@ -189,7 +162,7 @@
                                     <h:outputLabel value="UF:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText id="uf" value="#{professorController.professorDetalhe.pessoa.enderecos.estado}" />                                        
+                                    <h:outputText id="uf" value="#{funcionarioController.funcionarioDetalhe.pessoa.enderecos.estado}" />                                        
                                 </b:column>
                             </b:row>
                             <b:row>
@@ -197,7 +170,7 @@
                                     <h:outputLabel value="Cidade:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText id="cidade" value="#{professorController.professorDetalhe.pessoa.enderecos.cidade}" />
+                                    <h:outputText id="cidade" value="#{funcionarioController.funcionarioDetalhe.pessoa.enderecos.cidade}" />
                                 </b:column>
                             </b:row>
                             <b:row>
@@ -205,19 +178,19 @@
                                     <h:outputLabel value="Bairro:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText id="bairro" value="#{professorController.professorDetalhe.pessoa.enderecos.bairro}" />
+                                    <h:outputText id="bairro" value="#{funcionarioController.funcionarioDetalhe.pessoa.enderecos.bairro}" />
                                 </b:column>
                             </b:row>
                             <b:row>
                                 <br/>
                                 <b:column colSm="2" offset="5">
-                                    <p:button value="Voltar" outcome="/restrito/cadastro/consulta/professor" style="width: 100%"/>
+                                    <p:button value="Voltar" outcome="/restrito/cadastro/consulta/funcionario" style="width: 100%"/>
                                 </b:column>
                                 <b:column colSm="2">
-                                    <p:commandButton action="#{professorController.alterarProfessor}" value="Alterar" style="width: 100%"/>
+                                    <p:commandButton action="#{funcionarioController.alterarFuncionario}" value="Alterar" style="width: 100%"/>
                                 </b:column>
                                 <b:column colSm="2">
-                                    <p:commandButton action="#{professorController.inativar}" onclick="return confirm('Confirma a inativação do professor?');" value="Inativar" style="width: 100%"/>
+                                    <p:commandButton action="#{funcionarioController.inativar}" onclick="return confirm('Confirma a inativação do funcionário?');" value="Inativar" style="width: 100%"/>
                                 </b:column>
 
                             </b:row>

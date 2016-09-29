@@ -70,6 +70,8 @@ public class ProfessorController {
     private LoginHelper loginHelper;
     private Foto foto;
     private StreamedContent image;
+    
+    private final String emailHTML = "<div style=\"background-color: #f4f4f4; margin:0px;\"><table width=\"642\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\" style=\"border:20px #f4f4f4\" ><tbody><tr><td><table width=\"642\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"font-family:Arial, SansSerif, Myriad Pro;font-size:14px; \"><tbody><tr><td style=\"line-height: 0;\"><center><img src=\"http://cursoidealizar.acessotemporario.net/sgeda/resource/imagens/idealizar.png\" width=\"300\" height=\"80\" border=\"0\" style=\"display: block; margin-bottom: 10px; margin-top: 10px;\"></center></td></tr></tbody></table><table width=\"642\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"font-family:Arial, SansSerif, Myriad Pro;font-size:14px; padding:30px 40px 0px 40px; background:#ffffff;color:#373737;\" ><tbody><tr style=\"border-bottom:4px solid #f4f4f4; display:block; padding:20px 0;\"><td><p><strong>Bem vindo ao Curso Idealizar,</strong></p><p></p><p>Para acessar o sistema utilize os dados abaixo:</p>----------------------------------------------------------------------<div style=\"margin-left: 20px;\"><p>Matrícula: <strong>{1}</strong></p><p>Senha: <strong>{2}</strong></p></div>----------------------------------------------------------------------<p>Clique <a href=\"http://cursoidealizar.acessotemporario.net/sgeda/\" target=\"_blank\">aqui</a> para login. <p><p></p><p></p><p>Atenciosamente,</p><p>Grupo Idealizar</p></td></tr></tbody></table><table width=\"642\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\" class=\"segundo-rodape\" style=\"font-family:SansSerif, Myriad Pro;font-size:14px; padding:35px 40px; background:#ffffff; color:#373737; text-align:center; \"><tbody><tr><td><p><center>Esta senha é gerada automaticamente.<br>Para alterar, acesse o sistema em \"Configuração\" >> \"Senha\".</center></p></td></tr></tbody></table></td></tr><tbody></table></div>";
 
     public Foto getFoto() {
         return foto;
@@ -139,7 +141,9 @@ public class ProfessorController {
         
         addMessage(null, FacesMessage.SEVERITY_INFO ,"Professor Cadastrado com Sucesso!");
         
-        if(emailSender.sendTo(email, "Idealizar", "usuário: "+pessoa.getMatricula()+"\n Senha: "+senha)){
+        String corpoMessagem  = emailHTML.replace("{1}", pessoa.getMatricula()).replace("{2}", senha);
+        
+        if(emailSender.sendTo(email, "Idealizar", corpoMessagem)){
             addMessage(null, FacesMessage.SEVERITY_INFO ,"Email enviado com informações de login!");
         }else{
             addMessage(null, FacesMessage.SEVERITY_ERROR ,"Email com informações de login não pode ser enviado! Verifique sua conexão e tente reeviar através da página de detalhes");
@@ -352,9 +356,8 @@ public class ProfessorController {
       resultadoConsulta = new ArrayList<>();
     }
     
-    public String limparFormularioCadastro(){
+    public void limparFormularioCadastro(){
         limparCampos();
-        return "";
     }
     
     public String novoCadastro(){
@@ -363,7 +366,7 @@ public class ProfessorController {
     }
     
     public String novaConsulta(){
-        limparCampos();
+        limparFormularioConsulta();
         return "/restrito/cadastro/consulta/professor?faces-redirect=true";
     }
     

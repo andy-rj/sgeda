@@ -31,12 +31,12 @@ public class EmailSender {
 
         try {
 
-            Message message = new MimeMessage(session);
+            MimeMessage message = new MimeMessage(session);
+            message.setContent(corpo, "text/html; charset=utf-8");
             message.setFrom(new InternetAddress(username));
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(para));
             message.setSubject(assunto);
-            message.setText(corpo);
 
             Transport.send(message);
             

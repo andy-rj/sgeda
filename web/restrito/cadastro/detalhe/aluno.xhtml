@@ -14,17 +14,17 @@
             }
         </style>
     </h:head>
-    <h:body style="background-color: #e3e3e3">      
+    <h:body style="background-color: #e3e3e3">
         <h:form id="cadastro">
             <p:growl globalOnly="true" id="info" sticky="true" />
             <b:fetchBeanInfos/>
             <ui:insert name="navbar">
                 <ui:include src="/template/navbar.xhtml"/>
             </ui:insert>
-            <b:container>
+            <b:container id="container">
                 <b:row style="margin-left: -45px; margin-right: -45px;">
                     <b:column>
-                        <b:panel title="Detalhes Professor" collapsible="false" look="info">
+                        <b:panel title="Detalhes Aluno" collapsible="false" look="info">
                             <!--Dados Pessoais-->
                             <b:row>
                                 <b:column col-sm="12">
@@ -37,7 +37,7 @@
                                     <h:outputLabel value="Matrícula:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText id="matricula" value="#{professorController.professorDetalhe.pessoa.matricula}" />   
+                                    <h:outputText id="matricula" value="#{alunoController.alunoDetalhe.pessoa.matricula}" />   
                                 </b:column>
                             </b:row>
                             <b:row>
@@ -45,7 +45,7 @@
                                     <h:outputLabel value="Nome:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText id="nome" value="#{professorController.professorDetalhe.pessoa.nome}" />   
+                                    <h:outputText id="nome" value="#{alunoController.alunoDetalhe.pessoa.nome}" />   
                                 </b:column>
                             </b:row>
                             <b:row>
@@ -53,7 +53,7 @@
                                     <h:outputLabel value="CPF:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText converter="converter.cpfConverter" id="cpf" value="#{professorController.professorDetalhe.pessoa.cpf}" />   
+                                    <h:outputText converter="converter.cpfConverter" id="cpf" value="#{alunoController.alunoDetalhe.pessoa.cpf}" />   
                                 </b:column>
                             </b:row>
                             <b:row>
@@ -61,7 +61,7 @@
                                     <h:outputLabel value="Data de Nascimento:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText id="dataNascimento" value="#{professorController.professorDetalhe.pessoa.dataNascimento}" >
+                                    <h:outputText id="dataNascimento" value="#{alunoController.alunoDetalhe.pessoa.dataNascimento}" >
                                         <f:convertDateTime pattern="dd/MM/yyyy" type="date" />
                                     </h:outputText>
                                 </b:column>
@@ -71,8 +71,8 @@
                                     <h:outputLabel value="Sexo:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText id="sexo1" rendered="#{professorController.professorDetalhe.pessoa.sexo == 'M'}" value="Masculino" />
-                                    <h:outputText id="sexo2" rendered="#{professorController.professorDetalhe.pessoa.sexo != 'M'}" value="Feminino" />
+                                    <h:outputText id="sexo1" rendered="#{alunoController.alunoDetalhe.pessoa.sexo == 'M'}" value="Masculino" />
+                                    <h:outputText id="sexo2" rendered="#{alunoController.alunoDetalhe.pessoa.sexo != 'M'}" value="Feminino" />
                                 </b:column>
                             </b:row>
                             <b:row>
@@ -81,8 +81,8 @@
                                 </b:column>
                             </b:row>
                             <b:row>
-                                <b:column colSm="7">
-                                    <p:dataTable  var="telefone" value="#{professorController.professorDetalhe.pessoa.telefones}">
+                                <b:column colSm="12">
+                                    <p:dataTable  var="telefone" value="#{alunoController.alunoDetalhe.pessoa.telefones}">
                                         <p:column headerText="DDD">
                                             <h:outputText value="#{telefone.ddd}" />
                                         </p:column>
@@ -103,46 +103,46 @@
                                     <h:outputLabel value="Email:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText id="email" value="#{professorController.professorDetalhe.pessoa.email}"/>
+                                    <h:outputText id="email" value="#{alunoController.alunoDetalhe.pessoa.email}"/>
                                 </b:column>    
                             </b:row>
                             
                             <b:row>
                                 <b:column colSm="2">
-                                    <h:outputLabel value="Intituição:" />
+                                    <h:outputLabel value="Escolaridade:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText id="instituicao" value="#{professorController.professorDetalhe.intituicaoFormacao}"/>
+                                    <h:outputText id="escolaridade" value="#{alunoController.alunoDetalhe.escolaridade}"/>
                                 </b:column>    
                             </b:row>
                             
-                            <b:row>
+                            <b:row rendered="#{not empty alunoController.alunoDetalhe.nomeResponsavel}">
                                 <b:column colSm="2">
-                                    <h:outputLabel value="Especialização:" />
+                                    <h:outputLabel value="Responsável:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText id="especializacao" value="#{professorController.professorDetalhe.especializacao}"/>
+                                    <h:outputText id="responsavel" value="#{alunoController.alunoDetalhe.nomeResponsavel}"/>
                                 </b:column>    
                             </b:row>
                             
-                             <b:row>
+                            <b:row rendered="#{not empty alunoController.alunoDetalhe.cpfResponsavel}">
                                 <b:column colSm="2">
-                                    <h:outputLabel value="Habilitação:" />
+                                    <h:outputLabel value="CPF do Responsável:" />
                                 </b:column>
-                             </b:row>
-                            <b:row>
-                                <b:column colSm="7">
-                                    <p:dataTable  var="disciplina" value="#{professorController.professorDetalhe.disciplinas}">
-                                        <p:column headerText="Nome">
-                                            <h:outputText value="#{disciplina.nome}" />
-                                        </p:column>
-                                        <p:column headerText="Descrição">
-                                            <h:outputText value="#{disciplina.descricao}" />
-                                        </p:column>
-                                    </p:dataTable> 
-                                </b:column>
+                                <b:column colSm="10">
+                                    <h:outputText id="cpfresponsavel" value="#{alunoController.alunoDetalhe.cpfResponsavel}" converter="converter.cpfConverter"/>
+                                </b:column>    
                             </b:row>
-
+                            
+                            <b:row rendered="#{not empty alunoController.alunoDetalhe.telefoneResponsavel}">
+                                <b:column colSm="2">
+                                    <h:outputLabel value="Telefone do Responsável:" />
+                                </b:column>
+                                <b:column colSm="10">
+                                    <h:outputText id="telefoneResponsavel" value="#{alunoController.alunoDetalhe.telefoneResponsavel}"/>
+                                </b:column>    
+                            </b:row>
+                            
                             <!--Dados de endereço-->
                             <b:row>
                                 <b:column col-sm="12">
@@ -156,7 +156,7 @@
                                     <h:outputLabel value="Logradouro:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText id="logradouro" value="#{professorController.professorDetalhe.pessoa.enderecos.logradouro}" />
+                                    <h:outputText id="logradouro" value="#{alunoController.alunoDetalhe.pessoa.enderecos.logradouro}" />
                                 </b:column>
                             </b:row>
                             <b:row>
@@ -164,7 +164,7 @@
                                     <h:outputLabel value="Número:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText id="numero" value="#{professorController.professorDetalhe.pessoa.enderecos.numero}" />
+                                    <h:outputText id="numero" value="#{alunoController.alunoDetalhe.pessoa.enderecos.numero}" />
                                 </b:column>
                             </b:row>
                             <b:row>
@@ -172,7 +172,7 @@
                                     <h:outputLabel value="Complemento:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText id="complemento" value="#{professorController.professorDetalhe.pessoa.enderecos.complemento}" />
+                                    <h:outputText id="complemento" value="#{alunoController.alunoDetalhe.pessoa.enderecos.complemento}" />
                                 </b:column>
                                 
                             </b:row>
@@ -181,7 +181,7 @@
                                     <h:outputLabel value="CEP:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText id="cep" value="#{professorController.professorDetalhe.pessoa.enderecos.cep}" converter="converter.cepConverter"/>
+                                    <h:outputText id="cep" value="#{alunoController.alunoDetalhe.pessoa.enderecos.cep}" converter="converter.cepConverter"/>
                                 </b:column>
                             </b:row>
                             <b:row>
@@ -189,7 +189,7 @@
                                     <h:outputLabel value="UF:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText id="uf" value="#{professorController.professorDetalhe.pessoa.enderecos.estado}" />                                        
+                                    <h:outputText id="uf" value="#{alunoController.alunoDetalhe.pessoa.enderecos.estado}" />                                        
                                 </b:column>
                             </b:row>
                             <b:row>
@@ -197,7 +197,7 @@
                                     <h:outputLabel value="Cidade:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText id="cidade" value="#{professorController.professorDetalhe.pessoa.enderecos.cidade}" />
+                                    <h:outputText id="cidade" value="#{alunoController.alunoDetalhe.pessoa.enderecos.cidade}" />
                                 </b:column>
                             </b:row>
                             <b:row>
@@ -205,13 +205,53 @@
                                     <h:outputLabel value="Bairro:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText id="bairro" value="#{professorController.professorDetalhe.pessoa.enderecos.bairro}" />
+                                    <h:outputText id="bairro" value="#{alunoController.alunoDetalhe.pessoa.enderecos.bairro}" />
+                                </b:column>
+                            </b:row>
+                            
+                            <b:row>
+                                <b:column colSm="2">
+                                    <h:outputLabel value="Turmas:" />
+                                </b:column>
+                             </b:row>
+                            <b:row>
+                                <b:column colSm="12">
+                                    <p:dataTable  var="turma" value="#{alunoController.alunoDetalhe.turmaAlunos}">
+                                        <p:column headerText="Disciplina">
+                                            <h:outputText value="#{turma.turma.disciplina.nome}" />
+                                        </p:column>
+                                        <p:column headerText="Nome">
+                                            <h:outputText value="#{turma.turma.nome}" />
+                                        </p:column>
+                                        <p:column headerText="Descrição">
+                                            <h:outputText value="#{turma.turma.descricao}" />
+                                        </p:column>
+                                        <p:column headerText="Curso">
+                                            <h:outputText value="#{turma.turma.curso.nome}" />
+                                        </p:column>
+                                        <p:column headerText="Início">
+                                            <h:outputText value="#{turma.turma.dataInicio}" >
+                                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Turno">
+                                            <h:outputText value="#{turma.turma.turno}" />
+                                        </p:column>
+                                        <p:column headerText="Professor">
+                                            <h:outputText value="#{turma.turma.professor.pessoa.nome}" />
+                                        </p:column>
+                                        <p:column headerText="Data de Inscrição">
+                                            <h:outputText value="#{turma.dataIncricao}" >
+                                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                            </h:outputText>
+                                        </p:column>
+                                    </p:dataTable> 
                                 </b:column>
                             </b:row>
                             <b:row>
                                 <br/>
                                 <b:column colSm="2" offset="5">
-                                    <p:button value="Voltar" outcome="/restrito/cadastro/consulta/professor" style="width: 100%"/>
+                                    <p:button value="Voltar" outcome="/restrito/cadastro/consulta/aluno" style="width: 100%"/>
                                 </b:column>
                                 <b:column colSm="2">
                                     <p:commandButton action="#{professorController.alterarProfessor}" value="Alterar" style="width: 100%"/>

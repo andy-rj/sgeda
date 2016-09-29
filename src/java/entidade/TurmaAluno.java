@@ -66,7 +66,7 @@ public class TurmaAluno  implements java.io.Serializable {
         this.id = id;
     }
 
-@ManyToOne(fetch=FetchType.LAZY)
+@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="aluno_idAluno", nullable=false, insertable=false, updatable=false)
     public Aluno getAluno() {
         return this.aluno;
@@ -76,7 +76,7 @@ public class TurmaAluno  implements java.io.Serializable {
         this.aluno = aluno;
     }
 
-@ManyToOne(fetch=FetchType.LAZY)
+@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="turma_idTurma", nullable=false, insertable=false, updatable=false)
     public Turma getTurma() {
         return this.turma;

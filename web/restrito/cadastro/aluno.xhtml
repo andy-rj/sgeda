@@ -21,7 +21,7 @@
             <ui:insert name="navbar">
                     <ui:include src="/template/navbar.xhtml"/>
                 </ui:insert>
-            <b:container>
+            <b:container id="container">
                 <b:row style="margin-left: -45px; margin-right: -45px;">
                     <b:column>
                         <b:panel title="Cadastro de Aluno" collapsible="false" look="info">
@@ -56,7 +56,9 @@
                                     <h:outputLabel value="CPF" ><font color ='red' >*</font></h:outputLabel>
                                 </b:column>
                                 <b:column colSm="7">
-                                    <p:inputMask id="cpf" value="#{alunoController.cpf}" maxlength="11" validatorMessage="Nome é obrigatório e deve ter até 50 caracteres" mask="999.999.999-99"/>
+                                    <p:inputMask id="cpf" value="#{alunoController.cpf}" maxlength="11" validatorMessage="Nome é obrigatório e deve ter até 50 caracteres" mask="999.999.999-99" converter="converter.cpfConverter">
+                                        <f:validateBean />
+                                    </p:inputMask>
                                 </b:column>
                                 <b:column colSm="3">
                                     <b:message for="cpf"  />
@@ -67,7 +69,9 @@
                                     <h:outputLabel value="Data de Nascimento" ><font color ='red' >*</font></h:outputLabel>
                                 </b:column>
                                 <b:column colSm="7">
-                                    <p:calendar id="nascimento" value="#{alunoController.dataNascimento}" locale="pt" navigator="true" pattern="dd-MM-YYYY" yearRange="c-90:c"/>
+                                    <p:calendar id="nascimento" value="#{alunoController.dataNascimento}" locale="pt" navigator="true" pattern="dd-MM-yyyy" yearRange="c-90:c">
+                                        <f:validateBean />
+                                    </p:calendar>
                                 </b:column>
                                 <b:column colSm="3">
                                     <b:message for="nascimento"  />
@@ -155,9 +159,10 @@
                                     <h:outputLabel value="Escolaridade" ><font color ='red' >*</font></h:outputLabel>
                                 </b:column>
                                 <b:column colSm="7">
-                                    <p:inputText id="escolaridade" value="#{alunoController.escolaridade}" maxlength="50"/>
+                                    <p:inputText id="escolaridade" value="#{alunoController.escolaridade}" required="true" requiredMessage="Escolaridade é obrigatório!" maxlength="50"/>
                                 </b:column>
                                 <b:column colSm="3">
+                                    <b:message for="escolaridade"/>
                                 </b:column>
                             </b:row>
                             <b:row>
@@ -168,6 +173,19 @@
                                     <p:inputText id="responsavel" value="#{alunoController.nomeResponsavel}" maxlength="100"/>
                                 </b:column>
                                 <b:column colSm="3">
+                                    <b:message for="responsavel"/>
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column colSm="2">
+                                    <h:outputLabel value="CPF do Responsável" />
+                                </b:column>
+                                <b:column colSm="7">
+                                    <p:inputMask id="cpfResponsavel" value="#{alunoController.cpfResponsavel}" maxlength="11" validatorMessage="Nome é obrigatório e deve ter até 50 caracteres" mask="999.999.999-99" converter="converter.cpfConverter">
+                                    </p:inputMask>
+                                </b:column>
+                                <b:column colSm="3">
+                                    <b:message for="cpfResponsavel"  />
                                 </b:column>
                             </b:row>
                             <b:row>
@@ -176,9 +194,10 @@
                                     <h:outputLabel value="Telefone do Responsável" />
                                 </b:column>
                                 <b:column colSm="7">
-                                    <p:inputMask id="telefoneResponsavel" value="#{alunoController.telefoneResponsavel}" mask="(999)9999-9999?9"/>
+                                    <p:inputMask id="telefoneResponsavel" value="#{alunoController.telefoneResponsavel}" mask="(99)9999-9999?9" converter="converter.telefoneResponsavelConverter"/>
                                 </b:column>
                                 <b:column colSm="3">
+                                    <b:message for="telefoneResponsavel"/>
                                 </b:column>
                             </b:row>
                             <b:row>
@@ -186,9 +205,41 @@
                                     <h:outputLabel value="Curso" ><font color ='red' >*</font></h:outputLabel>
                                 </b:column>
                                 <b:column colSm="7">
-                                    <p:inputText id="curso" value="#{alunoController.curso}" maxlength="50"/>
+                                    <p:selectOneMenu id="curso" value="#{alunoController.cursoSelecionado}" required="true" requiredMessage="Curso é obrigatório!" style="width:100%">
+                                        <f:selectItem itemLabel="Selecione o curso" itemValue="0" noSelectionOption="true" />
+                                        <f:selectItems value="#{alunoController.cursosCadastrados}" var="curso" itemLabel="#{curso.nome}" itemValue="#{curso.idCurso}" />
+                                        <p:ajax listener="#{alunoController.onChangeCurso}" update="turno inicio"/>
+                                    </p:selectOneMenu>
                                 </b:column>
                                 <b:column colSm="3">
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column colSm="2">
+                                    <h:outputLabel value="Turno" ><font color ='red' >*</font></h:outputLabel>
+                                </b:column>
+                                <b:column colSm="7">
+                                    <p:selectOneMenu id="turno" value="#{alunoController.turnoSelecionado}" required="true" requiredMessage="Turno é obrigatório!" style="width:100%">
+                                        <f:selectItem itemLabel="Selecione o turno" itemValue="0" noSelectionOption="true" />
+                                        <f:selectItems value="#{alunoController.turnosDisponiveis}" var="turno" itemLabel="#{turno}" itemValue="#{turno}" />
+                                        <p:ajax listener="#{alunoController.onChangeTurno}" update="inicio"/>
+                                    </p:selectOneMenu>
+                                </b:column>
+                                <b:column colSm="3">
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column colSm="2">
+                                    <h:outputLabel value="Data de Início" ><font color ='red' >*</font></h:outputLabel>
+                                </b:column>
+                                <b:column colSm="7">
+                                    <p:selectOneMenu id="inicio" value="#{alunoController.dataInicioSelecionada}" required="true" requiredMessage="Data de início é obrigatório!" style="width:100%">
+                                        <f:selectItem itemLabel="Selecione a data de Início" itemValue="0" noSelectionOption="true" />
+                                        <f:selectItems value="#{alunoController.dataInicioDisponiveis}" var="data" itemLabel="#{data}" itemValue="#{data}" />
+                                    </p:selectOneMenu>
+                                </b:column>
+                                <b:column colSm="3">
+                                    <b:message for="inicio"/>
                                 </b:column>
                             </b:row>
                                                         
@@ -292,8 +343,8 @@
                             <b:row>
                                 <br/>
                                 <b:column colSm="12">
-                                <p:commandButton value="Cadastrar" action="#{alunoController.cadastrar}"/>
-                                <p:commandButton value="Limpar" action="#{alunoController.limparFormularioCadastro}" immediate="true"/>
+                                    <p:commandButton update=":#{p:component('container')} :#{p:component('info')}" value="Cadastrar" action="#{alunoController.cadastrar}" oncomplete="window.scrollTo(0,0);"/>
+                                    <p:commandButton update=":#{p:component('container')} " process="@this" value="Limpar" action="#{alunoController.limparFormularioCadastro}" immediate="true"/>
                                 </b:column>
                             </b:row>
 

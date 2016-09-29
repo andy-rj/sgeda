@@ -2,6 +2,7 @@ package helper;
 
 import entidade.Disciplina;
 import entidade.Endereco;
+import entidade.Funcionario;
 import entidade.Pessoa;
 import entidade.Professor;
 import entidade.Telefone;
@@ -16,10 +17,10 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
-public class ProfessorHelper {
+public class FuncionarioHelper {
     Session session = null;
     
-    public boolean cadastrar(Pessoa pessoa, Endereco endereco, Professor professor, Usuario usuario){
+    public boolean cadastrar(Pessoa pessoa, Endereco endereco, Funcionario funcionario, Usuario usuario){
         
         session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.getTransaction();
@@ -41,7 +42,7 @@ public class ProfessorHelper {
             }
             int ano = Calendar.getInstance().get(Calendar.YEAR);
             int mes = Calendar.getInstance().get(Calendar.MONTH);
-            matricula = "P" + ano + "." +((mes/6)+1) + "-" + matricula;
+            matricula = "F" + ano + "." +((mes/6)+1) + "-" + matricula;
             pessoa.setMatricula(matricula);
             usuario.setLogin(matricula);
             session.update(pessoa);
@@ -49,7 +50,7 @@ public class ProfessorHelper {
             for(Telefone telefone : pessoa.getTelefones()){
                 session.save(telefone);
             }
-            session.save(professor);
+            session.save(funcionario);
             session.save(usuario);
             session.flush();
             tx.commit();
@@ -67,15 +68,15 @@ public class ProfessorHelper {
         return true;
     }
     
-    public Professor getByCpf(String cpf){
+    public Funcionario getByCpf(String cpf){
         session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.getTransaction();
         try{
             tx.begin();
-            Professor professor = (Professor) session.createCriteria(Professor.class).createAlias("pessoa", "pessoa").add(Restrictions.eq("pessoa.cpf", cpf)).uniqueResult();
+            Funcionario funcionario = (Funcionario) session.createCriteria(Funcionario.class).createAlias("pessoa", "pessoa").add(Restrictions.eq("pessoa.cpf", cpf)).uniqueResult();
             session.flush();
             tx.commit();
-            return professor;
+            return funcionario;
         } catch (HibernateException e){
             if(tx != null){
                 tx.rollback();
@@ -88,34 +89,12 @@ public class ProfessorHelper {
         return null;
     }
 
-    public List<Professor> getProfessorByDisciplina(Integer disciplinaSelecionada) {
-        session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = session.getTransaction();
-        try{
-            tx.begin();
-            List<Professor> professores = session.createCriteria(Professor.class).createAlias("disciplinas", "disciplina").add(Restrictions.eq("disciplina.idDisciplina", disciplinaSelecionada)).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
-            session.flush();
-            tx.commit();
-            return professores;
-        } catch (HibernateException e) {
-            if (tx != null) {
-                tx.rollback();
-            }
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
-        return null;
-    }
-
-
-    public List<Professor> getProfessores(String stringConsulta) {
+    public List<Funcionario> getFuncionarios(String stringConsulta) {
         session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.getTransaction();
         try {
             tx.begin();
-            Criteria crit = session.createCriteria(Professor.class);
+            Criteria crit = session.createCriteria(Funcionario.class);
 
             crit.createAlias("pessoa", "pessoa");
 
@@ -129,14 +108,11 @@ public class ProfessorHelper {
 
             crit.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
-            List<Professor> retorno = crit.list();
+            List<Funcionario> retorno = crit.list();
 
-            for (Professor professor : retorno) {
-                for (Telefone telefone : professor.getPessoa().getTelefones()) {
+            for (Funcionario funcionario : retorno) {
+                for (Telefone telefone : funcionario.getPessoa().getTelefones()) {
                     telefone.getDdd();
-                }
-                for (Disciplina disciplina : professor.getDisciplinas()) {
-                    disciplina.getNome();
                 }
             }
             session.flush();
@@ -148,27 +124,6 @@ public class ProfessorHelper {
             }
         } finally {
             if(session != null){
-                session.close();
-            }
-        }
-        return null;
-    }
-    
-    public Professor getById(Integer Id){
-        session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = session.getTransaction();
-        try{
-            tx.begin();
-            Professor professore =(Professor)session.createCriteria(Professor.class).add(Restrictions.eq("idProfessor", Id)).uniqueResult();
-            session.flush();
-            tx.commit();
-            return professore;
-        } catch (HibernateException e) {
-            if (tx != null) {
-                tx.rollback();
-            }
-        } finally {
-            if (session != null) {
                 session.close();
             }
         }

@@ -112,7 +112,7 @@ public class Aluno  implements java.io.Serializable {
         this.telefoneResponsavel = telefoneResponsavel;
     }
 
-    @OneToMany(fetch=FetchType.LAZY, mappedBy="aluno")
+    @OneToMany(fetch=FetchType.EAGER, mappedBy="aluno")
     public Set<TurmaAluno> getTurmaAlunos() {
         return this.turmaAlunos;
     }

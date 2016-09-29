@@ -7,7 +7,7 @@ import entidade.Subdisciplina;
 import helper.CursoHelper;
 import helper.DisciplinaHelper;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
@@ -44,7 +44,6 @@ public class CursoController {
     private List<Disciplina> disciplinasDisponiveis;
     
     public List<Disciplina> getDisciplinasDisponiveis() {
-        disciplinasDisponiveis = disciplinaHelper.getDisciplinasDisponiveis();
         return disciplinasDisponiveis;
     }
     
@@ -60,6 +59,7 @@ public class CursoController {
         Curso curso = new Curso();
         curso.setDescricao(descricao);
         curso.setNome(nome);
+        curso.setDisciplinas(new HashSet<>(disciplinasCurso));
         
         if(!cursoHelper.cadastrar(curso)){
             addMessage(null,FacesMessage.SEVERITY_ERROR, "Erro ao Cadastrar Curso, Tente novamente!");
@@ -73,7 +73,7 @@ public class CursoController {
         
     }
 
-   
+   private List<Disciplina> disciplinasCurso;
 
     public String getNome() {
         return nome;
@@ -83,20 +83,62 @@ public class CursoController {
         this.nome = nome;
     }
 
+    public void incluirDisciplina(){
+        if(disciplinaSelecionada!=null){
+            if(disciplinasCurso==null) disciplinasCurso = new ArrayList<>();
+            for(Disciplina disciplina : disciplinasDisponiveis){
+                if(disciplina.getIdDisciplina().equals(disciplinaSelecionada)){
+                    if(!disciplinasCurso.contains(disciplina)){
+                        disciplinasCurso.add(disciplina);
+                        disciplinasDisponiveis.remove(disciplina);
+                        break;
+                    }
+                }
+            }
+        }
+    }
    
+    private String stringConsulta;
+
+    public String getStringConsulta() {
+        return stringConsulta;
+    }
+
+    public void setStringConsulta(String stringConsulta) {
+        this.stringConsulta = stringConsulta;
+    }
+    
     
     public void limparCampos(){
      
       nome = null;
       descricao = null;
-     
+      if(disciplinasCurso != null){
+          for(Disciplina disciplina : disciplinasCurso){
+              disciplinasDisponiveis.add(disciplina);
+          }
+      }
+      disciplinasCurso = null;
+
     }
     
     public String limparFormularioCadastro(){
         return novoCadastro();
     }
+    public List<Disciplina> getDisciplinasCurso(){
+        return disciplinasCurso;
+    }
+    
+    public void excluirDisciplina(Disciplina disciplina){
+        if(disciplina != null){
+            disciplinasCurso.remove(disciplina);
+            disciplinasDisponiveis.add(disciplina);
+        }
+        disciplinaSelecionada = null;
+    }
     
     public String novoCadastro(){
+        disciplinasDisponiveis = disciplinaHelper.getDisciplinasDisponiveis();
         limparCampos();
         return "/restrito/administrador/cadastro/curso?faces-redirect=true";
     }
@@ -120,31 +162,39 @@ public class CursoController {
     
      
      public void limparFormularioConsulta(){
-        
+        stringConsulta = null;
+        resultadoConsulta = new ArrayList<>();
      }
      
-     private List<Professor> resultadoConsulta;
+     private List<Curso> resultadoConsulta;
 
-    public List<Professor> getResultadoConsulta() {
+    public List<Curso> getResultadoConsulta() {
         return resultadoConsulta;
     }
      
-     public String consultar(){
-         //resultadoConsulta = professorHelper.getProfessores(nomeConsulta, cpfConsulta, matriculaConsulta);
+     public void consultar(){
+         resultadoConsulta = cursoHelper.getCursos(stringConsulta);
          if(resultadoConsulta == null || resultadoConsulta.isEmpty()){
              addMessage(null, FacesMessage.SEVERITY_INFO ,"Nenhum resultado encontrado!");
-             return "";
          }
-         return "/restrito/cadastro/consulta/resultadoCurso?faces-redirect=true";
      }
      
+     private Curso cursoDetalhe;
+
+    public Curso getCursoDetalhe() {
+        return cursoDetalhe;
+    }
+
+    public void setCursoDetalhe(Curso cursoDetalhe) {
+        this.cursoDetalhe = cursoDetalhe;
+    }
      
-     public String exibirDetalhes(Professor professor){
-        //professorDetalhe = professor;
+     public String exibirDetalhes(Curso curso){
+        cursoDetalhe = curso;
         return "/restrito/cadastro/detalhe/curso?faces-redirect=true";
      }
      
-     public String alterarProfessor(){
+     public String alterarCurso(){
          return null;
      }
      

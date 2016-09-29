@@ -71,7 +71,7 @@ public class Curso  implements java.io.Serializable {
         this.descricao = descricao;
     }
 
-@ManyToMany(fetch=FetchType.LAZY)
+@ManyToMany(fetch=FetchType.EAGER)
     @JoinTable(name="curso_disciplina", catalog="kemdixip_sgeda", joinColumns = { 
         @JoinColumn(name="curso_idCurso", nullable=false, updatable=false) }, inverseJoinColumns = { 
         @JoinColumn(name="disciplina_idDisciplina", nullable=false, updatable=false) })

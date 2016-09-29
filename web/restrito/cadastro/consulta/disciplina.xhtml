@@ -25,13 +25,13 @@
             <b:container >
                 <b:row style="margin-left: -45px; margin-right: -45px;">
                     <b:column >
-                        <b:panel title="Consulta de Disciplina" collapsible="false" look="info">
+                        <b:panel title="Consulta de Disciplina" style="min-height: 200px;" collapsible="false" look="info">
                             <b:row>
                                 <b:column colSm="5" offset="2">
                                     <p:inputText id="entradaConsulta" placeholder="Nome ou Descrição" value="#{disciplinaController.stringConsulta}" maxlength="50" style="width: 100%"/>
                                 </b:column>
                                  <b:column colSm="5">
-                                     <p:commandButton update="resultado " value="Buscar" action="#{disciplinaController.consultar}" icon=" ui-icon-search "/>
+                                     <p:commandButton update="resultado info" value="Buscar" action="#{disciplinaController.consultar}" icon=" ui-icon-search "/>
                                      <p:commandButton value="Limpar" update="entradaConsulta resultado" action="#{disciplinaController.limparFormularioConsulta}" immediate="true"/>
                                 </b:column>
                             </b:row>

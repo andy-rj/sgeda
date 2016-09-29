@@ -25,7 +25,7 @@ import org.hibernate.criterion.Restrictions;
 public class LoginHelper {
 
     public Foto getFotoPerfil(Pessoa pessoa) {
-        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session = HibernateUtil.getSessionFactory().openSession();
 
         Transaction tx = session.getTransaction();
 
@@ -35,10 +35,17 @@ public class LoginHelper {
             crit.createAlias("pessoa", "pessoa");
             crit.add(Restrictions.eq("pessoa.idPessoa", pessoa.getIdPessoa()));
             Foto foto = (Foto) crit.uniqueResult();
+            session.flush();
             tx.commit();
             return foto;
         } catch (Exception e) {
-            tx.rollback();
+            if(tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(session != null){
+                session.close();
+            }
         }
 
         return null;
@@ -92,7 +99,7 @@ public class LoginHelper {
         } catch (NoSuchAlgorithmException e) {
 
         }
-        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session = HibernateUtil.getSessionFactory().openSession();
 
         Transaction tx = session.getTransaction();
 
@@ -101,10 +108,15 @@ public class LoginHelper {
             Criteria crit = session.createCriteria(Usuario.class);
             crit.add(Restrictions.eq("senha", senha)).add(Restrictions.eq("login", usuario));
             Usuario login = (Usuario) crit.uniqueResult();
+            session.flush();
             tx.commit();
             return login;
         } catch (Exception e) {
-            tx.rollback();
+            if(tx != null)
+                tx.rollback();
+        } finally {
+            if(session != null)
+                session.close();
         }
 
         return null;
@@ -112,7 +124,59 @@ public class LoginHelper {
     }
     
     public Papel getPapelProfessor(){
-         session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session = HibernateUtil.getSessionFactory().openSession();
+
+        Transaction tx = session.getTransaction();
+
+        try {
+            tx.begin();
+            Criteria crit = session.createCriteria(Papel.class);
+            crit.add(Restrictions.eq("idPapel", 3));
+            Papel papel = (Papel) crit.uniqueResult();
+            session.flush();
+            tx.commit();
+            return papel;
+        } catch (Exception e) {
+            if(tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if (session != null){
+                session.close();
+            }
+        }
+
+        return null;
+    }
+    
+    public Papel getPapelAtendente(){
+        session = HibernateUtil.getSessionFactory().openSession();
+
+        Transaction tx = session.getTransaction();
+
+        try {
+            tx.begin();
+            Criteria crit = session.createCriteria(Papel.class);
+            crit.add(Restrictions.eq("idPapel", 2));
+            Papel papel = (Papel) crit.uniqueResult();
+            session.flush();
+            tx.commit();
+            return papel;
+        } catch (Exception e) {
+            if(tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if (session != null){
+                session.close();
+            }
+        }
+
+        return null;
+    }
+    
+    public Papel getPapelAdminstrador(){
+        session = HibernateUtil.getSessionFactory().openSession();
 
         Transaction tx = session.getTransaction();
 
@@ -121,10 +185,43 @@ public class LoginHelper {
             Criteria crit = session.createCriteria(Papel.class);
             crit.add(Restrictions.eq("idPapel", 1));
             Papel papel = (Papel) crit.uniqueResult();
+            session.flush();
             tx.commit();
             return papel;
         } catch (Exception e) {
-            tx.rollback();
+            if(tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if (session != null){
+                session.close();
+            }
+        }
+
+        return null;
+    }
+    
+    public Papel getPapelAluno(){
+        session = HibernateUtil.getSessionFactory().openSession();
+
+        Transaction tx = session.getTransaction();
+
+        try {
+            tx.begin();
+            Criteria crit = session.createCriteria(Papel.class);
+            crit.add(Restrictions.eq("idPapel", 4));
+            Papel papel = (Papel) crit.uniqueResult();
+            session.flush();
+            tx.commit();
+            return papel;
+        } catch (Exception e) {
+            if(tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if (session != null){
+                session.close();
+            }
         }
 
         return null;
@@ -138,32 +235,49 @@ public class LoginHelper {
 
         }
         
-        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session = HibernateUtil.getSessionFactory().openSession();
+         Transaction tx = session.getTransaction();
+         
          try {
-            session.beginTransaction();
+            tx.begin();
             usuario.setSenha(senha);
             session.save(usuario);
-            session.getTransaction().commit();
+            session.flush();
+            tx.commit();
         } catch (Exception e) {
-            session.getTransaction().rollback();
+            if(tx != null){
+                tx.rollback();
+            }
             e.printStackTrace();
             return false;
-        }
+        } finally {
+             if(session != null){
+                 session.close();
+             }
+         }
         return true;
     }
      
       public void addPapel(Usuario usuario, Papel papelProfessor) {
-          session = HibernateUtil.getSessionFactory().getCurrentSession();
+          session = HibernateUtil.getSessionFactory().openSession();
+          Transaction tx = session.getTransaction();
           try{
-            session.beginTransaction();
+            tx.begin();
             usuario.setPapels(new HashSet());
             usuario.getPapels().add(papelProfessor);
             session.update(usuario);
-            session.getTransaction().commit();
+            session.flush();
+            tx.commit();
         } catch (Exception e) {
-            session.getTransaction().rollback();
+            if(tx != null){
+                tx.rollback();
+            }
             e.printStackTrace();
-        }    
+        } finally {
+              if(session != null){
+                  session.close();
+              }
+          }
       }
         
     

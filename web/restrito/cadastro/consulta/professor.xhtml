@@ -31,7 +31,7 @@
                                     <p:inputText id="entradaConsulta" placeholder="Matrícula, Nome ou CPF" value="#{professorController.stringConsulta}" maxlength="50" style="width: 100%"/>
                                 </b:column>
                                  <b:column colSm="5">
-                                     <p:commandButton update="resultado " value="Buscar" action="#{professorController.consultar}" icon=" ui-icon-search "/>
+                                     <p:commandButton update="resultado info" value="Buscar" action="#{professorController.consultar}" icon=" ui-icon-search "/>
                                      <p:commandButton value="Limpar" update="entradaConsulta resultado" action="#{professorController.limparFormularioConsulta}" immediate="true"/>
                                 </b:column>
                             </b:row>

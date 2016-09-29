@@ -142,7 +142,7 @@ public class DisciplinaController {
     }
 
     public String novaConsulta() {
-        limparCampos();
+        limparFormularioConsulta();
         return "/restrito/cadastro/consulta/disciplina?faces-redirect=true";
     }
 

@@ -72,7 +72,7 @@ public class Turma  implements java.io.Serializable {
         this.idTurma = idTurma;
     }
 
-@ManyToOne(fetch=FetchType.LAZY)
+@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="idDisciplina", nullable=false)
     public Disciplina getDisciplina() {
         return this.disciplina;
@@ -82,7 +82,7 @@ public class Turma  implements java.io.Serializable {
         this.disciplina = disciplina;
     }
 
-@ManyToOne(fetch=FetchType.LAZY)
+@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="idProfessor", nullable=false)
     public Professor getProfessor() {
         return this.professor;
@@ -142,7 +142,7 @@ public class Turma  implements java.io.Serializable {
         this.turno = turno;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="turma")
+@OneToMany(fetch=FetchType.EAGER, mappedBy="turma")
     public Set<TurmaSimulado> getTurmaSimulados() {
         return this.turmaSimulados;
     }
@@ -151,7 +151,7 @@ public class Turma  implements java.io.Serializable {
         this.turmaSimulados = turmaSimulados;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="turma")
+@OneToMany(fetch=FetchType.EAGER, mappedBy="turma")
     public Set<TurmaAluno> getTurmaAlunos() {
         return this.turmaAlunos;
     }
@@ -160,7 +160,7 @@ public class Turma  implements java.io.Serializable {
         this.turmaAlunos = turmaAlunos;
     }
 
-@ManyToOne(fetch=FetchType.LAZY)
+@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="idCurso", nullable=false)
     public Curso getCurso() {
         return this.curso;

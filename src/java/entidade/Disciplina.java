@@ -110,7 +110,7 @@ public class Disciplina  implements java.io.Serializable {
         this.turmas = turmas;
     }
 
-@ManyToMany(fetch=FetchType.LAZY)
+@ManyToMany(fetch=FetchType.EAGER)
     @JoinTable(name="professor_habilitado_disciplina", catalog="kemdixip_sgeda", joinColumns = { 
         @JoinColumn(name="disciplina_idDisciplina", nullable=false, updatable=false) }, inverseJoinColumns = { 
         @JoinColumn(name="professor_idProfessor", nullable=false, updatable=false) })
