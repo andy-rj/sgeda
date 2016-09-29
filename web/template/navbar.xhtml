@@ -28,6 +28,10 @@
                 <b:navbarLinks pull="right">
                     <b:dropMenu value="#{loginController.usuarioLogado.pessoa.nome}">
                         <b:navCommandLink value="Sair" action="#{loginController.sair}" immediate="true"/>
+                        <b:dropMenu value="Configuração">
+                            <b:navCommandLink value="senha" action="#{loginController.alterarSenha}" immediate="true"/>
+                            <b:navCommandLink value="foto" action="#{loginController.alterarFoto}" immediate="true"/>
+                        </b:dropMenu>                    
                     </b:dropMenu>
                 </b:navbarLinks>
             </b:navBar>
@@ -104,16 +108,18 @@
         <b:navBar id="navBarProfessor" rendered="#{loginController.usuarioLogado.professor}" style="border-top: none; border-radius: 0%;background-color: rgb(10, 58, 86);border:none;" >
             <b:navbarLinks style="margin-left: 130px;">
                 <b:dropMenu value="Aluno">
-                    <b:navCommandLink value="Cadastrar" action="#{alunoController.novoCadastro}" immediate="true"/>
                     <b:navCommandLink value="Consultar" action="#{alunoController.novaConsulta}" immediate="true"/>
                 </b:dropMenu>
-                <b:dropMenu value="Professor">
+                <b:dropMenu value="Questão">
+                    <b:navCommandLink value="Consultar" action="#{professorController.novaConsulta}" immediate="true"/>
                     <b:navCommandLink value="Consultar" action="#{professorController.novaConsulta}" immediate="true"/>
                 </b:dropMenu>
-                <b:dropMenu value="Curso">
+                <b:dropMenu value="Simulado">
+                    <b:navCommandLink value="Consultar" action="#{professorController.novaConsulta}" immediate="true"/>
                     <b:navCommandLink value="Consultar" action="#{cursoController.novaConsulta}" immediate="true"/>
                 </b:dropMenu>
                 <b:dropMenu value="Turma">
+                    <b:navCommandLink value="Consultar" action="#{professorController.novaConsulta}" immediate="true"/>
                     <b:navCommandLink value="Consultar" action="#{alunoController.novaConsulta}" immediate="true"/>
                 </b:dropMenu>
             </b:navbarLinks>

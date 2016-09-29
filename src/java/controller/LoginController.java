@@ -5,6 +5,7 @@ import entidade.Usuario;
 import helper.LoginHelper;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -22,6 +23,33 @@ public class LoginController {
     private String senha;
     private String usuario;
     private Usuario usuarioLogado;
+    private String senhaAtual;
+
+    public String getSenhaAtual() {
+        return senhaAtual;
+    }
+
+    public void setSenhaAtual(String senhaAtual) {
+        this.senhaAtual = senhaAtual;
+    }
+
+    public String getNovaSenha() {
+        return novaSenha;
+    }
+
+    public void setNovaSenha(String novaSenha) {
+        this.novaSenha = novaSenha;
+    }
+
+    public String getConfirmaSenha() {
+        return confirmaSenha;
+    }
+
+    public void setConfirmaSenha(String confirmaSenha) {
+        this.confirmaSenha = confirmaSenha;
+    }
+    private String novaSenha;
+    private String confirmaSenha;
 
     public LoginController() {
         helper = new LoginHelper();
@@ -37,6 +65,42 @@ public class LoginController {
         //helper.atualizarDataAcesso(usuarioLogado);
         carregarFotoPerfil();
         return "/home?faces-redirect=true";
+    }
+    
+    public void confirmarAlterarSenha(){
+        
+        try{
+        
+        if(!LoginHelper.md5(senhaAtual).equals(usuarioLogado.getSenha())){
+            addMessage("cadastro:atual", FacesMessage.SEVERITY_ERROR, "Senha não confere!");
+            return;
+        }
+            }catch(NoSuchAlgorithmException e){
+                
+            }
+        if(!confirmaSenha.equals(novaSenha)){
+            addMessage("cadastro:confirma", FacesMessage.SEVERITY_ERROR, "Senha não confere!");
+            return;
+        }
+        
+        if(!helper.alterarSenha(novaSenha,usuarioLogado)){
+            addMessage(null, FacesMessage.SEVERITY_ERROR, "A senha não foi alterada! Tente novamente!");
+        }
+        addMessage(null, FacesMessage.SEVERITY_INFO, "Senha alterada com sucesso!");
+    }
+    
+    public String cancelarAlterarSenha(){
+        return  "/home?faces-redirect=true";
+    }
+    
+     public void addMessage(String id, String summary) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, summary,  null);
+        FacesContext.getCurrentInstance().addMessage(id, message);
+    }
+    
+    public void addMessage(String id, FacesMessage.Severity severidade, String summary) {
+        FacesMessage message = new FacesMessage(severidade, summary,  null);
+        FacesContext.getCurrentInstance().addMessage(id, message);
     }
 
     public String getSenha() {
@@ -100,5 +164,13 @@ public class LoginController {
             return new DefaultStreamedContent(new ByteArrayInputStream(foto.getImagem()));
         }
     }
+     
+     public String alterarSenha(){
+         return "/restrito/alterarSenha.xhtml?faces-redirect=true";
+     }
+     
+     public String alterarFoto(){
+         return "";
+     }
 
 }

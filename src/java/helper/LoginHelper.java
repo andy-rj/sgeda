@@ -24,6 +24,37 @@ import org.hibernate.criterion.Restrictions;
  */
 public class LoginHelper {
 
+    public boolean alterarSenha(String senha, Usuario usuario) {
+        if (senha == null) {
+            return false;
+        }
+        try {
+            senha = md5(senha);
+        } catch (NoSuchAlgorithmException e) {
+
+        }
+        session = HibernateUtil.getSessionFactory().openSession();
+
+        Transaction tx = session.getTransaction();
+
+        try {
+            tx.begin();
+            usuario.setSenha(senha);
+            session.update(usuario);
+            session.flush();
+            tx.commit();
+            return true;
+        } catch (Exception e) {
+            if(tx != null)
+                tx.rollback();
+        } finally {
+            if(session != null)
+                session.close();
+        }
+
+        return false;
+    }
+
     public Foto getFotoPerfil(Pessoa pessoa) {
         session = HibernateUtil.getSessionFactory().openSession();
 
