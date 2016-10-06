@@ -31,7 +31,20 @@
                                 </b:column>
                             </b:row>
                             <br/>
-                           
+                            
+                            <b:row>
+                                <b:column colSm="2">
+                                    <h:outputLabel value="Código" ><font color ='red' >*</font></h:outputLabel>
+                                </b:column>
+                                <b:column colSm="7">
+                                    <p:inputText id="codigoDisciplina" value="#{disciplinaController.codigo}" maxlength="10" validatorMessage="Código é obrigatório e deve ter até 10 caracteres!" style="width: 100%">
+                                        <f:validateRequired />
+                                    </p:inputText>
+                                </b:column>
+                                <b:column colSm="3">
+                                    <b:message for="codigoDisciplina"  />
+                                </b:column>
+                            </b:row>
                             <b:row>
                                 <b:column colSm="2">
                                     <h:outputLabel value="Nome" ><font color ='red' >*</font></h:outputLabel>
@@ -45,7 +58,7 @@
                                     <b:message for="nomeDisciplina"  />
                                 </b:column>
                             </b:row>
-                            <b:row id="cpfrow">
+                            <b:row>
                                 <b:column colSm="2">
                                     <h:outputLabel value="Descrição" ><font color ='red' >*</font></h:outputLabel>
                                 </b:column>

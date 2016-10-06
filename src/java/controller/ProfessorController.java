@@ -11,9 +11,6 @@ import entidade.Usuario;
 import helper.DisciplinaHelper;
 import helper.LoginHelper;
 import helper.ProfessorHelper;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.InputStream;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,10 +26,8 @@ import javax.faces.event.ActionEvent;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import org.hibernate.validator.constraints.br.CPF;
-import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.CroppedImage;
 import org.primefaces.model.StreamedContent;
-import org.primefaces.model.UploadedFile;
 import util.EnvelopeEndereco;
 import webservice.CepWebService;
 import util.EmailSender;
@@ -41,6 +36,15 @@ import util.EmailSender;
 @SessionScoped
 public class ProfessorController {
     
+    private CroppedImage croppedImage;
+
+    public CroppedImage getCroppedImage() {
+        return croppedImage;
+    }
+
+    public void setCroppedImage(CroppedImage croppedImage) {
+        this.croppedImage = croppedImage;
+    }
     private EmailSender emailSender;
     private String bairro;
     private String cep;
@@ -503,16 +507,24 @@ public class ProfessorController {
          return "/restrito/cadastro/detalhe/professor?faces-redirect=true";
      }
      
-    public void upload(FileUploadEvent event) {
-        UploadedFile uploadedFile = event.getFile();
-        String contentType = uploadedFile.getContentType();
-        foto = new Foto();
-        foto.setImagem(uploadedFile.getContents());
-        image = new DefaultStreamedContent(new ByteArrayInputStream(foto.getImagem()), contentType);
+     public void reenviarEmail(){
+        String email = professorDetalhe.getPessoa().getEmail();
+        String senha = Long.toHexString(Double.doubleToLongBits(Math.random()));
+        if (senha.length() > 6) {
+            senha = senha.substring(0, 6);
+        }
+        String corpoMessagem = emailHTML.replace("{1}", professorDetalhe.getPessoa().getMatricula()).replace("{2}", senha);
+        Usuario usuario = loginHelper.getByIdPessoa(professorDetalhe.getIdProfessor());
+        if(!loginHelper.alterarSenha(senha, usuario)){
+            addMessage(null, FacesMessage.SEVERITY_INFO, "Não foi possivel recuperar senha!");
+            return;
+        }
+        if (emailSender.sendTo(email, "Idealizar", corpoMessagem)) {
+            addMessage(null, FacesMessage.SEVERITY_INFO, "Email enviado com informações de login!");
+        } else {
+            addMessage(null, FacesMessage.SEVERITY_ERROR, "Email com informações de login não pode ser enviado! Verifique sua conexão e tente reeviar através da página de detalhes");
+        }
     }
-    
-    public StreamedContent getImage(){
-        return image;
-    }
-            
+ 
+
 }

@@ -164,7 +164,7 @@ public class DisciplinaHelper {
         Transaction tx = session.getTransaction();
         try{
         tx.begin();
-        List<Subdisciplina> subdisciplina = session.createCriteria(Subdisciplina.class).createAlias("disciplina", "disciplina").add(Restrictions.eq("disciplina.idDisciplina", disciplina)).list();
+        List<Subdisciplina> subdisciplina = session.createCriteria(Subdisciplina.class).createAlias("disciplina", "disciplina").add(Restrictions.eq("disciplina.idDisciplina", disciplina)).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
         session.flush();
         tx.commit();
         return subdisciplina;
@@ -180,8 +180,27 @@ public class DisciplinaHelper {
         return null;
     }
 
-    public List<Subdisciplina> getSubdisciplinas(String nomeConsulta, String descricaoConsulta) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Subdisciplina getSubdisciplina(String nomeSubdisciplina, Integer idDisciplina) {
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.getTransaction();
+        try{
+        tx.begin();
+        Subdisciplina subdisciplina = (Subdisciplina)session.createCriteria(Subdisciplina.class).createAlias("disciplina", "disciplina").
+                add(Restrictions.eq("disciplina.idDisciplina", idDisciplina)).
+                add(Restrictions.eq("nome", nomeSubdisciplina).ignoreCase()).uniqueResult();
+        session.flush();
+        tx.commit();
+        return subdisciplina;
+        } catch(HibernateException e){
+            if(tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+        return null;
     }
     
     public List<Disciplina> getDisciplinasByCurso(Integer curso) {

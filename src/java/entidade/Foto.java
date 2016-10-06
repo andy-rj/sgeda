@@ -16,7 +16,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="foto"
-    ,catalog="kemdixip_sgeda"
+    ,catalog="kemdixip_sgedanovo"
 )
 public class Foto  implements java.io.Serializable {
 

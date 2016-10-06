@@ -84,7 +84,7 @@ public class CursoHelper {
         Transaction tx = session.getTransaction();
         try{
             tx.begin();
-            List<Curso> cursos = session.createCriteria(Curso.class).list();
+            List<Curso> cursos = session.createCriteria(Curso.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
             session.flush();
             tx.commit();
             return cursos;

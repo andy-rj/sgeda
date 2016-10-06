@@ -51,7 +51,9 @@
                                     <h:outputLabel value="Data de Início" ><font color ='red' >*</font></h:outputLabel>
                                 </b:column>
                                 <b:column colSm="7">
-                                    <p:calendar id="dataInicio" value="#{turmaController.dataInicio}" locale="pt" navigator="true" required="true" requiredMessage="Data de início é obrigatória!" pattern="dd-MM-yyyy"/>
+                                    <p:calendar id="dataInicio" value="#{turmaController.dataInicio}" locale="pt" navigator="true" pattern="dd-MM-yyyy">
+                                        <f:validateBean />
+                                    </p:calendar>
                                 </b:column>
                                 <b:column colSm="3">
                                     <b:message for="dataInicio"  />
@@ -62,7 +64,9 @@
                                     <h:outputLabel value="Data de Término" ><font color ='red' >*</font></h:outputLabel>
                                 </b:column>
                                 <b:column colSm="7">
-                                    <p:calendar id="dataFim" value="#{turmaController.dataFim}" locale="pt" navigator="true" required="true" requiredMessage="Data de término é obrigatória!" pattern="dd-MM-yyyy"/>
+                                    <p:calendar id="dataFim" value="#{turmaController.dataFim}" locale="pt" navigator="true" pattern="dd-MM-yyyy">
+                                        <f:validateBean/>
+                                    </p:calendar>
                                 </b:column>
                                 <b:column colSm="3">
                                     <b:message for="dataFim"  />

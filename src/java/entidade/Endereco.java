@@ -17,7 +17,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="endereco"
-    ,catalog="kemdixip_sgeda"
+    ,catalog="kemdixip_sgedanovo"
 )
 public class Endereco  implements java.io.Serializable {
 

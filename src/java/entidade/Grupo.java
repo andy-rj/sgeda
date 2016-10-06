@@ -22,7 +22,7 @@ import org.hibernate.annotations.Parameter;
  */
 @Entity
 @Table(name="grupo"
-    ,catalog="kemdixip_sgeda"
+    ,catalog="kemdixip_sgedanovo"
 )
 public class Grupo  implements java.io.Serializable {
 

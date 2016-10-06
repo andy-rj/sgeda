@@ -3,22 +3,36 @@ package controller;
 import entidade.Foto;
 import entidade.Usuario;
 import helper.LoginHelper;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
+import javax.imageio.ImageIO;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
+import util.ImagemUtil;
 
 @ManagedBean
 @SessionScoped
 public class LoginController {
     
     private Foto foto;
+
+    public Foto getFoto() {
+        return foto;
+    }
     private final LoginHelper helper;
     private String senha;
     private String usuario;
@@ -155,13 +169,13 @@ public class LoginController {
      public StreamedContent getImage() throws IOException {
         FacesContext context = FacesContext.getCurrentInstance();
 
-        if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
+        if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE || usuarioLogado.getPessoa().getFoto() == null) {
             // So, we're rendering the HTML. Return a stub StreamedContent so that it will generate right URL.
             return new DefaultStreamedContent();
         }
         else {
             // So, browser is requesting the image. Return a real StreamedContent with the image bytes.
-            return new DefaultStreamedContent(new ByteArrayInputStream(foto.getImagem()));
+            return new DefaultStreamedContent(new ByteArrayInputStream(usuarioLogado.getPessoa().getFoto().getImagem()));
         }
     }
      
@@ -172,5 +186,134 @@ public class LoginController {
      public String alterarFoto(){
          return "";
      }
+
+    public void salvarImagem() {
+        
+        Map<String, String> requestParamMap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        String top = requestParamMap.get("top");
+        top = top.replaceAll("px", "");
+        String left = requestParamMap.get("left");
+        left = left.replace("px", "");
+        
+        imagemOriginal = cropImage(imagemOriginal, imagemOriginal.getWidth()-Integer.parseInt(left)-IMG_WIDTH, imagemOriginal.getHeight()-Integer.parseInt(top) - IMG_HEIGHT, IMG_WIDTH, IMG_HEIGHT);
+        
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        
+        try {
+            ImageIO.write(imagemOriginal, "jpg", baos);
+            baos.flush();
+            byte[] imageInByte = baos.toByteArray();
+            baos.close();
+            usuarioLogado.getPessoa().getFoto().setImagem(imageInByte);
+            height = imagemOriginal.getHeight();
+            width = imagemOriginal.getWidth();
+            helper.salvarFotoPerfil(usuarioLogado.getPessoa());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        uploaded=false;
+
+    }
+
+    private BufferedImage cropImage(BufferedImage src, int x, int y, int w, int h) {
+        BufferedImage dest = src.getSubimage(x, y, w, h);
+        return dest;
+   }
+     
+     private int width;
+
+    
+    private static final int IMG_WIDTH = 200;
+    private static final int IMG_HEIGHT = 200;
+    
+    public int getWidth() {
+        if (usuarioLogado.getPessoa().getFoto() != null) {
+            InputStream in = new ByteArrayInputStream(usuarioLogado.getPessoa().getFoto().getImagem());
+            BufferedImage bImageFromConvert = null;
+            try {
+                bImageFromConvert = ImageIO.read(in);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            width = bImageFromConvert.getWidth();
+        }else{
+            width =0;
+        }
+        return width;
+    }
+
+    public int getHeight() {
+       if (usuarioLogado.getPessoa().getFoto() != null) {
+            InputStream in = new ByteArrayInputStream(usuarioLogado.getPessoa().getFoto().getImagem());
+            BufferedImage bImageFromConvert = null;
+            try {
+                bImageFromConvert = ImageIO.read(in);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            height = bImageFromConvert.getHeight();
+        }else{
+            height =0;
+        }
+        return height;
+    }
+    
+    BufferedImage imagemOriginal;
+    private int height;
+    boolean uploaded;
+
+    public boolean isUploaded() {
+        return uploaded;
+    }
+     
+    public void upload(FileUploadEvent event) {
+        UploadedFile uploadedFile = event.getFile();
+        try{
+            imagemOriginal = ImageIO.read(uploadedFile.getInputstream());
+            height = imagemOriginal.getHeight();
+            width = imagemOriginal.getWidth();
+            int type = imagemOriginal.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB;
+            
+            Double razao;
+            Double dHeight = (double) imagemOriginal.getHeight();
+            Double dWidth = (double) imagemOriginal.getWidth();
+            
+            if(imagemOriginal.getWidth()<=imagemOriginal.getHeight()){
+                width = IMG_WIDTH;
+            } else {
+                razao = dHeight/IMG_HEIGHT;
+                width = (new Double(((double)dWidth)/razao)).intValue();
+            }
+            
+            if(imagemOriginal.getHeight()<=imagemOriginal.getWidth()){
+                height = IMG_HEIGHT;
+            } else {
+                razao = dWidth/IMG_WIDTH;
+                height = (new Double(((double)dHeight)/razao)).intValue();
+            }
+            
+            imagemOriginal = ImagemUtil.resizeImage(width, height, imagemOriginal, type);
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+        
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        
+        try {
+            ImageIO.write(imagemOriginal, "jpg", baos);
+            baos.flush();
+            byte[] imageInByte = baos.toByteArray();
+            baos.close();
+            if(usuarioLogado.getPessoa().getFoto()==null) usuarioLogado.getPessoa().setFoto(new Foto());
+            usuarioLogado.getPessoa().getFoto().setTipo("jpg");
+            usuarioLogado.getPessoa().getFoto().setImagem(imageInByte);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        uploaded = true;
+        
+    }
 
 }

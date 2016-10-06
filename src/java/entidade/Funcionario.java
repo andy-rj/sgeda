@@ -18,7 +18,7 @@ import org.hibernate.annotations.Parameter;
  */
 @Entity
 @Table(name="funcionario"
-    ,catalog="kemdixip_sgeda"
+    ,catalog="kemdixip_sgedanovo"
 )
 public class Funcionario  implements java.io.Serializable {
 

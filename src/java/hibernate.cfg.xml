@@ -4,7 +4,7 @@
   <session-factory>
     <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
     <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-    <property name="hibernate.connection.url">jdbc:mysql://cursoidealizar.acessotemporario.net:3306/kemdixip_sgeda?zeroDateTimeBehavior=convertToNull</property>
+    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/kemdixip_sgedanovo?zeroDateTimeBehavior=convertToNull</property>
     <property name="hibernate.connection.username">kemdixip_root</property>
     <property name="hibernate.connection.password">padaria123</property>
     <property name="hibernate.show_sql">true</property>
@@ -15,7 +15,7 @@
     <property name="hibernate.c3p0.idle_test_period">300</property>
     <property name="hibernate.c3p0.timeout">1800</property>
     <property name="hibernate.c3p0.max_size">25</property>
-    <property name="hibernate.c3p0.min_size" >3</property>
+    <property name="hibernate.c3p0.min_size">3</property>
     <property name="hibernate.c3p0.max_statement">0</property>
     <property name="hibernate.c3p0.preferredTestQuery">select 1;</property>
     <property name="hibernate.c3p0.validate">true</property>

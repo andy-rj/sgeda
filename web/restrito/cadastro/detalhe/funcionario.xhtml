@@ -183,7 +183,7 @@
                             </b:row>
                             <b:row>
                                 <br/>
-                                <b:column colSm="2" offset="5">
+                                <b:column colSm="2" offset="3">
                                     <p:button value="Voltar" outcome="/restrito/cadastro/consulta/funcionario" style="width: 100%"/>
                                 </b:column>
                                 <b:column colSm="2">
@@ -191,6 +191,9 @@
                                 </b:column>
                                 <b:column colSm="2">
                                     <p:commandButton action="#{funcionarioController.inativar}" onclick="return confirm('Confirma a inativação do funcionário?');" value="Inativar" style="width: 100%"/>
+                                </b:column>
+                                <b:column colSm="2">
+                                    <p:commandButton update=":#{p:component('info')}" action="#{funcionarioController.reenviarEmail}" onclick="return confirm('Confirma o envio do email?');" value="Enviar email" style="width: 100%"/>
                                 </b:column>
 
                             </b:row>

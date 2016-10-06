@@ -442,5 +442,24 @@ public class FuncionarioController {
         foto.setImagem(uploadedFile.getContents());
         image = new DefaultStreamedContent(new ByteArrayInputStream(foto.getImagem()), contentType);
     }
+    
+    public void reenviarEmail(){
+        String email = funcionarioDetalhe.getPessoa().getEmail();
+        String senha = Long.toHexString(Double.doubleToLongBits(Math.random()));
+        if (senha.length() > 6) {
+            senha = senha.substring(0, 6);
+        }
+        String corpoMessagem = emailHTML.replace("{1}", funcionarioDetalhe.getPessoa().getMatricula()).replace("{2}", senha);
+        Usuario usuario = loginHelper.getByIdPessoa(funcionarioDetalhe.getIdFuncionario());
+        if(!loginHelper.alterarSenha(senha, usuario)){
+            addMessage(null, FacesMessage.SEVERITY_INFO, "Não foi possivel recuperar senha!");
+            return;
+        }
+        if (emailSender.sendTo(email, "Idealizar", corpoMessagem)) {
+            addMessage(null, FacesMessage.SEVERITY_INFO, "Email enviado com informações de login!");
+        } else {
+            addMessage(null, FacesMessage.SEVERITY_ERROR, "Email com informações de login não pode ser enviado! Verifique sua conexão e tente reeviar através da página de detalhes");
+        }
+    }
 
 }

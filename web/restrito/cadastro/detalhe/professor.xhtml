@@ -210,7 +210,7 @@
                             </b:row>
                             <b:row>
                                 <br/>
-                                <b:column colSm="2" offset="5">
+                                <b:column colSm="2" offset="3">
                                     <p:button value="Voltar" outcome="/restrito/cadastro/consulta/professor" style="width: 100%"/>
                                 </b:column>
                                 <b:column colSm="2">
@@ -218,6 +218,9 @@
                                 </b:column>
                                 <b:column colSm="2">
                                     <p:commandButton action="#{professorController.inativar}" onclick="return confirm('Confirma a inativação do professor?');" value="Inativar" style="width: 100%"/>
+                                </b:column>
+                                <b:column colSm="2">
+                                    <p:commandButton update=":#{p:component('info')}" action="#{professorController.reenviarEmail}" onclick="return confirm('Confirma o envio do email?');" value="Enviar email" style="width: 100%"/>
                                 </b:column>
 
                             </b:row>

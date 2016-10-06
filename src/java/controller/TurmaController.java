@@ -15,6 +15,8 @@ import javax.faces.application.FacesMessage.Severity;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 
 @ManagedBean
 @SessionScoped
@@ -24,7 +26,11 @@ public class TurmaController {
     private Integer cursoSelecionado;
     private boolean cursoSelecionadoFlag;
     private List<Curso> cursosCadastrados;
+    @NotNull(message = "Data de término é obrigatória!")
+    @Past(message = "Data de término inválida!")
     private Date dataFim;
+    @NotNull(message = "Data de início é obrigatória!")
+    @Past(message = "Data de início inválida!")
     private Date dataInicio;
     private String descricao;
     private DisciplinaHelper disciplinaHelper;

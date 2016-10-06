@@ -20,7 +20,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="curso"
-    ,catalog="kemdixip_sgeda"
+    ,catalog="kemdixip_sgedanovo"
 )
 public class Curso  implements java.io.Serializable {
 
@@ -72,7 +72,7 @@ public class Curso  implements java.io.Serializable {
     }
 
 @ManyToMany(fetch=FetchType.EAGER)
-    @JoinTable(name="curso_disciplina", catalog="kemdixip_sgeda", joinColumns = { 
+    @JoinTable(name="curso_disciplina", catalog="kemdixip_sgedanovo", joinColumns = { 
         @JoinColumn(name="curso_idCurso", nullable=false, updatable=false) }, inverseJoinColumns = { 
         @JoinColumn(name="disciplina_idDisciplina", nullable=false, updatable=false) })
     public Set<Disciplina> getDisciplinas() {

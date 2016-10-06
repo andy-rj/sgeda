@@ -25,7 +25,7 @@ import javax.persistence.Transient;
  */
 @Entity
 @Table(name="usuario"
-    ,catalog="kemdixip_sgeda"
+    ,catalog="kemdixip_sgedanovo"
 )
 public class Usuario  implements java.io.Serializable {
 
@@ -121,7 +121,7 @@ public class Usuario  implements java.io.Serializable {
     }
 
 @ManyToMany(fetch=FetchType.EAGER)
-    @JoinTable(name="usuario_papel", catalog="kemdixip_sgeda", joinColumns = { 
+    @JoinTable(name="usuario_papel", catalog="kemdixip_sgedanovo", joinColumns = { 
         @JoinColumn(name="usuario_idUsuario", nullable=false, updatable=false) }, inverseJoinColumns = { 
         @JoinColumn(name="papel_idPapel", nullable=false, updatable=false) })
     public Set<Papel> getPapels() {

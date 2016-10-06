@@ -82,6 +82,60 @@ public class LoginHelper {
         return null;
 
     }
+    
+    public boolean salvarFotoPerfil(Pessoa pessoa) {
+        session = HibernateUtil.getSessionFactory().openSession();
+
+        Transaction tx = session.getTransaction();
+
+        try {
+            tx.begin();
+            session.saveOrUpdate(pessoa.getFoto());
+            session.update(pessoa);
+            session.flush();
+            tx.commit();
+        } catch (Exception e) {
+            if(tx != null){
+                tx.rollback();
+            }
+            return false;
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+
+        return true;
+
+    }
+    
+    public Usuario getByIdPessoa(int id) {
+        session = HibernateUtil.getSessionFactory().openSession();
+
+        Transaction tx = session.getTransaction();
+
+        try {
+            tx.begin();
+            Criteria crit = session.createCriteria(Usuario.class);
+            crit.createAlias("pessoa", "pessoa");
+            crit.add(Restrictions.eq("pessoa.idPessoa", id));
+            Usuario usuario = (Usuario) crit.uniqueResult();
+            session.flush();
+            tx.commit();
+            return usuario;
+        } catch (Exception e) {
+            if(tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+
+        return null;
+
+    }
 
     Session session = null;
 

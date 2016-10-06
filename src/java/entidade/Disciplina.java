@@ -21,12 +21,13 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="disciplina"
-    ,catalog="kemdixip_sgeda"
+    ,catalog="kemdixip_sgedanovo"
 )
 public class Disciplina  implements java.io.Serializable {
 
 
      private Integer idDisciplina;
+     private String codigo;
      private String nome;
      private String descricao;
      private Set<Subdisciplina> subdisciplinas = new HashSet(0);
@@ -69,6 +70,15 @@ public class Disciplina  implements java.io.Serializable {
     public void setNome(String nome) {
         this.nome = nome;
     }
+    
+    @Column(name="codigo")
+    public String getCodigo() {
+        return this.codigo;
+    }
+    
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
 
     
     @Column(name="descricao")
@@ -90,7 +100,7 @@ public class Disciplina  implements java.io.Serializable {
     }
 
 @ManyToMany(fetch=FetchType.LAZY)
-    @JoinTable(name="curso_disciplina", catalog="kemdixip_sgeda", joinColumns = { 
+    @JoinTable(name="curso_disciplina", catalog="kemdixip_sgedanovo", joinColumns = { 
         @JoinColumn(name="disciplina_idDisciplina", nullable=false, updatable=false) }, inverseJoinColumns = { 
         @JoinColumn(name="curso_idCurso", nullable=false, updatable=false) })
     public Set<Curso> getCursos() {
@@ -111,7 +121,7 @@ public class Disciplina  implements java.io.Serializable {
     }
 
 @ManyToMany(fetch=FetchType.EAGER)
-    @JoinTable(name="professor_habilitado_disciplina", catalog="kemdixip_sgeda", joinColumns = { 
+    @JoinTable(name="professor_habilitado_disciplina", catalog="kemdixip_sgedanovo", joinColumns = { 
         @JoinColumn(name="disciplina_idDisciplina", nullable=false, updatable=false) }, inverseJoinColumns = { 
         @JoinColumn(name="professor_idProfessor", nullable=false, updatable=false) })
     public Set<Professor> getProfessors() {

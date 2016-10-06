@@ -24,7 +24,7 @@ import javax.persistence.UniqueConstraint;
  */
 @Entity
 @Table(name="pessoa"
-    ,catalog="kemdixip_sgeda"
+    ,catalog="kemdixip_sgedanovo"
     , uniqueConstraints = {@UniqueConstraint(columnNames="cpf"), @UniqueConstraint(columnNames="matricula")} 
 )
 public class Pessoa  implements java.io.Serializable {
@@ -162,7 +162,7 @@ public class Pessoa  implements java.io.Serializable {
         this.enderecos = enderecos;
     }
     
-    @OneToOne(fetch=FetchType.LAZY)
+    @OneToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="idFoto", nullable=false)
     public Foto getFoto() {
         return this.foto;

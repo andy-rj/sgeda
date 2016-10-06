@@ -6,6 +6,22 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
+         <script type="text/javascript">
+            function getTopLeft() {
+                var element = document.getElementById('cadastro:img'),
+                style = window.getComputedStyle(element),
+                top = style.getPropertyValue('top'),
+                left = style.getPropertyValue('left');
+            
+                setarValoresPosicao([{
+                      name : 'top',
+                      value : top
+                }, {
+                      name : 'left',
+                      value : left
+                }]);
+            }
+        </script>
         <style>
             .navbar-default {
             background-color: #6F2222;
@@ -19,9 +35,48 @@
             background-color: #014E7A;
             color: #fff;
             }
+            .ui-fileupload-content{
+                border: none;
+            }
+            .ui-fileupload-choose{
+                margin: 0px 140px;
+            }
+            .ui-fileupload-files{
+                display: none;
+            }
         </style>
     </h:head>
     <h:body>
+        <p:dialog header="Alterar Foto de Perfil" widgetVar="dlg" modal="true" height="400" width="426" draggable="false" resizable="false">
+            <b:row>
+                <b:column id="foto">
+                    <p:remoteCommand id="remote" actionListener="#{loginController.salvarImagem()}" name="setarValoresPosicao" process="@this"/>
+                    <p:outputPanel style="width: 200px; height: 200px; overflow: hidden; border-radius: 50%; margin: 0 auto; background-size: 200px 200px; background-image: url('/sgeda/resource/imagens/fotoPerfil.png')">
+                        <p:outputPanel style="width: #{loginController.width * 2 - 200}px; height: #{loginController.height * 2 -200}px; margin-left: -#{loginController.width -200}px; margin-top: -#{loginController.height -200}px;">
+                            <p:graphicImage cache="false" id="img" value="#{loginController.image}" width="#{loginController.width}" height="#{loginController.height}">
+                                <p:draggable id="d1" rendered="#{loginController.width eq 200}" axis="y" containment="parent"/>
+                                <p:draggable id="d2" rendered="#{loginController.height eq 200}" axis="x" containment="parent"/>
+                            </p:graphicImage>
+                        </p:outputPanel>
+                    </p:outputPanel>
+                    
+                </b:column>
+            </b:row>
+            <b:row>
+                <br/>
+                <b:column id="botaoSalvar">
+                    <h:outputText value="Arraste a imagem para ajustar" rendered="#{loginController.uploaded}" style="display: table; margin: 0px auto;" />
+                    <p:commandButton update="foto fotoPerfil botaoSalvar"  rendered="#{loginController.uploaded}" style="display:table; margin: 0px auto;" process="@this" value="Salvar" onclick="getTopLeft()"/>
+                </b:column>
+            </b:row>
+            <b:row>
+                <br/>
+                <b:column >
+                    <p:fileUpload id="uploadImage" label="Carregar" style="width:100%" fileUploadListener="#{loginController.upload}" mode="advanced"
+                                  update="foto botaoSalvar" auto="true" sizeLimit="100000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+                </b:column>
+            </b:row>
+        </p:dialog> 
         
         <b:row>
             <b:navBar brandImg="/sgeda/resource/imagens/idealizar.png" brandHref="/../../sgeda/faces/home.xhtml" brandAlign="left" brand-img-style="width:145px;" style="margin-bottom: 0px; border-bottom: none;border-radius: 0%" >
@@ -30,20 +85,20 @@
                         <b:navCommandLink value="Sair" action="#{loginController.sair}" immediate="true"/>
                         <b:dropMenu value="Configuração">
                             <b:navCommandLink value="senha" action="#{loginController.alterarSenha}" immediate="true"/>
-                            <b:navCommandLink value="foto" action="#{loginController.alterarFoto}" immediate="true"/>
+                            <b:navCommandLink value="foto" onclick="PF('dlg').show();return false;"/>
                         </b:dropMenu>                    
                     </b:dropMenu>
                 </b:navbarLinks>
             </b:navBar>
         </b:row>
-        <b:row style="background-color: #6F2222;height: 85px;">
+        <b:row id="fotoPerfil" style="background-color: #6F2222;height: 85px;">
             <p:graphicImage cache="false" rendered="#{loginController.usuarioLogado.pessoa.foto != null}" value="#{loginController.image}" 
                             width="110" height="110" 
-                            style="border-radius: 50%; margin-left: 150px;position: absolute;z-index: 5000; margin-top: 5px;">
+                            style="border-radius: 50%; margin-left: 150px;position: absolute;z-index: 1; margin-top: 5px;">
             </p:graphicImage>
             <h:graphicImage rendered="#{loginController.usuarioLogado.pessoa.foto == null}" value="/resource/imagens/fotoPerfil.png" 
                             width="110" height="110" 
-                            style="border-radius: 50%; margin-left: 150px;position: absolute;z-index: 5000; margin-top: 5px;">
+                            style="border-radius: 50%; margin-left: 150px;position: absolute;z-index: 1; margin-top: 5px;">
             </h:graphicImage>
         </b:row>
         <b:navBar id="navBarAdm" rendered="#{loginController.usuarioLogado.administrador}" style="border-top: none; border-radius: 0%;background-color: rgb(10, 58, 86);border:none;" >
@@ -108,19 +163,22 @@
         <b:navBar id="navBarProfessor" rendered="#{loginController.usuarioLogado.professor}" style="border-top: none; border-radius: 0%;background-color: rgb(10, 58, 86);border:none;" >
             <b:navbarLinks style="margin-left: 130px;">
                 <b:dropMenu value="Aluno">
-                    <b:navCommandLink value="Consultar" action="#{alunoController.novaConsulta}" immediate="true"/>
+                    <b:navCommandLink value="Consultar" action="#{alunoController.novaConsultaProfessor(loginController.usuarioLogado.pessoa.idPessoa)}" immediate="true"/>
                 </b:dropMenu>
                 <b:dropMenu value="Questão">
-                    <b:navCommandLink value="Consultar" action="#{professorController.novaConsulta}" immediate="true"/>
-                    <b:navCommandLink value="Consultar" action="#{professorController.novaConsulta}" immediate="true"/>
+                    <b:dropMenu value="Cadastrar">
+                        <b:navCommandLink value="Objetiva" action="#{questaoController.novoCadastroObjetiva(loginController.usuarioLogado.pessoa.idPessoa)}" immediate="true"/>
+                        <b:navCommandLink value="Discursiva" action="#{questaoController.novoCadastroDiscursiva(loginController.usuarioLogado.pessoa.idPessoa)}" immediate="true"/>
+                        <b:navCommandLink value="Redação" action="#{questaoController.novoCadastroRedacao(loginController.usuarioLogado.pessoa.idPessoa)}" immediate="true"/>
+                    </b:dropMenu>
+                    <b:navCommandLink value="Consultar" action="#{questaoController.novaConsulta}" immediate="true"/>
                 </b:dropMenu>
                 <b:dropMenu value="Simulado">
-                    <b:navCommandLink value="Consultar" action="#{professorController.novaConsulta}" immediate="true"/>
-                    <b:navCommandLink value="Consultar" action="#{cursoController.novaConsulta}" immediate="true"/>
+                    <b:navCommandLink value="Cadastrar" action="#{simuladoController.novoCadastro}" immediate="true"/>
+                    <b:navCommandLink value="Consultar" action="#{simuladoController.novaConsulta}" immediate="true"/>
                 </b:dropMenu>
                 <b:dropMenu value="Turma">
-                    <b:navCommandLink value="Consultar" action="#{professorController.novaConsulta}" immediate="true"/>
-                    <b:navCommandLink value="Consultar" action="#{alunoController.novaConsulta}" immediate="true"/>
+                    <b:navCommandLink value="Consultar" action="#{turmaController.novaConsultaProfessor(loginController.usuarioLogado.pessoa.idPessoa)}" immediate="true"/>
                 </b:dropMenu>
             </b:navbarLinks>
         </b:navBar>

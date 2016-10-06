@@ -24,7 +24,7 @@ import org.hibernate.annotations.Parameter;
  */
 @Entity
 @Table(name="professor"
-    ,catalog="kemdixip_sgeda"
+    ,catalog="kemdixip_sgedanovo"
 )
 public class Professor  implements java.io.Serializable {
 
@@ -103,8 +103,8 @@ public class Professor  implements java.io.Serializable {
         this.intituicaoFormacao = intituicaoFormacao;
     }
 
-@ManyToMany(fetch=FetchType.LAZY)
-    @JoinTable(name="professor_habilitado_disciplina", catalog="kemdixip_sgeda", joinColumns = { 
+@ManyToMany(fetch=FetchType.EAGER)
+    @JoinTable(name="professor_habilitado_disciplina", catalog="kemdixip_sgedanovo", joinColumns = { 
         @JoinColumn(name="professor_idProfessor", nullable=false, updatable=false) }, inverseJoinColumns = { 
         @JoinColumn(name="disciplina_idDisciplina", nullable=false, updatable=false) })
     public Set<Disciplina> getDisciplinas() {

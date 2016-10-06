@@ -1,13 +1,7 @@
 package controller;
 
-import entidade.Curso;
 import entidade.Disciplina;
-import entidade.Professor;
-import entidade.Subdisciplina;
-import helper.CursoHelper;
 import helper.DisciplinaHelper;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
@@ -18,6 +12,7 @@ import javax.faces.context.FacesContext;
 @ManagedBean
 @SessionScoped
 public class DisciplinaController {
+    private String codigo;
     
     private String descricao;
     private DisciplinaHelper disciplinaHelper;
@@ -47,6 +42,7 @@ public class DisciplinaController {
         Disciplina disciplina = new Disciplina();
         disciplina.setDescricao(descricao);
         disciplina.setNome(nome);
+        disciplina.setCodigo(codigo);
         
         if(disciplinaHelper.getByNome(nome) != null){
             addMessage(null,FacesMessage.SEVERITY_ERROR, "Disciplina com nome " + nome + " ja está cadastrada no sistema!");
@@ -120,6 +116,14 @@ public class DisciplinaController {
     public void setNome(String nome){
         this.nome = nome;
     }
+    
+    public String getCodigo() {
+        return codigo;
+    }
+     
+    public void setCodigo(String codigo){
+        this.codigo = codigo;
+    }
      
     public String inativar() {
         return null;
@@ -129,6 +133,7 @@ public class DisciplinaController {
         
         nome = null;
         descricao = null;
+        codigo = null;
      
     }
      
