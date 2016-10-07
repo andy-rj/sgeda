@@ -74,12 +74,12 @@ public class AlunoHelper {
         return true;
     }
     
-    public Aluno getByCpf(String cpf){
+    public Pessoa getByCpf(String cpf){
         session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.getTransaction();
         try{
             tx.begin();
-            Aluno aluno = (Aluno) session.createCriteria(Aluno.class).createAlias("pessoa", "pessoa").add(Restrictions.eq("pessoa.cpf", cpf)).uniqueResult();
+            Pessoa aluno = (Pessoa) session.createCriteria(Pessoa.class).add(Restrictions.eq("cpf", cpf)).uniqueResult();
             session.flush();
             tx.commit();
             return aluno;

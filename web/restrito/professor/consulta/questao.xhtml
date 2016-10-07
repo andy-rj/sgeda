@@ -7,7 +7,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <title>Sistema de Gerenciamento</title>
+        <title>Curso Idealizar</title>
         <style type="text/css">
             .ui-growl {
                 z-index:9999 !important;
@@ -17,7 +17,7 @@
     <h:body style="background-color: #e3e3e3">
 
         <h:form id="consulta">
-            <p:growl globalOnly="true" id="info" sticky="true" />
+            <p:growl  globalOnly="true" id="info"  />
             <b:fetchBeanInfos/>
             <ui:insert name="navbar">
                 <ui:include src="/template/navbar.xhtml"/>
@@ -39,8 +39,8 @@
                                 <b:column>
                                     <b:dataTable rendered="#{not empty questaoController.resultadoConsulta}" value="#{questaoController.resultadoConsulta}" var="questao" id="datatable" styleClass="table table-striped table-bordered"
                                              style="width:100%" searching="false">
-                                        <h:column>
-                                            <f:facet name="header">
+                                        <h:column >
+                                            <f:facet  name="header">
                                                 <h:outputText value="Código" />
                                             </f:facet>
                                             <h:outputText id="matricula" value="#{questao.idQuestao}" />
@@ -51,6 +51,27 @@
                                             </f:facet>
                                             <h:outputText value="#{questao.instituicao}" />
                                         </h:column>
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <h:outputText value="Ano" />
+                                            </f:facet>
+                                            <h:outputText value="#{questao.ano}" />
+                                        </h:column>
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <h:outputText value="Disciplina" />
+                                            </f:facet>
+                                            <h:outputText value="#{questao.disciplina.nome}" />
+                                        </h:column>
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <h:outputText value="Tipo" />
+                                            </f:facet>
+                                            <h:outputText rendered="#{not empty questao.objetiva}" value="Objetiva" />
+                                            <h:outputText rendered="#{not empty questao.discursiva}" value="Discursiva" />
+                                            <h:outputText rendered="#{not empty questao.redacao}" value="Redação" />
+                                        </h:column>
+                                        
                                         
                                         <h:column>
                                             <f:facet name="header">

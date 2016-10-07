@@ -41,8 +41,11 @@ public class QuestaoHelper {
             }
             
             session.save(questao);
+            int letraA = 97;
             for(Opcao op : questao.getOpcaos()){
                 op.setObjetiva(questao);
+                op.setOpcao(Character.toChars(letraA)[0]);
+                letraA++;
                 session.save(op);
             }
             session.flush();

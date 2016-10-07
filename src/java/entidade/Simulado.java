@@ -70,7 +70,7 @@ public class Simulado  implements java.io.Serializable {
         this.idSimulado = idSimulado;
     }
 
-@ManyToOne(fetch=FetchType.LAZY)
+@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="idProfessor", nullable=false)
     public Professor getProfessor() {
         return this.professor;
@@ -130,7 +130,7 @@ public class Simulado  implements java.io.Serializable {
         this.dataCadastro = dataCadastro;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="simulado")
+@OneToMany(fetch=FetchType.EAGER, mappedBy="simulado")
     public Set<SimuladoQuestao> getSimuladoQuestaos() {
         return this.simuladoQuestaos;
     }
@@ -139,7 +139,7 @@ public class Simulado  implements java.io.Serializable {
         this.simuladoQuestaos = simuladoQuestaos;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="simulado")
+@OneToMany(fetch=FetchType.EAGER, mappedBy="simulado")
     public Set<TurmaSimulado> getTurmaSimulados() {
         return this.turmaSimulados;
     }
@@ -148,7 +148,7 @@ public class Simulado  implements java.io.Serializable {
         this.turmaSimulados = turmaSimulados;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="simulado")
+@OneToMany(fetch=FetchType.EAGER, mappedBy="simulado")
     public Set<AlunoSimulado> getAlunoSimulados() {
         return this.alunoSimulados;
     }

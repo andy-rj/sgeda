@@ -2,6 +2,7 @@ package entidade;
 // Generated 09/09/2016 09:36:48 by Hibernate Tools 4.3.1
 
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
@@ -13,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
@@ -130,7 +132,55 @@ public class Aluno  implements java.io.Serializable {
         this.alunoSimulados = alunoSimulados;
     }
 
-
+    @Transient
+    public Curso getCurso(){
+        if(turmaAlunos != null && !turmaAlunos.isEmpty()){
+            for(TurmaAluno turma : turmaAlunos){
+                return turma.getTurma().getCurso();
+            }
+        }
+        return null;
+    }
+    
+    @Transient
+    public Date getDataInicio(){
+        if(turmaAlunos != null && !turmaAlunos.isEmpty()){
+            for(TurmaAluno turma : turmaAlunos){
+                return turma.getTurma().getDataInicio();
+            }
+        }
+        return null;
+    }
+    
+    @Transient
+    public Date getDataFim(){
+        if(turmaAlunos != null && !turmaAlunos.isEmpty()){
+            for(TurmaAluno turma : turmaAlunos){
+                return turma.getTurma().getDataFim();
+            }
+        }
+        return null;
+    } 
+    
+    @Transient
+    public String getTurno(){
+        if(turmaAlunos != null && !turmaAlunos.isEmpty()){
+            for(TurmaAluno turma : turmaAlunos){
+                return turma.getTurma().getTurno();
+            }
+        }
+        return null;
+    }
+    
+    @Transient
+    public Date getDataInscricao(){
+        if(turmaAlunos != null && !turmaAlunos.isEmpty()){
+            for(TurmaAluno turma : turmaAlunos){
+                return turma.getDataIncricao();
+            }
+        }
+        return null;
+    }
 
 
 }

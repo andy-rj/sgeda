@@ -68,15 +68,15 @@ public class FuncionarioHelper {
         return true;
     }
     
-    public Funcionario getByCpf(String cpf){
+    public Pessoa getByCpf(String cpf){
         session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.getTransaction();
         try{
             tx.begin();
-            Funcionario funcionario = (Funcionario) session.createCriteria(Funcionario.class).createAlias("pessoa", "pessoa").add(Restrictions.eq("pessoa.cpf", cpf)).uniqueResult();
+            Pessoa pessoa = (Pessoa) session.createCriteria(Pessoa.class).add(Restrictions.eq("cpf", cpf)).uniqueResult();
             session.flush();
             tx.commit();
-            return funcionario;
+            return pessoa;
         } catch (HibernateException e){
             if(tx != null){
                 tx.rollback();

@@ -2,7 +2,11 @@ package entidade;
 // Generated 09/09/2016 09:36:48 by Hibernate Tools 4.3.1
 
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
@@ -63,13 +68,24 @@ public class Objetiva  implements java.io.Serializable {
         this.questao = questao;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="objetiva")
+@OneToMany(fetch=FetchType.EAGER, mappedBy="objetiva")
     public Set<Opcao> getOpcaos() {
         return this.opcaos;
     }
     
     public void setOpcaos(Set<Opcao> opcaos) {
         this.opcaos = opcaos;
+    }
+    
+    @Transient
+    public List<Opcao> getOpcoesList(){
+        List<Opcao> opcoesList = new ArrayList<>(opcaos);
+        Collections.sort( opcoesList, new Comparator<Opcao>() {
+            public int compare(Opcao obj1, Opcao obj2) {
+                return obj1.getIdOpcao().compareTo(obj2.getIdOpcao());
+            }
+        });
+        return opcoesList ;
     }
 
 

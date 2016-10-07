@@ -163,7 +163,7 @@ public class Pessoa  implements java.io.Serializable {
     }
     
     @OneToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="idFoto", nullable=false)
+    @JoinColumn(name="idFoto", nullable=true)
     public Foto getFoto() {
         return this.foto;
     }

@@ -7,7 +7,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <title>Sistema de Gerenciamento</title>
+        <title>Curso Idealizar</title>
         <style type="text/css">
             .ui-growl {
                 z-index:9999 !important;
@@ -17,7 +17,7 @@
     <h:body style="background-color: #e3e3e3">
 
         <h:form id="consulta">
-            <p:growl globalOnly="true" id="info" sticky="true" />
+            <p:growl  globalOnly="true" id="info"  />
             <b:fetchBeanInfos/>
             <ui:insert name="navbar">
                 <ui:include src="/template/navbar.xhtml"/>
@@ -41,7 +41,7 @@
                                              style="width:100%" searching="false">
                                         <h:column>
                                             <f:facet name="header">
-                                                <h:outputText value="Nome" />
+                                                <h:outputText value="Código" />
                                             </f:facet>
                                             <h:outputText id="matricula" value="#{disciplina.nome}" />
                                         </h:column>

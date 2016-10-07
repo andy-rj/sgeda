@@ -1,17 +1,26 @@
 package controller;
 
+import entidade.Professor;
 import entidade.Questao;
+import entidade.Simulado;
 import entidade.SimuladoQuestao;
 import entidade.Subdisciplina;
+import helper.ProfessorHelper;
 import helper.QuestaoHelper;
+import helper.SimuladoHelper;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
 @ManagedBean
 @SessionScoped
@@ -23,7 +32,9 @@ public class SimuladoController {
     private QuestaoHelper questaoHelper;
     private List<Questao> questoesCadastradas;
     private List<SimuladoQuestao> questoesSelecionadas;
-
+    private ProfessorHelper professorHelper;
+    private SimuladoHelper simuladoHelper;
+    
     public List<SimuladoQuestao> getQuestoesSelecionadas() {
         return questoesSelecionadas;
     }
@@ -48,9 +59,54 @@ public class SimuladoController {
 
     public SimuladoController() {
         questaoHelper = new QuestaoHelper();
+        professorHelper = new ProfessorHelper();
+        simuladoHelper = new SimuladoHelper();
+    }
+    
+    public void addMessage(String id, String summary) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, summary, null);
+        FacesContext.getCurrentInstance().addMessage(id, message);
+    }
+
+    public void addMessage(String id, FacesMessage.Severity severidade, String summary) {
+        FacesMessage message = new FacesMessage(severidade, summary, null);
+        FacesContext.getCurrentInstance().addMessage(id, message);
     }
 
     public String cadastrar() {
+        if(questoesSelecionadas == null || questoesSelecionadas.isEmpty()){
+            addMessage(null, FacesMessage.SEVERITY_ERROR, "Adicione pelo menos uma questão!");
+            return "";
+        }
+        
+        if(new BigDecimal(getNotaTotal()).compareTo(BigDecimal.TEN) != 0){
+            addMessage(null, FacesMessage.SEVERITY_ERROR, "Nota total do simulado diferente de 10");
+            return "";
+        }
+        
+        for(SimuladoQuestao questao: questoesSelecionadas){
+            if(questao.getValorQuestao() == null){
+                addMessage(null, FacesMessage.SEVERITY_ERROR, "Por favor cadastrar a nota para todas as questões!");
+                return "";
+            }
+        }
+        
+        Simulado simulado = new Simulado();
+        simulado.setDescricao(descricao);
+        simulado.setNome(nome);
+        simulado.setDataCadastro(new Timestamp(new Date().getTime()));
+        simulado.setProfessor(professor);
+        simulado.setSimuladoQuestaos(new HashSet<>(questoesSelecionadas));
+        
+        if(!simuladoHelper.cadastrar(simulado)){
+            addMessage(null, FacesMessage.SEVERITY_ERROR, "Erro ao cadastrar simulado, tente novamente!");
+            return "";
+        }
+        
+        addMessage(null, FacesMessage.SEVERITY_INFO, "Cadastro realizado com sucesso!");
+        
+        limparCampos();
+        
         return "";
     }
 
@@ -86,7 +142,7 @@ public class SimuladoController {
         nome = null;
         questaoSelecionada = null;
         descricao = null;
-
+        questoesSelecionadas = new ArrayList<>();
     }
 
     public String limparFormularioCadastro() {
@@ -125,7 +181,9 @@ public class SimuladoController {
     private List<String> disciplinas;
     private List<String> assuntos;
 
-    public String novoCadastro() {
+    private Professor professor;
+    public String novoCadastro(Integer idProfessorAtual) {
+        this.professor = professorHelper.getById(idProfessorAtual);
         limparCampos();
         questoesCadastradas = questaoHelper.getAllQuestoes();
         if (questoesCadastradas != null) {
@@ -169,20 +227,18 @@ public class SimuladoController {
             if (questoesSelecionadas == null) {
                 questoesSelecionadas = new ArrayList<>();
             }
+            for(SimuladoQuestao q : questoesSelecionadas){
+                if(q.getQuestao().getIdQuestao().equals(questaoSelecionada.getIdQuestao())) return;
+            }
             SimuladoQuestao questao = new SimuladoQuestao();
             questao.setQuestao(questaoSelecionada);
             questoesSelecionadas.add(questao);
-            questoesCadastradas.remove(questao.getQuestao());
-            if (questoesFiltradas != null) {
-                questoesFiltradas.remove(questao.getQuestao());
-            }
             questaoSelecionada = null;
         }
     }
 
     public void excluirQuestao(SimuladoQuestao questao) {
         questoesSelecionadas.remove(questao);
-        questoesCadastradas.add(questao.getQuestao());
     }
 
     public String getNotaTotal() {

@@ -125,50 +125,16 @@ public class AlunoController {
     }
 
     public void cadastrar() {
-        
-        boolean erro=false;
-        
+                
         if (telefones == null || telefones.isEmpty()) {
             addMessage("cadastro:telefone", "Cadastre pelo menos um telefone!");
-            erro = true;
+            return;
         }
 
         if (alunoHelper.getByCpf(cpf) != null) {
             addMessage("cadastro:cpf", "CPF já cadastrado!");
-            erro = true;
+            return;
         }
-        
-        if(nomeResponsavel != null || !nomeResponsavel.isEmpty()){
-            if(telefoneResponsavel == null || telefoneResponsavel.isEmpty()){
-                addMessage("cadastro:telefoneResponsavel", "Telefone do responsável não preenchido!");
-                erro = true;
-            }
-            if(cpfResponsavel == null || cpfResponsavel.isEmpty()){
-                addMessage("cadastro:cpfResponsavel", "CPF do responsável não preenchido!");
-                erro = true;
-            }
-        } 
-        else if(cpfResponsavel != null || !cpfResponsavel.isEmpty()){
-            if(telefoneResponsavel == null || telefoneResponsavel.isEmpty()){
-                addMessage("cadastro:telefoneResponsavel", "Telefone do responsável não preenchido!");
-                erro = true;
-            }
-            if(nomeResponsavel == null || nomeResponsavel.isEmpty()){
-                addMessage("cadastro:responsavel", "Nome do responsável não preenchido!");
-                erro = true;
-            }
-        }else if(telefoneResponsavel != null || !telefoneResponsavel.isEmpty()){
-            if(nomeResponsavel == null || nomeResponsavel.isEmpty()){
-                addMessage("cadastro:responsavel", "Nome do responsável não preenchido!");
-                erro = true;
-            }
-            if(cpfResponsavel == null || cpfResponsavel.isEmpty()){
-                addMessage("cadastro:cpfResponsavel", "CPF do responsável não preenchido!");
-                erro = true;
-            }
-        }
-        
-        if(erro) return;
         
         Endereco endereco = new Endereco(null, logradouro, numero, complemento, cep, bairro, cidade, estado);
         Pessoa pessoa = new Pessoa(cpf, "0", nome, dataNascimento, sexo, new Timestamp(new Date().getTime()), email, telefones, endereco);
@@ -508,8 +474,7 @@ public class AlunoController {
     }
 
     public String limparFormularioCadastro() {
-        limparCampos();
-        return "";
+        return novoCadastro();
     }
 
     public String novaConsulta() {

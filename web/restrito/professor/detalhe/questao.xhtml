@@ -4,9 +4,10 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:b="http://bootsfaces.net/ui"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
-        <title>Sistema de Gerenciamento</title>
+        <title>Curso Idealizar</title>
         <style type="text/css">
             .ui-growl {
                 z-index:9999 !important;
@@ -15,7 +16,7 @@
     </h:head>
     <h:body style="background-color: #e3e3e3">
         <h:form id="cadastro" >
-            <p:growl globalOnly="true" id="info" sticky="true" />
+            <p:growl  globalOnly="true" id="info"  />
             <b:fetchBeanInfos/>
             <ui:insert name="navbar">
                 <ui:include src="/template/navbar.xhtml"/>
@@ -24,7 +25,7 @@
                 <b:row style="margin-left: -45px; margin-right: -45px;">
                     <b:column>
                         <b:panel rendered="#{not empty questaoController.questaoDetalhe.objetiva}" title="Detalhes Questão" collapsible="false" look="info">
-                                                       
+
                             <b:row>
                                 <b:column colSm="2">
                                     <h:outputLabel value="Instituição:" />
@@ -69,21 +70,172 @@
                                     <h:outputText id="enunciado" value="#{questaoController.questaoDetalhe.enunciado}" escape="false" transient="true" />   
                                 </b:column>
                             </b:row>
-                           
+                            <b:row>
+                                <b:column>
+                                    <p:separator/>
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column colSm="2">
+                                    <h:outputLabel value="Opções de resposta:" />
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column colSm="7">
+                                    <p:dataTable var ="opcao" value="#{questaoController.questaoDetalhe.objetiva.opcoesList}">
+                                        <p:column style="width:60px;" headerText="Opção">
+                                            <h:outputText rendered="#{opcao.correta}" style="color:green" value="#{opcao.opcao}"/>
+                                            <h:outputText rendered="#{not opcao.correta}" style="color:darkred" value="#{opcao.opcao}"/>
+                                        </p:column>
+                                        <p:column headerText="Descrição">
+                                            <h:outputText rendered="#{opcao.correta}" style="color:green" value="#{opcao.descricao}"/>
+                                            <h:outputText rendered="#{not opcao.correta}" style="color:darkred" value="#{opcao.descricao}"/>
+                                        </p:column>
+                                        <p:column headerText="Correta">
+                                            <h:outputText rendered="#{opcao.correta}" style="color:green" value="sim"/>
+                                            <h:outputText rendered="#{not opcao.correta}" style="color:darkred" value="não"/>
+                                        </p:column>
+                                    </p:dataTable>
+                                </b:column>
+                            </b:row>
+
                             <b:row>
                                 <br/>
-                                <b:column colSm="2" offset="5">
+                                <b:column colSm="2">
                                     <p:button value="Voltar" outcome="/restrito/professor/consulta/questao" style="width: 100%"/>
                                 </b:column>
+                            </b:row>
+                        </b:panel>
+
+                        <b:panel rendered="#{not empty questaoController.questaoDetalhe.discursiva}" title="Detalhes Questão" collapsible="false" look="info">
+
+                            <b:row>
                                 <b:column colSm="2">
-                                    <p:commandButton rendered="#{loginController.usuarioLogado.administrador}" action="#{disciplinaController.alterarDisciplina}" value="Alterar" style="width: 100%"/>
+                                    <h:outputLabel value="Instituição:" />
                                 </b:column>
+                                <b:column colSm="10">
+                                    <h:outputText id="instituicao" value="#{questaoController.questaoDetalhe.instituicao}" />   
+                                </b:column>
+                            </b:row>
+                            <b:row>
                                 <b:column colSm="2">
-                                    <p:commandButton rendered="#{loginController.usuarioLogado.administrador}" action="#{professorController.inativar}" onclick="return confirm('Confirma a inativação do professor?');" value="Inativar" style="width: 100%"/>
+                                    <h:outputLabel value="Ano:" />
+                                </b:column>
+                                <b:column colSm="10">
+                                    <h:outputText id="ano" value="#{questaoController.questaoDetalhe.ano}" />   
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column colSm="2">
+                                    <h:outputLabel value="Disciplina:" />
+                                </b:column>
+                                <b:column colSm="10">
+                                    <h:outputText id="disciplina" value="#{questaoController.questaoDetalhe.disciplina.codigo} - #{questaoController.questaoDetalhe.disciplina.nome}" />   
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column colSm="2">
+                                    <h:outputLabel value="Assuntos:" />
+                                </b:column>
+                                <b:column colSm="10">
+                                    <ui:repeat var="assunto" value="#{questaoController.assuntosDetalhe}" varStatus="status">
+                                        <b:label text="#{assunto.nome}" severity="info" style="margin-right: 5px;"/>
+                                    </ui:repeat>
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column colSm="2">
+                                    <h:outputLabel value="Enunciado:" />
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column colSm="12">
+                                    <h:outputText id="enunciado" value="#{questaoController.questaoDetalhe.enunciado}" escape="false" transient="true" />   
+                                </b:column>
+                            </b:row>
+                            
+                            <b:row>
+                                <b:column>
+                                    <p:separator/>
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column colSm="2">
+                                    <h:outputLabel value="Resposta Padrão:" />
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column colSm="7">
+                                    <h:outputLabel value="#{questaoController.questaoDetalhe.discursiva.respostaPadrao}" />
+                                </b:column>
+                            </b:row>
+
+                            <b:row>
+                                <br/>
+                                <b:column colSm="2">
+                                    <p:button value="Voltar" outcome="/restrito/professor/consulta/questao" style="width: 100%"/>
+                                </b:column>
+                               
+
+                            </b:row>
+                        </b:panel>
+
+                        <b:panel rendered="#{not empty questaoController.questaoDetalhe.redacao}" title="Detalhes Questão" collapsible="false" look="info">
+
+                            <b:row>
+                                <b:column colSm="2">
+                                    <h:outputLabel value="Instituição:" />
+                                </b:column>
+                                <b:column colSm="10">
+                                    <h:outputText id="instituicao" value="#{questaoController.questaoDetalhe.instituicao}" />   
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column colSm="2">
+                                    <h:outputLabel value="Ano:" />
+                                </b:column>
+                                <b:column colSm="10">
+                                    <h:outputText id="ano" value="#{questaoController.questaoDetalhe.ano}" />   
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column colSm="2">
+                                    <h:outputLabel value="Disciplina:" />
+                                </b:column>
+                                <b:column colSm="10">
+                                    <h:outputText id="disciplina" value="#{questaoController.questaoDetalhe.disciplina.codigo} - #{questaoController.questaoDetalhe.disciplina.nome}" />   
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column colSm="2">
+                                    <h:outputLabel value="Assuntos:" />
+                                </b:column>
+                                <b:column colSm="10">
+                                    <ui:repeat var="assunto" value="#{questaoController.assuntosDetalhe}" varStatus="status">
+                                        <b:label text="#{assunto.nome}" severity="info" style="margin-right: 5px;"/>
+                                    </ui:repeat>
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column colSm="2">
+                                    <h:outputLabel value="Enunciado:" />
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column colSm="12">
+                                    <h:outputText id="enunciado" value="#{questaoController.questaoDetalhe.enunciado}" escape="false" transient="true" />   
+                                </b:column>
+                            </b:row>
+
+                            <b:row>
+                                <br/>
+                                <b:column colSm="2">
+                                    <p:button value="Voltar" outcome="/restrito/professor/consulta/questao" style="width: 100%"/>
                                 </b:column>
 
                             </b:row>
                         </b:panel>
+
                     </b:column>
                 </b:row>
             </b:container>

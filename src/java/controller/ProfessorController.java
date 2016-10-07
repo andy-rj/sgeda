@@ -360,8 +360,8 @@ public class ProfessorController {
       resultadoConsulta = new ArrayList<>();
     }
     
-    public void limparFormularioCadastro(){
-        limparCampos();
+    public String limparFormularioCadastro(){
+        return novoCadastro();
     }
     
     public String novoCadastro(){

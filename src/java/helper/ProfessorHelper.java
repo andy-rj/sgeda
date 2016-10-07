@@ -67,12 +67,12 @@ public class ProfessorHelper {
         return true;
     }
     
-    public Professor getByCpf(String cpf){
+    public Pessoa getByCpf(String cpf){
         session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.getTransaction();
         try{
             tx.begin();
-            Professor professor = (Professor) session.createCriteria(Professor.class).createAlias("pessoa", "pessoa").add(Restrictions.eq("pessoa.cpf", cpf)).uniqueResult();
+            Pessoa professor = (Pessoa) session.createCriteria(Pessoa.class).add(Restrictions.eq("cpf", cpf)).uniqueResult();
             session.flush();
             tx.commit();
             return professor;
@@ -163,6 +163,27 @@ public class ProfessorHelper {
             session.flush();
             tx.commit();
             return professore;
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return null;
+    }
+    
+    public Pessoa getPessoaById(Integer Id){
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.getTransaction();
+        try{
+            tx.begin();
+            Pessoa pessoa =(Pessoa)session.createCriteria(Pessoa.class).add(Restrictions.eq("idPessoa", Id)).uniqueResult();
+            session.flush();
+            tx.commit();
+            return pessoa;
         } catch (HibernateException e) {
             if (tx != null) {
                 tx.rollback();

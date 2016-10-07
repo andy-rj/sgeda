@@ -2,35 +2,42 @@ package controller;
 
 import entidade.Curso;
 import entidade.Disciplina;
+import entidade.Professor;
+import entidade.Simulado;
 import entidade.Turma;
+import entidade.TurmaSimulado;
+import entidade.TurmaSimuladoId;
 import helper.CursoHelper;
 import helper.DisciplinaHelper;
 import helper.ProfessorHelper;
+import helper.SimuladoHelper;
 import helper.TurmaHelper;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
 
 @ManagedBean
 @SessionScoped
 public class TurmaController {
+
     private Curso curso;
     private CursoHelper cursoHelper;
     private Integer cursoSelecionado;
     private boolean cursoSelecionadoFlag;
     private List<Curso> cursosCadastrados;
     @NotNull(message = "Data de término é obrigatória!")
-    @Past(message = "Data de término inválida!")
+    @Future(message = "Data de término inválida!")
     private Date dataFim;
     @NotNull(message = "Data de início é obrigatória!")
-    @Past(message = "Data de início inválida!")
+    @Future(message = "Data de início inválida!")
     private Date dataInicio;
     private String descricao;
     private DisciplinaHelper disciplinaHelper;
@@ -43,24 +50,41 @@ public class TurmaController {
     private TurmaHelper turmaHelper;
     private List<Turma> turmas;
     private String turno;
+    private Simulado simuladoSelecionado;
+    private List<Simulado> simuladosFiltrados;
+
+    public List<Simulado> getSimuladosFiltrados() {
+        return simuladosFiltrados;
+    }
+
+    public void setSimuladosFiltrados(List<Simulado> simuladosFiltrados) {
+        this.simuladosFiltrados = simuladosFiltrados;
+    }
+
+    public Simulado getSimuladoSelecionado() {
+        return simuladoSelecionado;
+    }
+
+    public void setSimuladoSelecionado(Simulado simuladoSelecionado) {
+        this.simuladoSelecionado = simuladoSelecionado;
+    }
 
     public TurmaController() {
-        
+        simuladoHelper = new SimuladoHelper();
         cursoHelper = new CursoHelper();
         turmaHelper = new TurmaHelper();
         professorHelper = new ProfessorHelper();
         disciplinaHelper = new DisciplinaHelper();
-        
+
     }
-    
+
     public void addMessage(String id, String summary) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, summary,  null);
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, summary, null);
         FacesContext.getCurrentInstance().addMessage(id, message);
     }
 
-
     public void addMessage(String id, Severity severidade, String summary) {
-        FacesMessage message = new FacesMessage(severidade, summary,  null);
+        FacesMessage message = new FacesMessage(severidade, summary, null);
         FacesContext.getCurrentInstance().addMessage(id, message);
     }
 
@@ -69,34 +93,37 @@ public class TurmaController {
     }
 
     public void cadastrar() {
-        
-        if(turmas == null || turmas.isEmpty()) {
-            addMessage(null,FacesMessage.SEVERITY_ERROR, "Entre com pelo menos uma turma para cadastrar!");
+
+        if (turmas == null || turmas.isEmpty()) {
+            addMessage(null, FacesMessage.SEVERITY_ERROR, "Entre com pelo menos uma turma para cadastrar!");
             return;
         }
-        
-        if(!turmaHelper.cadastrar(turmas)){
-            addMessage(null,FacesMessage.SEVERITY_ERROR, "Erro ao Cadastrar Turmas, Tente novamente!");
+
+        if (!turmaHelper.cadastrar(turmas)) {
+            addMessage(null, FacesMessage.SEVERITY_ERROR, "Erro ao Cadastrar Turmas, Tente novamente!");
             return;
 
         }
-        if(turmas.size()==1) addMessage(null, FacesMessage.SEVERITY_INFO ,"Turma Cadastrada com Sucesso!");
-        else addMessage(null, FacesMessage.SEVERITY_INFO ,"Turmas Cadastradas com Sucesso!");
+        if (turmas.size() == 1) {
+            addMessage(null, FacesMessage.SEVERITY_INFO, "Turma Cadastrada com Sucesso!");
+        } else {
+            addMessage(null, FacesMessage.SEVERITY_INFO, "Turmas Cadastradas com Sucesso!");
+        }
 
         limparCampos();
         turmas = null;
         cursoSelecionadoFlag = false;
         curso = null;
-        
+
     }
 
     public void consultar() {
         resultadoConsulta = turmaHelper.getTurmas(stringConsulta);
-        if(resultadoConsulta == null || resultadoConsulta.isEmpty()){
-            addMessage(null, FacesMessage.SEVERITY_INFO ,"Nenhum resultado encontrado!");
+        if (resultadoConsulta == null || resultadoConsulta.isEmpty()) {
+            addMessage(null, FacesMessage.SEVERITY_INFO, "Nenhum resultado encontrado!");
         }
-     }
-   
+    }
+
     public void excluirTurma(Turma turma) {
         turmas.remove(turma);
     }
@@ -104,12 +131,11 @@ public class TurmaController {
     public String exibirDetalhes(Turma turma) {
         turmaDetalhe = turma;
         return "/restrito/cadastro/detalhe/turma?faces-redirect=true";
-     }
+    }
 
     public Integer getCursoSelecionado() {
         return cursoSelecionado;
     }
-    
 
     public void setCursoSelecionado(Integer cursoSelecionado) {
         this.cursoSelecionado = cursoSelecionado;
@@ -131,7 +157,6 @@ public class TurmaController {
         return dataInicio;
     }
 
-
     public void setDataInicio(Date dataInicio) {
         this.dataInicio = dataInicio;
     }
@@ -140,53 +165,23 @@ public class TurmaController {
         return descricao;
     }
 
-    public void setDescricao(String descricao){
+    public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
-   
-    public List<Disciplina> getDisciplinasDisponiveis(){
+
+    public List<Disciplina> getDisciplinasDisponiveis() {
         return disciplinasDisponiveis;
     }
 
     public String getNome() {
         return nome;
     }
-    
-    
-     
-    public void setNome(String nome){
+
+    public void setNome(String nome) {
         this.nome = nome;
     }
-     
-    public void selecionarCurso() {
-        if(dataFim.before(dataInicio)){
-            addMessage("cadastro:dataFim", FacesMessage.SEVERITY_ERROR, "Data de término anterior a data de início!");
-            return;
-        }
-        
-        for (Curso curso : cursosCadastrados) {
-            if (curso.getIdCurso().equals(cursoSelecionado)) {
-                this.curso = curso;
-                break;
-            }
-        }
-        List<Disciplina> disciplinasDisponiveis = disciplinaHelper.getDisciplinasByCurso(cursoSelecionado);
-        
-        turmas = new ArrayList<>();
-        
-        for(Disciplina disciplina: disciplinasDisponiveis){
-            Turma turma = new Turma();
-            turma.setCurso(curso);
-            turma.setDataFim(dataFim);
-            turma.setDataInicio(dataInicio);
-            turma.setDisciplina(disciplina);
-            turma.setTurno(turno);
-            turmas.add(turma);
-        }
-            
-    }
 
-    public List<Turma> getResultadoConsulta(){
+    public List<Turma> getResultadoConsulta() {
         return resultadoConsulta;
     }
 
@@ -202,7 +197,6 @@ public class TurmaController {
         return turmaDetalhe;
     }
 
-    
     public void setTurmaDetalhe(Turma turmaDetalhe) {
         this.turmaDetalhe = turmaDetalhe;
     }
@@ -239,20 +233,18 @@ public class TurmaController {
     public String limparFormularioCadastro() {
         return novoCadastro();
     }
-    
+
     public void limparFormularioConsulta() {
         stringConsulta = null;
         resultadoConsulta = null;
     }
-    
-    
-    public String novaConsulta(){
+
+    public String novaConsulta() {
         limparFormularioConsulta();
         return "/restrito/cadastro/consulta/turma?faces-redirect=true";
     }
-    
-    
-    public String novoCadastro(){
+
+    public String novoCadastro() {
         cursosCadastrados = cursoHelper.getCursosDisponiveis();
         limparCampos();
         cursoSelecionadoFlag = false;
@@ -260,5 +252,118 @@ public class TurmaController {
         curso = null;
         return "/restrito/administrador/cadastro/turma?faces-redirect=true";
     }
+
+    public void selecionarCurso() {
+        if (dataFim.before(dataInicio)) {
+            addMessage("cadastro:dataFim", FacesMessage.SEVERITY_ERROR, "Data de término anterior a data de início!");
+            return;
+        }
+
+        for (Curso curso : cursosCadastrados) {
+            if (curso.getIdCurso().equals(cursoSelecionado)) {
+                this.curso = curso;
+                break;
+            }
+        }
+        List<Disciplina> disciplinasDisponiveis = disciplinaHelper.getDisciplinasByCurso(cursoSelecionado);
+
+        turmas = new ArrayList<>();
+
+        for (Disciplina disciplina : disciplinasDisponiveis) {
+            Turma turma = new Turma();
+            turma.setCurso(curso);
+            turma.setDataFim(dataFim);
+            turma.setDataInicio(dataInicio);
+            turma.setDisciplina(disciplina);
+            turma.setTurno(turno);
+            turmas.add(turma);
+        }
+    }
+    List<Turma> turmasProfessor;
+    List<Simulado> simuladosCadastrados;
+
+    public List<Simulado> getSimuladosCadastrados() {
+        return simuladosCadastrados;
+    }
+
+    public List<Turma> getTurmasProfessor() {
+        return turmasProfessor;
+    }
+
+    private SimuladoHelper simuladoHelper;
     
+    private List<String> professores;
+
+    public List<String> getProfessores() {
+        return professores;
+    }
+
+    public String novaConsultaProfessor(Integer idProfessor) {
+        turmasProfessor = turmaHelper.getTurmasByIdProfessor(idProfessor);
+        simuladosCadastrados = simuladoHelper.getSimulados();
+        professores = new ArrayList<>();
+        for (Simulado simulado : simuladosCadastrados) {
+            if (!professores.contains(simulado.getProfessor().getPessoa().getNome())) {
+                professores.add(simulado.getProfessor().getPessoa().getNome());
+            }
+        }
+
+        return "/restrito/professor/consulta/turma?faces-redirect=true";
+    }
+
+    private Turma turmaProfessorDetalhe;
+    private Date dataAberturaSimulado;
+    private Date dataEncerramentoSimulado;
+
+    public Date getDataAberturaSimulado() {
+        return dataAberturaSimulado;
+    }
+
+    public void setDataAberturaSimulado(Date dataAberturaSimulado) {
+        this.dataAberturaSimulado = dataAberturaSimulado;
+    }
+
+    public Date getDataEncerramentoSimulado() {
+        return dataEncerramentoSimulado;
+    }
+
+    public void setDataEncerramentoSimulado(Date dataEncerramentoSimulado) {
+        this.dataEncerramentoSimulado = dataEncerramentoSimulado;
+    }
+
+    public Date getDuracaoSimulado() {
+        return duracaoSimulado;
+    }
+
+    public void setDuracaoSimulado(Date duracaoSimulado) {
+        this.duracaoSimulado = duracaoSimulado;
+    }
+    private Date duracaoSimulado;
+
+    public Turma getTurmaProfessorDetalhe() {
+        return turmaProfessorDetalhe;
+    }
+
+    public void detalheTurmaProfessor(Turma turma) {
+        turmaProfessorDetalhe = turma;
+    }
+
+    
+    public void adicionarSimuladoSelecionado(){
+        TurmaSimulado turmaSimulado = new TurmaSimulado();
+        turmaSimulado.setDataAbertura(dataAberturaSimulado);
+        turmaSimulado.setDataEncerramento(dataEncerramentoSimulado);
+        turmaSimulado.setDuracao(duracaoSimulado);
+        turmaSimulado.setSimulado(simuladoSelecionado);
+        turmaSimulado.setTurma(turmaProfessorDetalhe);
+        if(turmaProfessorDetalhe.getTurmaSimulados()==null) turmaProfessorDetalhe.setTurmaSimulados(new HashSet<TurmaSimulado>());
+        turmaProfessorDetalhe.getTurmaSimulados().add(turmaSimulado);
+        turmaSimulado.setId(new TurmaSimuladoId(simuladoSelecionado.getIdSimulado(), turmaProfessorDetalhe.getIdTurma()));
+        if(!turmaHelper.cadastrarSimulado(turmaSimulado)){
+            addMessage(null, FacesMessage.SEVERITY_ERROR, "Erro ao incluir simulado!");
+            return;
+        }
+        addMessage(null,FacesMessage.SEVERITY_INFO, "Simulado incluido com sucesso!");
+    }
+
 }

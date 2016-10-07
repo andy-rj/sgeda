@@ -8,7 +8,7 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:fn="http://java.sun.com/jsp/jstl/functions">
     <h:head>
-        <title>Sistema de Gerenciamento</title>
+        <title>Curso Idealizar</title>
         <style type="text/css">
             .ui-growl {
                 z-index:9999 !important;
@@ -22,6 +22,7 @@
                       minimizable="true" maximizable="true" width="800" height="500">
                 <b:row>
                     <b:column>
+                        <font color ='red' >*</font><h:outputText style="font-size: 14px;color: red;" value="Utilize o botão direito do mouse para selecionar." />
                         <p:dataTable id="checkboxQuestoes" widgetVar="tableQuestoes" var="questao" value="#{simuladoController.questoesCadastradas}" 
                                      selection="#{simuladoController.questaoSelecionada}" selectionMode="single" rowKey="#{questao.idQuestao}" 
                                      style="margin-bottom:0" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -33,10 +34,10 @@
                                     <p:inputText id="globalFilter" onkeyup="PF('tableQuestoes').filter()" style="width:150px" placeholder="Procurar"/>
                                 </p:outputPanel>
                             </f:facet>
-                            <p:column headerText="Código">
+                            <p:column style="text-align: center;width: 73px;" headerText="Código">
                                 <h:outputText value="#{questao.idQuestao}" />
                             </p:column>
-                            <p:column filterBy="#{questao.instituicao}" filterMatchMode="in" headerText="Instituição">
+                            <p:column style="text-align: center;" filterBy="#{questao.instituicao}" filterMatchMode="in" headerText="Instituição">
                                 <f:facet name="filter">
                                     <p:selectCheckboxMenu label="instituicoes" onchange="PF('tableQuestoes').filter()" panelStyle="width:225px" scrollHeight="150">
                                         <f:selectItems value="#{simuladoController.instituicoes}" />
@@ -44,7 +45,7 @@
                                 </f:facet>
                                 <h:outputText value="#{questao.instituicao}" />
                             </p:column>
-                            <p:column filterBy="#{questao.ano}" filterMatchMode="in" headerText="Ano">
+                            <p:column style="text-align: center;width: 86px;" filterBy="#{questao.ano}" filterMatchMode="in" headerText="Ano">
                                 <f:facet name="filter">
                                     <p:selectCheckboxMenu label="anos" onchange="PF('tableQuestoes').filter()" panelStyle="width:125px" scrollHeight="150">
                                         <f:selectItems value="#{simuladoController.anos}" />
@@ -52,7 +53,7 @@
                                 </f:facet>
                                 <h:outputText value="#{questao.ano}" />
                             </p:column>
-                            <p:column filterBy="#{questao.professor.pessoa.nome}" filterMatchMode="in" headerText="Professor">
+                            <p:column style="text-align: center;" filterBy="#{questao.professor.pessoa.nome}" filterMatchMode="in" headerText="Professor">
                                 <f:facet name="filter">
                                     <p:selectCheckboxMenu label="professores" onchange="PF('tableQuestoes').filter()" panelStyle="width:270px" scrollHeight="150">
                                         <f:selectItems value="#{simuladoController.professores}" />
@@ -60,7 +61,7 @@
                                 </f:facet>
                                 <h:outputText value="#{questao.professor.pessoa.nome}" />
                             </p:column>
-                            <p:column filterBy="#{questao.disciplina.nome}" filterMatchMode="in" headerText="Disciplina">
+                            <p:column style="text-align: center;" filterBy="#{questao.disciplina.nome}" filterMatchMode="in" headerText="Disciplina">
                                 <f:facet name="filter">
                                     <p:selectCheckboxMenu label="disciplinas" onchange="PF('tableQuestoes').filter()" panelStyle="width:200px" scrollHeight="150">
                                         <f:selectItems value="#{simuladoController.disciplinas}" />
@@ -68,7 +69,7 @@
                                 </f:facet>
                                 <h:outputText value="#{questao.disciplina.nome}" />
                             </p:column>
-                            <p:column filterBy="#{questao.subdisciplinasList}" filterFunction="#{simuladoController.filtroPorAssunto}" headerText="Assunto">
+                            <p:column style="text-align: center;" filterBy="#{questao.subdisciplinasList}" filterFunction="#{simuladoController.filtroPorAssunto}" headerText="Assunto">
                                 <f:facet name="filter">
                                     <p:selectCheckboxMenu label="assuntos" onchange="PF('tableQuestoes').filter()" panelStyle="width:200px" scrollHeight="150">
                                         <f:selectItems value="#{simuladoController.assuntos}" />
@@ -78,9 +79,6 @@
                                     <b:label text="#{assunto.nome}" severity="info" style="margin-right: 5px; display: inline-block"/>
                                 </p:repeat>
                             </p:column>
-                            <f:facet name="footer">
-                                <p:commandButton process="checkboxQuestoes" icon="ui-icon-search" value="View" />
-                            </f:facet>
                         </p:dataTable>
                     </b:column>
                 </b:row>
@@ -93,7 +91,7 @@
 
             <p:overlayPanel widgetVar="detalheQuestaoO" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" my="right top" at="right top">
                 <p:outputPanel id="detalheQuestao" style="text-align:center;">
-                    <p:panelGrid  columns="2" rendered="#{not empty simuladoController.questaoSelecionada}" columnClasses="label,value">
+                    <p:panelGrid  columns="2" rendered="#{not empty simuladoController.questaoSelecionada}" >
 
                         <h:outputText value="Código:" />
                         <h:outputText value="#{simuladoController.questaoSelecionada.idQuestao}" />
@@ -105,7 +103,7 @@
                 </p:outputPanel>
             </p:overlayPanel>
 
-            <p:growl globalOnly="true" id="info" sticky="true" />
+            <p:growl  globalOnly="true" id="info"  />
             <b:fetchBeanInfos/>
             <ui:insert name="navbar">
                 <ui:include src="/template/navbar.xhtml"/>
@@ -177,7 +175,7 @@
                                         </p:column>
 
                                         <p:column width="125" style="text-align:center;" headerText="">
-                                            <p:commandButton value="Excluir" ajax="true" immediate="true" update=":#{p:component('questaoTableRow')} :#{p:component('checkboxQuestoes')}" action="#{simuladoController.excluirQuestao(questao)}"/>
+                                            <p:commandButton value="Excluir" ajax="true" immediate="true" update=":#{p:component('questaoTableRow')}" action="#{simuladoController.excluirQuestao(questao)}"/>
                                         </p:column>
                                         <f:facet name="footer">
                                             Total de questões: #{fn:length(simuladoController.questoesSelecionadas)}.
@@ -190,7 +188,7 @@
                             <b:row>
                                 <br/>
                                 <b:column>
-                                    <p:commandButton value="Cadastrar" action="#{simuladoController.cadastrar}"/>
+                                    <p:commandButton value="Cadastrar" process="@this titulo descricao" update="container info" action="#{simuladoController.cadastrar}"/>
                                     <p:commandButton value="Limpar" action="#{simuladoController.limparFormularioCadastro}" immediate="true"/>
                                 </b:column>
                             </b:row>

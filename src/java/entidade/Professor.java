@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
@@ -141,9 +142,6 @@ public class Professor  implements java.io.Serializable {
     public void setQuestaos(Set<Questao> questaos) {
         this.questaos = questaos;
     }
-
-
-
 
 }
 

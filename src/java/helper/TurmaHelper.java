@@ -6,6 +6,7 @@ import entidade.Professor;
 import entidade.Telefone;
 import entidade.Turma;
 import entidade.TurmaAluno;
+import entidade.TurmaSimulado;
 import hibernate.HibernateUtil;
 import java.util.Date;
 import java.util.HashSet;
@@ -18,35 +19,58 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
 public class TurmaHelper {
+
     Session session = null;
 
     public boolean cadastrar(List<Turma> turmas) {
         session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.getTransaction();
-         
-        try{
+
+        try {
             tx.begin();
-            for(Turma turma: turmas){
+            for (Turma turma : turmas) {
                 session.save(turma);
             }
             session.flush();
             tx.commit();
         } catch (Exception e) {
-            if(tx != null){
+            if (tx != null) {
                 tx.rollback();
             }
             e.printStackTrace();
             return false;
         } finally {
-            if(session != null){
+            if (session != null) {
                 session.close();
             }
         }
         return true;
     }
 
+    public boolean cadastrarSimulado(TurmaSimulado turmaSimulado) {
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.getTransaction();
+
+        try {
+            tx.begin();
+            session.save(turmaSimulado);
+            session.flush();
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return true;    }
+
     public List<Turma> getTurmas(String stringConsulta) {
-       session = HibernateUtil.getSessionFactory().openSession();
+        session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.getTransaction();
         try {
             tx.begin();
@@ -56,7 +80,7 @@ public class TurmaHelper {
             crit.createAlias("curso", "curso");
             crit.createAlias("professor", "professor");
             crit.createAlias("professor.pessoa", "pessoa");
-            
+
             if (stringConsulta != null && !stringConsulta.isEmpty()) {
                 crit.add(Restrictions.disjunction()
                         .add(Restrictions.ilike("pessoa.nome", "%" + stringConsulta + "%"))
@@ -71,18 +95,16 @@ public class TurmaHelper {
             List<Turma> retorno = crit.list();
 
             //for (Turma turma : retorno) {
-                
             //}
-            
             session.flush();
             tx.commit();
             return retorno;
-        } catch (HibernateException e){
-            if(tx != null){
+        } catch (HibernateException e) {
+            if (tx != null) {
                 tx.rollback();
             }
         } finally {
-            if(session != null){
+            if (session != null) {
                 session.close();
             }
         }
@@ -97,7 +119,7 @@ public class TurmaHelper {
             Criteria crit = session.createCriteria(TurmaAluno.class);
 
             crit.createAlias("aluno", "aluno");
-            
+
             if (idAluno != 0) {
                 crit.add(Restrictions.conjunction()
                         .add(Restrictions.eq("aluno.idAluno", idAluno))
@@ -110,18 +132,48 @@ public class TurmaHelper {
             session.flush();
             tx.commit();
             return retorno;
-        } catch (HibernateException e){
-            if(tx != null){
+        } catch (HibernateException e) {
+            if (tx != null) {
                 tx.rollback();
             }
         } finally {
-            if(session != null){
+            if (session != null) {
                 session.close();
             }
         }
-        return null;    
+        return null;
     }
-    
+
+    public List<Turma> getTurmasByIdProfessor(Integer idProfessor) {
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.getTransaction();
+        try {
+            tx.begin();
+            Criteria crit = session.createCriteria(Turma.class);
+            crit.createAlias("professor", "professor");
+
+            crit.add(Restrictions.conjunction()
+                    .add(Restrictions.eq("professor.idProfessor", idProfessor))
+            );
+
+            crit.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+
+            List<Turma> retorno = crit.list();
+            session.flush();
+            tx.commit();
+            return retorno;
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return null;
+    }
+
     public List<Turma> getTurmasByCurso(Integer cursoSelecionado) {
         session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.getTransaction();
@@ -130,7 +182,7 @@ public class TurmaHelper {
             Criteria crit = session.createCriteria(Turma.class);
 
             crit.createAlias("curso", "curso");
-            
+
             if (cursoSelecionado != null) {
                 crit.add(Restrictions.conjunction()
                         .add(Restrictions.eq("curso.idCurso", cursoSelecionado))
@@ -142,22 +194,20 @@ public class TurmaHelper {
             List<Turma> retorno = crit.list();
 
             //for (Turma turma : retorno) {
-                
             //}
-            
             session.flush();
             tx.commit();
             return retorno;
-        } catch (HibernateException e){
-            if(tx != null){
+        } catch (HibernateException e) {
+            if (tx != null) {
                 tx.rollback();
             }
         } finally {
-            if(session != null){
+            if (session != null) {
                 session.close();
             }
         }
-        return null;    
+        return null;
     }
 
     public List<Turma> getTurmasByCurso(Integer cursoSelecionado, Date dataInicio, String turno) {
@@ -168,7 +218,7 @@ public class TurmaHelper {
             Criteria crit = session.createCriteria(Turma.class);
 
             crit.createAlias("curso", "curso");
-            
+
             if (cursoSelecionado != null && dataInicio != null) {
                 crit.add(Restrictions.conjunction()
                         .add(Restrictions.eq("curso.idCurso", cursoSelecionado))
@@ -182,22 +232,20 @@ public class TurmaHelper {
             List<Turma> retorno = crit.list();
 
             //for (Turma turma : retorno) {
-                
             //}
-            
             session.flush();
             tx.commit();
             return retorno;
-        } catch (HibernateException e){
-            if(tx != null){
+        } catch (HibernateException e) {
+            if (tx != null) {
                 tx.rollback();
             }
         } finally {
-            if(session != null){
+            if (session != null) {
                 session.close();
             }
         }
-        return null;    
+        return null;
     }
-    
+
 }

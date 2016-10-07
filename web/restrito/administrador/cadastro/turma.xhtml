@@ -7,7 +7,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <title>Sistema de Gerenciamento</title>
+        <title>Curso Idealizar</title>
         <style type="text/css">
             .ui-growl {
                 z-index:9999 !important;
@@ -16,7 +16,8 @@
     </h:head>
     <h:body style="background-color: #e3e3e3">
         <h:form id="cadastro">
-            <p:growl globalOnly="true" id="info" sticky="true" />
+            <p:growl  globalOnly="true" id="info"  />
+            <p:growl  globalOnly="true" id="validaTurma" />
             <b:fetchBeanInfos/>
             <ui:insert name="navbar">
                 <ui:include src="/template/navbar.xhtml"/>
@@ -94,42 +95,32 @@
                                     <p:commandButton update=":#{p:component('tabelaTurmas')}" process="@this curso dataInicio dataFim turno" value="Selecionar" action="#{turmaController.selecionarCurso}"/>
                                 </b:column>
                             </b:row>
-                                              
+
                             <p:separator/>
-                            
+
                             <b:row id="tabelaTurmas">
                                 <b:column>
                                     <b:messages/>
                                     <p:dataTable   rendered="#{not empty turmaController.turmas}" var="turma" value="#{turmaController.turmas}">
-                                        <p:column headerText="Nome">
-                                            <p:inputText id="nome" placeholder="Nome" value="#{turma.nome}" required="true" requiredMessage="Nome é obrigatório"/>
+                                        <p:column headerText="Disciplina">
+                                            <h:outputText id="disciplina" value="#{turma.disciplina.nome}" />
+                                        </p:column>
+                                        <p:column headerText="Código">
+                                            <p:inputText id="codigo" value="#{turma.nome}" required="true" requiredMessage="Digite um código!" />
                                         </p:column>
                                         <p:column headerText="Descrição">
-                                            <p:inputText id="descricao" placeholder="Nome" value="#{turma.descricao}" required="true" requiredMessage="Descrição é obrigatório"/>
+                                            <p:inputText id="descricao" value="#{turma.descricao}" required="true" requiredMessage="Digite uma descrição!" />
                                         </p:column>
                                         <p:column headerText="Professor">
                                             <p:selectOneMenu id="professor" value="#{turma.professor}" converter="converter.professorConverter" required="true" style="width:100%">
                                                 <f:selectItem itemLabel="Selecione o professor" itemValue="0" noSelectionOption="true" />
-                                                <f:selectItems value="#{turma.disciplina.professors}" var="professor" itemLabel="#{professor.pessoa.nome}" itemValue="#{professor}" />
+                                                <f:selectItems id="teste" value="#{turma.disciplina.professors}" var="professor" itemLabel="#{professor.pessoa.nome}" itemValue="#{professor}" />
                                             </p:selectOneMenu>
-                                        </p:column>
-                                        <p:column headerText="Início">
-                                            <h:outputText value="#{turma.dataInicio}">
-                                                <f:convertDateTime pattern="dd/MM/yyyy" />
-                                            </h:outputText>
-                                        </p:column>
-                                        <p:column headerText="Término">
-                                            <h:outputText value="#{turma.dataFim}">
-                                                <f:convertDateTime pattern="dd/MM/yyyy" />
-                                            </h:outputText>
-                                        </p:column>
-                                        <p:column headerText="Turno">
-                                            <h:outputText value="#{turma.turno}"/>
                                         </p:column>
                                     </p:dataTable> 
                                 </b:column>
                             </b:row>
-                            
+
                             <b:row>
                                 <br/>
                                 <b:column colSm="12">

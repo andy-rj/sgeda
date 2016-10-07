@@ -58,7 +58,7 @@ public class SimuladoQuestao  implements java.io.Serializable {
         this.id = id;
     }
 
-@ManyToOne(fetch=FetchType.LAZY)
+@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="questao_idQuestao", nullable=false, insertable=false, updatable=false)
     public Questao getQuestao() {
         return this.questao;
@@ -68,7 +68,7 @@ public class SimuladoQuestao  implements java.io.Serializable {
         this.questao = questao;
     }
 
-@ManyToOne(fetch=FetchType.LAZY)
+@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="simulado_idSimulado", nullable=false, insertable=false, updatable=false)
     public Simulado getSimulado() {
         return this.simulado;

@@ -416,8 +416,8 @@ public class FuncionarioController {
 
     }
 
-    public void limparFormularioCadastro() {
-        limparCampos();
+    public String limparFormularioCadastro() {
+        return novoCadastro();
     }
 
     public void limparFormularioConsulta() {

@@ -7,7 +7,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <title>Sistema de Gerenciamento</title>
+        <title>Curso Idealizar</title>
     </h:head>
     <h:body style="background-color: #e3e3e3">
         <h:outputStylesheet>
@@ -17,7 +17,7 @@
         </h:outputStylesheet>
 
         <h:form id="cadastro">
-            <p:growl globalOnly="true" id="info" sticky="true" />
+            <p:growl  globalOnly="true" id="info"  />
             <b:fetchBeanInfos/>
             <ui:insert name="navbar">
                 <ui:include src="/template/navbar.xhtml"/>
@@ -167,7 +167,7 @@
                             </b:row>
                             <b:row>
                                 <b:column colSm="2">
-                                    <h:outputLabel value="Administrador" ><font color ='red' >*</font></h:outputLabel>
+                                    <h:outputLabel value="Administrador" ></h:outputLabel>
                                 </b:column>
                                 <b:column colSm="7">
                                     <p:selectBooleanCheckbox value="#{funcionarioController.papelAdmistrador}" />
