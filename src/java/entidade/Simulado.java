@@ -37,7 +37,6 @@ public class Simulado  implements java.io.Serializable {
      private Date dataCadastro;
      private Set<SimuladoQuestao> simuladoQuestaos = new HashSet(0);
      private Set<TurmaSimulado> turmaSimulados = new HashSet(0);
-     private Set<AlunoSimulado> alunoSimulados = new HashSet(0);
 
     public Simulado() {
     }
@@ -55,7 +54,6 @@ public class Simulado  implements java.io.Serializable {
        this.dataCadastro = dataCadastro;
        this.simuladoQuestaos = simuladoQuestaos;
        this.turmaSimulados = turmaSimulados;
-       this.alunoSimulados = alunoSimulados;
     }
    
      @Id @GeneratedValue(strategy=IDENTITY)
@@ -148,14 +146,7 @@ public class Simulado  implements java.io.Serializable {
         this.turmaSimulados = turmaSimulados;
     }
 
-@OneToMany(fetch=FetchType.EAGER, mappedBy="simulado")
-    public Set<AlunoSimulado> getAlunoSimulados() {
-        return this.alunoSimulados;
-    }
-    
-    public void setAlunoSimulados(Set<AlunoSimulado> alunoSimulados) {
-        this.alunoSimulados = alunoSimulados;
-    }
+
 
 
 

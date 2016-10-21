@@ -42,6 +42,7 @@ import webservice.CepWebService;
 @ManagedBean
 @SessionScoped
 public class AlunoController {
+    private Aluno alunoDetalhe;
     private final AlunoHelper alunoHelper;
 
     private String bairro;
@@ -62,7 +63,7 @@ public class AlunoController {
     private String ddd;
     private String descricaoTelefone;
     private String email;
-    private final String emailHTML = "<div style=\"background-color: #f4f4f4; margin:0px;\"><table width=\"642\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\" style=\"border:20px #f4f4f4\" ><tbody><tr><td><table width=\"642\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"font-family:Arial, SansSerif, Myriad Pro;font-size:14px; \"><tbody><tr><td style=\"line-height: 0;\"><center><img src=\"http://cursoidealizar.acessotemporario.net/sgeda/resource/imagens/idealizar.png\" width=\"300\" height=\"80\" border=\"0\" style=\"display: block; margin-bottom: 10px; margin-top: 10px;\"></center></td></tr></tbody></table><table width=\"642\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"font-family:Arial, SansSerif, Myriad Pro;font-size:14px; padding:30px 40px 0px 40px; background:#ffffff;color:#373737;\" ><tbody><tr style=\"border-bottom:4px solid #f4f4f4; display:block; padding:20px 0;\"><td><p><strong>Bem vindo ao Curso Idealizar,</strong></p><p></p><p>Para acessar o sistema utilize os dados abaixo:</p>----------------------------------------------------------------------<div style=\"margin-left: 20px;\"><p>Matrícula: <strong>{1}</strong></p><p>Senha: <strong>{2}</strong></p></div>----------------------------------------------------------------------<p>Clique <a href=\"http://cursoidealizar.acessotemporario.net/sgeda/\" target=\"_blank\">aqui</a> para login. <p><p></p><p></p><p>Atenciosamente,</p><p>Grupo Idealizar</p></td></tr></tbody></table><table width=\"642\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\" class=\"segundo-rodape\" style=\"font-family:SansSerif, Myriad Pro;font-size:14px; padding:35px 40px; background:#ffffff; color:#373737; text-align:center; \"><tbody><tr><td><p><center>Esta senha é gerada automaticamente.<br>Para alterar, acesse o sistema em \"Configuração\" >> \"Senha\".</center></p></td></tr></tbody></table></td></tr><tbody></table></div>";
+    private final String emailHTML = "<div style=\"background-color: #f4f4f4; margin:0px;\"><table width=\"642\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\" style=\"border:20px #f4f4f4\" ><tbody><tr><td><table width=\"642\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"font-family:Arial, SansSerif, Myriad Pro;font-size:14px; \"><tbody><tr><td style=\"line-height: 0;\"><center><img src=\"http://cursoidealizar.acessotemporario.net/sgeda/resource/imagens/idealizar.png\" width=\"300\" height=\"80\" border=\"0\" style=\"display: block; margin-bottom: 10px; margin-top: 10px;\"></center></td></tr></tbody></table><table width=\"642\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"font-family:Arial, SansSerif, Myriad Pro;font-size:14px; padding:30px 40px 0px 40px; background:#ffffff;color:#373737;\" ><tbody><tr style=\"border-bottom:4px solid #f4f4f4; display:block; padding:20px 0;\"><td><p><strong>Bem vindo ao Curso Idealizar,</strong></p><p></p><p>Para acessar o sistema utilize os dados abaixo:</p>----------------------------------------------------------------------<div style=\"margin-left: 20px;\"><p>Curso: <strong>{0}</strong></p><p>Matrícula: <strong>{1}</strong></p><p>Senha: <strong>{2}</strong></p></div>----------------------------------------------------------------------<p>Clique <a href=\"http://cursoidealizar.acessotemporario.net/sgeda/\" target=\"_blank\">aqui</a> para login. <p><p></p><p></p><p>Atenciosamente,</p><p>Grupo Idealizar</p></td></tr></tbody></table><table width=\"642\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\" class=\"segundo-rodape\" style=\"font-family:SansSerif, Myriad Pro;font-size:14px; padding:35px 40px; background:#ffffff; color:#373737; text-align:center; \"><tbody><tr><td><p><center>Esta senha é gerada automaticamente.<br>Para alterar, acesse o sistema em \"Configuração\" >> \"Senha\".</center></p></td></tr></tbody></table></td></tr><tbody></table></div>";
     private EmailSender emailSender;
     private boolean enderecoEncontrado;
     private String escolaridade;
@@ -76,7 +77,9 @@ public class AlunoController {
     private String numero;
     private String numeroTelefone;
     private Pessoa pessoa;
+    private List<Aluno> resultadoConsulta;
     private String sexo;
+    private String stringConsulta;
     private String telefoneResponsavel;
     private Set<Telefone> telefones;
     private TurmaHelper turmaHelper;
@@ -130,18 +133,17 @@ public class AlunoController {
             addMessage("cadastro:telefone", "Cadastre pelo menos um telefone!");
             return;
         }
-
-        if (alunoHelper.getByCpf(cpf) != null) {
-            addMessage("cadastro:cpf", "CPF já cadastrado!");
-            return;
-        }
         
         Endereco endereco = new Endereco(null, logradouro, numero, complemento, cep, bairro, cidade, estado);
         Pessoa pessoa = new Pessoa(cpf, "0", nome, dataNascimento, sexo, new Timestamp(new Date().getTime()), email, telefones, endereco);
         endereco.setPessoa(pessoa);
         Aluno aluno = new Aluno(pessoa, nomeResponsavel, escolaridade, cpfResponsavel, telefoneResponsavel, null, null);
-
+        aluno.setDesistente(false);
+        
         pessoa.setFoto(foto);
+        pessoa.setAtivo(true);
+        
+ 
 
         for (Telefone telefone : telefones) {
             telefone.setPessoa(pessoa);
@@ -184,7 +186,7 @@ public class AlunoController {
 
         addMessage(null, FacesMessage.SEVERITY_INFO, "Aluno Cadastrado com Sucesso!");
 
-        String corpoMessagem = emailHTML.replace("{1}", pessoa.getMatricula()).replace("{2}", senha);
+        String corpoMessagem = emailHTML.replace("{0}",aluno.getCurso().getNome()).replace("{1}", pessoa.getMatricula()).replace("{2}", senha);
 
         if (emailSender.sendTo(email, "Idealizar", corpoMessagem)) {
             addMessage(null, FacesMessage.SEVERITY_INFO, "Email enviado com informações de login!");
@@ -195,15 +197,31 @@ public class AlunoController {
         limparCampos();
     }
 
+    public String consultar() {
+        resultadoConsulta = alunoHelper.getAlunos(stringConsulta);
+        if(resultadoConsulta == null || resultadoConsulta.isEmpty()){
+            addMessage(null, FacesMessage.SEVERITY_INFO ,"Nenhum resultado encontrado!");
+        }
+        return "";
+    }
+
     public void excluirTelefone(Telefone telefone) {
         telefones.remove(telefone);
+    }
+
+    
+    public void exibirDetalhes(Aluno aluno) {
+        alunoDetalhe = aluno;
+    }
+
+    public Aluno getAlunoDetalhe() {
+        return alunoDetalhe;
     }
 
     public String getBairro() {
         return bairro;
     }
 
-    
     public void setBairro(String bairro) {
         this.bairro = bairro;
     }
@@ -215,24 +233,24 @@ public class AlunoController {
     public void setCep(String cep) {
         this.cep = cep;
     }
-
-    public String getCidade() {
+    
+    public String getCidade(){
         return cidade;
     }
-
-    public void setCidade(String cidade) {
+    
+    public void setCidade(String cidade){
         this.cidade = cidade;
     }
 
     public String getComplemento() {
         return complemento;
     }
-    
-    public void setComplemento(String complemento){
+
+    public void setComplemento(String complemento) {
         this.complemento = complemento;
     }
-    
-    public String getCpf(){
+
+    public String getCpf() {
         return cpf;
     }
 
@@ -280,6 +298,7 @@ public class AlunoController {
         this.dataNascimento = dataNascimento;
     }
 
+    
     public String getDdd() {
         return ddd;
     }
@@ -292,7 +311,6 @@ public class AlunoController {
         return descricaoTelefone;
     }
 
-    
     public void setDescricaoTelefone(String descricaoTelefone) {
         this.descricaoTelefone = descricaoTelefone;
     }
@@ -377,6 +395,10 @@ public class AlunoController {
         this.pessoa = pessoa;
     }
 
+    public List<Aluno> getResultadoConsulta() {
+        return resultadoConsulta;
+    }
+
     public String getSexo() {
         return sexo;
     }
@@ -385,6 +407,14 @@ public class AlunoController {
         this.sexo = sexo;
     }
 
+    public String getStringConsulta() {
+        return stringConsulta;
+    }
+
+    public void setStringConsulta(String stringConsulta) {
+        this.stringConsulta = stringConsulta;
+    }
+    
     public String getTelefoneResponsavel() {
         return telefoneResponsavel;
     }
@@ -438,6 +468,7 @@ public class AlunoController {
         descricaoTelefone = null;
 
     }
+    
 
     public boolean isEnderecoEncontrado() {
         return enderecoEncontrado;
@@ -472,15 +503,22 @@ public class AlunoController {
         turnosDisponiveis = new ArrayList<>();
         dataInicioDisponiveis = new ArrayList<>();
     }
+    
 
     public String limparFormularioCadastro() {
         return novoCadastro();
     }
 
+    public void limparFormularioConsulta(){
+        stringConsulta = null;
+        resultadoConsulta = new ArrayList<>();
+    }
+    
     public String novaConsulta() {
         limparCampos();
         return "/restrito/cadastro/consulta/aluno?faces-redirect=true";
     }
+    
 
     public String novoCadastro() {
         cursosCadastrados = cursoHelper.getCursosDisponiveis();
@@ -509,46 +547,6 @@ public class AlunoController {
             turmasDisponiveis = new ArrayList<>();
     }
     
-    private String stringConsulta;
-
-    public String getStringConsulta() {
-        return stringConsulta;
-    }
-
-    public void setStringConsulta(String stringConsulta) {
-        this.stringConsulta = stringConsulta;
-    }
-    
-    private List<Aluno> resultadoConsulta;
-
-    public List<Aluno> getResultadoConsulta() {
-        return resultadoConsulta;
-    }
-    
-    public String consultar(){
-        resultadoConsulta = alunoHelper.getAlunos(stringConsulta);
-        if(resultadoConsulta == null || resultadoConsulta.isEmpty()){
-            addMessage(null, FacesMessage.SEVERITY_INFO ,"Nenhum resultado encontrado!");
-        }
-        return "";
-     }
-    
-    public void limparFormularioConsulta() {
-        stringConsulta = null;
-        resultadoConsulta = new ArrayList<>();
-    }
-    
-    private Aluno alunoDetalhe;
-
-    public Aluno getAlunoDetalhe() {
-        return alunoDetalhe;
-    }
-    
-    public String exibirDetalhes(Aluno aluno) {
-        alunoDetalhe = aluno;
-        return "/restrito/cadastro/detalhe/aluno?faces-redirect=true";
-    }
-    
     public void onChangeTurno() {
         SimpleDateFormat format;
         format = new SimpleDateFormat("dd/MM/yyyy");
@@ -571,15 +569,7 @@ public class AlunoController {
             dataInicioDisponiveis = new ArrayList<>();
     }
     
-    public void upload(FileUploadEvent event) {
-        UploadedFile uploadedFile = event.getFile();
-        String contentType = uploadedFile.getContentType();
-        foto = new Foto();
-        foto.setImagem(uploadedFile.getContents());
-        image = new DefaultStreamedContent(new ByteArrayInputStream(foto.getImagem()), contentType);
-    }
-    
-    public void reenviarEmail(){
+    public void reenviarEmail() {
         String email = alunoDetalhe.getPessoa().getEmail();
         String senha = Long.toHexString(Double.doubleToLongBits(Math.random()));
         if (senha.length() > 6) {
@@ -596,6 +586,14 @@ public class AlunoController {
         } else {
             addMessage(null, FacesMessage.SEVERITY_ERROR, "Email com informações de login não pode ser enviado! Verifique sua conexão e tente reeviar através da página de detalhes");
         }
+    }
+    
+    public void upload(FileUploadEvent event){
+        UploadedFile uploadedFile = event.getFile();
+        String contentType = uploadedFile.getContentType();
+        foto = new Foto();
+        foto.setImagem(uploadedFile.getContents());
+        image = new DefaultStreamedContent(new ByteArrayInputStream(foto.getImagem()), contentType);
     }
 
 }

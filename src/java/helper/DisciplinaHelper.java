@@ -1,7 +1,7 @@
 package helper;
 
 import entidade.Disciplina;
-import entidade.Subdisciplina;
+import entidade.Assunto;
 import hibernate.HibernateUtil;
 import java.util.List;
 import org.hibernate.Criteria;
@@ -35,7 +35,7 @@ public class DisciplinaHelper {
         return true;
     }
 
-    public boolean cadastrarSubdisciplina(Subdisciplina subdisciplina) {
+    public boolean cadastrarSubdisciplina(Assunto subdisciplina) {
         session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.getTransaction();
         try{
@@ -80,6 +80,28 @@ public class DisciplinaHelper {
         return null;
 
     }
+    
+    public boolean salvarAlteracaoDisciplina(Disciplina disciplina){
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.getTransaction();
+        try{
+            tx.begin();
+            session.update(disciplina);
+            session.flush();
+            tx.commit();
+        } catch (Exception e) {
+            if(tx != null){
+                tx.rollback();
+            }
+            e.printStackTrace();
+            return false;
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+        return true;
+    }
 
     public Disciplina getByNome(String nome) {
         session = HibernateUtil.getSessionFactory().openSession();
@@ -115,6 +137,7 @@ public class DisciplinaHelper {
                 crit.add(Restrictions.disjunction()
                         .add(Restrictions.ilike("descricao", "%" + string + "%"))
                         .add(Restrictions.ilike("nome", "%" + string + "%"))
+                        .add(Restrictions.ilike("codigo", "%" + string + "%"))
                 );
             }
 
@@ -159,12 +182,12 @@ public class DisciplinaHelper {
         return null;
     }
 
-    public List<Subdisciplina> getSubdisciplinas(Integer disciplina) {
+    public List<Assunto> getSubdisciplinas(Integer disciplina) {
         session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.getTransaction();
         try{
         tx.begin();
-        List<Subdisciplina> subdisciplina = session.createCriteria(Subdisciplina.class).createAlias("disciplina", "disciplina").add(Restrictions.eq("disciplina.idDisciplina", disciplina)).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+        List<Assunto> subdisciplina = session.createCriteria(Assunto.class).createAlias("disciplina", "disciplina").add(Restrictions.eq("disciplina.idDisciplina", disciplina)).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
         session.flush();
         tx.commit();
         return subdisciplina;
@@ -180,12 +203,12 @@ public class DisciplinaHelper {
         return null;
     }
 
-    public Subdisciplina getSubdisciplina(String nomeSubdisciplina, Integer idDisciplina) {
+    public Assunto getSubdisciplina(String nomeSubdisciplina, Integer idDisciplina) {
         session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.getTransaction();
         try{
         tx.begin();
-        Subdisciplina subdisciplina = (Subdisciplina)session.createCriteria(Subdisciplina.class).createAlias("disciplina", "disciplina").
+        Assunto subdisciplina = (Assunto)session.createCriteria(Assunto.class).createAlias("disciplina", "disciplina").
                 add(Restrictions.eq("disciplina.idDisciplina", idDisciplina)).
                 add(Restrictions.eq("nome", nomeSubdisciplina).ignoreCase()).uniqueResult();
         session.flush();

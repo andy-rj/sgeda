@@ -154,7 +154,7 @@
         </b:navBar>
         <b:navBar id="navBarAluno" rendered="#{loginController.usuarioLogado.aluno}" style="border-top: none; border-radius: 0%;background-color: rgb(10, 58, 86);border:none;" >
             <b:navbarLinks style="margin-left: 130px;">
-                <b:navCommandLink value="Turmas" action="#{alunoController.turmas}" immediate="true"/>
+                <b:navCommandLink value="Turmas" action="#{turmaController.novaConsultaAluno(loginController.usuarioLogado.pessoa.idPessoa)}" immediate="true"/>
                 <b:navCommandLink value="Simulados" action="#{professorController.turmas}" immediate="true"/>
                 <b:navCommandLink value="Notas" action="#{alunoController.desempenho}" immediate="true"/>
                 <b:navCommandLink value="Desempenho" action="#{alunoController.desempenho}" immediate="true"/>

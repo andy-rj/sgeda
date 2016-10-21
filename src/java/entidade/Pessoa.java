@@ -41,6 +41,7 @@ public class Pessoa  implements java.io.Serializable {
      private Set<Telefone> telefones = new HashSet(0);
      private Endereco enderecos;
      private Foto foto;
+     private Boolean ativo;
 
     public Pessoa() {
     }
@@ -75,7 +76,7 @@ public class Pessoa  implements java.io.Serializable {
     }
 
     
-    @Column(name="cpf", unique=true, nullable=false, length=11)
+    @Column(name="cpf", nullable=false, length=11)
     public String getCpf() {
         return this.cpf;
     }
@@ -94,6 +95,14 @@ public class Pessoa  implements java.io.Serializable {
         this.matricula = matricula;
     }
 
+    @Column(name="ativo")
+    public Boolean getAtivo() {
+        return this.ativo;
+    }
+    
+    public void setAtivo(Boolean ativo) {
+        this.ativo = ativo;
+    }
     
     @Column(name="nome")
     public String getNome() {
@@ -144,7 +153,7 @@ public class Pessoa  implements java.io.Serializable {
         this.email = email;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="pessoa")
+@OneToMany(fetch=FetchType.EAGER, mappedBy="pessoa")
     public Set<Telefone> getTelefones() {
         return this.telefones;
     }
@@ -153,7 +162,7 @@ public class Pessoa  implements java.io.Serializable {
         this.telefones = telefones;
     }
 
-@OneToOne(fetch=FetchType.LAZY, mappedBy="pessoa")
+@OneToOne(fetch=FetchType.EAGER, mappedBy="pessoa")
     public Endereco getEnderecos() {
         return this.enderecos;
     }

@@ -1,6 +1,8 @@
 package helper;
 
+import entidade.AlunoSimulado;
 import entidade.Questao;
+import entidade.Resposta;
 import entidade.Simulado;
 import entidade.SimuladoQuestao;
 import entidade.SimuladoQuestaoId;
@@ -15,6 +17,33 @@ import org.hibernate.criterion.Restrictions;
 public class SimuladoHelper {
     Session session = null;
 
+    
+    public boolean cadastrarSimuladoAluno(AlunoSimulado simulado) {
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.getTransaction();
+        try{
+            tx.begin();
+            
+            session.save(simulado);
+            for(Resposta resposta: simulado.getRespostas()){
+                session.save(resposta);
+            }
+            session.flush();
+            tx.commit();
+        } catch (Exception e) {
+            if(tx != null){
+                tx.rollback();
+            }
+            e.printStackTrace();
+            return false;
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+        return true;
+    }
+    
     public boolean cadastrar(Simulado simulado) {
         session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.getTransaction();

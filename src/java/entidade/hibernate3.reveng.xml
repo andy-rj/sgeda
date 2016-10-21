@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd">
+<hibernate-reverse-engineering>
+  <schema-selection match-catalog="kemdixip_sgedanovo"/>
+  <table-filter match-name="pessoa"/>
+  <table-filter match-name="professor"/>
+  <table-filter match-name="curso_disciplina"/>
+  <table-filter match-name="papel"/>
+  <table-filter match-name="simulado"/>
+  <table-filter match-name="simulado_questao"/>
+  <table-filter match-name="aluno_simulado"/>
+  <table-filter match-name="telefone"/>
+  <table-filter match-name="questao"/>
+  <table-filter match-name="curso"/>
+  <table-filter match-name="turma_simulado"/>
+  <table-filter match-name="discursiva"/>
+  <table-filter match-name="disciplina"/>
+  <table-filter match-name="resposta"/>
+  <table-filter match-name="turma"/>
+  <table-filter match-name="endereco"/>
+  <table-filter match-name="usuario"/>
+  <table-filter match-name="funcionario"/>
+  <table-filter match-name="assunto"/>
+  <table-filter match-name="aluno"/>
+  <table-filter match-name="foto"/>
+  <table-filter match-name="redacao"/>
+  <table-filter match-name="turma_aluno"/>
+  <table-filter match-name="questao_assunto"/>
+  <table-filter match-name="objetiva"/>
+  <table-filter match-name="opcao"/>
+  <table-filter match-name="grupo"/>
+  <table-filter match-name="usuario_papel"/>
+  <table-filter match-name="figura"/>
+  <table-filter match-name="professor_habilitado_disciplina"/>
+</hibernate-reverse-engineering>

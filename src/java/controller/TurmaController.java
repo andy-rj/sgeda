@@ -1,12 +1,15 @@
 package controller;
 
+import entidade.Aluno;
 import entidade.Curso;
 import entidade.Disciplina;
 import entidade.Professor;
 import entidade.Simulado;
 import entidade.Turma;
+import entidade.TurmaAluno;
 import entidade.TurmaSimulado;
 import entidade.TurmaSimuladoId;
+import helper.AlunoHelper;
 import helper.CursoHelper;
 import helper.DisciplinaHelper;
 import helper.ProfessorHelper;
@@ -27,12 +30,16 @@ import javax.validation.constraints.NotNull;
 @ManagedBean
 @SessionScoped
 public class TurmaController {
+    private AlunoHelper alunoHelper;
+    private Aluno alunoOnline;
 
     private Curso curso;
     private CursoHelper cursoHelper;
     private Integer cursoSelecionado;
     private boolean cursoSelecionadoFlag;
     private List<Curso> cursosCadastrados;
+    private Date dataAberturaSimulado;
+    private Date dataEncerramentoSimulado;
     @NotNull(message = "Data de término é obrigatória!")
     @Future(message = "Data de término inválida!")
     private Date dataFim;
@@ -42,32 +49,22 @@ public class TurmaController {
     private String descricao;
     private DisciplinaHelper disciplinaHelper;
     private List<Disciplina> disciplinasDisponiveis;
+    private Date duracaoSimulado;
     private String nome;
     private ProfessorHelper professorHelper;
+    private List<String> professores;
     private List<Turma> resultadoConsulta;
+    private SimuladoHelper simuladoHelper;
+    private Simulado simuladoSelecionado;
+    List<Simulado> simuladosCadastrados;
+    private List<Simulado> simuladosFiltrados;
     private String stringConsulta;
     public Turma turmaDetalhe;
     private TurmaHelper turmaHelper;
+    private Turma turmaProfessorDetalhe;
     private List<Turma> turmas;
+    List<Turma> turmasProfessor;
     private String turno;
-    private Simulado simuladoSelecionado;
-    private List<Simulado> simuladosFiltrados;
-
-    public List<Simulado> getSimuladosFiltrados() {
-        return simuladosFiltrados;
-    }
-
-    public void setSimuladosFiltrados(List<Simulado> simuladosFiltrados) {
-        this.simuladosFiltrados = simuladosFiltrados;
-    }
-
-    public Simulado getSimuladoSelecionado() {
-        return simuladoSelecionado;
-    }
-
-    public void setSimuladoSelecionado(Simulado simuladoSelecionado) {
-        this.simuladoSelecionado = simuladoSelecionado;
-    }
 
     public TurmaController() {
         simuladoHelper = new SimuladoHelper();
@@ -75,6 +72,7 @@ public class TurmaController {
         turmaHelper = new TurmaHelper();
         professorHelper = new ProfessorHelper();
         disciplinaHelper = new DisciplinaHelper();
+        alunoHelper = new AlunoHelper();
 
     }
 
@@ -88,10 +86,28 @@ public class TurmaController {
         FacesContext.getCurrentInstance().addMessage(id, message);
     }
 
+    public void adicionarSimuladoSelecionado() {
+        TurmaSimulado turmaSimulado = new TurmaSimulado();
+        turmaSimulado.setDataAbertura(dataAberturaSimulado);
+        turmaSimulado.setDataEncerramento(dataEncerramentoSimulado);
+        turmaSimulado.setDuracao(duracaoSimulado);
+        turmaSimulado.setSimulado(simuladoSelecionado);
+        turmaSimulado.setTurma(turmaProfessorDetalhe);
+        if(turmaProfessorDetalhe.getTurmaSimulados()==null) turmaProfessorDetalhe.setTurmaSimulados(new HashSet<TurmaSimulado>());
+        turmaProfessorDetalhe.getTurmaSimulados().add(turmaSimulado);
+        turmaSimulado.setId(new TurmaSimuladoId(simuladoSelecionado.getIdSimulado(), turmaProfessorDetalhe.getIdTurma()));
+        if(!turmaHelper.cadastrarSimulado(turmaSimulado)){
+            addMessage(null, FacesMessage.SEVERITY_ERROR, "Erro ao incluir simulado!");
+            return;
+        }
+        addMessage(null,FacesMessage.SEVERITY_INFO, "Simulado incluido com sucesso!");
+    }
+
     public String alterarTurma() {
         return null;
     }
 
+    
     public void cadastrar() {
 
         if (turmas == null || turmas.isEmpty()) {
@@ -124,6 +140,18 @@ public class TurmaController {
         }
     }
 
+    public void detalheTurmaProfessor(Turma turma) {
+        turmaProfessorDetalhe = turma;
+    }
+    
+    public void detalheTurmaAluno(TurmaAluno turmaAluno) {
+        turmaAlunoDetalhe = turmaAluno;
+    }
+    private TurmaAluno turmaAlunoDetalhe;
+
+    public TurmaAluno getTurmaAlunoDetalhe() {
+        return turmaAlunoDetalhe;
+    }
     public void excluirTurma(Turma turma) {
         turmas.remove(turma);
     }
@@ -143,6 +171,22 @@ public class TurmaController {
 
     public List<Curso> getCursosCadastrados() {
         return cursosCadastrados;
+    }
+    
+    public Date getDataAberturaSimulado() {
+        return dataAberturaSimulado;
+    }
+    
+    public void setDataAberturaSimulado(Date dataAberturaSimulado) {
+        this.dataAberturaSimulado = dataAberturaSimulado;
+    }
+    
+    public Date getDataEncerramentoSimulado() {
+        return dataEncerramentoSimulado;
+    }
+    
+    public void setDataEncerramentoSimulado(Date dataEncerramentoSimulado) {
+        this.dataEncerramentoSimulado = dataEncerramentoSimulado;
     }
 
     public Date getDataFim() {
@@ -173,6 +217,14 @@ public class TurmaController {
         return disciplinasDisponiveis;
     }
 
+    public Date getDuracaoSimulado() {
+        return duracaoSimulado;
+    }
+    
+    public void setDuracaoSimulado(Date duracaoSimulado) {
+        this.duracaoSimulado = duracaoSimulado;
+    }
+    
     public String getNome() {
         return nome;
     }
@@ -181,8 +233,32 @@ public class TurmaController {
         this.nome = nome;
     }
 
+    public List<String> getProfessores() {
+        return professores;
+    }
+
     public List<Turma> getResultadoConsulta() {
         return resultadoConsulta;
+    }
+
+    public Simulado getSimuladoSelecionado() {
+        return simuladoSelecionado;
+    }
+    
+    public void setSimuladoSelecionado(Simulado simuladoSelecionado) {
+        this.simuladoSelecionado = simuladoSelecionado;
+    }
+
+    public List<Simulado> getSimuladosCadastrados() {
+        return simuladosCadastrados;
+    }
+
+    public List<Simulado> getSimuladosFiltrados() {
+        return simuladosFiltrados;
+    }
+    
+    public void setSimuladosFiltrados(List<Simulado> simuladosFiltrados) {
+        this.simuladosFiltrados = simuladosFiltrados;
     }
 
     public String getStringConsulta() {
@@ -201,10 +277,19 @@ public class TurmaController {
         this.turmaDetalhe = turmaDetalhe;
     }
 
+    public Turma getTurmaProfessorDetalhe() {
+        return turmaProfessorDetalhe;
+    }
+
     public List<Turma> getTurmas() {
         return turmas;
     }
 
+    public List<Turma> getTurmasProfessor() {
+        return turmasProfessor;
+    }
+    
+    
     public String getTurno() {
         return turno;
     }
@@ -244,6 +329,24 @@ public class TurmaController {
         return "/restrito/cadastro/consulta/turma?faces-redirect=true";
     }
 
+    public String novaConsultaAluno(Integer idAluno) {
+        alunoOnline = alunoHelper.getById(idAluno);
+        return "/restrito/aluno/consulta/turma?faces-redirect=true";
+    }
+    
+    public String novaConsultaProfessor(Integer idProfessor) {
+        turmasProfessor = turmaHelper.getTurmasByIdProfessor(idProfessor);
+        simuladosCadastrados = simuladoHelper.getSimulados();
+        professores = new ArrayList<>();
+        for (Simulado simulado : simuladosCadastrados) {
+            if (!professores.contains(simulado.getProfessor().getPessoa().getNome())) {
+                professores.add(simulado.getProfessor().getPessoa().getNome());
+            }
+        }
+        
+        return "/restrito/professor/consulta/turma?faces-redirect=true";
+    }
+    
     public String novoCadastro() {
         cursosCadastrados = cursoHelper.getCursosDisponiveis();
         limparCampos();
@@ -252,8 +355,9 @@ public class TurmaController {
         curso = null;
         return "/restrito/administrador/cadastro/turma?faces-redirect=true";
     }
-
-    public void selecionarCurso() {
+    
+    
+    public void selecionarCurso(){
         if (dataFim.before(dataInicio)) {
             addMessage("cadastro:dataFim", FacesMessage.SEVERITY_ERROR, "Data de término anterior a data de início!");
             return;
@@ -279,91 +383,9 @@ public class TurmaController {
             turmas.add(turma);
         }
     }
-    List<Turma> turmasProfessor;
-    List<Simulado> simuladosCadastrados;
 
-    public List<Simulado> getSimuladosCadastrados() {
-        return simuladosCadastrados;
-    }
-
-    public List<Turma> getTurmasProfessor() {
-        return turmasProfessor;
-    }
-
-    private SimuladoHelper simuladoHelper;
-    
-    private List<String> professores;
-
-    public List<String> getProfessores() {
-        return professores;
-    }
-
-    public String novaConsultaProfessor(Integer idProfessor) {
-        turmasProfessor = turmaHelper.getTurmasByIdProfessor(idProfessor);
-        simuladosCadastrados = simuladoHelper.getSimulados();
-        professores = new ArrayList<>();
-        for (Simulado simulado : simuladosCadastrados) {
-            if (!professores.contains(simulado.getProfessor().getPessoa().getNome())) {
-                professores.add(simulado.getProfessor().getPessoa().getNome());
-            }
-        }
-
-        return "/restrito/professor/consulta/turma?faces-redirect=true";
-    }
-
-    private Turma turmaProfessorDetalhe;
-    private Date dataAberturaSimulado;
-    private Date dataEncerramentoSimulado;
-
-    public Date getDataAberturaSimulado() {
-        return dataAberturaSimulado;
-    }
-
-    public void setDataAberturaSimulado(Date dataAberturaSimulado) {
-        this.dataAberturaSimulado = dataAberturaSimulado;
-    }
-
-    public Date getDataEncerramentoSimulado() {
-        return dataEncerramentoSimulado;
-    }
-
-    public void setDataEncerramentoSimulado(Date dataEncerramentoSimulado) {
-        this.dataEncerramentoSimulado = dataEncerramentoSimulado;
-    }
-
-    public Date getDuracaoSimulado() {
-        return duracaoSimulado;
-    }
-
-    public void setDuracaoSimulado(Date duracaoSimulado) {
-        this.duracaoSimulado = duracaoSimulado;
-    }
-    private Date duracaoSimulado;
-
-    public Turma getTurmaProfessorDetalhe() {
-        return turmaProfessorDetalhe;
-    }
-
-    public void detalheTurmaProfessor(Turma turma) {
-        turmaProfessorDetalhe = turma;
-    }
-
-    
-    public void adicionarSimuladoSelecionado(){
-        TurmaSimulado turmaSimulado = new TurmaSimulado();
-        turmaSimulado.setDataAbertura(dataAberturaSimulado);
-        turmaSimulado.setDataEncerramento(dataEncerramentoSimulado);
-        turmaSimulado.setDuracao(duracaoSimulado);
-        turmaSimulado.setSimulado(simuladoSelecionado);
-        turmaSimulado.setTurma(turmaProfessorDetalhe);
-        if(turmaProfessorDetalhe.getTurmaSimulados()==null) turmaProfessorDetalhe.setTurmaSimulados(new HashSet<TurmaSimulado>());
-        turmaProfessorDetalhe.getTurmaSimulados().add(turmaSimulado);
-        turmaSimulado.setId(new TurmaSimuladoId(simuladoSelecionado.getIdSimulado(), turmaProfessorDetalhe.getIdTurma()));
-        if(!turmaHelper.cadastrarSimulado(turmaSimulado)){
-            addMessage(null, FacesMessage.SEVERITY_ERROR, "Erro ao incluir simulado!");
-            return;
-        }
-        addMessage(null,FacesMessage.SEVERITY_INFO, "Simulado incluido com sucesso!");
+    public Aluno getAlunoOnline() {
+        return alunoOnline;
     }
 
 }

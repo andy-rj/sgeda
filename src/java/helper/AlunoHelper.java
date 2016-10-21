@@ -135,5 +135,24 @@ public class AlunoHelper {
         }
         return null;
     }
+    
+    public Aluno getById(Integer idAluno) {
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.getTransaction();
+        try {
+            tx.begin();
+            Aluno aluno = (Aluno) session.createCriteria(Aluno.class).add(Restrictions.eq("idAluno", idAluno)).uniqueResult();
+            return aluno;
+        } catch (HibernateException e){
+            if(tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+        return null;
+    }
 
 }

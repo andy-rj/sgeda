@@ -3,13 +3,12 @@ package controller;
 import entidade.Disciplina;
 import entidade.Discursiva;
 import entidade.Figura;
-import entidade.Foto;
 import entidade.Objetiva;
 import entidade.Opcao;
 import entidade.Professor;
 import entidade.Questao;
 import entidade.Redacao;
-import entidade.Subdisciplina;
+import entidade.Assunto;
 import helper.DisciplinaHelper;
 import helper.ProfessorHelper;
 import helper.QuestaoHelper;
@@ -103,16 +102,16 @@ public class QuestaoController {
             return;
         }
 
-        List<Subdisciplina> assuntos = new ArrayList<>();
+        List<Assunto> assuntos = new ArrayList<>();
 
         if (assuntosSelecionados != null) {
-            Subdisciplina assunto;
+            Assunto assunto;
             for (String strAssunto : assuntosSelecionados) {
                 assunto = disciplinaHelper.getSubdisciplina(strAssunto, new Integer(disciplinaSelecionada));
                 if (assunto != null) {
                     assuntos.add(assunto);
                 } else {
-                    Subdisciplina novoAssunto = new Subdisciplina();
+                    Assunto novoAssunto = new Assunto();
                     novoAssunto.setNome(strAssunto.toLowerCase());
                     assuntos.add(novoAssunto);
                     for (Disciplina disciplina : disciplinasDisponiveis) {
@@ -164,7 +163,7 @@ public class QuestaoController {
         questao.setEnunciado(enunciado);
         questao.setGrupo(null);
         questao.setInstituicao(instituicao);
-        questao.setSubdisciplinas(new HashSet<>(assuntos));
+        questao.setAssuntos(new HashSet<>(assuntos));
 
         if (figuras != null) {
             questao.setFiguras(new HashSet<>(figuras));
@@ -196,16 +195,16 @@ public class QuestaoController {
 
     public void cadastrarDiscursiva() {
 
-        List<Subdisciplina> assuntos = new ArrayList<>();
+        List<Assunto> assuntos = new ArrayList<>();
 
         if (assuntosSelecionados != null) {
-            Subdisciplina assunto;
+            Assunto assunto;
             for (String strAssunto : assuntosSelecionados) {
                 assunto = disciplinaHelper.getSubdisciplina(strAssunto, new Integer(disciplinaSelecionada));
                 if (assunto != null) {
                     assuntos.add(assunto);
                 } else {
-                    Subdisciplina novoAssunto = new Subdisciplina();
+                    Assunto novoAssunto = new Assunto();
                     novoAssunto.setNome(strAssunto.toLowerCase());
                     assuntos.add(novoAssunto);
                     for (Disciplina disciplina : disciplinasDisponiveis) {
@@ -257,7 +256,7 @@ public class QuestaoController {
         questao.setEnunciado(enunciado);
         questao.setGrupo(null);
         questao.setInstituicao(instituicao);
-        questao.setSubdisciplinas(new HashSet<>(assuntos));
+        questao.setAssuntos(new HashSet<Assunto>(assuntos));
 
         if (figuras != null) {
             questao.setFiguras(new HashSet<>(figuras));
@@ -287,16 +286,16 @@ public class QuestaoController {
 
     public void cadastrarRedacao() {
 
-        List<Subdisciplina> assuntos = new ArrayList<>();
+        List<Assunto> assuntos = new ArrayList<>();
 
         if (assuntosSelecionados != null) {
-            Subdisciplina assunto;
+            Assunto assunto;
             for (String strAssunto : assuntosSelecionados) {
                 assunto = disciplinaHelper.getSubdisciplina(strAssunto, new Integer(disciplinaSelecionada));
                 if (assunto != null) {
                     assuntos.add(assunto);
                 } else {
-                    Subdisciplina novoAssunto = new Subdisciplina();
+                    Assunto novoAssunto = new Assunto();
                     novoAssunto.setNome(strAssunto.toLowerCase());
                     assuntos.add(novoAssunto);
                     for (Disciplina disciplina : disciplinasDisponiveis) {
@@ -348,7 +347,7 @@ public class QuestaoController {
         questao.setEnunciado(enunciado);
         questao.setGrupo(null);
         questao.setInstituicao(instituicao);
-        questao.setSubdisciplinas(new HashSet<>(assuntos));
+        questao.setAssuntos(new HashSet<>(assuntos));
 
         if (figuras != null) {
             questao.setFiguras(new HashSet<>(figuras));
@@ -377,11 +376,11 @@ public class QuestaoController {
 
     public List<String> completarAssuntos(String query) {
         List<String> results = new ArrayList<>();
-        List<Subdisciplina> assuntos = disciplinaHelper.getSubdisciplinas(new Integer(disciplinaSelecionada));
+        List<Assunto> assuntos = disciplinaHelper.getSubdisciplinas(new Integer(disciplinaSelecionada));
         boolean encontrado = false;
         if (assuntos != null) {
             encontrado = false;
-            for (Subdisciplina assunto : assuntos) {
+            for (Assunto assunto : assuntos) {
                 if (assunto.getNome().toLowerCase().equals(query.toLowerCase())) {
                     encontrado = true;
                     break;
@@ -392,7 +391,7 @@ public class QuestaoController {
             results.add(query);
         }
         if (assuntos != null) {
-            for (Subdisciplina assunto : assuntos) {
+            for (Assunto assunto : assuntos) {
                 if (assunto.getNome().toLowerCase().startsWith(query)) {
                     results.add(assunto.getNome());
                 }
@@ -427,9 +426,9 @@ public class QuestaoController {
         this.ano = ano;
     }
 
-    public List<Subdisciplina> getAssuntosDetalhe() {
-        if (questaoDetalhe.getSubdisciplinas() != null) {
-            return new ArrayList<>(questaoDetalhe.getSubdisciplinas());
+    public List<Assunto> getAssuntosDetalhe() {
+        if (questaoDetalhe.getAssuntos()!= null) {
+            return new ArrayList<>(questaoDetalhe.getAssuntos());
         }
         return new ArrayList<>();
     }

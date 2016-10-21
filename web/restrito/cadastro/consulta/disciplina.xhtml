@@ -17,6 +17,95 @@
     <h:body style="background-color: #e3e3e3">
 
         <h:form id="consulta">
+<!--        ***************************
+            modal de alteração de dados
+            ***************************-->
+            <p:dialog rendered="#{loginController.usuarioLogado.administrador}" header="Alterar Disciplina" modal="true" resizable="false"  draggable="false" widgetVar="modalAlterar"
+                      minimizable="true" maximizable="true" width="500" height="300">
+                <p:outputPanel id="alterarDisciplina">
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputLabel value="Código " />
+                        </b:column>
+                        <b:column colSm="7">
+                            <p:inputText id="codigoAlterar" value="#{disciplinaController.codigoAlterar}" maxlength="10" validatorMessage="Código é obrigatório e deve ter até 10 caracteres!" >
+                                <f:validateRequired/>
+                            </p:inputText>
+                        </b:column>
+                        <b:column>
+                            <b:message for="codigoAlterar"/>
+                        </b:column>
+                    </b:row>
+                     <b:row>
+                        <b:column colSm="2">
+                            <h:outputLabel value="Nome: " />
+                        </b:column>
+                        <b:column colSm="7">
+                            <p:inputText id="nomeAlterar" value="#{disciplinaController.nomeAlterar}" maxlength="255" validatorMessage="Nome é obrigatório e deve ter até 255 caracteres!" style="width: 100%">
+                                <f:validateRequired/>
+                            </p:inputText>
+                        </b:column>
+                         <b:column>
+                            <b:message for="nomeAlterar"/>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputLabel value="Descrição:" />
+                        </b:column>
+                        <b:column colSm="7">
+                            <p:inputText id="descricaoAlterar" value="#{disciplinaController.descricaoAlterar}" maxlength="255" validatorMessage="Descrição é obrigatório e deve ter até 255 caracteres!" style="width: 100%" >
+                                <f:validateRequired/>
+                            </p:inputText>
+                        </b:column>
+                        <b:column>
+                            <b:message for="descricaoAlterar"/>
+                        </b:column>
+                    </b:row>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Fechar" onclick="PF('modalAlterar').hide();PF('modalDetalhe').show();" />
+                    <p:commandButton action="#{disciplinaController.salvarAlteracao}" ajax="true" process="@this alterarDisciplina" update="alterarDisciplina :#{p:component('resultado')}  :#{p:component('info')} :#{p:component('detalheDisciplina')}" value="Salvar"/>
+                </f:facet>
+            </p:dialog>
+            
+<!--        ***************************
+            modal de detalhes
+            ***************************-->
+            <p:dialog header="Detalhes" modal="true" resizable="false"  draggable="false" widgetVar="modalDetalhe"
+                      minimizable="true" maximizable="true" width="500" height="300">
+                <p:outputPanel id="detalheDisciplina">
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputLabel value="Código: " />
+                        </b:column>
+                        <b:column colSm="10">
+                            <h:outputText id="codigo" value="#{disciplinaController.disciplinaDetalhe.codigo}" />   
+                        </b:column>
+                    </b:row>
+                     <b:row>
+                        <b:column colSm="2">
+                            <h:outputLabel value="Nome: " />
+                        </b:column>
+                        <b:column colSm="10">
+                            <h:outputText id="nome" value="#{disciplinaController.disciplinaDetalhe.nome}" />   
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputLabel value="Descrição:" />
+                        </b:column>
+                        <b:column colSm="10">
+                            <h:outputText id="descricao" value="#{disciplinaController.disciplinaDetalhe.descricao}" />   
+                        </b:column>
+                    </b:row>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Fechar" onclick="PF('modalDetalhe').hide();" />
+                    <p:commandButton process="@this" rendered="#{loginController.usuarioLogado.administrador}" update=":#{p:component('alterarDisciplina')}" onclick="PF('modalDetalhe').hide();PF('modalAlterar').show();" value="Alterar"/>
+                </f:facet>
+            </p:dialog>
+
             <p:growl  globalOnly="true" id="info"  />
             <b:fetchBeanInfos/>
             <ui:insert name="navbar">
@@ -28,37 +117,35 @@
                         <b:panel title="Consulta de Disciplina" style="min-height: 200px;" collapsible="false" look="info">
                             <b:row>
                                 <b:column colSm="5" offset="2">
-                                    <p:inputText id="entradaConsulta" placeholder="Nome ou Descrição" value="#{disciplinaController.stringConsulta}" maxlength="50" style="width: 100%"/>
+                                    <p:inputText id="entradaConsulta" placeholder="Código, Nome ou Descrição" value="#{disciplinaController.stringConsulta}" maxlength="50" style="width: 100%"/>
                                 </b:column>
-                                 <b:column colSm="5">
-                                     <p:commandButton update="resultado info" value="Buscar" action="#{disciplinaController.consultar}" icon=" ui-icon-search "/>
-                                     <p:commandButton value="Limpar" update="entradaConsulta resultado" action="#{disciplinaController.limparFormularioConsulta}" immediate="true"/>
+                                <b:column colSm="5">
+                                    <p:commandButton process="@this entradaConsulta" update="resultado info" value="Buscar" action="#{disciplinaController.consultar}" icon=" ui-icon-search "/>
+                                    <p:commandButton value="Limpar" update="entradaConsulta resultado" action="#{disciplinaController.limparFormularioConsulta}" immediate="true"/>
                                 </b:column>
                             </b:row>
                             <b:row id="resultado">
                                 <b:column>
-                                <b:dataTable rendered="#{not empty disciplinaController.resultadoConsulta}" value="#{disciplinaController.resultadoConsulta}" var="disciplina" id="datatable" styleClass="table table-striped table-bordered"
-                                             style="width:100%" searching="false">
-                                        <h:column>
-                                            <f:facet name="header">
-                                                <h:outputText value="Código" />
-                                            </f:facet>
-                                            <h:outputText id="matricula" value="#{disciplina.nome}" />
-                                        </h:column>
-                                        <h:column>
-                                            <f:facet name="header">
-                                                <h:outputText value="Descrição" />
-                                            </f:facet>
-                                            <h:outputText value="#{disciplina.descricao}" />
-                                        </h:column>
+                                    <p:dataTable rendered="#{not empty disciplinaController.resultadoConsulta}" value="#{disciplinaController.resultadoConsulta}" var="disciplina" id="datatable" styleClass="table table-striped table-bordered"
+                                                 style="width:100%; margin-top: 20px;"
+                                                 rows="10"
+                                                 paginatorPosition="bottom"
+                                                 paginator="true"
+                                                 paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink} {RowsPerPageDropdown}"
+                                                 rowsPerPageTemplate="5,10,15">
+                                       
+                                        <p:column style="width: 120px;" headerText="Código" sortBy="#{disciplina.codigo}">
+                                            <h:outputText id="matricula" value="#{disciplina.codigo}" />
+                                        </p:column>
                                         
-                                        <h:column>
-                                            <f:facet name="header">
-                                                <h:outputText value="" />
-                                            </f:facet>
-                                            <p:commandButton action="#{disciplinaController.exibirDetalhes(disciplina)}" value="Detalhes" style="width: 100%"/>
-                                        </h:column>
-                                    </b:dataTable>
+                                        <p:column headerText="Nome" sortBy="#{disciplina.nome}">
+                                            <h:outputText value="#{disciplina.nome}" />
+                                        </p:column>
+
+                                        <p:column style="width: 120px;" >
+                                            <p:commandButton process="@this" update=":#{p:component('detalheDisciplina')}" action="#{disciplinaController.exibirDetalhes(disciplina)}" oncomplete="PF('modalDetalhe').show();" value="Detalhes" style="width: 100px"/>
+                                        </p:column>
+                                    </p:dataTable>
                                 </b:column>
                             </b:row>
                         </b:panel>

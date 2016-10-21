@@ -30,7 +30,7 @@ public class Disciplina  implements java.io.Serializable {
      private String codigo;
      private String nome;
      private String descricao;
-     private Set<Subdisciplina> subdisciplinas = new HashSet(0);
+     private Set<Assunto> assuntos = new HashSet(0);
      private Set<Curso> cursos = new HashSet(0);
      private Set<Turma> turmas = new HashSet(0);
      private Set<Professor> professors = new HashSet(0);
@@ -39,10 +39,10 @@ public class Disciplina  implements java.io.Serializable {
     public Disciplina() {
     }
 
-    public Disciplina(String nome, String descricao, Set<Subdisciplina> subdisciplinas, Set<Curso> cursos, Set<Turma> turmas, Set<Professor> professors, Set<Questao> questaos) {
+    public Disciplina(String nome, String descricao, Set<Assunto> subdisciplinas, Set<Curso> cursos, Set<Turma> turmas, Set<Professor> professors, Set<Questao> questaos) {
        this.nome = nome;
        this.descricao = descricao;
-       this.subdisciplinas = subdisciplinas;
+       this.assuntos = subdisciplinas;
        this.cursos = cursos;
        this.turmas = turmas;
        this.professors = professors;
@@ -90,16 +90,16 @@ public class Disciplina  implements java.io.Serializable {
         this.descricao = descricao;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="disciplina")
-    public Set<Subdisciplina> getSubdisciplinas() {
-        return this.subdisciplinas;
+@OneToMany(fetch=FetchType.EAGER, mappedBy="disciplina")
+    public Set<Assunto> getAssuntos() {
+        return this.assuntos;
     }
     
-    public void setSubdisciplinas(Set<Subdisciplina> subdisciplinas) {
-        this.subdisciplinas = subdisciplinas;
+    public void setAssuntos(Set<Assunto> subdisciplinas) {
+        this.assuntos = subdisciplinas;
     }
 
-@ManyToMany(fetch=FetchType.LAZY)
+@ManyToMany(fetch=FetchType.EAGER)
     @JoinTable(name="curso_disciplina", catalog="kemdixip_sgedanovo", joinColumns = { 
         @JoinColumn(name="disciplina_idDisciplina", nullable=false, updatable=false) }, inverseJoinColumns = { 
         @JoinColumn(name="curso_idCurso", nullable=false, updatable=false) })
@@ -111,7 +111,7 @@ public class Disciplina  implements java.io.Serializable {
         this.cursos = cursos;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="disciplina")
+@OneToMany(fetch=FetchType.EAGER, mappedBy="disciplina")
     public Set<Turma> getTurmas() {
         return this.turmas;
     }
@@ -132,7 +132,7 @@ public class Disciplina  implements java.io.Serializable {
         this.professors = professors;
     }
     
-@OneToMany(fetch=FetchType.LAZY, mappedBy="disciplina")
+@OneToMany(fetch=FetchType.EAGER, mappedBy="disciplina")
     public Set<Questao> getQuestaos() {
         return this.questaos;
     }

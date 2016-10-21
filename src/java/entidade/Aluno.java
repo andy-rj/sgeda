@@ -2,8 +2,12 @@ package entidade;
 // Generated 09/09/2016 09:36:48 by Hibernate Tools 4.3.1
 
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,6 +40,7 @@ public class Aluno  implements java.io.Serializable {
      private String telefoneResponsavel;
      private Set<TurmaAluno> turmaAlunos = new HashSet(0);
      private Set<AlunoSimulado> alunoSimulados = new HashSet(0);
+     private Boolean desistente;
 
     public Aluno() {
     }
@@ -123,7 +128,7 @@ public class Aluno  implements java.io.Serializable {
         this.turmaAlunos = turmaAlunos;
     }
 
-    @OneToMany(fetch=FetchType.LAZY, mappedBy="aluno")
+    @OneToMany(fetch=FetchType.EAGER, mappedBy="aluno")
     public Set<AlunoSimulado> getAlunoSimulados() {
         return this.alunoSimulados;
     }
@@ -181,7 +186,36 @@ public class Aluno  implements java.io.Serializable {
         }
         return null;
     }
+    
+    @Transient
+    public List<TurmaAluno> getTurmaAlunosOrd(){
+        List<TurmaAluno> turmas = new ArrayList<>(this.turmaAlunos);
+        Collections.sort( turmas, new Comparator<TurmaAluno>() {
+            public int compare(TurmaAluno obj1, TurmaAluno obj2) {
+                return obj1.getTurma().getIdTurma().compareTo(obj2.getTurma().getIdTurma());
+            }
+        });
+        return turmas;
+    }
+    
+    public boolean simuladoRealizado(Simulado simulado){
+        if(alunoSimulados == null) return false;
+        for(AlunoSimulado alunoSimulado: alunoSimulados){
+            if(alunoSimulado.getTurmaSimulado().getSimulado().getIdSimulado().equals(simulado.getIdSimulado())){
+                return true;
+            }
+        }
+        return false;
+    }
 
+    @Column(name="desistente")
+    public Boolean getDesistente() {
+        return this.desistente;
+    }
+    
+    public void setDesistente(Boolean desistente) {
+        this.desistente = desistente;
+    }
 
 }
 

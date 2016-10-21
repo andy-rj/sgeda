@@ -4,7 +4,7 @@ import entidade.Professor;
 import entidade.Questao;
 import entidade.Simulado;
 import entidade.SimuladoQuestao;
-import entidade.Subdisciplina;
+import entidade.Assunto;
 import helper.ProfessorHelper;
 import helper.QuestaoHelper;
 import helper.SimuladoHelper;
@@ -205,8 +205,8 @@ public class SimuladoController {
                 if (!disciplinas.contains(questao.getDisciplina().getNome())) {
                     disciplinas.add(questao.getDisciplina().getNome());
                 }
-                if (questao.getSubdisciplinas() != null) {
-                    for (Subdisciplina assunto : questao.getSubdisciplinas()) {
+                if (questao.getAssuntos()!= null) {
+                    for (Assunto assunto : questao.getAssuntos()) {
                         if (!assuntos.contains(assunto.getNome())) {
                             assuntos.add(assunto.getNome());
                         }
@@ -257,14 +257,14 @@ public class SimuladoController {
             return true;
         }
 
-        List<Subdisciplina> listaAssuntos = (value == null) ? null : (List<Subdisciplina>) value;
+        List<Assunto> listaAssuntos = (value == null) ? null : (List<Assunto>) value;
 
         if (listaAssuntos == null || listaAssuntos.isEmpty()) {
             return false;
         }
         for (String filtro : filterText) {
 
-            for (Subdisciplina assunto : listaAssuntos) {
+            for (Assunto assunto : listaAssuntos) {
                 if (assunto.getNome().equals(filtro)) {
                     return true;
                 }

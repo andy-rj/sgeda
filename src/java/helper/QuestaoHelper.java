@@ -1,13 +1,12 @@
 package helper;
 
-import entidade.Disciplina;
 import entidade.Discursiva;
 import entidade.Figura;
 import entidade.Objetiva;
 import entidade.Opcao;
 import entidade.Questao;
 import entidade.Redacao;
-import entidade.Subdisciplina;
+import entidade.Assunto;
 import hibernate.HibernateUtil;
 import java.util.List;
 import org.hibernate.Criteria;
@@ -25,9 +24,9 @@ public class QuestaoHelper {
         try{
             tx.begin();
             
-            if(questao.getQuestao().getSubdisciplinas()!= null && !questao.getQuestao().getSubdisciplinas().isEmpty()){
-                for(Subdisciplina assunto : questao.getQuestao().getSubdisciplinas()){
-                    if(assunto.getIdSubdisciplina() == null){
+            if(questao.getQuestao().getAssuntos()!= null && !questao.getQuestao().getAssuntos().isEmpty()){
+                for(Assunto assunto : questao.getQuestao().getAssuntos()){
+                    if(assunto.getIdAssunto()== null){
                         session.save(assunto);
                     }
                 }
@@ -70,9 +69,9 @@ public class QuestaoHelper {
         try{
             tx.begin();
             
-            if(questao.getQuestao().getSubdisciplinas()!= null && !questao.getQuestao().getSubdisciplinas().isEmpty()){
-                for(Subdisciplina assunto : questao.getQuestao().getSubdisciplinas()){
-                    if(assunto.getIdSubdisciplina() == null){
+            if(questao.getQuestao().getAssuntos()!= null && !questao.getQuestao().getAssuntos().isEmpty()){
+                for(Assunto assunto : questao.getQuestao().getAssuntos()){
+                    if(assunto.getIdAssunto()== null){
                         session.save(assunto);
                     }
                 }
@@ -109,9 +108,9 @@ public class QuestaoHelper {
         try{
             tx.begin();
             
-            if(questao.getQuestao().getSubdisciplinas()!= null && !questao.getQuestao().getSubdisciplinas().isEmpty()){
-                for(Subdisciplina assunto : questao.getQuestao().getSubdisciplinas()){
-                    if(assunto.getIdSubdisciplina() == null){
+            if(questao.getQuestao().getAssuntos()!= null && !questao.getQuestao().getAssuntos().isEmpty()){
+                for(Assunto assunto : questao.getQuestao().getAssuntos()){
+                    if(assunto.getIdAssunto()== null){
                         session.save(assunto);
                     }
                 }

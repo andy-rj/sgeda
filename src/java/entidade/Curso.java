@@ -26,6 +26,7 @@ public class Curso  implements java.io.Serializable {
 
 
      private Integer idCurso;
+     private String codigo;
      private String nome;
      private String descricao;
      private Set<Disciplina> disciplinas = new HashSet(0);
@@ -59,6 +60,15 @@ public class Curso  implements java.io.Serializable {
     
     public void setNome(String nome) {
         this.nome = nome;
+    }
+    
+    @Column(name="codigo")
+    public String getCodigo() {
+        return this.codigo;
+    }
+    
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
 
     

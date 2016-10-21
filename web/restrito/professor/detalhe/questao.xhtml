@@ -4,8 +4,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:b="http://bootsfaces.net/ui"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>Curso Idealizar</title>
         <style type="text/css">
@@ -31,7 +30,7 @@
                                     <h:outputLabel value="Instituição:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText id="instituicao" value="#{questaoController.questaoDetalhe.instituicao}" />   
+                                    <h:outputText id="instituicao1" value="#{questaoController.questaoDetalhe.instituicao}" />   
                                 </b:column>
                             </b:row>
                             <b:row>
@@ -39,7 +38,7 @@
                                     <h:outputLabel value="Ano:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText id="ano" value="#{questaoController.questaoDetalhe.ano}" />   
+                                    <h:outputText id="ano1" value="#{questaoController.questaoDetalhe.ano}" />   
                                 </b:column>
                             </b:row>
                             <b:row>
@@ -47,7 +46,7 @@
                                     <h:outputLabel value="Disciplina:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText id="disciplina" value="#{questaoController.questaoDetalhe.disciplina.codigo} - #{questaoController.questaoDetalhe.disciplina.nome}" />   
+                                    <h:outputText id="disciplina1" value="#{questaoController.questaoDetalhe.disciplina.codigo} - #{questaoController.questaoDetalhe.disciplina.nome}" />   
                                 </b:column>
                             </b:row>
                             <b:row>
@@ -55,8 +54,8 @@
                                     <h:outputLabel value="Assuntos:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <ui:repeat var="assunto" value="#{questaoController.assuntosDetalhe}" varStatus="status">
-                                        <b:label text="#{assunto.nome}" severity="info" style="margin-right: 5px;"/>
+                                    <ui:repeat var="assunto1" value="#{questaoController.assuntosDetalhe}" varStatus="status">
+                                        <b:label text="#{assunto1.nome}" severity="info" style="margin-right: 5px;"/>
                                     </ui:repeat>
                                 </b:column>
                             </b:row>
@@ -67,7 +66,7 @@
                             </b:row>
                             <b:row>
                                 <b:column colSm="12">
-                                    <h:outputText id="enunciado" value="#{questaoController.questaoDetalhe.enunciado}" escape="false" transient="true" />   
+                                    <h:outputText id="enunciado1" value="#{questaoController.questaoDetalhe.enunciado}" escape="false" transient="true" />   
                                 </b:column>
                             </b:row>
                             <b:row>
@@ -114,7 +113,7 @@
                                     <h:outputLabel value="Instituição:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText id="instituicao" value="#{questaoController.questaoDetalhe.instituicao}" />   
+                                    <h:outputText id="instituicao2" value="#{questaoController.questaoDetalhe.instituicao}" />   
                                 </b:column>
                             </b:row>
                             <b:row>
@@ -122,7 +121,7 @@
                                     <h:outputLabel value="Ano:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText id="ano" value="#{questaoController.questaoDetalhe.ano}" />   
+                                    <h:outputText id="ano2" value="#{questaoController.questaoDetalhe.ano}" />   
                                 </b:column>
                             </b:row>
                             <b:row>
@@ -130,7 +129,7 @@
                                     <h:outputLabel value="Disciplina:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <h:outputText id="disciplina" value="#{questaoController.questaoDetalhe.disciplina.codigo} - #{questaoController.questaoDetalhe.disciplina.nome}" />   
+                                    <h:outputText id="disciplina2" value="#{questaoController.questaoDetalhe.disciplina.codigo} - #{questaoController.questaoDetalhe.disciplina.nome}" />   
                                 </b:column>
                             </b:row>
                             <b:row>
@@ -138,7 +137,7 @@
                                     <h:outputLabel value="Assuntos:" />
                                 </b:column>
                                 <b:column colSm="10">
-                                    <ui:repeat var="assunto" value="#{questaoController.assuntosDetalhe}" varStatus="status">
+                                    <ui:repeat var="assunto2" value="#{questaoController.assuntosDetalhe}" varStatus="status">
                                         <b:label text="#{assunto.nome}" severity="info" style="margin-right: 5px;"/>
                                     </ui:repeat>
                                 </b:column>
@@ -150,7 +149,7 @@
                             </b:row>
                             <b:row>
                                 <b:column colSm="12">
-                                    <h:outputText id="enunciado" value="#{questaoController.questaoDetalhe.enunciado}" escape="false" transient="true" />   
+                                    <h:outputText id="enunciado2" value="#{questaoController.questaoDetalhe.enunciado}" escape="false" transient="true" />   
                                 </b:column>
                             </b:row>
                             

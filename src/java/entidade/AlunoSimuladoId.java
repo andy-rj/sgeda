@@ -14,13 +14,15 @@ public class AlunoSimuladoId  implements java.io.Serializable {
 
      private int alunoIdAluno;
      private int simuladoIdSimulado;
+     private int turmaIdTurma;
 
     public AlunoSimuladoId() {
     }
 
-    public AlunoSimuladoId(int alunoIdAluno, int simuladoIdSimulado) {
+    public AlunoSimuladoId(int alunoIdAluno, int simuladoIdSimulado, int turmaIdTurma) {
        this.alunoIdAluno = alunoIdAluno;
        this.simuladoIdSimulado = simuladoIdSimulado;
+       this.turmaIdTurma = turmaIdTurma;
     }
    
 
@@ -32,6 +34,15 @@ public class AlunoSimuladoId  implements java.io.Serializable {
     
     public void setAlunoIdAluno(int alunoIdAluno) {
         this.alunoIdAluno = alunoIdAluno;
+    }
+    
+    @Column(name="turma_IdTurma", nullable=false)
+    public int getTurmaIdTurma() {
+        return this.turmaIdTurma;
+    }
+    
+    public void setTurmaIdTurma(int turmaIdTurma) {
+        this.turmaIdTurma = turmaIdTurma;
     }
 
 
@@ -52,7 +63,8 @@ public class AlunoSimuladoId  implements java.io.Serializable {
 		 AlunoSimuladoId castOther = ( AlunoSimuladoId ) other; 
          
 		 return (this.getAlunoIdAluno()==castOther.getAlunoIdAluno())
- && (this.getSimuladoIdSimulado()==castOther.getSimuladoIdSimulado());
+ && (this.getSimuladoIdSimulado()==castOther.getSimuladoIdSimulado())
+ && (this.getTurmaIdTurma()==castOther.getTurmaIdTurma());
    }
    
    public int hashCode() {
@@ -60,6 +72,7 @@ public class AlunoSimuladoId  implements java.io.Serializable {
          
          result = 37 * result + this.getAlunoIdAluno();
          result = 37 * result + this.getSimuladoIdSimulado();
+         result = 37 * result + this.getTurmaIdTurma();
          return result;
    }   
 

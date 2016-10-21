@@ -37,6 +37,29 @@ public class CursoHelper {
         }
         return true;
     }
+    
+    public boolean salvarAlteracaoCurso(Curso curso) {
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.getTransaction();
+         
+        try{
+            tx.begin();
+            session.update(curso);
+            session.flush();
+            tx.commit();
+        } catch (Exception e) {
+            if(tx != null){
+                tx.rollback();
+            }
+            e.printStackTrace();
+            return false;
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+        return true;
+    }
 
     public List<Curso> getCursos(String stringConsulta) {
         session = HibernateUtil.getSessionFactory().openSession();
@@ -52,6 +75,7 @@ public class CursoHelper {
                         .add(Restrictions.ilike("nome", "%" + stringConsulta + "%"))
                         .add(Restrictions.ilike("descricao", "%" + stringConsulta + "%"))
                         .add(Restrictions.ilike("disciplina.nome", "%" + stringConsulta + "%"))
+                        .add(Restrictions.ilike("codigo", "%" + stringConsulta + "%"))
                 );
             }
 

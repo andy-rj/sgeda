@@ -34,6 +34,19 @@
                            
                             <b:row>
                                 <b:column colSm="2">
+                                    <h:outputLabel value="Código" ><font color ='red' >*</font></h:outputLabel>
+                                </b:column>
+                                <b:column colSm="7">
+                                    <p:inputText id="codigoCurso" value="#{cursoController.codigo}" maxlength="10" validatorMessage="Código é obrigatório e deve ter até 255 caracteres!">
+                                        <f:validateRequired />
+                                    </p:inputText>
+                                </b:column>
+                                <b:column colSm="3">
+                                    <b:message for="codigoCurso"  />
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column colSm="2">
                                     <h:outputLabel value="Nome" ><font color ='red' >*</font></h:outputLabel>
                                 </b:column>
                                 <b:column colSm="7">

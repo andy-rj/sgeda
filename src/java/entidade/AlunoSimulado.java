@@ -2,9 +2,9 @@ package entidade;
 // Generated 09/09/2016 09:36:48 by Hibernate Tools 4.3.1
 
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -12,6 +12,7 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -30,23 +31,23 @@ public class AlunoSimulado  implements java.io.Serializable {
 
      private AlunoSimuladoId id;
      private Aluno aluno;
-     private Simulado simulado;
+     private TurmaSimulado turmaSimulado;
      private Date data;
-     private Set<Resposta> respostas = new HashSet(0);
+     private List<Resposta> respostas = new ArrayList<>(0);
 
     public AlunoSimulado() {
     }
 
 	
-    public AlunoSimulado(AlunoSimuladoId id, Aluno aluno, Simulado simulado) {
+    public AlunoSimulado(AlunoSimuladoId id, Aluno aluno, TurmaSimulado simulado) {
         this.id = id;
         this.aluno = aluno;
-        this.simulado = simulado;
+        this.turmaSimulado = simulado;
     }
-    public AlunoSimulado(AlunoSimuladoId id, Aluno aluno, Simulado simulado, Date data, Set<Resposta> respostas) {
+    public AlunoSimulado(AlunoSimuladoId id, Aluno aluno, TurmaSimulado simulado, Date data, List<Resposta> respostas) {
        this.id = id;
        this.aluno = aluno;
-       this.simulado = simulado;
+       this.turmaSimulado = simulado;
        this.data = data;
        this.respostas = respostas;
     }
@@ -56,7 +57,8 @@ public class AlunoSimulado  implements java.io.Serializable {
     
     @AttributeOverrides( {
         @AttributeOverride(name="alunoIdAluno", column=@Column(name="aluno_idAluno", nullable=false) ), 
-        @AttributeOverride(name="simuladoIdSimulado", column=@Column(name="simulado_idSimulado", nullable=false) ) } )
+        @AttributeOverride(name="simuladoIdSimulado", column=@Column(name="simulado_idSimulado", nullable=false) ), 
+        @AttributeOverride(name="turmaIdTurma", column=@Column(name="turma_idTurma", nullable=false) ) } )
     public AlunoSimuladoId getId() {
         return this.id;
     }
@@ -65,7 +67,7 @@ public class AlunoSimulado  implements java.io.Serializable {
         this.id = id;
     }
 
-@ManyToOne(fetch=FetchType.LAZY)
+@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="aluno_idAluno", nullable=false, insertable=false, updatable=false)
     public Aluno getAluno() {
         return this.aluno;
@@ -75,14 +77,16 @@ public class AlunoSimulado  implements java.io.Serializable {
         this.aluno = aluno;
     }
 
-@ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="simulado_idSimulado", nullable=false, insertable=false, updatable=false)
-    public Simulado getSimulado() {
-        return this.simulado;
+@ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumns( {  
+        @JoinColumn(name="simulado_idSimulado", referencedColumnName="simulado_idSimulado", nullable=false, insertable=false, updatable=false),
+        @JoinColumn(name="turma_idTurma", referencedColumnName="turma_idTurma", nullable=false, insertable=false, updatable=false)} )
+    public TurmaSimulado getTurmaSimulado() {
+        return this.turmaSimulado;
     }
     
-    public void setSimulado(Simulado simulado) {
-        this.simulado = simulado;
+    public void setTurmaSimulado(TurmaSimulado turmaSimulado) {
+        this.turmaSimulado = turmaSimulado;
     }
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -95,12 +99,12 @@ public class AlunoSimulado  implements java.io.Serializable {
         this.data = data;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="alunoSimulado")
-    public Set<Resposta> getRespostas() {
+@OneToMany(fetch=FetchType.EAGER, mappedBy="alunoSimulado")
+    public List<Resposta> getRespostas() {
         return this.respostas;
     }
     
-    public void setRespostas(Set<Resposta> respostas) {
+    public void setRespostas(List<Resposta> respostas) {
         this.respostas = respostas;
     }
 

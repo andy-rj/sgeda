@@ -289,11 +289,16 @@
                                     <p:button value="Voltar" outcome="/restrito/cadastro/consulta/aluno" style="width: 100%"/>
                                 </b:column>
                                 <b:column colSm="2">
-                                    <p:commandButton action="#{professorController.alterarProfessor}" value="Alterar" style="width: 100%"/>
+                                    <p:commandButton global="false" action="#{professorController.alterarProfessor}" value="Alterar" style="width: 100%"/>
                                 </b:column>
                                 <b:column colSm="2">
                                     <p:commandButton update=":#{p:component('info')}" action="#{alunoController.reenviarEmail}" onclick="return confirm('Confirma o envio do email?');" value="Enviar email" style="width: 100%"/>
                                 </b:column>
+                                
+                                <p:ajaxStatus  onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+                                <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                                    <p:graphicImage url="/resource/imagens/loading.gif" />
+                                </p:dialog>
 
                             </b:row>
                         </b:panel>

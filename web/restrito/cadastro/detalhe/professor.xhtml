@@ -97,7 +97,7 @@
                                     </p:dataTable> 
                                 </b:column>
                             </b:row>
-                            
+
                             <b:row>
                                 <b:column colSm="2">
                                     <h:outputLabel value="Email:" />
@@ -106,7 +106,7 @@
                                     <h:outputText id="email" value="#{professorController.professorDetalhe.pessoa.email}"/>
                                 </b:column>    
                             </b:row>
-                            
+
                             <b:row>
                                 <b:column colSm="2">
                                     <h:outputLabel value="Intituição:" />
@@ -115,7 +115,7 @@
                                     <h:outputText id="instituicao" value="#{professorController.professorDetalhe.intituicaoFormacao}"/>
                                 </b:column>    
                             </b:row>
-                            
+
                             <b:row>
                                 <b:column colSm="2">
                                     <h:outputLabel value="Especialização:" />
@@ -124,12 +124,12 @@
                                     <h:outputText id="especializacao" value="#{professorController.professorDetalhe.especializacao}"/>
                                 </b:column>    
                             </b:row>
-                            
-                             <b:row>
+
+                            <b:row>
                                 <b:column colSm="2">
                                     <h:outputLabel value="Habilitação:" />
                                 </b:column>
-                             </b:row>
+                            </b:row>
                             <b:row>
                                 <b:column colSm="7">
                                     <p:dataTable  var="disciplina" value="#{professorController.professorDetalhe.disciplinas}">
@@ -174,7 +174,7 @@
                                 <b:column colSm="10">
                                     <h:outputText id="complemento" value="#{professorController.professorDetalhe.pessoa.enderecos.complemento}" />
                                 </b:column>
-                                
+
                             </b:row>
                             <b:row>
                                 <b:column colSm="2">
@@ -214,14 +214,20 @@
                                     <p:button value="Voltar" outcome="/restrito/cadastro/consulta/professor" style="width: 100%"/>
                                 </b:column>
                                 <b:column colSm="2">
-                                    <p:commandButton action="#{professorController.alterarProfessor}" value="Alterar" style="width: 100%"/>
+                                    <p:commandButton global="false" action="#{professorController.alterarProfessor}" value="Alterar" style="width: 100%"/>
                                 </b:column>
                                 <b:column colSm="2">
-                                    <p:commandButton action="#{professorController.inativar}" onclick="return confirm('Confirma a inativação do professor?');" value="Inativar" style="width: 100%"/>
+                                    <p:commandButton global="false" action="#{professorController.inativar}" onclick="return confirm('Confirma a inativação do professor?');" value="Inativar" style="width: 100%"/>
                                 </b:column>
                                 <b:column colSm="2">
-                                    <p:commandButton update=":#{p:component('info')}" action="#{professorController.reenviarEmail}" onclick="return confirm('Confirma o envio do email?');" value="Enviar email" style="width: 100%"/>
+                                    <p:commandButton  update=":#{p:component('info')}" action="#{professorController.reenviarEmail}" onclick="return confirm('Confirma o envio do email?');" value="Enviar email" style="width: 100%"/>
                                 </b:column>
+                                
+                                
+                                <p:ajaxStatus  onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+                                <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                                    <p:graphicImage url="/resource/imagens/loading.gif" />
+                                </p:dialog>
 
                             </b:row>
                         </b:panel>

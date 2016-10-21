@@ -69,13 +69,13 @@
                                 </f:facet>
                                 <h:outputText value="#{questao.disciplina.nome}" />
                             </p:column>
-                            <p:column style="text-align: center;" filterBy="#{questao.subdisciplinasList}" filterFunction="#{simuladoController.filtroPorAssunto}" headerText="Assunto">
+                            <p:column style="text-align: center;" filterBy="#{questao.assuntos}" filterFunction="#{simuladoController.filtroPorAssunto}" headerText="Assunto">
                                 <f:facet name="filter">
                                     <p:selectCheckboxMenu label="assuntos" onchange="PF('tableQuestoes').filter()" panelStyle="width:200px" scrollHeight="150">
                                         <f:selectItems value="#{simuladoController.assuntos}" />
                                     </p:selectCheckboxMenu>
                                 </f:facet>
-                                <p:repeat value="#{questao.subdisciplinasList}" var="assunto" offset="0" size="#{fn:length(questao.subdisciplinas)}" step="1" varStatus="varStatus">
+                                <p:repeat value="#{questao.assuntos}" var="assunto" offset="0" size="#{fn:length(questao.assuntos)}" step="1" varStatus="varStatus">
                                     <b:label text="#{assunto.nome}" severity="info" style="margin-right: 5px; display: inline-block"/>
                                 </p:repeat>
                             </p:column>

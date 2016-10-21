@@ -43,7 +43,7 @@ public class Questao  implements java.io.Serializable {
      private Set<Figura> figuras = new HashSet(0);
      private Redacao redacao;
      private Objetiva objetiva;
-     private Set<Subdisciplina> subdisciplinas = new HashSet(0);
+     private Set<Assunto> assuntos = new HashSet<>(0);
      private Set<Resposta> respostas = new HashSet(0);
 
     public Questao() {
@@ -54,7 +54,7 @@ public class Questao  implements java.io.Serializable {
         this.professor = professor;
         this.disciplina = disciplina;
     }
-    public Questao(Grupo grupo, Professor professor, Disciplina disciplina, String enunciado, String ano, String instituicao, Discursiva discursiva, Set<SimuladoQuestao> simuladoQuestaos, Set<Figura> figuras, Redacao redacao, Objetiva objetiva, Set<Subdisciplina> subdisciplinas, Set<Resposta> respostas) {
+    public Questao(Grupo grupo, Professor professor, Disciplina disciplina, String enunciado, String ano, String instituicao, Discursiva discursiva, Set<SimuladoQuestao> simuladoQuestaos, Set<Figura> figuras, Redacao redacao, Objetiva objetiva, Set<Assunto> subdisciplinas, Set<Resposta> respostas) {
        this.grupo = grupo;
        this.professor = professor;
        this.disciplina = disciplina;
@@ -66,7 +66,7 @@ public class Questao  implements java.io.Serializable {
        this.figuras = figuras;
        this.redacao = redacao;
        this.objetiva = objetiva;
-       this.subdisciplinas = subdisciplinas;
+       this.assuntos = subdisciplinas;
        this.respostas = respostas;
     }
    
@@ -188,15 +188,15 @@ public class Questao  implements java.io.Serializable {
     }
 
 @ManyToMany(fetch=FetchType.EAGER)
-    @JoinTable(name="questao_subdisciplina", catalog="kemdixip_sgedanovo", joinColumns = { 
+    @JoinTable(name="questao_assunto", catalog="kemdixip_sgedanovo", joinColumns = { 
         @JoinColumn(name="questao_idQuestao", nullable=false, updatable=false) }, inverseJoinColumns = { 
-        @JoinColumn(name="subdisciplina_idSubdisciplina", nullable=false, updatable=false) })
-    public Set<Subdisciplina> getSubdisciplinas() {
-        return this.subdisciplinas;
+        @JoinColumn(name="assunto_idAssunto", nullable=false, updatable=false) })
+    public Set<Assunto> getAssuntos() {
+        return this.assuntos;
     }
     
-    public void setSubdisciplinas(Set<Subdisciplina> subdisciplinas) {
-        this.subdisciplinas = subdisciplinas;
+    public void setAssuntos(Set<Assunto> assuntos) {
+        this.assuntos = assuntos;
     }
 
 @OneToMany(fetch=FetchType.EAGER, mappedBy="questao")
@@ -207,12 +207,6 @@ public class Questao  implements java.io.Serializable {
     public void setRespostas(Set<Resposta> respostas) {
         this.respostas = respostas;
     }
-
-    @Transient
-    public List<Subdisciplina> getSubdisciplinasList(){
-        return new ArrayList<>(this.subdisciplinas);
-    }
-
 
 }
 

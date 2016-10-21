@@ -39,7 +39,7 @@
     <mapping class="entidade.Discursiva"/>
     <mapping class="entidade.AlunoSimulado"/>
     <mapping class="entidade.Resposta"/>
-    <mapping class="entidade.Subdisciplina"/>
+    <mapping class="entidade.Assunto"/>
     <mapping class="entidade.Grupo"/>
     <mapping class="entidade.Redacao"/>
     <mapping class="entidade.AlunoSimuladoId"/>

@@ -32,10 +32,64 @@ public class DisciplinaController {
         FacesMessage message = new FacesMessage(severidade, summary,  null);
         FacesContext.getCurrentInstance().addMessage(id, message);
     }
+    
 
-    public String alterarDisciplina() {
-        return null;
-     }
+   
+    
+    public void salvarAlteracao(){
+        Disciplina disciplinaAlterar = disciplinaDetalhe;
+        
+        if(disciplinaAlterar.getCodigo().equals(codigoAlterar)&&
+                disciplinaAlterar.getDescricao().equals(descricaoAlterar)&&
+                disciplinaAlterar.getNome().equals(nomeAlterar)){
+            addMessage(null, FacesMessage.SEVERITY_WARN, "Não houve alteração nos dados!");
+            return;
+        }
+        
+        disciplinaAlterar.setCodigo(codigoAlterar);
+        disciplinaAlterar.setDescricao(descricaoAlterar);
+        disciplinaAlterar.setNome(nomeAlterar);
+        
+        if(!disciplinaHelper.salvarAlteracaoDisciplina(disciplinaAlterar)){
+            addMessage(null,FacesMessage.SEVERITY_ERROR, "Não foi possível salvar alterações!");
+            return;
+        }
+        
+        addMessage(null,FacesMessage.SEVERITY_INFO, "Alterações salvas com sucesso!");
+        
+        consultar();
+        disciplinaDetalhe = disciplinaAlterar;
+        nomeAlterar = disciplinaDetalhe.getNome();
+        codigoAlterar = disciplinaDetalhe.getCodigo();
+        descricaoAlterar = disciplinaDetalhe.getDescricao();
+    }
+    private String codigoAlterar;
+
+    public String getCodigoAlterar() {
+        return codigoAlterar;
+    }
+
+    public void setCodigoAlterar(String codigoAlterar) {
+        this.codigoAlterar = codigoAlterar;
+    }
+
+    public String getNomeAlterar() {
+        return nomeAlterar;
+    }
+
+    public void setNomeAlterar(String nomeAlterar) {
+        this.nomeAlterar = nomeAlterar;
+    }
+
+    public String getDescricaoAlterar() {
+        return descricaoAlterar;
+    }
+
+    public void setDescricaoAlterar(String descricaoAlterar) {
+        this.descricaoAlterar = descricaoAlterar;
+    }
+    private String nomeAlterar;
+    private String descricaoAlterar;
 
     public void cadastrar() {
         
@@ -96,9 +150,11 @@ public class DisciplinaController {
     public void setDisciplinaDetalhe(Disciplina disciplinaDetalhe) {
         this.disciplinaDetalhe = disciplinaDetalhe;
     }
-    public String exibirDetalhes(Disciplina disciplina){
+    public void exibirDetalhes(Disciplina disciplina){
         disciplinaDetalhe = disciplina;
-        return "/restrito/cadastro/detalhe/disciplina?faces-redirect=true";
+        nomeAlterar = disciplinaDetalhe.getNome();
+        codigoAlterar = disciplinaDetalhe.getCodigo();
+        descricaoAlterar = disciplinaDetalhe.getDescricao();
      }
     
     public String getDescricao(){
@@ -148,6 +204,8 @@ public class DisciplinaController {
 
     public String novaConsulta() {
         limparFormularioConsulta();
+        stringConsulta = "";
+        consultar();
         return "/restrito/cadastro/consulta/disciplina?faces-redirect=true";
     }
 

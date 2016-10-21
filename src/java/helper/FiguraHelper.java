@@ -1,12 +1,7 @@
 package helper;
 
-import entidade.Disciplina;
 import entidade.Figura;
-import entidade.Subdisciplina;
 import hibernate.HibernateUtil;
-import java.util.List;
-import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;

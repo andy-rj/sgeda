@@ -6,8 +6,8 @@
   <table-filter match-name="turma"/>
   <table-filter match-name="professor_habilitado_disciplina"/>
   <table-filter match-name="opcao"/>
-  <table-filter match-name="subdisciplina"/>
-  <table-filter match-name="questao_subdisciplina"/>
+  <table-filter match-name="assunto"/>
+  <table-filter match-name="questao_assunto"/>
   <table-filter match-name="redacao"/>
   <table-filter match-name="discursiva"/>
   <table-filter match-name="simulado_questao"/>

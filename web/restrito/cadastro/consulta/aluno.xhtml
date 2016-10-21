@@ -17,6 +17,286 @@
     <h:body style="background-color: #e3e3e3">
 
         <h:form id="consulta">
+
+            <p:dialog header="Detalhes" modal="true" resizable="false"  draggable="false" widgetVar="modalDetalhe"
+                      minimizable="true" maximizable="true" width="800" height="500">
+                <p:outputPanel id="detalheAluno">
+                    <b:row>
+                        <b:column col-sm="12">
+                            <strong style="color: #999999;">Dados Pessoais</strong>
+                            <hr style= "border-top: 1px solid #999999;" />
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputLabel value="Matrícula:" />
+                        </b:column>
+                        <b:column colSm="10">
+                            <h:outputText id="matricula" value="#{alunoController.alunoDetalhe.pessoa.matricula}" />   
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputLabel value="Nome:" />
+                        </b:column>
+                        <b:column colSm="10">
+                            <h:outputText id="nome" value="#{alunoController.alunoDetalhe.pessoa.nome}" />   
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputLabel value="CPF:" />
+                        </b:column>
+                        <b:column colSm="10">
+                            <h:outputText converter="converter.cpfConverter" id="cpf" value="#{alunoController.alunoDetalhe.pessoa.cpf}" />   
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputLabel value="Data de Nascimento:" />
+                        </b:column>
+                        <b:column colSm="10">
+                            <h:outputText id="dataNascimento" value="#{alunoController.alunoDetalhe.pessoa.dataNascimento}" >
+                                <f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+                            </h:outputText>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputLabel value="Sexo:" />
+                        </b:column>
+                        <b:column colSm="10">
+                            <h:outputText id="sexo1" rendered="#{alunoController.alunoDetalhe.pessoa.sexo == 'M'}" value="Masculino" />
+                            <h:outputText id="sexo2" rendered="#{alunoController.alunoDetalhe.pessoa.sexo != 'M'}" value="Feminino" />
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="12">
+                            <h:outputLabel value="Telefones:" />
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="12">
+                            <p:dataTable  var="telefone" value="#{alunoController.alunoDetalhe.pessoa.telefones}">
+                                <p:column headerText="DDD">
+                                    <h:outputText value="#{telefone.ddd}" />
+                                </p:column>
+
+                                <p:column headerText="Número">
+                                    <h:outputText value="#{telefone.numero}" converter="converter.telefoneConverter"/>
+                                </p:column>
+
+                                <p:column headerText="Observação">
+                                    <h:outputText value="#{telefone.descricao}" />
+                                </p:column>                                        
+                            </p:dataTable> 
+                        </b:column>
+                    </b:row>
+
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputLabel value="Email:" />
+                        </b:column>
+                        <b:column colSm="10">
+                            <h:outputText id="email" value="#{alunoController.alunoDetalhe.pessoa.email}"/>
+                        </b:column>    
+                    </b:row>
+
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputLabel value="Escolaridade:" />
+                        </b:column>
+                        <b:column colSm="10">
+                            <h:outputText id="escolaridade" value="#{alunoController.alunoDetalhe.escolaridade}"/>
+                        </b:column>    
+                    </b:row>
+
+                    <b:row rendered="#{not empty alunoController.alunoDetalhe.nomeResponsavel}">
+                        <b:column colSm="2">
+                            <h:outputLabel value="Responsável:" />
+                        </b:column>
+                        <b:column colSm="10">
+                            <h:outputText id="responsavel" value="#{alunoController.alunoDetalhe.nomeResponsavel}"/>
+                        </b:column>    
+                    </b:row>
+
+                    <b:row rendered="#{not empty alunoController.alunoDetalhe.cpfResponsavel}">
+                        <b:column colSm="2">
+                            <h:outputLabel value="CPF do Responsável:" />
+                        </b:column>
+                        <b:column colSm="10">
+                            <h:outputText id="cpfresponsavel" value="#{alunoController.alunoDetalhe.cpfResponsavel}" converter="converter.cpfConverter"/>
+                        </b:column>    
+                    </b:row>
+
+                    <b:row rendered="#{not empty alunoController.alunoDetalhe.telefoneResponsavel}">
+                        <b:column colSm="2">
+                            <h:outputLabel value="Telefone do Responsável:" />
+                        </b:column>
+                        <b:column colSm="10">
+                            <h:outputText id="telefoneResponsavel" value="#{alunoController.alunoDetalhe.telefoneResponsavel}"/>
+                        </b:column>    
+                    </b:row>
+
+                    <!--Dados de endereço-->
+                    <b:row>
+                        <b:column col-sm="12">
+                            <br/>
+                            <strong style="color: #999999;">Dados do Endereço</strong>
+                            <hr style= "border-top: 1px solid #999999;"/>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputLabel value="Logradouro:" />
+                        </b:column>
+                        <b:column colSm="10">
+                            <h:outputText id="logradouro" value="#{alunoController.alunoDetalhe.pessoa.enderecos.logradouro}" />
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputLabel value="Número:" />
+                        </b:column>
+                        <b:column colSm="10">
+                            <h:outputText id="numero" value="#{alunoController.alunoDetalhe.pessoa.enderecos.numero}" />
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputLabel value="Complemento:" />
+                        </b:column>
+                        <b:column colSm="10">
+                            <h:outputText id="complemento" value="#{alunoController.alunoDetalhe.pessoa.enderecos.complemento}" />
+                        </b:column>
+
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputLabel value="CEP:" />
+                        </b:column>
+                        <b:column colSm="10">
+                            <h:outputText id="cep" value="#{alunoController.alunoDetalhe.pessoa.enderecos.cep}" converter="converter.cepConverter"/>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputLabel value="UF:" />
+                        </b:column>
+                        <b:column colSm="10">
+                            <h:outputText id="uf" value="#{alunoController.alunoDetalhe.pessoa.enderecos.estado}" />                                        
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputLabel value="Cidade:" />
+                        </b:column>
+                        <b:column colSm="10">
+                            <h:outputText id="cidade" value="#{alunoController.alunoDetalhe.pessoa.enderecos.cidade}" />
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputLabel value="Bairro:" />
+                        </b:column>
+                        <b:column colSm="10">
+                            <h:outputText id="bairro" value="#{alunoController.alunoDetalhe.pessoa.enderecos.bairro}" />
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column>
+                            <p:separator/>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputLabel value="Curso:" />
+                        </b:column>
+                        <b:column colSm="10">
+                            <h:outputText id="curso" value="#{alunoController.alunoDetalhe.curso.nome}" />
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputLabel value="Turno:" />
+                        </b:column>
+                        <b:column colSm="10">
+                            <h:outputText id="turno" value="#{alunoController.alunoDetalhe.turno}" />
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputLabel value="Data de Início:" />
+                        </b:column>
+                        <b:column colSm="10">
+                            <h:outputText id="dataInicio" value="#{alunoController.alunoDetalhe.dataInicio}" >
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputLabel value="Data de Término:" />
+                        </b:column>
+                        <b:column colSm="10">
+                            <h:outputText id="dataTermino" value="#{alunoController.alunoDetalhe.dataFim}" >
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputLabel value="Data de Inscrição" />
+                        </b:column>
+                        <b:column colSm="10">
+                            <h:outputText id="dataInscricao" value="#{alunoController.alunoDetalhe.dataInscricao}" >
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </b:column>
+                    </b:row>
+
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputLabel value="Turmas:" />
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="12">
+                            <p:dataTable  var="turma" value="#{alunoController.alunoDetalhe.turmaAlunos}">
+                                <p:column headerText="Codigo">
+                                    <h:outputText value="#{turma.turma.nome}" />
+                                </p:column>
+                                <p:column headerText="Disciplina">
+                                    <h:outputText value="#{turma.turma.disciplina.nome}" />
+                                </p:column>
+                                <p:column headerText="Descrição">
+                                    <h:outputText value="#{turma.turma.descricao}" />
+                                </p:column>
+                                <p:column headerText="Professor">
+                                    <h:outputText value="#{turma.turma.professor.pessoa.nome}" />
+                                </p:column>
+                            </p:dataTable> 
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <br/>
+                        <b:column colSm="2">
+                            <p:button value="Voltar" outcome="/restrito/cadastro/consulta/aluno" style="width: 100%"/>
+                        </b:column>
+                        <b:column colSm="2">
+                            <p:commandButton action="#{professorController.alterarProfessor}" value="Alterar" style="width: 100%"/>
+                        </b:column>
+                        <b:column colSm="2">
+                            <p:commandButton update=":#{p:component('info')}" action="#{alunoController.reenviarEmail}" onclick="return confirm('Confirma o envio do email?');" value="Enviar email" style="width: 100%"/>
+                        </b:column>
+
+                    </b:row>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Fechar" onclick="PF('modalDetalhe').hide();" />
+                </f:facet>
+            </p:dialog>
+
             <p:growl  globalOnly="true" id="info"  />
             <b:fetchBeanInfos/>
             <ui:insert name="navbar">
@@ -30,15 +310,15 @@
                                 <b:column colSm="5" offset="2">
                                     <p:inputText id="entradaConsulta" placeholder="Matrícula, Nome ou CPF" value="#{alunoController.stringConsulta}" maxlength="50" style="width: 100%"/>
                                 </b:column>
-                                 <b:column colSm="5">
-                                     <p:commandButton update="resultado info" value="Buscar" action="#{alunoController.consultar}" icon=" ui-icon-search "/>
-                                     <p:commandButton value="Limpar" update="entradaConsulta resultado" action="#{alunoController.limparFormularioConsulta}" immediate="true"/>
+                                <b:column colSm="5">
+                                    <p:commandButton update="resultado info" value="Buscar" action="#{alunoController.consultar}" icon=" ui-icon-search "/>
+                                    <p:commandButton value="Limpar" update="entradaConsulta resultado" action="#{alunoController.limparFormularioConsulta}" immediate="true"/>
                                 </b:column>
                             </b:row>
                             <b:row id="resultado">
                                 <b:column>
-                                <b:dataTable rendered="#{not empty alunoController.resultadoConsulta}" value="#{alunoController.resultadoConsulta}" var="aluno" id="datatable" styleClass="table table-striped table-bordered"
-                                             style="width:100%" searching="false">
+                                    <b:dataTable rendered="#{not empty alunoController.resultadoConsulta}" value="#{alunoController.resultadoConsulta}" var="aluno" id="datatable" styleClass="table table-striped table-bordered"
+                                                 style="width:100%" searching="false">
                                         <h:column>
                                             <f:facet name="header">
                                                 <h:outputText value="Matrícula" />
@@ -61,7 +341,7 @@
                                             <f:facet name="header">
                                                 <h:outputText value="" />
                                             </f:facet>
-                                            <p:commandButton action="#{alunoController.exibirDetalhes(aluno)}" value="Detalhes" style="width: 100%"/>
+                                            <p:commandButton update=":#{p:component('detalheAluno')}" action="#{alunoController.exibirDetalhes(aluno)}" oncomplete="PF('modalDetalhe').show();" value="Detalhes" style="width: 100%"/>
                                         </h:column>
                                     </b:dataTable>
                                 </b:column>
