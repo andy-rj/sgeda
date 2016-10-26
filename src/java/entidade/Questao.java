@@ -207,6 +207,11 @@ public class Questao  implements java.io.Serializable {
     public void setRespostas(Set<Resposta> respostas) {
         this.respostas = respostas;
     }
+    
+    @Transient
+    public List<Assunto> getAssuntosList(){
+        return new ArrayList<>(assuntos);
+    }
 
 }
 

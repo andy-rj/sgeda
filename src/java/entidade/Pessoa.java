@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -42,6 +43,7 @@ public class Pessoa  implements java.io.Serializable {
      private Endereco enderecos;
      private Foto foto;
      private Boolean ativo;
+     private Usuario usuario;
 
     public Pessoa() {
     }
@@ -73,6 +75,15 @@ public class Pessoa  implements java.io.Serializable {
     
     public void setIdPessoa(Integer idPessoa) {
         this.idPessoa = idPessoa;
+    }
+    
+    @OneToOne(fetch=FetchType.EAGER, mappedBy="pessoa")
+    public Usuario getUsuario() {
+        return this.usuario;
+    }
+    
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     

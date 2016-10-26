@@ -83,9 +83,10 @@
                                     <h:outputLabel value="Sexo" ><font color ='red' >*</font></h:outputLabel>
                                 </b:column>
                                 <b:column colSm="7">
-                                    <p:selectOneRadio id="sexo" value="#{funcionarioController.sexo}">
+                                    <p:selectOneRadio requiredMessage="Sexo é obrigatorio!" id="sexo" value="#{funcionarioController.sexo}">
                                         <f:selectItem itemLabel="Masculino" itemValue="M" />
                                         <f:selectItem itemLabel="Feminino" itemValue="F" />
+                                        <f:validateRequired/>
                                     </p:selectOneRadio>
                                 </b:column>
                                 <b:column colSm="3">
@@ -106,7 +107,7 @@
                                     <p:inputText id="descricao" value="#{funcionarioController.descricaoTelefone}" placeholder="Observação" maxlength="50" style="width: 100%"/>
                                 </b:column>
                                 <b:column colSm="1">
-                                    <p:commandButton process="@this :#{p:component('ddd')} :#{p:component('telefone')} :#{p:component('descricao')}" update=":#{p:component('tabelaTelefone')} :#{p:component('entradaTelefone')}" value="Incluir" action="#{funcionarioController.incluirTelefone}" icon="ui-icon-arrowthickstop-1-s"/>
+                                    <p:commandButton global="false" process="@this :#{p:component('ddd')} :#{p:component('telefone')} :#{p:component('descricao')}" update=":#{p:component('tabelaTelefone')} :#{p:component('entradaTelefone')}" value="Incluir" action="#{funcionarioController.incluirTelefone}" icon="ui-icon-arrowthickstop-1-s"/>
                                 </b:column>
                                 <b:column colSm="3">
                                     <b:message for="ddd" />
@@ -135,7 +136,7 @@
                                         </p:column>
 
                                         <p:column headerText="">
-                                            <p:commandButton value="Excluir" ajax="true" immediate="true" update=":#{p:component('tabelaTelefone')}" action="#{funcionarioController.excluirTelefone(telefone)}"/>
+                                            <p:commandButton global="false" value="Excluir" ajax="true" immediate="true" update=":#{p:component('tabelaTelefone')}" action="#{funcionarioController.excluirTelefone(telefone)}"/>
                                         </p:column>
                                      
                                     </p:dataTable> 
@@ -277,8 +278,12 @@
                                 <br/>
                                 <b:column colSm="12">
                                     <p:commandButton update=":#{p:component('container')} :#{p:component('info')}" value="Cadastrar" action="#{funcionarioController.cadastrar}" oncomplete="window.scrollTo(0,0);"/>
-                                    <p:commandButton update=":#{p:component('container')} " process="@this" value="Limpar" action="#{funcionarioController.limparFormularioCadastro}" immediate="true"/>
+                                    <p:commandButton global="false" update=":#{p:component('container')} " process="@this" value="Limpar" action="#{funcionarioController.limparFormularioCadastro}" immediate="true"/>
                                 </b:column>
+                                <p:ajaxStatus  onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+                                <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                                    <p:graphicImage url="/resource/imagens/loading.gif" />
+                                </p:dialog>
                             </b:row>
                         </b:panel>
                     </b:column>

@@ -150,7 +150,7 @@
                 </p:outputPanel>
                 <f:facet name="footer">
                     <p:commandButton value="Fechar" onclick="PF('modalDetalhe').hide();" />
-                    <p:commandButton process="@this" action="#{cursoController.carregarDisciplinas}" rendered="#{loginController.usuarioLogado.administrador}" update=":#{p:component('alterarCurso')}" onclick="PF('modalDetalhe').hide();
+                    <p:commandButton process="@this" action="#{cursoController.carregarDisciplinas}" rendered="#{loginController.usuarioLogado.administrador}" update=":#{p:component('alterarCurso')}" oncomplete="PF('modalDetalhe').hide();
                             PF('modalAlterar').show();" value="Alterar"/>
                 </f:facet>
             </p:dialog>
@@ -166,7 +166,7 @@
                         <b:panel title="Consulta de Curso" style="min-height: 200px;" collapsible="false" look="info">
                             <b:row>
                                 <b:column colSm="5" offset="2">
-                                    <p:inputText id="entradaConsulta" placeholder="Nome, Disciplina ou Descrição" value="#{cursoController.stringConsulta}" maxlength="50" style="width: 100%"/>
+                                    <p:inputText id="entradaConsulta" placeholder="Código, Nome, Disciplina ou Descrição" value="#{cursoController.stringConsulta}" maxlength="50" style="width: 100%"/>
                                 </b:column>
                                 <b:column colSm="5">
                                     <p:commandButton process="@this entradaConsulta" update="resultado info" value="Buscar" action="#{cursoController.consultar}" icon=" ui-icon-search "/>

@@ -1,16 +1,15 @@
 package helper;
 
-import entidade.Disciplina;
 import entidade.Endereco;
 import entidade.Funcionario;
 import entidade.Pessoa;
-import entidade.Professor;
 import entidade.Telefone;
 import entidade.Usuario;
 import hibernate.HibernateUtil;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Set;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -52,6 +51,66 @@ public class FuncionarioHelper {
             }
             session.save(funcionario);
             session.save(usuario);
+            session.flush();
+            tx.commit();
+        } catch (Exception e) {
+            if(tx != null){
+                tx.rollback();
+            }
+            e.printStackTrace();
+            return false;
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+        return true;
+    }
+    
+    public boolean alterarAtividade(Funcionario funcionario){
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.getTransaction();
+         
+        try{
+            tx.begin();
+            session.update(funcionario.getPessoa());
+            session.update(funcionario.getPessoa().getUsuario());
+            session.flush();
+            tx.commit();
+        } catch (Exception e) {
+            if(tx != null){
+                tx.rollback();
+            }
+            e.printStackTrace();
+            return false;
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+        return true;
+    }
+    
+     public boolean salvarAlteracaoFuncionario(Funcionario funcionario, Set<Telefone> telefonesExcluir){
+        
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.getTransaction();
+         
+        try{
+            tx.begin();
+            session.update(funcionario.getPessoa());
+            session.update(funcionario.getPessoa().getEnderecos());
+            for(Telefone telefone : telefonesExcluir){
+                session.delete(telefone);
+            }
+            for(Telefone telefone : funcionario.getPessoa().getTelefones()){
+                if(telefone.getPessoa()==null){
+                    telefone.setPessoa(funcionario.getPessoa());
+                }
+                session.save(telefone);
+            }
+            session.update(funcionario);
+            session.update(funcionario.getPessoa().getUsuario());
             session.flush();
             tx.commit();
         } catch (Exception e) {

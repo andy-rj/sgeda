@@ -37,7 +37,7 @@
                             <p:column style="text-align: center;width: 73px;" headerText="Código">
                                 <h:outputText value="#{questao.idQuestao}" />
                             </p:column>
-                            <p:column style="text-align: center;" filterBy="#{questao.instituicao}" filterMatchMode="in" headerText="Instituição">
+                            <p:column style="text-align: center;" filterBy="#{questao.instituicao}" filterMatchMode="in" >
                                 <f:facet name="filter">
                                     <p:selectCheckboxMenu label="instituicoes" onchange="PF('tableQuestoes').filter()" panelStyle="width:225px" scrollHeight="150">
                                         <f:selectItems value="#{simuladoController.instituicoes}" />
@@ -45,7 +45,7 @@
                                 </f:facet>
                                 <h:outputText value="#{questao.instituicao}" />
                             </p:column>
-                            <p:column style="text-align: center;width: 86px;" filterBy="#{questao.ano}" filterMatchMode="in" headerText="Ano">
+                            <p:column style="text-align: center;width: 86px;" filterBy="#{questao.ano}" filterMatchMode="in" >
                                 <f:facet name="filter">
                                     <p:selectCheckboxMenu label="anos" onchange="PF('tableQuestoes').filter()" panelStyle="width:125px" scrollHeight="150">
                                         <f:selectItems value="#{simuladoController.anos}" />
@@ -53,7 +53,7 @@
                                 </f:facet>
                                 <h:outputText value="#{questao.ano}" />
                             </p:column>
-                            <p:column style="text-align: center;" filterBy="#{questao.professor.pessoa.nome}" filterMatchMode="in" headerText="Professor">
+                            <p:column style="text-align: center;" filterBy="#{questao.professor.pessoa.nome}" filterMatchMode="in">
                                 <f:facet name="filter">
                                     <p:selectCheckboxMenu label="professores" onchange="PF('tableQuestoes').filter()" panelStyle="width:270px" scrollHeight="150">
                                         <f:selectItems value="#{simuladoController.professores}" />
@@ -61,7 +61,7 @@
                                 </f:facet>
                                 <h:outputText value="#{questao.professor.pessoa.nome}" />
                             </p:column>
-                            <p:column style="text-align: center;" filterBy="#{questao.disciplina.nome}" filterMatchMode="in" headerText="Disciplina">
+                            <p:column style="text-align: center;" filterBy="#{questao.disciplina.nome}" filterMatchMode="in">
                                 <f:facet name="filter">
                                     <p:selectCheckboxMenu label="disciplinas" onchange="PF('tableQuestoes').filter()" panelStyle="width:200px" scrollHeight="150">
                                         <f:selectItems value="#{simuladoController.disciplinas}" />
@@ -69,13 +69,13 @@
                                 </f:facet>
                                 <h:outputText value="#{questao.disciplina.nome}" />
                             </p:column>
-                            <p:column style="text-align: center;" filterBy="#{questao.assuntos}" filterFunction="#{simuladoController.filtroPorAssunto}" headerText="Assunto">
+                            <p:column style="text-align: center;" filterBy="#{questao.assuntos}" filterFunction="#{simuladoController.filtroPorAssunto}">
                                 <f:facet name="filter">
                                     <p:selectCheckboxMenu label="assuntos" onchange="PF('tableQuestoes').filter()" panelStyle="width:200px" scrollHeight="150">
                                         <f:selectItems value="#{simuladoController.assuntos}" />
                                     </p:selectCheckboxMenu>
                                 </f:facet>
-                                <p:repeat value="#{questao.assuntos}" var="assunto" offset="0" size="#{fn:length(questao.assuntos)}" step="1" varStatus="varStatus">
+                                <p:repeat value="#{questao.assuntosList}" var="assunto" offset="0" size="#{fn:length(questao.assuntosList)}" step="1" varStatus="varStatus">
                                     <b:label text="#{assunto.nome}" severity="info" style="margin-right: 5px; display: inline-block"/>
                                 </p:repeat>
                             </p:column>

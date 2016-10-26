@@ -114,7 +114,7 @@
                                         <p:column headerText="Professor">
                                             <p:selectOneMenu id="professor" value="#{turma.professor}" converter="converter.professorConverter" required="true" style="width:100%">
                                                 <f:selectItem itemLabel="Selecione o professor" itemValue="0" noSelectionOption="true" />
-                                                <f:selectItems id="teste" value="#{turma.disciplina.professors}" var="professor" itemLabel="#{professor.pessoa.nome}" itemValue="#{professor}" />
+                                                <f:selectItems id="teste" value="#{turma.disciplina.professoresAtivos}" var="professor" itemLabel="#{professor.pessoa.nome}" itemValue="#{professor}" />
                                             </p:selectOneMenu>
                                         </p:column>
                                     </p:dataTable> 

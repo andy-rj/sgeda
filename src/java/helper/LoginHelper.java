@@ -175,6 +175,27 @@ public class LoginHelper {
         }
     }
     
+    public boolean atualizarDataAcesso(Usuario usuario){
+        session = HibernateUtil.getSessionFactory().openSession();
+
+        Transaction tx = session.getTransaction();
+
+        try {
+            tx.begin();
+            session.update(usuario);
+            tx.commit();
+            return true;
+        } catch (Exception e) {
+            if(tx != null)
+                tx.rollback();
+        } finally {
+            if(session != null)
+                session.close();
+        }
+
+        return false;
+    }
+    
     public Usuario getByLoginSenha(String usuario, String senha) {
         if (senha == null || usuario == null) {
             return null;

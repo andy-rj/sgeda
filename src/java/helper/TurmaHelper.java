@@ -46,7 +46,30 @@ public class TurmaHelper {
         }
         return true;
     }
-
+    
+    public boolean salvarAlteracaoTurma(Turma turma) {
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.getTransaction();
+         
+        try{
+            tx.begin();
+            session.update(turma);
+            session.flush();
+            tx.commit();
+        } catch (Exception e) {
+            if(tx != null){
+                tx.rollback();
+            }
+            e.printStackTrace();
+            return false;
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+        return true;
+    }
+    
     public boolean cadastrarSimulado(TurmaSimulado turmaSimulado) {
         session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.getTransaction();
@@ -87,6 +110,7 @@ public class TurmaHelper {
                         .add(Restrictions.ilike("curso.nome", "%" + stringConsulta + "%"))
                         .add(Restrictions.ilike("disciplina.nome", "%" + stringConsulta + "%"))
                         .add(Restrictions.ilike("turno", "%" + stringConsulta + "%"))
+                        .add(Restrictions.ilike("turma", "%" + stringConsulta + "%"))
                 );
             }
 

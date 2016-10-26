@@ -2,6 +2,7 @@ package helper;
 
 import entidade.Disciplina;
 import entidade.Endereco;
+import entidade.Funcionario;
 import entidade.Pessoa;
 import entidade.Professor;
 import entidade.Telefone;
@@ -10,6 +11,7 @@ import hibernate.HibernateUtil;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Set;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -33,6 +35,7 @@ public class ProfessorHelper {
         try{
             tx.begin();
             if(pessoa.getFoto() != null) session.save(pessoa.getFoto());
+            pessoa.setAtivo(Boolean.TRUE);
             session.save(pessoa);
             Integer idPessoa = pessoa.getIdPessoa();
             String matricula = Integer.toString(idPessoa);
@@ -51,6 +54,65 @@ public class ProfessorHelper {
             }
             session.save(professor);
             session.save(usuario);
+            session.flush();
+            tx.commit();
+        } catch (Exception e) {
+            if(tx != null){
+                tx.rollback();
+            }
+            e.printStackTrace();
+            return false;
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+        return true;
+    }
+    
+    public boolean alterarAtividade(Professor professor){
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.getTransaction();
+         
+        try{
+            tx.begin();
+            session.update(professor.getPessoa());
+            session.update(professor.getPessoa().getUsuario());
+            session.flush();
+            tx.commit();
+        } catch (Exception e) {
+            if(tx != null){
+                tx.rollback();
+            }
+            e.printStackTrace();
+            return false;
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+        return true;
+    }
+    
+     public boolean salvarAlteracaoProfessor(Professor professor, Set<Telefone> telefonesExcluir){
+        
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.getTransaction();
+         
+        try{
+            tx.begin();
+            session.update(professor.getPessoa());
+            session.update(professor.getPessoa().getEnderecos());
+            for(Telefone telefone : telefonesExcluir){
+                session.delete(telefone);
+            }
+            for(Telefone telefone : professor.getPessoa().getTelefones()){
+                if(telefone.getPessoa()==null){
+                    telefone.setPessoa(professor.getPessoa());
+                }
+                session.save(telefone);
+            }
+            session.update(professor);
             session.flush();
             tx.commit();
         } catch (Exception e) {

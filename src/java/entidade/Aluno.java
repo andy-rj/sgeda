@@ -41,6 +41,7 @@ public class Aluno  implements java.io.Serializable {
      private Set<TurmaAluno> turmaAlunos = new HashSet(0);
      private Set<AlunoSimulado> alunoSimulados = new HashSet(0);
      private Boolean desistente;
+     private String motivoDesistencia;
 
     public Aluno() {
     }
@@ -87,6 +88,15 @@ public class Aluno  implements java.io.Serializable {
     
     public void setNomeResponsavel(String nomeResponsavel) {
         this.nomeResponsavel = nomeResponsavel;
+    }
+    
+    @Column(name="motivoDesistencia")
+    public String getMotivoDesistencia() {
+        return this.motivoDesistencia;
+    }
+    
+    public void setMotivoDesistencia(String motivo) {
+        this.motivoDesistencia = motivo;
     }
 
     

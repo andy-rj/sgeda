@@ -102,7 +102,7 @@
                 </p:outputPanel>
                 <f:facet name="footer">
                     <p:commandButton value="Fechar" onclick="PF('modalDetalhe').hide();" />
-                    <p:commandButton process="@this" rendered="#{loginController.usuarioLogado.administrador}" update=":#{p:component('alterarDisciplina')}" onclick="PF('modalDetalhe').hide();PF('modalAlterar').show();" value="Alterar"/>
+                    <p:commandButton process="@this" rendered="#{loginController.usuarioLogado.administrador}" update=":#{p:component('alterarDisciplina')}" oncomplete="PF('modalDetalhe').hide();PF('modalAlterar').show();" value="Alterar"/>
                 </f:facet>
             </p:dialog>
 

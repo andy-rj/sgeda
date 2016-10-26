@@ -107,7 +107,7 @@
                                     <p:inputText id="descricao" value="#{professorController.descricaoTelefone}" placeholder="Observação" maxlength="50" style="width: 100%"/>
                                 </b:column>
                                 <b:column colSm="1">
-                                    <p:commandButton process="@this :#{p:component('ddd')} :#{p:component('telefone')} :#{p:component('descricao')}" update=":#{p:component('tabelaTelefone')} :#{p:component('entradaTelefone')}" value="Incluir" action="#{professorController.incluirTelefone}" icon="ui-icon-arrowthickstop-1-s"/>
+                                    <p:commandButton global="false" process="@this :#{p:component('ddd')} :#{p:component('telefone')} :#{p:component('descricao')}" update=":#{p:component('tabelaTelefone')} :#{p:component('entradaTelefone')}" value="Incluir" action="#{professorController.incluirTelefone}" icon="ui-icon-arrowthickstop-1-s"/>
                                 </b:column>
                                 <b:column colSm="3">
                                     <b:message for="ddd" />
@@ -136,7 +136,7 @@
                                         </p:column>
 
                                         <p:column headerText="">
-                                            <p:commandButton value="Excluir" ajax="true" immediate="true" update=":#{p:component('tabelaTelefone')}" action="#{professorController.excluirTelefone(telefone)}"/>
+                                            <p:commandButton global="false" value="Excluir" ajax="true" immediate="true" update=":#{p:component('tabelaTelefone')}" action="#{professorController.excluirTelefone(telefone)}"/>
                                         </p:column>
 
                                     </p:dataTable> 
@@ -193,7 +193,7 @@
                                     </p:selectCheckboxMenu>
                                 </b:column>
                                 <b:column colSm="2">
-                                    <p:commandButton process="@this :#{p:component('disciplinas')}" update=":#{p:component('display')}" id="incluirDisciplinas" value="incluir" icon="ui-icon-arrowthickstop-1-s"/>
+                                    <p:commandButton global="false" process="@this :#{p:component('disciplinas')}" update=":#{p:component('display')}" id="incluirDisciplinas" value="incluir" icon="ui-icon-arrowthickstop-1-s"/>
                                 </b:column>
                                 <b:column colSm="3">
                                     <b:message for="disciplinas"/>
@@ -310,8 +310,13 @@
                                 <br/>
                                 <b:column colSm="12">
                                     <p:commandButton update=":#{p:component('cont')} :#{p:component('info')}" value="Cadastrar" action="#{professorController.cadastrar}" oncomplete="window.scrollTo(0,0);"/>
-                                    <p:commandButton update=":#{p:component('cont')}" process="@this" value="Limpar" action="#{professorController.limparFormularioCadastro}" immediate="true"/>
+                                    <p:commandButton global="false" update=":#{p:component('cont')}" process="@this" value="Limpar" action="#{professorController.limparFormularioCadastro}" immediate="true"/>
                                 </b:column>
+                                
+                                <p:ajaxStatus  onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+                                <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                                    <p:graphicImage url="/resource/imagens/loading.gif" />
+                                </p:dialog>
                             </b:row>
                         </b:panel>
                     </b:column>

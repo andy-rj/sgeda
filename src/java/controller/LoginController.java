@@ -3,14 +3,14 @@ package controller;
 import entidade.Foto;
 import entidade.Usuario;
 import helper.LoginHelper;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Map;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -71,12 +71,22 @@ public class LoginController {
 
     public String entrar() {
         usuarioLogado = helper.getByLoginSenha(usuario, senha);
+       
         if (usuarioLogado == null) {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuário ou senha inválidos!", "Usuário ou senha inválidos!");
             FacesContext.getCurrentInstance().addMessage("", message);
             return null;
         }
-        //helper.atualizarDataAcesso(usuarioLogado);
+        
+         if (!usuarioLogado.getAtivo()){
+            usuarioLogado = null;
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuário bloqueado!", "Usuário bloqueado, entre em contato conosco!");
+            FacesContext.getCurrentInstance().addMessage("", message);
+            return null;
+        }
+        
+        usuarioLogado.setUltimoLogin(new Timestamp(new Date().getTime()));
+        helper.atualizarDataAcesso(usuarioLogado);
         carregarFotoPerfil();
         return "/home?faces-redirect=true";
     }

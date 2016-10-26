@@ -44,25 +44,35 @@ import webservice.CepWebService;
 public class AlunoController {
     private Aluno alunoDetalhe;
     private final AlunoHelper alunoHelper;
+    private Boolean ativoAlterar;
 
     private String bairro;
+    private String bairroAlterar;
     private String cep;
+    private String cepAlterar;
     private String cidade;
+    private String cidadeAlterar;
     private String complemento;
+    private String complementoAlterar;
     @CPF(message = "CPF inválido!")
     private String cpf;
     private String cpfResponsavel;
+    private String cpfResponsavelAlterar;
     private final CursoHelper cursoHelper;
     private Integer cursoSelecionado;
     private List<Curso> cursosCadastrados;
     private List<String> dataInicioDisponiveis;
     private String dataInicioSelecionada;
+    private Date dataNascAlterar;
     @NotNull(message = "Data de nascimento é obrigatória!")
     @Past(message = "Data de nascimento inválida!")
     private Date dataNascimento;
     private String ddd;
+    private String dddAlterar;
     private String descricaoTelefone;
+    private String descricaoTelefoneAlterar;
     private String email;
+    private String emailAlterar;
     private final String emailHTML = "<div style=\"background-color: #f4f4f4; margin:0px;\"><table width=\"642\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\" style=\"border:20px #f4f4f4\" ><tbody><tr><td><table width=\"642\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"font-family:Arial, SansSerif, Myriad Pro;font-size:14px; \"><tbody><tr><td style=\"line-height: 0;\"><center><img src=\"http://cursoidealizar.acessotemporario.net/sgeda/resource/imagens/idealizar.png\" width=\"300\" height=\"80\" border=\"0\" style=\"display: block; margin-bottom: 10px; margin-top: 10px;\"></center></td></tr></tbody></table><table width=\"642\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"font-family:Arial, SansSerif, Myriad Pro;font-size:14px; padding:30px 40px 0px 40px; background:#ffffff;color:#373737;\" ><tbody><tr style=\"border-bottom:4px solid #f4f4f4; display:block; padding:20px 0;\"><td><p><strong>Bem vindo ao Curso Idealizar,</strong></p><p></p><p>Para acessar o sistema utilize os dados abaixo:</p>----------------------------------------------------------------------<div style=\"margin-left: 20px;\"><p>Curso: <strong>{0}</strong></p><p>Matrícula: <strong>{1}</strong></p><p>Senha: <strong>{2}</strong></p></div>----------------------------------------------------------------------<p>Clique <a href=\"http://cursoidealizar.acessotemporario.net/sgeda/\" target=\"_blank\">aqui</a> para login. <p><p></p><p></p><p>Atenciosamente,</p><p>Grupo Idealizar</p></td></tr></tbody></table><table width=\"642\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\" class=\"segundo-rodape\" style=\"font-family:SansSerif, Myriad Pro;font-size:14px; padding:35px 40px; background:#ffffff; color:#373737; text-align:center; \"><tbody><tr><td><p><center>Esta senha é gerada automaticamente.<br>Para alterar, acesse o sistema em \"Configuração\" >> \"Senha\".</center></p></td></tr></tbody></table></td></tr><tbody></table></div>";
     private EmailSender emailSender;
     private boolean enderecoEncontrado;
@@ -72,20 +82,29 @@ public class AlunoController {
     private StreamedContent image;
     private final LoginHelper loginHelper;
     private String logradouro;
+    private String logradouroAlterar;
     private String nome;
+    private String nomeAlterar;
     private String nomeResponsavel;
+    private String nomeResponsavelAlterar;
     private String numero;
+    private String numeroAlterar;
     private String numeroTelefone;
     private Pessoa pessoa;
     private List<Aluno> resultadoConsulta;
     private String sexo;
+    private String sexoAlterar;
     private String stringConsulta;
+    private String telefoneNumeroAlterar;
     private String telefoneResponsavel;
+    private String telefoneResponsavelAlterar;
     private Set<Telefone> telefones;
+    private HashSet<Telefone> telefonesAlterar;
     private TurmaHelper turmaHelper;
     private List<Turma> turmasDisponiveis;
     private String turnoSelecionado;
     private List<String> turnosDisponiveis;
+    private String ufAlterar;
     
     public AlunoController() {
         enderecoEncontrado = true;
@@ -212,6 +231,340 @@ public class AlunoController {
     
     public void exibirDetalhes(Aluno aluno) {
         alunoDetalhe = aluno;
+    }
+
+    public Boolean getAtivoAlterar() {
+        return ativoAlterar;
+    }
+
+    public void setAtivoAlterar(Boolean ativoAlterar) {
+        this.ativoAlterar = ativoAlterar;
+    }
+
+    public String getBairroAlterar() {
+        return bairroAlterar;
+    }
+
+    public void setBairroAlterar(String bairroAlterar) {
+        this.bairroAlterar = bairroAlterar;
+    }
+
+    public String getCepAlterar() {
+        return cepAlterar;
+    }
+
+    public void setCepAlterar(String cepAlterar) {
+        this.cepAlterar = cepAlterar;
+    }
+
+    public String getCidadeAlterar() {
+        return cidadeAlterar;
+    }
+
+    public void setCidadeAlterar(String cidadeAlterar) {
+        this.cidadeAlterar = cidadeAlterar;
+    }
+
+    public String getComplementoAlterar() {
+        return complementoAlterar;
+    }
+
+    public void setComplementoAlterar(String complementoAlterar) {
+        this.complementoAlterar = complementoAlterar;
+    }
+
+    public String getCpfResponsavelAlterar() {
+        return cpfResponsavelAlterar;
+    }
+
+    public void setCpfResponsavelAlterar(String cpfResponsavelAlterar) {
+        this.cpfResponsavelAlterar = cpfResponsavelAlterar;
+    }
+
+    public Date getDataNascAlterar() {
+        return dataNascAlterar;
+    }
+
+    public void setDataNascAlterar(Date dataNascAlterar) {
+        this.dataNascAlterar = dataNascAlterar;
+    }
+
+    public String getDddAlterar() {
+        return dddAlterar;
+    }
+
+    public void setDddAlterar(String dddAlterar) {
+        this.dddAlterar = dddAlterar;
+    }
+
+    public String getDescricaoTelefoneAlterar() {
+        return descricaoTelefoneAlterar;
+    }
+
+    public void setDescricaoTelefoneAlterar(String descricaoTelefoneAlterar) {
+        this.descricaoTelefoneAlterar = descricaoTelefoneAlterar;
+    }
+
+    public String getEmailAlterar() {
+        return emailAlterar;
+    }
+
+    public void setEmailAlterar(String emailAlterar) {
+        this.emailAlterar = emailAlterar;
+    }
+
+    public String getLogradouroAlterar() {
+        return logradouroAlterar;
+    }
+
+    public void setLogradouroAlterar(String logradouroAlterar) {
+        this.logradouroAlterar = logradouroAlterar;
+    }
+
+    public String getNomeAlterar() {
+        return nomeAlterar;
+    }
+
+    public void setNomeAlterar(String nomeAlterar) {
+        this.nomeAlterar = nomeAlterar;
+    }
+
+    public String getNomeResponsavelAlterar() {
+        return nomeResponsavelAlterar;
+    }
+
+    public void setNomeResponsavelAlterar(String nomeResponsavelAlterar) {
+        this.nomeResponsavelAlterar = nomeResponsavelAlterar;
+    }
+
+    public String getNumeroAlterar() {
+        return numeroAlterar;
+    }
+
+    public void setNumeroAlterar(String numeroAlterar) {
+        this.numeroAlterar = numeroAlterar;
+    }
+
+    public String getSexoAlterar() {
+        return sexoAlterar;
+    }
+
+    public void setSexoAlterar(String sexoAlterar) {
+        this.sexoAlterar = sexoAlterar;
+    }
+
+    public String getTelefoneNumeroAlterar() {
+        return telefoneNumeroAlterar;
+    }
+
+    public void setTelefoneNumeroAlterar(String telefoneNumeroAlterar) {
+        this.telefoneNumeroAlterar = telefoneNumeroAlterar;
+    }
+
+    public String getTelefoneResponsavelAlterar() {
+        return telefoneResponsavelAlterar;
+    }
+
+    public void setTelefoneResponsavelAlterar(String telefoneResponsavelAlterar) {
+        this.telefoneResponsavelAlterar = telefoneResponsavelAlterar;
+    }
+
+    public HashSet<Telefone> getTelefonesAlterar() {
+        return telefonesAlterar;
+    }
+
+    public void setTelefonesAlterar(HashSet<Telefone> telefonesAlterar) {
+        this.telefonesAlterar = telefonesAlterar;
+    }
+
+    public String getUfAlterar() {
+        return ufAlterar;
+    }
+
+    public void setUfAlterar(String ufAlterar) {
+        this.ufAlterar = ufAlterar;
+    }
+    
+    public void alterarAtividade(){
+        if(alunoDetalhe.getPessoa().getAtivo()){
+            alunoDetalhe.getPessoa().setAtivo(false);
+            alunoDetalhe.getPessoa().getUsuario().setAtivo(false);
+        } else {
+            alunoDetalhe.getPessoa().setAtivo(true);
+            alunoDetalhe.getPessoa().getUsuario().setAtivo(true);
+        }
+        
+        if(!alunoHelper.alterarAtividade(alunoDetalhe)){
+             addMessage(null, FacesMessage.SEVERITY_ERROR, "Erro ao salvar Aluno, Tente novamente!");
+            return;
+
+        }
+        
+        if(alunoDetalhe.getPessoa().getAtivo()){
+            addMessage(null, FacesMessage.SEVERITY_INFO, "Aluno reativado com Sucesso!");
+        } else {
+            addMessage(null, FacesMessage.SEVERITY_INFO, "Aluno inativado com Sucesso!");
+        }
+
+    }
+    
+    public void excluirTelefoneAlterar(Telefone telefone) {
+        telefonesAlterar.remove(telefone);
+    }
+    
+    public void buscarCepAlterar() {
+        EnvelopeEndereco endereco = CepWebService.buscaEndereco(cepAlterar);
+        if (endereco == null) {
+            addMessage("cadastro:cepA", "Cep não encontrado! Verifique e tente novamente ou preencha manualmente!");
+            cidadeAlterar = null;
+            bairroAlterar = null;
+            ufAlterar = null;
+            logradouroAlterar = null;
+            complementoAlterar = null;
+            enderecoEncontrado = false;
+            return;
+        }
+        cidadeAlterar = endereco.getLocalidade();
+        bairroAlterar = endereco.getBairro();
+        ufAlterar = endereco.getUf();
+        logradouroAlterar = endereco.getLogradouro();
+        complementoAlterar = endereco.getComplemento();
+        enderecoEncontrado = true;
+
+    }
+    
+    private boolean alteracaoDeDados(Aluno aluno) {
+        
+        boolean encontrado = false;
+        
+        if(telefonesAlterar.size()!=aluno.getPessoa().getTelefones().size()){
+            return true;
+        }
+        
+        for(Telefone tel : telefonesAlterar){
+            encontrado = false;
+            for(Telefone telC : aluno.getPessoa().getTelefones()){
+                if(tel.getDdd().equals(telC.getDdd())&&
+                        tel.getNumero().equals(telC.getNumero())&&
+                        tel.getDescricao().equals(telC.getDescricao())){
+                    encontrado = true;
+                    break;
+                }
+            }
+            if(!encontrado){
+                return true;
+            }
+        }
+        
+        return !(aluno.getPessoa().getNome().equals(nomeAlterar)
+                && aluno.getPessoa().getSexo().equals(sexoAlterar)
+                && aluno.getPessoa().getEmail().equals(emailAlterar)
+                && aluno.getNomeResponsavel().equals(nomeResponsavelAlterar)
+                && aluno.getCpfResponsavel().equals(cpfResponsavelAlterar)
+                && aluno.getTelefoneResponsavel().equals(telefoneResponsavelAlterar)
+                && aluno.getPessoa().getEnderecos().getBairro().equals(bairroAlterar)
+                && aluno.getPessoa().getEnderecos().getCep().equals(cepAlterar)
+                && aluno.getPessoa().getEnderecos().getCidade().equals(cidadeAlterar)
+                && aluno.getPessoa().getEnderecos().getComplemento().equals(complementoAlterar)
+                && aluno.getPessoa().getEnderecos().getEstado().equals(ufAlterar)
+                && aluno.getPessoa().getEnderecos().getLogradouro().equals(logradouroAlterar)
+                && aluno.getPessoa().getEnderecos().getNumero().equals(numeroAlterar)
+                && aluno.getPessoa().getDataNascimento().getDay() == dataNascAlterar.getDay()
+                && aluno.getPessoa().getDataNascimento().getMonth() == dataNascAlterar.getMonth()
+                && aluno.getPessoa().getDataNascimento().getYear() == dataNascAlterar.getYear());
+                
+    }
+
+    
+    public void salvarAlteracao() {
+        Set<Telefone> telefoneExcluir = new HashSet<>(alunoDetalhe.getPessoa().getTelefones());
+        Aluno alunoAlterar = alunoDetalhe;
+
+        if (!alteracaoDeDados(alunoAlterar)) {
+            addMessage(null, FacesMessage.SEVERITY_WARN, "Não houve alteração nos dados!");
+            return;
+        }
+
+        alunoAlterar.getPessoa().setNome(nomeAlterar);
+        alunoAlterar.getPessoa().setSexo(sexoAlterar);
+        alunoAlterar.getPessoa().setEmail(emailAlterar);
+        alunoAlterar.setNomeResponsavel(nomeResponsavelAlterar);
+        alunoAlterar.setCpfResponsavel(cpfResponsavelAlterar);
+        alunoAlterar.setTelefoneResponsavel(telefoneResponsavelAlterar);
+        alunoAlterar.getPessoa().setTelefones(telefonesAlterar);
+        alunoAlterar.getPessoa().getEnderecos().setBairro(bairroAlterar);
+        alunoAlterar.getPessoa().getEnderecos().setCep(cepAlterar);
+        alunoAlterar.getPessoa().getEnderecos().setCidade(cidadeAlterar);
+        alunoAlterar.getPessoa().getEnderecos().setComplemento(complementoAlterar);
+        alunoAlterar.getPessoa().getEnderecos().setEstado(ufAlterar);
+        alunoAlterar.getPessoa().getEnderecos().setLogradouro(logradouroAlterar);
+        alunoAlterar.getPessoa().getEnderecos().setNumero(numeroAlterar);
+        alunoAlterar.getPessoa().setDataNascimento(dataNascAlterar);
+        
+
+        if (!alunoHelper.salvarAlteracaoAluno(alunoAlterar, telefoneExcluir)) {
+            addMessage(null, FacesMessage.SEVERITY_ERROR, "Não foi possível salvar alterações!");
+            return;
+        }
+
+        addMessage(null, FacesMessage.SEVERITY_INFO, "Alterações salvas com sucesso!");
+
+        consultar();
+        alunoDetalhe = alunoAlterar;
+        carregarAlterar();
+    }
+    
+    public void incluirTelefoneAlterar() {
+        if (dddAlterar == null || dddAlterar.isEmpty()) {
+            addMessage("cadastro:dddA", "DDD inválido!");
+            return;
+        }
+        if (telefoneNumeroAlterar == null || telefoneNumeroAlterar.isEmpty()) {
+            addMessage("cadastro:telefoneA", "Número do telefone inválido");
+            return;
+        }
+
+        Telefone telefone = new Telefone();
+        telefone.setDdd(dddAlterar);
+        telefone.setNumero(telefoneNumeroAlterar);
+        telefone.setDescricao(descricaoTelefoneAlterar);
+
+        if (telefonesAlterar == null) {
+            telefonesAlterar = new HashSet<>();
+        }
+        telefonesAlterar.add(telefone);
+
+        dddAlterar = null;
+        telefoneNumeroAlterar = null;
+        descricaoTelefoneAlterar = null;
+
+    }
+     
+    public void carregarAlterar() {
+        nomeAlterar = alunoDetalhe.getPessoa().getNome();
+        dataNascAlterar = alunoDetalhe.getPessoa().getDataNascimento();
+        sexoAlterar = alunoDetalhe.getPessoa().getSexo();
+        emailAlterar = alunoDetalhe.getPessoa().getEmail();
+        nomeResponsavelAlterar = alunoDetalhe.getNomeResponsavel();
+        cpfResponsavelAlterar = alunoDetalhe.getCpfResponsavel();
+        telefoneResponsavelAlterar = alunoDetalhe.getTelefoneResponsavel();
+        cepAlterar = alunoDetalhe.getPessoa().getEnderecos().getCep();
+        logradouroAlterar = alunoDetalhe.getPessoa().getEnderecos().getLogradouro();
+        numeroAlterar = alunoDetalhe.getPessoa().getEnderecos().getNumero();
+        complementoAlterar = alunoDetalhe.getPessoa().getEnderecos().getComplemento();
+        ufAlterar = alunoDetalhe.getPessoa().getEnderecos().getEstado();
+        cidadeAlterar = alunoDetalhe.getPessoa().getEnderecos().getCidade();
+        bairroAlterar = alunoDetalhe.getPessoa().getEnderecos().getBairro();
+        telefonesAlterar = new HashSet<>();
+        for(Telefone telefone: alunoDetalhe.getPessoa().getTelefones()){
+            Telefone novoTelefone = new Telefone(alunoDetalhe.getPessoa(), telefone.getDdd(), telefone.getNumero(), telefone.getDescricao());
+            telefone.setIdTelefone(telefone.getIdTelefone());
+            telefonesAlterar.add(novoTelefone);
+        }
+        dddAlterar = "";
+        telefoneNumeroAlterar = "";
+        descricaoTelefoneAlterar = "";
+        ativoAlterar = alunoDetalhe.getPessoa().getAtivo();
     }
 
     public Aluno getAlunoDetalhe() {
@@ -511,11 +864,12 @@ public class AlunoController {
 
     public void limparFormularioConsulta(){
         stringConsulta = null;
-        resultadoConsulta = new ArrayList<>();
+        consultar();
     }
     
     public String novaConsulta() {
         limparCampos();
+        consultar();
         return "/restrito/cadastro/consulta/aluno?faces-redirect=true";
     }
     
