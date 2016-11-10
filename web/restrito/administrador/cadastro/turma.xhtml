@@ -105,12 +105,6 @@
                                         <p:column headerText="Disciplina">
                                             <h:outputText id="disciplina" value="#{turma.disciplina.nome}" />
                                         </p:column>
-                                        <p:column headerText="Código">
-                                            <p:inputText id="codigo" value="#{turma.nome}" required="true" requiredMessage="Digite um código!" />
-                                        </p:column>
-                                        <p:column headerText="Descrição">
-                                            <p:inputText id="descricao" value="#{turma.descricao}" required="true" requiredMessage="Digite uma descrição!" />
-                                        </p:column>
                                         <p:column headerText="Professor">
                                             <p:selectOneMenu id="professor" value="#{turma.professor}" converter="converter.professorConverter" required="true" style="width:100%">
                                                 <f:selectItem itemLabel="Selecione o professor" itemValue="0" noSelectionOption="true" />

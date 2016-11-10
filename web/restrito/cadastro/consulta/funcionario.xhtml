@@ -452,7 +452,7 @@
                                      PF('modalAlterar').show();" value="Alterar"/>
                     <p:commandButton rendered="#{funcionarioController.funcionarioDetalhe.pessoa.ativo}" action="#{funcionarioController.alterarAtividade}" ajax="true" process="@this" update="footer :#{p:component('resultado')}  :#{p:component('info')} :#{p:component('detalheFuncionario')}" value="Inativar Funcionário"/>
                     <p:commandButton rendered="#{not funcionarioController.funcionarioDetalhe.pessoa.ativo}" action="#{funcionarioController.alterarAtividade}" ajax="true" process="@this" update="footer :#{p:component('resultado')}  :#{p:component('info')} :#{p:component('detalheFuncionario')}" value="Reativar Funcionário"/>
-                    <p:commandButton  update=":#{p:component('info')}" action="#{funcionarioController.reenviarEmail}" onclick="return confirm('Confirma o envio do email?');" value="Enviar email"/>
+                    <p:commandButton process="@this" update=":#{p:component('info')}" action="#{funcionarioController.reenviarEmail}" onclick="return confirm('Confirma o envio do email?');" value="Enviar email"/>
                     </b:row>
                 </f:facet>
             </p:dialog>

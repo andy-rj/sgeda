@@ -12,35 +12,81 @@
             .ui-growl {
                 z-index:9999 !important;
             }
+              .navbar-default {
+            background-color: #6F2222;
+            border: none;
+            }
+            .navbar-default .navbar-nav > li > a:hover,.navbar-default .navbar-nav > li > a:focus {
+            color: #fff;
+            background-color: #014E7A;
+            }
+            .navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+            background-color: #014E7A;
+            color: #fff;
+            }
 
         </style>
     </h:head>
     <h:body style="background-color: #e3e3e3" >      
         <h:form id="consulta">
-            
-             <!--        ***************************
-                        modal de detalhes
-                        ***************************-->
+            <b:row>
+                <b:navBar onclick="PF('modalAviso').show();return false;" brandImg="/sgeda/resource/imagens/idealizar.png" brandHref="/../../sgeda/faces/home.xhtml" brandAlign="left" brand-img-style="width:145px;" style="margin-bottom: 0px; border-bottom: none;border-radius: 0%" >
+                    <b:navbarLinks pull="right">
+                        <b:dropMenu value="#{loginController.usuarioLogado.pessoa.nome}">
+                            <b:navCommandLink onclick="PF('modalAviso').show();return false;" value="Sair" action="#{loginController.sair}" immediate="true"/>
+                            <b:dropMenu value="Configuração">
+                                <b:navCommandLink onclick="PF('modalAviso').show();return false;" value="senha" action="#{loginController.alterarSenha}" immediate="true"/>
+                                <b:navCommandLink onclick="PF('modalAviso').show();return false;" value="foto"/>
+                            </b:dropMenu>                    
+                        </b:dropMenu>
+                    </b:navbarLinks>
+                </b:navBar>
+            </b:row>
+            <b:row id="fotoPerfil" style="background-color: #6F2222;height: 85px;">
+                <p:graphicImage cache="false" rendered="#{loginController.usuarioLogado.pessoa.foto != null}" value="#{loginController.image}" 
+                                width="110" height="110" 
+                                style="border-radius: 50%; margin-left: 150px;position: absolute;z-index: 1; margin-top: 5px;">
+                </p:graphicImage>
+                <h:graphicImage rendered="#{loginController.usuarioLogado.pessoa.foto == null}" value="/resource/imagens/fotoPerfil.png" 
+                                width="110" height="110" 
+                                style="border-radius: 50%; margin-left: 150px;position: absolute;z-index: 1; margin-top: 5px;">
+                </h:graphicImage>
+            </b:row>
+            <b:navBar id="navBarAluno" rendered="#{loginController.usuarioLogado.aluno}" style="border-top: none; border-radius: 0%;background-color: rgb(10, 58, 86);border:none;" >
+                <b:navbarLinks style="margin-left: 130px;">
+                    <b:navCommandLink value="Turmas" onclick="PF('modalAviso').show();
+                            return false;" action="#{turmaController.novaConsultaAluno(loginController.usuarioLogado.pessoa.idPessoa)}"/>
+                    <b:navCommandLink value="Simulados" onclick="PF('modalAviso').show();
+                            return false;" action="#{professorController.turmas}" immediate="true"/>
+                    <b:navCommandLink value="Desempenho" onclick="PF('modalAviso').show();
+                            return false;" action="#{alunoController.desempenho}" immediate="true"/>
+                </b:navbarLinks>
+            </b:navBar>
+
+            <p:dialog id="modalAviso" header="Aviso" widgetVar="modalAviso" height="40">
+                <h:outputText value="Finalize o simulado antes de navegar!"/>
+            </p:dialog>
+
+            <!--        ***************************
+                       modal de detalhes
+                       ***************************-->
             <p:dialog id="modalMensagensAviso" header="Aviso" modal="true" resizable="false"  draggable="false" widgetVar="modalMensagens"
-                      minimizable="true" maximizable="true" width="500" height="300">
+                      minimizable="false" maximizable="false" width="500" height="300" closable="false">
                 <p:outputPanel id="painelAviso">
                     <b:row>
                         <b:messages/>
                     </b:row>
                 </p:outputPanel>
-                
+
                 <f:facet id="footer" name="footer">
                     <p:commandButton rendered="#{alunoSimuladoController.finalizado}" process="@this" action="#{alunoSimuladoController.fecharPaginaSimulado}"  value="Fechar" />
                     <p:commandButton rendered="#{not alunoSimuladoController.finalizado}"  value="Fechar" onclick="PF('modalMesagens').hide();" />
                     <p:commandButton rendered="#{not alunoSimuladoController.finalizado}" process="@this" action="#{alunoSimuladoController.forcarFinalizarSimulado}" update=":#{p:component('modalMensagensAviso')}" value="Forçar finalização"/>
                 </f:facet>
             </p:dialog>
-            
+
             <p:growl  globalOnly="true" id="info"  />
             <b:fetchBeanInfos/>
-            <ui:insert name="navbar">
-                <ui:include src="/template/navbar.xhtml"/>
-            </ui:insert>
             <b:container >
                 <b:row style="margin-left: -45px; margin-right: -45px;">
                     <b:column >
@@ -56,7 +102,7 @@
                                 </b:column>
                             </b:row>
                             <b:row id="rowCronometro" style="text-align: right; padding-right: 10px;">
-                                <p:poll interval="1" listener="#{alunoSimuladoController.atualizaCronometro}" update="cronometro" />
+                                <p:poll widgetVar="poll" interval="1" listener="#{alunoSimuladoController.atualizaCronometro}" update="@this cronometro :#{p:component('modalMensagensAviso')}"  />
                                 <b:label text="Tempo Restante: #{alunoSimuladoController.horasRestante}:#{alunoSimuladoController.minutosRestante}:#{alunoSimuladoController.segundosRestante}" style="font-size: 15px;" id="cronometro" severity="#{alunoSimuladoController.severidadeCronometro}"/>
                             </b:row>
                             <b:row style="margin-top: 10px;">
@@ -85,7 +131,7 @@
                                                 </ui:repeat>
                                             </b:column>
                                             <b:column rendered="#{empty alunoSimuladoController.questaoAtual.questao.objetiva}"> 
-                                                alkdjfkd
+                                                <p:inputTextarea style="width:100%" value="#{alunoSimuladoController.respostaAtual}" autoResize="true" maxlength="2999"/>
                                             </b:column>
 
                                         </b:row>
@@ -96,26 +142,26 @@
                                         </b:row>
                                         <b:row>
                                             <b:column style="text-align: center">
-                                                <b:commandButton ajax="true" process=":#{p:component('radioOpcoes')}" update=":#{p:component('painelQuestoes')}" action="#{alunoSimuladoController.questaoAnterior}" disabled="#{alunoSimuladoController.indiceQuestaoAtual == 0}" look="info" value="&lt; Anterior"/>
+                                                <b:commandButton ajax="true" process=":#{p:component('painelQuestoes')}" update=":#{p:component('painelQuestoes')}" action="#{alunoSimuladoController.questaoAnterior}" disabled="#{alunoSimuladoController.indiceQuestaoAtual == 0}" look="info" value="&lt; Anterior"/>
                                                 <b:commandButton rendered="#{not alunoSimuladoController.questaoAtual.marcadaRevisao}" ajax="true" process="@this" update=":#{p:component('painelQuestoes')}" action="#{alunoSimuladoController.marcarRevisao}" style="margin-left: 5px;" look="warning" value="Marcar para revisão"/>
                                                 <b:commandButton rendered="#{alunoSimuladoController.questaoAtual.marcadaRevisao}" ajax="true" process="@this" update=":#{p:component('painelQuestoes')}" action="#{alunoSimuladoController.desmarcarRevisao()}" style="margin-left: 5px;" look="warning" value="Desmarcar revisão"/>
-                                                <b:commandButton ajax="true" process=":#{p:component('radioOpcoes')}" update=":#{p:component('painelQuestoes')}" action="#{alunoSimuladoController.proximaQuestao}" disabled="#{alunoSimuladoController.indiceQuestaoAtual+1 == alunoSimuladoController.numeroQuestoes}" style="margin-left: 5px;" look="info" value="Próxima &gt;"/>
+                                                <b:commandButton ajax="true" process=":#{p:component('painelQuestoes')}" update=":#{p:component('painelQuestoes')}" action="#{alunoSimuladoController.proximaQuestao}" disabled="#{alunoSimuladoController.indiceQuestaoAtual+1 == alunoSimuladoController.numeroQuestoes}" style="margin-left: 5px;" look="info" value="Próxima &gt;"/>
                                             </b:column>
                                         </b:row>
                                         <b:row>
                                             <b:column>
                                                 <p:panel style="margin-top: 10px;" header="Questões" id="botoesQuestoes">
-                                                    <ui:repeat varStatus="status" value="#{alunoSimuladoController.simulado.respostas}" var="resposta" >
-                                                        <p:commandLink style="display: inline" ajax="true" process="@this :#{p:component('radioOpcoes')}" update=":#{p:component('painelQuestoes')}" action="#{alunoSimuladoController.escolherQuestao(status.index)}">
-                                                                <b:label style="margin-right: 5px;" text="#{status.index + 1}" severity="#{resposta.marcadaRevisao?'warning':(empty resposta.resposta?'danger':'success')}"/>
-                                                            </p:commandLink>
+                                                    <ui:repeat varStatus="status" value="#{alunoSimuladoController.respostas}" var="resposta" >
+                                                        <p:commandLink style="display: inline" ajax="true" process="@this :#{p:component('painelQuestoes')}" update=":#{p:component('painelQuestoes')}" action="#{alunoSimuladoController.escolherQuestao(status.index)}">
+                                                            <b:label style="margin-right: 5px;" text="#{status.index + 1}" severity="#{resposta.marcadaRevisao?'warning':(empty resposta.resposta?'danger':'success')}"/>
+                                                        </p:commandLink>
                                                     </ui:repeat>
                                                 </p:panel>
                                             </b:column>
                                         </b:row>
                                         <b:row>
                                             <b:column style="text-align: center">
-                                                <b:commandButton style="margin-top: 10px;" ajax="true" process="@this :#{p:component('radioOpcoes')}" update=":#{p:component('painelQuestoes')} :#{p:component('modalMensagensAviso')}" action="#{alunoSimuladoController.finalizarSimulado()}" look="success" oncomplete="PF('modalMensagens').show()" value="Finalizar"/>
+                                                <b:commandButton style="margin-top: 10px;" ajax="true" process="@this :#{p:component('painelQuestoes')}" update=":#{p:component('painelQuestoes')} :#{p:component('modalMensagensAviso')}" action="#{alunoSimuladoController.finalizarSimulado()}" look="success" oncomplete="PF('modalMensagens').show()" value="Finalizar"/>
                                             </b:column>
                                         </b:row>
                                     </p:panel>

@@ -2,6 +2,7 @@ package entidade;
 // Generated 09/09/2016 09:36:48 by Hibernate Tools 4.3.1
 
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -129,6 +130,7 @@ public class Aluno  implements java.io.Serializable {
         this.telefoneResponsavel = telefoneResponsavel;
     }
 
+    
     @OneToMany(fetch=FetchType.EAGER, mappedBy="aluno")
     public Set<TurmaAluno> getTurmaAlunos() {
         return this.turmaAlunos;
@@ -208,14 +210,42 @@ public class Aluno  implements java.io.Serializable {
         return turmas;
     }
     
-    public boolean simuladoRealizado(Simulado simulado){
+    public boolean simuladoRealizado(TurmaSimulado simulado){
         if(alunoSimulados == null) return false;
         for(AlunoSimulado alunoSimulado: alunoSimulados){
-            if(alunoSimulado.getTurmaSimulado().getSimulado().getIdSimulado().equals(simulado.getIdSimulado())){
+            if(alunoSimulado.getTurmaSimulado().getId().equals(simulado.getId())){
                 return true;
             }
         }
         return false;
+    }
+    
+    public boolean simuladoCorrigido(TurmaSimulado simulado){
+        if(alunoSimulados == null) return false;
+        for(AlunoSimulado alunoSimulado: alunoSimulados){
+            if(alunoSimulado.getTurmaSimulado().getId().equals(simulado.getId())){
+                if(alunoSimulado.isCorrigido()) return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean existeSimuladoParaCorrecao(){
+        if(alunoSimulados == null) return false;
+        for(AlunoSimulado alunoSimulado: alunoSimulados){
+            if(!alunoSimulado.isCorrigido()) return true;
+        }
+        return false;
+    }
+    
+    public BigDecimal notaSimulado(TurmaSimulado simulado){
+        if(alunoSimulados == null) return BigDecimal.ZERO;
+        for(AlunoSimulado alunoSimulado: alunoSimulados){
+            if(alunoSimulado.getTurmaSimulado().getId().equals(simulado.getId())){
+                return alunoSimulado.getNota();
+            }
+        }
+        return BigDecimal.ZERO;
     }
 
     @Column(name="desistente")

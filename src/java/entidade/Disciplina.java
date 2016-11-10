@@ -36,6 +36,7 @@ public class Disciplina  implements java.io.Serializable {
      private Set<Turma> turmas = new HashSet(0);
      private Set<Professor> professors = new HashSet(0);
      private Set<Questao> questaos = new HashSet(0);
+     
 
     public Disciplina() {
     }

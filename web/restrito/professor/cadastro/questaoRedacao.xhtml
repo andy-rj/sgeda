@@ -67,7 +67,7 @@
                                     <h:outputLabel value="Instituição" ></h:outputLabel>
                                 </b:column>
                                 <b:column colSm="7">
-                                    <p:inputText id="instituicaoQuestao" value="#{questaoController.instituicao}" maxlength="50" />
+                                    <p:inputText id="instituicaoQuestao" value="#{questaoController.instituicao}" maxlength="10" />
                                 </b:column>
                                 <b:column colSm="3">
                                     <b:message for="instituicaoQuestao"  />
@@ -82,6 +82,22 @@
                                 </b:column>
                                 <b:column colSm="3">
                                     <b:message for="ano"  />
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column colSm="2">
+                                    <h:outputLabel value="Nível" ></h:outputLabel>
+                                </b:column>
+                                <b:column colSm="7">
+                                    <p:selectOneMenu id="nivelQuestao" value="#{questaoController.nivel}" style="width:100%" required="true">
+                                        <f:selectItem itemLabel="Selecione a disciplina" itemValue="0" noSelectionOption="true" />
+                                        <f:selectItem itemLabel="Ensino Fundamental" itemValue="Ensino Fundamental" />
+                                        <f:selectItem itemLabel="Ensino Médio" itemValue="Ensino Médio" />
+                                        <f:selectItem itemLabel="Ensino Superior" itemValue="Ensino Superior" />
+                                    </p:selectOneMenu>
+                                </b:column>
+                                <b:column colSm="3">
+                                    <b:message for="nivelQuestao"  />
                                 </b:column>
                             </b:row>
                               <b:row id="disciplinas">
@@ -149,7 +165,7 @@
                             <b:row>
                                 <br/>
                                 <b:column>
-                                    <p:commandButton value="Cadastrar" process="@this instituicaoQuestao ano disciplina editor assuntos" update="info container" action="#{questaoController.cadastrarRedacao}"/>
+                                    <p:commandButton value="Cadastrar" process="@this nivelQuestao instituicaoQuestao ano disciplina editor assuntos" update="info container" action="#{questaoController.cadastrarRedacao}"/>
                                     <p:commandButton value="Limpar" action="#{questaoController.limparFormularioCadastroObjetiva}" immediate="true"/>
                                 </b:column>
                             </b:row>

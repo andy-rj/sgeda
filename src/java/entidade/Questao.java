@@ -2,6 +2,7 @@ package entidade;
 // Generated 09/09/2016 09:36:48 by Hibernate Tools 4.3.1
 
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -38,6 +39,8 @@ public class Questao  implements java.io.Serializable {
      private String enunciado;
      private String ano;
      private String instituicao;
+     private String tipo;
+     private String nivel;
      private Discursiva discursiva;
      private Set<SimuladoQuestao> simuladoQuestaos = new HashSet(0);
      private Set<Figura> figuras = new HashSet(0);
@@ -141,6 +144,24 @@ public class Questao  implements java.io.Serializable {
     public void setInstituicao(String instituicao) {
         this.instituicao = instituicao;
     }
+    
+    @Column(name="tipo", length=45, nullable = false)
+    public String getTipo() {
+        return this.tipo;
+    }
+    
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+    
+    @Column(name="nivel", length = 45)
+    public String getNivel(){
+        return this.nivel;
+    }
+    
+    public void setNivel(String nivel){
+        this.nivel = nivel;
+    }
 
 @OneToOne(fetch=FetchType.EAGER, mappedBy="questao")
     public Discursiva getDiscursiva() {
@@ -212,6 +233,16 @@ public class Questao  implements java.io.Serializable {
     public List<Assunto> getAssuntosList(){
         return new ArrayList<>(assuntos);
     }
+    
+   public BigDecimal getValorQuestao(Simulado simulado, Questao questao){
+       if(simuladoQuestaos == null) return null;
+       for(SimuladoQuestao Squestao: simuladoQuestaos){
+           if(Squestao.getSimulado().getIdSimulado()==simulado.getIdSimulado() && Squestao.getQuestao().getIdQuestao()==questao.getIdQuestao()){
+               return Squestao.getValorQuestao();
+           }
+       }
+       return null;
+   }
 
 }
 

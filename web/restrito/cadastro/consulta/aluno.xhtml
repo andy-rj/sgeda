@@ -22,6 +22,27 @@
             <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
                 <p:graphicImage url="/resource/imagens/loading.gif" />
             </p:dialog>
+            
+            <p:dialog header="Confirmar" modal="true" resizable="false"  draggable="false" widgetVar="modalInativar"
+                      minimizable="true" maximizable="true" width="400" height="100">
+                <p:outputPanel id="painelInativar">
+                    <b:row rendered="#{alunoController.alunoDetalhe.pessoa.ativo}" style="text-align: center">
+                        <p:selectOneMenu id="selectMotivo" required="true" requiredMessage="Selecione um motivo!" value="#{alunoController.motivoDesistencia}" >
+                            <f:selectItem itemLabel="Selecione" itemValue="0" noSelectionOption="true"/>
+                            <f:selectItem itemLabel="Dificuldade financeira" itemValue="Dificuldade financeira"/>
+                            <f:selectItem itemLabel="Falta de tempo" itemValue="Falta de tempo"/>
+                            <f:selectItem itemLabel="Insatisfação" itemValue="Insatisfação"/>
+                            <f:selectItem itemLabel="Outros" itemValue="Outros"/>
+                        </p:selectOneMenu>
+                        <b:message for="selectMotivo"/>
+                    </b:row>
+                    <b:row  style="text-align: center">
+                        <br/>
+                        <p:commandButton rendered="#{alunoController.alunoDetalhe.pessoa.ativo}" action="#{alunoController.alterarAtividade}"  ajax="true" process="@this selectMotivo" update=":#{p:component('footer')} :#{p:component('painelInativar')} :#{p:component('resultado')} :#{p:component('info')} :#{p:component('detalheAluno')}" value="Confirmar"/>
+                        <p:commandButton rendered="#{not alunoController.alunoDetalhe.pessoa.ativo}" onclick="PF('modalInativar').hide();" value="Fechar"/>
+                    </b:row>
+                </p:outputPanel>
+            </p:dialog>
 
             <!--        ***************************
                         modal de alteração de dados
@@ -536,14 +557,8 @@
                     <b:row>
                         <b:column colSm="12">
                             <p:dataTable  var="turma" value="#{alunoController.alunoDetalhe.turmaAlunos}">
-                                <p:column headerText="Codigo">
-                                    <h:outputText value="#{turma.turma.nome}" />
-                                </p:column>
-                                <p:column headerText="Disciplina">
+                                <p:column headerText="Turma">
                                     <h:outputText value="#{turma.turma.disciplina.nome}" />
-                                </p:column>
-                                <p:column headerText="Descrição">
-                                    <h:outputText value="#{turma.turma.descricao}" />
                                 </p:column>
                                 <p:column headerText="Professor">
                                     <h:outputText value="#{turma.turma.professor.pessoa.nome}" />
@@ -557,9 +572,9 @@
                         <p:commandButton value="Fechar" onclick="PF('modalDetalhe').hide();" />
                         <p:commandButton global="false" process="@this" action="#{alunoController.carregarAlterar}" update=":#{p:component('alterarAluno')}" oncomplete="PF('modalDetalhe').hide();
                                          PF('modalAlterar').show();" value="Alterar"/>
-                        <p:commandButton rendered="#{alunoController.alunoDetalhe.pessoa.ativo}" action="#{alunoController.alterarAtividade}" ajax="true" process="@this" update="footer :#{p:component('resultado')}  :#{p:component('info')} :#{p:component('detalheAluno')}" value="Inativar Aluno"/>
+                        <p:commandButton rendered="#{alunoController.alunoDetalhe.pessoa.ativo}" oncomplete="PF('modalInativar').show();" process="@this" update=":#{p:component('painelInativar')}" value="Inativar Aluno"/>
                         <p:commandButton rendered="#{not alunoController.alunoDetalhe.pessoa.ativo}" action="#{alunoController.alterarAtividade}" ajax="true" process="@this" update="footer :#{p:component('resultado')}  :#{p:component('info')} :#{p:component('detalheAluno')}" value="Reativar Aluno"/>
-                        <p:commandButton  update=":#{p:component('info')}" action="#{alunoController.reenviarEmail}" onclick="return confirm('Confirma o envio do email?');" value="Enviar email"/>
+                        <p:commandButton process="@this" update=":#{p:component('info')}" action="#{alunoController.reenviarEmail}" onclick="return confirm('Confirma o envio do email?');" value="Enviar email"/>
                     </b:row>
                 </f:facet>
             </p:dialog>
@@ -602,7 +617,7 @@
                                         </p:column>
 
                                         <p:column style="width: 160px">
-                                            <p:commandButton global="false" process="@this" update=":#{p:component('detalheAluno')}" action="#{alunoController.exibirDetalhes(aluno)}" oncomplete="PF('modalDetalhe').show();" value="Detalhes" style="width: 100px"/>
+                                            <p:commandButton global="false" process="@this" update=":#{p:component('painelInativar')} :#{p:component('detalheAluno')} :#{p:component('footer')}" action="#{alunoController.exibirDetalhes(aluno)}" oncomplete="PF('modalDetalhe').show();" value="Detalhes" style="width: 100px"/>
                                         </p:column>
                                     </p:dataTable>
                                 </b:column>

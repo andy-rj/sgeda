@@ -113,6 +113,18 @@ public class Resposta  implements java.io.Serializable {
         this.marcadaRevisao = marcadaRevisao;
     }
 
+    @Transient
+    public BigDecimal getNotaMaximaQuestao(){
+        if(questao.getSimuladoQuestaos() == null) return null;
+        if(alunoSimulado == null) return null;
+        for(SimuladoQuestao simuladoQuestao: questao.getSimuladoQuestaos()){
+            if(simuladoQuestao.getQuestao().getIdQuestao()==questao.getIdQuestao() &&
+                    simuladoQuestao.getSimulado().getIdSimulado()==alunoSimulado.getTurmaSimulado().getSimulado().getIdSimulado()){
+                return simuladoQuestao.getValorQuestao();
+            }
+        }
+        return null;
+    }
 
 
 

@@ -64,6 +64,17 @@ public class QuestaoController {
     private String tipo;
     boolean uploaded;
     private int width;
+    private String nivel;
+
+    public String getNivel() {
+        return nivel;
+    }
+
+    public void setNivel(String nivel) {
+        this.nivel = nivel;
+    }
+    
+    
 
     public QuestaoController() {
         professorHelper = new ProfessorHelper();
@@ -176,6 +187,8 @@ public class QuestaoController {
             }
         }
 
+        questao.setTipo("Objetiva");
+        questao.setNivel(nivel);
         Objetiva questaoObjetiva = new Objetiva();
         questaoObjetiva.setQuestao(questao);
         if (opcoes != null) {
@@ -268,7 +281,9 @@ public class QuestaoController {
                 questao.setDisciplina(disciplina);
             }
         }
-
+        
+        questao.setTipo("Discursiva");
+        questao.setNivel(nivel);
         Discursiva questaoDiscursiva = new Discursiva();
         questaoDiscursiva.setQuestao(questao);
         questaoDiscursiva.setRespostaPadrao(resposta);
@@ -360,6 +375,8 @@ public class QuestaoController {
             }
         }
 
+        questao.setTipo("Redação");
+        questao.setNivel(nivel);
         Redacao redacao = new Redacao();
         redacao.setQuestao(questao);
 
@@ -619,6 +636,7 @@ public class QuestaoController {
         resposta = null;
         opcoes = null;
         assuntosSelecionados = new ArrayList<>();
+        nivel = null;
     }
 
     public String limparFormularioCadastro() {

@@ -105,6 +105,16 @@ public class AlunoController {
     private String turnoSelecionado;
     private List<String> turnosDisponiveis;
     private String ufAlterar;
+    private String motivoDesistencia;
+
+    public String getMotivoDesistencia() {
+        return motivoDesistencia;
+    }
+
+    public void setMotivoDesistencia(String motivoDesistencia) {
+        this.motivoDesistencia = motivoDesistencia;
+    }
+    
     
     public AlunoController() {
         enderecoEncontrado = true;
@@ -389,9 +399,13 @@ public class AlunoController {
         if(alunoDetalhe.getPessoa().getAtivo()){
             alunoDetalhe.getPessoa().setAtivo(false);
             alunoDetalhe.getPessoa().getUsuario().setAtivo(false);
+            alunoDetalhe.setDesistente(true);
+            alunoDetalhe.setMotivoDesistencia(motivoDesistencia);
         } else {
             alunoDetalhe.getPessoa().setAtivo(true);
             alunoDetalhe.getPessoa().getUsuario().setAtivo(true);
+            alunoDetalhe.setDesistente(false);
+            alunoDetalhe.setMotivoDesistencia(null);
         }
         
         if(!alunoHelper.alterarAtividade(alunoDetalhe)){
@@ -929,7 +943,7 @@ public class AlunoController {
         if (senha.length() > 6) {
             senha = senha.substring(0, 6);
         }
-        String corpoMessagem = emailHTML.replace("{1}", alunoDetalhe.getPessoa().getMatricula()).replace("{2}", senha);
+        String corpoMessagem = emailHTML.replace("{0}",alunoDetalhe.getCurso().getNome()).replace("{1}", alunoDetalhe.getPessoa().getMatricula()).replace("{2}", senha);
         Usuario usuario = loginHelper.getByIdPessoa(alunoDetalhe.getIdAluno());
         if(!loginHelper.alterarSenha(senha, usuario)){
             addMessage(null, FacesMessage.SEVERITY_INFO, "Não foi possivel recuperar senha!");

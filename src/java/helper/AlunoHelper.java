@@ -84,6 +84,7 @@ public class AlunoHelper {
             tx.begin();
             session.update(aluno.getPessoa());
             session.update(aluno.getPessoa().getUsuario());
+            session.update(aluno);
             session.flush();
             tx.commit();
         } catch (Exception e) {

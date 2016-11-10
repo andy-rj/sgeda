@@ -91,6 +91,29 @@ public class TurmaHelper {
             }
         }
         return true;    }
+    
+    public boolean atualizarSimulado(TurmaSimulado turmaSimulado) {
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.getTransaction();
+
+        try {
+            tx.begin();
+            session.update(turmaSimulado);
+            session.flush();
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return true;    
+    }
 
     public List<Turma> getTurmas(String stringConsulta) {
         session = HibernateUtil.getSessionFactory().openSession();

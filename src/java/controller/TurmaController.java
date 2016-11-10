@@ -1,6 +1,7 @@
 package controller;
 
 import entidade.Aluno;
+import entidade.AlunoSimulado;
 import entidade.Curso;
 import entidade.Disciplina;
 import entidade.Professor;
@@ -41,7 +42,9 @@ public class TurmaController {
     private Integer cursoSelecionado;
     private boolean cursoSelecionadoFlag;
     private List<Curso> cursosCadastrados;
+    private Date dataAberturaAlterar;
     private Date dataAberturaSimulado;
+    private Date dataEncerramentoAlterar;
     private Date dataEncerramentoSimulado;
     @NotNull(message = "Data de término é obrigatória!")
     @Future(message = "Data de término inválida!")
@@ -60,6 +63,7 @@ public class TurmaController {
     private Disciplina disciplinaAlterar;
     private DisciplinaHelper disciplinaHelper;
     private List<Disciplina> disciplinasDisponiveis;
+    private Date duracaoAlterar;
     private Date duracaoSimulado;
     private String nome;
     private ProfessorHelper professorHelper;
@@ -67,6 +71,7 @@ public class TurmaController {
     private List<String> professores;
     private Set<Professor> professoresAtivosAlterar;
     private List<Turma> resultadoConsulta;
+    private TurmaSimulado simuladoAlterar;
     private SimuladoHelper simuladoHelper;
     private Simulado simuladoSelecionado;
     List<Simulado> simuladosCadastrados;
@@ -80,6 +85,30 @@ public class TurmaController {
     List<Turma> turmasProfessor;
     private String turno;
     private String turnoAlterar;
+    private Aluno alunoDetalhe;
+
+    public Aluno getAlunoDetalhe() {
+        return alunoDetalhe;
+    }
+
+    public void setAlunoDetalhe(Aluno AlunoDetalhe) {
+        this.alunoDetalhe = AlunoDetalhe;
+    }
+    
+    private Turma alunoTurmaDetalhe;
+
+    public Turma getAlunoTurmaDetalhe() {
+        return alunoTurmaDetalhe;
+    }
+
+    public void setAlunoTurmaDetalhe(Turma alunoTurmaDetalhe) {
+        this.alunoTurmaDetalhe = alunoTurmaDetalhe;
+    }
+    
+    public void detalheAluno(Aluno aluno, Turma turma){
+        this.alunoDetalhe = aluno;
+        this.alunoTurmaDetalhe = turma;
+    }
 
     public TurmaController() {
         simuladoHelper = new SimuladoHelper();
@@ -100,6 +129,29 @@ public class TurmaController {
         FacesMessage message = new FacesMessage(severidade, summary, null);
         FacesContext.getCurrentInstance().addMessage(id, message);
     }
+    
+    public void alterarSimulado() {
+        
+        if(dataAberturaAlterar.after(dataEncerramentoAlterar)){
+            addMessage(null, FacesMessage.SEVERITY_ERROR, "Erro ao atualizar simulado! Data de abertura ou Data de Encerramento inválidas!");
+            return;
+        }
+        
+        if(duracaoAlterar.getHours()==0 && duracaoAlterar.getMinutes()==0&& duracaoAlterar.getSeconds()==0){
+            addMessage(null, FacesMessage.SEVERITY_ERROR, "Erro ao atualizar simulado! Duração inválida!");
+            return;
+        }
+        
+        simuladoAlterar.setDataAbertura(dataAberturaAlterar);
+        simuladoAlterar.setDataEncerramento(dataEncerramentoAlterar);
+        simuladoAlterar.setDuracao(duracaoAlterar);
+        
+        if (!turmaHelper.atualizarSimulado(simuladoAlterar)) {
+            addMessage(null, FacesMessage.SEVERITY_ERROR, "Erro ao atualizar simulado!");
+            return;
+        }
+        addMessage(null, FacesMessage.SEVERITY_INFO, "Simulado atualizado com sucesso!");
+    }
 
     public void adicionarSimuladoSelecionado() {
         TurmaSimulado turmaSimulado = new TurmaSimulado();
@@ -111,13 +163,14 @@ public class TurmaController {
         if (turmaProfessorDetalhe.getTurmaSimulados() == null) {
             turmaProfessorDetalhe.setTurmaSimulados(new HashSet<TurmaSimulado>());
         }
-        turmaProfessorDetalhe.getTurmaSimulados().add(turmaSimulado);
+        
         turmaSimulado.setId(new TurmaSimuladoId(simuladoSelecionado.getIdSimulado(), turmaProfessorDetalhe.getIdTurma()));
         if (!turmaHelper.cadastrarSimulado(turmaSimulado)) {
             addMessage(null, FacesMessage.SEVERITY_ERROR, "Erro ao incluir simulado!");
             return;
         }
         addMessage(null, FacesMessage.SEVERITY_INFO, "Simulado incluido com sucesso!");
+        turmaProfessorDetalhe.getTurmaSimulados().add(turmaSimulado);
     }
 
     public String alterarTurma() {
@@ -201,6 +254,37 @@ public class TurmaController {
         }
         professoresAtivosAlterar = new HashSet<>(turmaDetalhe.getDisciplina().getProfessoresAtivos());
         turnoAlterar = turmaDetalhe.getTurno();
+    }
+    
+    public void carregarAlterarSimulado(TurmaSimulado simulado) {
+        simuladoAlterar = simulado;
+        dataAberturaAlterar = (Date)simuladoAlterar.getDataAbertura().clone();
+        dataEncerramentoAlterar = (Date)simuladoAlterar.getDataEncerramento().clone();
+        duracaoAlterar = (Date)simuladoAlterar.getDuracao().clone();
+    }
+
+    public Date getDataAberturaAlterar() {
+        return dataAberturaAlterar;
+    }
+
+    public void setDataAberturaAlterar(Date dataAberturaAlterar) {
+        this.dataAberturaAlterar = dataAberturaAlterar;
+    }
+
+    public Date getDataEncerramentoAlterar() {
+        return dataEncerramentoAlterar;
+    }
+
+    public void setDataEncerramentoAlterar(Date dataEncerramentoAlterar) {
+        this.dataEncerramentoAlterar = dataEncerramentoAlterar;
+    }
+
+    public Date getDuracaoAlterar() {
+        return duracaoAlterar;
+    }
+
+    public void setDuracaoAlterar(Date duracaoAlterar) {
+        this.duracaoAlterar = duracaoAlterar;
     }
     
     public void consultar() {
@@ -463,6 +547,11 @@ public class TurmaController {
         alunoOnline = alunoHelper.getById(idAluno);
         return "/restrito/aluno/consulta/turma?faces-redirect=true";
     }
+    
+    public String novaConsultaSimuladoAluno(Integer idAluno) {
+        alunoOnline = alunoHelper.getById(idAluno);
+        return "/restrito/aluno/consulta/simulado?faces-redirect=true";
+    }
 
     public String novaConsultaProfessor(Integer idProfessor) {
         turmasProfessor = turmaHelper.getTurmasByIdProfessor(idProfessor);
@@ -475,6 +564,11 @@ public class TurmaController {
         }
 
         return "/restrito/professor/consulta/turma?faces-redirect=true";
+    }
+    
+    public String novaConsultaAlunoProfessor(Integer idProfessor) {
+        turmasProfessor = turmaHelper.getTurmasByIdProfessor(idProfessor);
+        return "/restrito/professor/consulta/aluno?faces-redirect=true";
     }
 
     public String novoCadastro() {
@@ -511,6 +605,53 @@ public class TurmaController {
             turma.setTurno(turno);
             turmas.add(turma);
         }
+    }
+    
+    private TurmaSimulado simuladoTurmaDetalhe;
+
+    public TurmaSimulado getSimuladoTurmaDetalhe() {
+        return simuladoTurmaDetalhe;
+    }
+
+    public void setSimuladoTurmaDetalhe(TurmaSimulado simuladoTurmaDetalhe) {
+        this.simuladoTurmaDetalhe = simuladoTurmaDetalhe;
+    }
+    
+    private AlunoSimulado simuladoAlunoDetalhe;
+
+    public AlunoSimulado getSimuladoAlunoDetalhe() {
+        return simuladoAlunoDetalhe;
+    }
+
+    public void setSimuladoAlunoDetalhe(AlunoSimulado simuladoAlunoDetalhe) {
+        this.simuladoAlunoDetalhe = simuladoAlunoDetalhe;
+    }
+    
+    public void detalheSimulado(TurmaSimulado simulado){
+        simuladoTurmaDetalhe = simulado;
+        simuladoAlunoDetalhe = getSimuladoAluno(simulado);
+    }
+    
+    public AlunoSimulado getSimuladoAluno(TurmaSimulado simulado){
+        for(AlunoSimulado ASimulado: alunoOnline.getAlunoSimulados()){
+            if(ASimulado.getTurmaSimulado().getId().equals(simulado.getId())){
+                return ASimulado;
+            }
+        }
+        return null;
+    }
+    
+    public AlunoSimulado getSimuladoAluno(TurmaSimulado simulado, Aluno aluno){
+        for(AlunoSimulado ASimulado: aluno.getAlunoSimulados()){
+            if(ASimulado.getTurmaSimulado().getId().equals(simulado.getId())){
+                return ASimulado;
+            }
+        }
+        return null;
+    }
+    
+    public Date dataRealizacaoSimulado(TurmaSimulado simulado){
+        return (getSimuladoAluno(simulado,alunoDetalhe)!=null? getSimuladoAluno(simulado,alunoDetalhe).getData():null);
     }
 
 }

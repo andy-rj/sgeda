@@ -41,46 +41,18 @@
             <p:outputPanel id="conteudoDetalhe">
                 <b:row>
                     <b:column colSm="2">
-                        <h:outputText value="Curso:"/> 
-                    </b:column>
-                    <b:column colSm="7">
-                        <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.curso.nome}"/> 
-                    </b:column>
-                </b:row>
-                <b:row>
-                    <b:column colSm="2">
-                        <h:outputText value="Turno:"/> 
-                    </b:column>
-                    <b:column colSm="7">
-                        <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.turno}"/> 
-                    </b:column>
-                </b:row>
-                <b:row>
-                    <b:column colSm="2">
-                        <h:outputText value="Data de Início:"/> 
-                    </b:column>
-                    <b:column colSm="7">
-                        <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.dataInicio}">
-                            <f:convertDateTime pattern="dd/MM/yyyy"/>
-                        </h:outputText>
-                    </b:column>
-                </b:row>
-                <b:row>
-                    <b:column colSm="2">
-                        <h:outputText value="Data de Término"/> 
-                    </b:column>
-                    <b:column colSm="7">
-                        <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.dataFim}">
-                            <f:convertDateTime pattern="dd/MM/yyyy"/>
-                        </h:outputText>
-                    </b:column>
-                </b:row>
-                <b:row>
-                    <b:column colSm="2">
                         <h:outputText value="Código:"/> 
                     </b:column>
                     <b:column colSm="7">
                         <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.nome}"/> 
+                    </b:column>
+                </b:row>
+                <b:row>
+                    <b:column colSm="2">
+                        <h:outputText value="Disciplina:"/> 
+                    </b:column>
+                    <b:column colSm="7">
+                        <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.disciplina.nome}"/> 
                     </b:column>
                 </b:row>
                 <b:row>
@@ -93,10 +65,26 @@
                 </b:row>
                 <b:row>
                     <b:column colSm="2">
-                        <h:outputText value="Disciplina:"/> 
+                        <h:outputText value="Professor:"/> 
                     </b:column>
                     <b:column colSm="7">
-                        <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.disciplina.nome}"/> 
+                        <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.professor.pessoa.nome}"/> 
+                    </b:column>
+                </b:row>
+                <b:row>
+                    <b:column colSm="2">
+                        <h:outputText value="Turno:"/> 
+                    </b:column>
+                    <b:column colSm="7">
+                        <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.turno}"/> 
+                    </b:column>
+                </b:row>
+                <b:row>
+                    <b:column colSm="2">
+                        <h:outputText value="Curso:"/> 
+                    </b:column>
+                    <b:column colSm="7">
+                        <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.curso.nome}"/> 
                     </b:column>
                 </b:row>
 
@@ -108,7 +96,7 @@
 
                 <b:row>
                     <b:column>
-                        <p:dataTable emptyMessage="Não existem simulados para essa turma" var="simulado" value="#{turmaController.turmaAlunoDetalhe.turma.turmaSimulados}">
+                        <p:dataTable emptyMessage="Não existem simulados para essa turma" var="simulado" value="#{turmaController.turmaAlunoDetalhe.turma.turmaSimuladosListOrd}">
                             <f:facet name="header">
                                 <h:outputText value="Simulados"/>
                             </f:facet>
@@ -118,11 +106,11 @@
                             <p:column headerText="Descrição">
                                 <h:outputText value="#{simulado.simulado.descricao}"/>
                             </p:column>
-                            <p:column headerText="Abertura">
+<!--                            <p:column headerText="Abertura">
                                 <h:outputText value="#{simulado.dataAbertura}">
                                     <f:convertDateTime pattern="dd/MM/yyyy"/>
                                 </h:outputText>
-                            </p:column>
+                            </p:column>-->
                             <p:column headerText="Encerramento">
                                 <h:outputText value="#{simulado.dataEncerramento}">
                                     <f:convertDateTime pattern="dd/MM/yyyy"/>
@@ -130,16 +118,17 @@
                             </p:column>
                             <p:column headerText="Duração">
                                 <h:outputText value="#{simulado.duracao}">
-                                    <f:convertDateTime pattern="hh:mm:ss"/>
+                                    <f:convertDateTime pattern="HH:mm:ss"/>
                                 </h:outputText>
                             </p:column>
-                            <p:column style="text-align: center" headerText="">
-                                <b:label rendered="#{not turmaController.turmaAlunoDetalhe.aluno.simuladoRealizado(simulado.simulado)}" text="aberto" severity="danger"/>
-                                <b:label rendered="#{turmaController.turmaAlunoDetalhe.aluno.simuladoRealizado(simulado.simulado)}" text="realizado" severity="info"/>
+                            <p:column style="text-align: center ;width:100px" headerText="">
+                                <b:label rendered="#{not turmaController.turmaAlunoDetalhe.aluno.simuladoRealizado(simulado) and simulado.simuladoAberto}" text="aberto" severity="danger"/>
+                                <b:label rendered="#{turmaController.turmaAlunoDetalhe.aluno.simuladoRealizado(simulado)}" text="realizado" severity="info"/>
+                                <b:label rendered="#{not turmaController.turmaAlunoDetalhe.aluno.simuladoRealizado(simulado) and not simulado.simuladoAberto}" text="fora do prazo" severity="danger"/>
                             </p:column>
 
                             <p:column style="width: 115px;" headerText="">
-                                <p:commandButton rendered="#{not turmaController.turmaAlunoDetalhe.aluno.simuladoRealizado(simulado.simulado)}" value="Realizar" process="@this" update=":#{p:component('conteudoRealizarSimulado')}" oncomplete="PF('modalRealizarSimulado').show();PF('modalDetalheTurma').hide();" action="#{alunoSimuladoController.realizarSimulado(simulado)}"/>
+                                <p:commandButton rendered="#{not turmaController.turmaAlunoDetalhe.aluno.simuladoRealizado(simulado) and simulado.simuladoAberto}" value="Realizar" process="@this" update=":#{p:component('conteudoRealizarSimulado')}" oncomplete="PF('modalRealizarSimulado').show();PF('modalDetalheTurma').hide();" action="#{alunoSimuladoController.realizarSimulado(simulado)}"/>
                             </p:column>
                         </p:dataTable> 
                     </b:column>
@@ -176,11 +165,8 @@
                                         <p:column headerText="Professor">
                                             <h:outputText value="#{turma.turma.professor.pessoa.nome}"/>
                                         </p:column>
-                                        <p:column headerText="Curso">
-                                            <h:outputText value="#{turma.turma.curso.nome}"/>
-                                        </p:column>
-                                        <p:column style="width: 100px;text-align: center" headerText="Simulado">
-                                            <b:label style="margin-left: 3px;" rendered="#{turma.turma.simuladoAberto}" text="aberto" severity="danger"/>
+                                        <p:column style="width: 140px;text-align: center" headerText="">
+                                            <b:label style="margin-left: 3px;" rendered="#{not turma.turma.isSimuladosAbertosRealizados(turmaController.alunoOnline) and turma.turma.simuladoAberto}" text="Simulado aberto" severity="danger"/>
                                         </p:column>
                                         <p:column style="width: 115px;" headerText="">
                                             <p:commandButton value="Detalhes" process="@this" update=":#{p:component('conteudoDetalhe')}" oncomplete="PF('modalDetalheTurma').show();" action="#{turmaController.detalheTurmaAluno(turma)}"/>

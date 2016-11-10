@@ -17,6 +17,57 @@
     <h:body style="background-color: #e3e3e3">
 
         <h:form id="consulta">
+            
+            <p:dialog modal="true" draggable="false" width="600" height="400" header="Alterar Simulado"
+                      maximizable="true" widgetVar="modalAlterarSimulado" resizable="false" footer="" >
+                <p:outputPanel id="painelAlterarSimulado">
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputText value="Data de Abertura" />
+                        </b:column>
+                        <b:column colSm="7">
+                            <p:calendar id="dataAberturaA" value="#{turmaController.dataAberturaAlterar}" locale="pt" navigator="true" pattern="dd-MM-yyyy" yearRange="c:c">
+                                <f:validateBean />
+                            </p:calendar>
+                        </b:column>
+                        <b:column colSm="3">
+                            <b:message for="dataAbertura"/>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputText value="Data de Encerramento" />
+                        </b:column>
+                        <b:column colSm="7">
+                            <p:calendar id="dataEncerramentoA" value="#{turmaController.dataEncerramentoAlterar}" locale="pt" navigator="true" pattern="dd-MM-yyyy" yearRange="c:c">
+                                <f:validateBean />
+                            </p:calendar>
+                        </b:column>
+                        <b:column colSm="3">
+                            <b:message for="dataEncerramento"/>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputText value="Duração:" />
+                        </b:column>
+                        <b:column colSm="7">
+                            <p:calendar id="duracaoA" value="#{turmaController.duracaoAlterar}" locale="pt" pattern="HH:mm" timeOnly="true" title="Tempo">
+                            </p:calendar>
+                        </b:column>
+                        <b:column colSm="3">
+                            <b:message for="duracao"/>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column>
+                            <p:commandButton process="@this duracaoA dataAberturaA dataEncerramentoA" update=":#{p:component('conteudoDetalhe')} :#{p:component('info')}" value="Confirmar" action="#{turmaController.alterarSimulado()}" oncomplete="PF('modalAlterarSimulado').hide();" />
+                        </b:column>
+                    </b:row>
+
+                    
+                </p:outputPanel>
+            </p:dialog>
 
             <p:dialog modal="true" draggable="false" width="600" height="400" header="Simulado"
                       maximizable="true" widgetVar="modalConfirma" resizable="false" footer="" onHide="PF('modalSimulados').show();">
@@ -139,7 +190,7 @@
                 </p:outputPanel>
             </p:dialog>
 
-            <p:dialog modal="true" draggable="false" width="600" height="400" header="Detalhes"
+            <p:dialog modal="true" draggable="false" width="800" height="500" header="Detalhes"
                       maximizable="true" widgetVar="modalDetalheTurma" resizable="false" footer="">
                 <p:outputPanel id="conteudoDetalhe">
                     <b:row>
@@ -233,8 +284,11 @@
                                 </p:column>
                                 <p:column headerText="Duração">
                                     <h:outputText value="#{simulado.duracao}">
-                                        <f:convertDateTime pattern="hh:mm:ss"/>
+                                        <f:convertDateTime pattern="HH:mm:ss"/>
                                     </h:outputText>
+                                </p:column>
+                                <p:column headerText="">
+                                    <p:commandButton value="Alterar" oncomplete="PF('modalAlterarSimulado').show();" update=":#{p:component('painelAlterarSimulado')}" action="#{turmaController.carregarAlterarSimulado(simulado)}"/> 
                                 </p:column>
                             </p:dataTable> 
                         </b:column>

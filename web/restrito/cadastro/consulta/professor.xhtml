@@ -501,7 +501,7 @@
                                          PF('modalAlterar').show();" value="Alterar"/>
                         <p:commandButton rendered="#{professorController.professorDetalhe.pessoa.ativo}" action="#{professorController.alterarAtividade}" ajax="true" process="@this" update="footer :#{p:component('resultado')}  :#{p:component('info')} :#{p:component('detalheProfessor')}" value="Inativar Professor"/>
                         <p:commandButton rendered="#{not professorController.professorDetalhe.pessoa.ativo}" action="#{professorController.alterarAtividade}" ajax="true" process="@this" update="footer :#{p:component('resultado')}  :#{p:component('info')} :#{p:component('detalheProfessor')}" value="Reativar Professor"/>
-                        <p:commandButton  update=":#{p:component('info')}" action="#{professorController.reenviarEmail}" onclick="return confirm('Confirma o envio do email?');" value="Enviar email"/>
+                        <p:commandButton process="@this" update=":#{p:component('info')}" action="#{professorController.reenviarEmail}" onclick="return confirm('Confirma o envio do email?');" value="Enviar email"/>
                     </b:row>
                 </f:facet>
             </p:dialog>

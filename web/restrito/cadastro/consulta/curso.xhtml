@@ -22,7 +22,7 @@
             modal de alteração de dados
             ***************************-->
             <p:dialog rendered="#{loginController.usuarioLogado.administrador}" header="Alterar Curso" modal="true" resizable="false"  draggable="false" widgetVar="modalAlterar"
-                      minimizable="true" maximizable="true" width="700" height="300">
+                      minimizable="true" maximizable="true" width="700" height="300" onHide="PF('modalDetalhe').show();">
                 <p:outputPanel id="alterarCurso">
                     <b:row>
                         <b:column colSm="2">
@@ -98,9 +98,8 @@
                     </b:row>
                 </p:outputPanel>
                 <f:facet name="footer">
-                    <p:commandButton value="Fechar" onclick="PF('modalAlterar').hide();
-                            PF('modalDetalhe').show();" />
-                    <p:commandButton action="#{cursoController.salvarAlteracao}" ajax="true" process="@this alterarCurso" update="alterarCurso :#{p:component('resultado')}  :#{p:component('info')} :#{p:component('detalheCurso')}" value="Salvar"/>
+                    <p:commandButton value="Salvar" process="@this :#{p:component('alterarCurso')}" update=":#{p:component('alterarCurso')} :#{p:component('resultado')} :#{p:component('info')} :#{p:component('detalheCurso')}" action="#{cursoController.salvarAlteracao}" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('modalAlterar').hide()" />
+                    <p:commandButton value="Fechar" onclick="PF('modalAlterar').hide();" />
                 </f:facet>
             </p:dialog>
 

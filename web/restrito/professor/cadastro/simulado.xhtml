@@ -26,6 +26,7 @@
                         <p:dataTable id="checkboxQuestoes" widgetVar="tableQuestoes" var="questao" value="#{simuladoController.questoesCadastradas}" 
                                      selection="#{simuladoController.questaoSelecionada}" selectionMode="single" rowKey="#{questao.idQuestao}" 
                                      style="margin-bottom:0" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     paginatorPosition="bottom"
                                      rowsPerPageTemplate="5,10,15" emptyMessage="Não foram encontradas questãos para esses critérios!"
                                      filteredValue="#{simuladoController.questoesFiltradas}">
                             <f:facet name="header">
@@ -37,9 +38,25 @@
                             <p:column style="text-align: center;width: 73px;" headerText="Código">
                                 <h:outputText value="#{questao.idQuestao}" />
                             </p:column>
+                            <p:column style="text-align: center;" filterBy="#{questao.tipo}" filterMatchMode="in" >
+                                <f:facet name="filter">
+                                    <p:selectCheckboxMenu label="tipo" onchange="PF('tableQuestoes').filter()" panelStyle="width:125px" scrollHeight="150">
+                                        <f:selectItems value="#{simuladoController.tipos}" />
+                                    </p:selectCheckboxMenu>
+                                </f:facet>
+                                <h:outputText value="#{questao.tipo}" />
+                            </p:column>
+                            <p:column style="text-align: center;" filterBy="#{questao.nivel}" filterMatchMode="in" >
+                                <f:facet name="filter">
+                                    <p:selectCheckboxMenu label="nível" onchange="PF('tableQuestoes').filter()" panelStyle="width:125px" scrollHeight="150">
+                                        <f:selectItems value="#{simuladoController.niveis}" />
+                                    </p:selectCheckboxMenu>
+                                </f:facet>
+                                <h:outputText value="#{questao.nivel}" />
+                            </p:column>
                             <p:column style="text-align: center;" filterBy="#{questao.instituicao}" filterMatchMode="in" >
                                 <f:facet name="filter">
-                                    <p:selectCheckboxMenu label="instituicoes" onchange="PF('tableQuestoes').filter()" panelStyle="width:225px" scrollHeight="150">
+                                    <p:selectCheckboxMenu label="instituição" onchange="PF('tableQuestoes').filter()" panelStyle="width:225px" scrollHeight="150">
                                         <f:selectItems value="#{simuladoController.instituicoes}" />
                                     </p:selectCheckboxMenu>
                                 </f:facet>
@@ -47,7 +64,7 @@
                             </p:column>
                             <p:column style="text-align: center;width: 86px;" filterBy="#{questao.ano}" filterMatchMode="in" >
                                 <f:facet name="filter">
-                                    <p:selectCheckboxMenu label="anos" onchange="PF('tableQuestoes').filter()" panelStyle="width:125px" scrollHeight="150">
+                                    <p:selectCheckboxMenu label="ano" onchange="PF('tableQuestoes').filter()" panelStyle="width:125px" scrollHeight="150">
                                         <f:selectItems value="#{simuladoController.anos}" />
                                     </p:selectCheckboxMenu>
                                 </f:facet>
@@ -55,7 +72,7 @@
                             </p:column>
                             <p:column style="text-align: center;" filterBy="#{questao.professor.pessoa.nome}" filterMatchMode="in">
                                 <f:facet name="filter">
-                                    <p:selectCheckboxMenu label="professores" onchange="PF('tableQuestoes').filter()" panelStyle="width:270px" scrollHeight="150">
+                                    <p:selectCheckboxMenu label="professore" onchange="PF('tableQuestoes').filter()" panelStyle="width:270px" scrollHeight="150">
                                         <f:selectItems value="#{simuladoController.professores}" />
                                     </p:selectCheckboxMenu>
                                 </f:facet>
@@ -63,7 +80,7 @@
                             </p:column>
                             <p:column style="text-align: center;" filterBy="#{questao.disciplina.nome}" filterMatchMode="in">
                                 <f:facet name="filter">
-                                    <p:selectCheckboxMenu label="disciplinas" onchange="PF('tableQuestoes').filter()" panelStyle="width:200px" scrollHeight="150">
+                                    <p:selectCheckboxMenu label="disciplina" onchange="PF('tableQuestoes').filter()" panelStyle="width:200px" scrollHeight="150">
                                         <f:selectItems value="#{simuladoController.disciplinas}" />
                                     </p:selectCheckboxMenu>
                                 </f:facet>
@@ -71,7 +88,7 @@
                             </p:column>
                             <p:column style="text-align: center;" filterBy="#{questao.assuntos}" filterFunction="#{simuladoController.filtroPorAssunto}">
                                 <f:facet name="filter">
-                                    <p:selectCheckboxMenu label="assuntos" onchange="PF('tableQuestoes').filter()" panelStyle="width:200px" scrollHeight="150">
+                                    <p:selectCheckboxMenu label="assunto" onchange="PF('tableQuestoes').filter()" panelStyle="width:200px" scrollHeight="150">
                                         <f:selectItems value="#{simuladoController.assuntos}" />
                                     </p:selectCheckboxMenu>
                                 </f:facet>

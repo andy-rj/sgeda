@@ -155,16 +155,13 @@
         <b:navBar id="navBarAluno" rendered="#{loginController.usuarioLogado.aluno}" style="border-top: none; border-radius: 0%;background-color: rgb(10, 58, 86);border:none;" >
             <b:navbarLinks style="margin-left: 130px;">
                 <b:navCommandLink value="Turmas" action="#{turmaController.novaConsultaAluno(loginController.usuarioLogado.pessoa.idPessoa)}" immediate="true"/>
-                <b:navCommandLink value="Simulados" action="#{professorController.turmas}" immediate="true"/>
-                <b:navCommandLink value="Notas" action="#{alunoController.desempenho}" immediate="true"/>
+                <b:navCommandLink value="Simulados" action="#{turmaController.novaConsultaSimuladoAluno(loginController.usuarioLogado.pessoa.idPessoa)}" immediate="true"/>
                 <b:navCommandLink value="Desempenho" action="#{alunoController.desempenho}" immediate="true"/>
             </b:navbarLinks>
         </b:navBar>
         <b:navBar id="navBarProfessor" rendered="#{loginController.usuarioLogado.professor}" style="border-top: none; border-radius: 0%;background-color: rgb(10, 58, 86);border:none;" >
             <b:navbarLinks style="margin-left: 130px;">
-                <b:dropMenu value="Aluno">
-                    <b:navCommandLink value="Consultar" action="#{alunoController.novaConsultaProfessor(loginController.usuarioLogado.pessoa.idPessoa)}" immediate="true"/>
-                </b:dropMenu>
+                <b:navCommandLink value="Gerenciar Aluno" action="#{turmaController.novaConsultaAlunoProfessor(loginController.usuarioLogado.pessoa.idPessoa)}" immediate="true"/>
                 <b:dropMenu value="Questão">
                     <b:dropMenu value="Cadastrar">
                         <b:navCommandLink value="Objetiva" action="#{questaoController.novoCadastroObjetiva(loginController.usuarioLogado.pessoa.idPessoa)}" immediate="true"/>
@@ -177,9 +174,7 @@
                     <b:navCommandLink value="Cadastrar" action="#{simuladoController.novoCadastro(loginController.usuarioLogado.pessoa.idPessoa)}" immediate="true"/>
                     <b:navCommandLink value="Consultar" action="#{simuladoController.novaConsulta}" immediate="true"/>
                 </b:dropMenu>
-                <b:dropMenu value="Turma">
-                    <b:navCommandLink value="Consultar" action="#{turmaController.novaConsultaProfessor(loginController.usuarioLogado.pessoa.idPessoa)}" immediate="true"/>
-                </b:dropMenu>
+                    <b:navCommandLink value="Gerenciar Turma" action="#{turmaController.novaConsultaProfessor(loginController.usuarioLogado.pessoa.idPessoa)}" immediate="true"/>
             </b:navbarLinks>
         </b:navBar>
     </h:body>

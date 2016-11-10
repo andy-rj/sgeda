@@ -34,6 +34,15 @@ public class SimuladoController {
     private List<SimuladoQuestao> questoesSelecionadas;
     private ProfessorHelper professorHelper;
     private SimuladoHelper simuladoHelper;
+    private List<String> niveis;
+
+    public List<String> getNiveis() {
+        return niveis;
+    }
+
+    public void setNiveis(List<String> niveis) {
+        this.niveis = niveis;
+    }
     
     public List<SimuladoQuestao> getQuestoesSelecionadas() {
         return questoesSelecionadas;
@@ -173,6 +182,14 @@ public class SimuladoController {
         return disciplinas;
     }
 
+    public List<String> getTipos() {
+        return tipos;
+    }
+
+    public void setTipos(List<String> tipos) {
+        this.tipos = tipos;
+    }
+
     public List<String> getAssuntos() {
         return assuntos;
     }
@@ -180,7 +197,7 @@ public class SimuladoController {
     private List<String> professores;
     private List<String> disciplinas;
     private List<String> assuntos;
-
+    private List<String> tipos;
     private Professor professor;
     public String novoCadastro(Integer idProfessorAtual) {
         this.professor = professorHelper.getById(idProfessorAtual);
@@ -192,6 +209,9 @@ public class SimuladoController {
             disciplinas = new ArrayList<>();
             professores = new ArrayList<>();
             instituicoes = new ArrayList<>();
+            tipos = new ArrayList<>();
+            niveis = new ArrayList<>();
+            
             for (Questao questao : questoesCadastradas) {
                 if (!anos.contains(questao.getAno())) {
                     anos.add(questao.getAno());
@@ -204,6 +224,12 @@ public class SimuladoController {
                 }
                 if (!disciplinas.contains(questao.getDisciplina().getNome())) {
                     disciplinas.add(questao.getDisciplina().getNome());
+                }
+                if (!tipos.contains(questao.getTipo())) {
+                    tipos.add(questao.getTipo());
+                }
+                if (!niveis.contains(questao.getNivel())) {
+                    niveis.add(questao.getNivel());
                 }
                 if (questao.getAssuntos()!= null) {
                     for (Assunto assunto : questao.getAssuntos()) {
@@ -218,6 +244,8 @@ public class SimuladoController {
             Collections.sort(assuntos);
             Collections.sort(disciplinas);
             Collections.sort(professores);
+            Collections.sort(niveis);
+            Collections.sort(tipos);
         }
         return "/restrito/professor/cadastro/simulado?faces-redirect=true";
     }

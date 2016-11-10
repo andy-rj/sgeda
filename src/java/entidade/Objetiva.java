@@ -88,7 +88,21 @@ public class Objetiva  implements java.io.Serializable {
         return opcoesList ;
     }
 
-
+    @Transient
+    public String getOpcaoCorreta(){
+        for(Opcao opcao: opcaos){
+            if(opcao.getCorreta()) return opcao.getOpcao().toString();
+        }
+        return null;
+    }
+    
+    @Transient
+    public String getTextoOpcaoCorreta(){
+        for(Opcao opcao: opcaos){
+            if(opcao.getCorreta()) return opcao.getDescricao();
+        }
+        return null;
+    }
 
 
 }

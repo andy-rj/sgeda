@@ -1,12 +1,16 @@
 package controller;
 
+import entidade.Aluno;
+import entidade.AlunoSimulado;
 import entidade.Disciplina;
 import entidade.Endereco;
 import entidade.Foto;
 import entidade.Papel;
 import entidade.Pessoa;
 import entidade.Professor;
+import entidade.Simulado;
 import entidade.Telefone;
+import entidade.TurmaSimulado;
 import entidade.Usuario;
 import helper.DisciplinaHelper;
 import helper.LoginHelper;
@@ -35,6 +39,7 @@ import util.EmailSender;
 @ManagedBean
 @SessionScoped
 public class ProfessorController {
+    private AlunoSimulado alunoSimuladoCorrigir;
     private Boolean ativoAlterar;
     private String bairro;
     private String bairroAlterar;
@@ -107,6 +112,14 @@ public class ProfessorController {
                 
     }
 
+    public AlunoSimulado getAlunoSimuladoCorrigir() {
+        return alunoSimuladoCorrigir;
+    }
+
+    public void setAlunoSimuladoCorrigir(AlunoSimulado alunoSimuladoCorrigir) {
+        this.alunoSimuladoCorrigir = alunoSimuladoCorrigir;
+    }
+
     public void addMessage(String id, String summary) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, summary,  null);
         FacesContext.getCurrentInstance().addMessage(id, message);
@@ -115,6 +128,14 @@ public class ProfessorController {
     public void addMessage(String id, Severity severidade, String summary) {
         FacesMessage message = new FacesMessage(severidade, summary,  null);
         FacesContext.getCurrentInstance().addMessage(id, message);
+    }
+    
+    public void salvarNotaSimulado(){
+        if(!professorHelper.salvarNotasSimulado(alunoSimuladoCorrigir)){
+            addMessage(null, FacesMessage.SEVERITY_ERROR, "Erro ao salvar notas, Tente novamente!");
+            return;
+        }
+        addMessage(null, FacesMessage.SEVERITY_INFO, "Notas salvas com sucesso!");
     }
 
     public void alterarAtividade() {
@@ -923,6 +944,15 @@ public class ProfessorController {
         consultar();
         professorDetalhe = professorAlterar;
         carregarAlterar();
+    }
+    
+    public void corrigirSimulado(Aluno aluno, TurmaSimulado simulado){
+        for(AlunoSimulado alunoSimulado: aluno.getAlunoSimulados()){
+            if(alunoSimulado.getTurmaSimulado().getId().equals(simulado.getId())){
+                alunoSimuladoCorrigir = alunoSimulado;
+                break;
+            }
+        }
     }
  
 

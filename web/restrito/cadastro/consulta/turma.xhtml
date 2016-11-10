@@ -25,32 +25,6 @@
                 <p:outputPanel id="alterarTurma">
                     <b:row>
                         <b:column colSm="2">
-                            <h:outputLabel value="Código " />
-                        </b:column>
-                        <b:column colSm="7">
-                            <p:inputText id="codigoAlterar" value="#{turmaController.codigoAlterar}" maxlength="10" validatorMessage="Código é obrigatório e deve ter até 10 caracteres!" >
-                                <f:validateRequired/>
-                            </p:inputText>
-                        </b:column>
-                        <b:column>
-                            <b:message for="codigoAlterar"/>
-                        </b:column>
-                    </b:row>
-                    <b:row>
-                        <b:column colSm="2">
-                            <h:outputLabel value="Descrição:" />
-                        </b:column>
-                        <b:column colSm="7">
-                            <p:inputText id="descricaoAlterar" value="#{turmaController.descricaoAlterar}" maxlength="255" validatorMessage="Descrição é obrigatório e deve ter até 255 caracteres!" style="width: 100%" >
-                                <f:validateRequired/>
-                            </p:inputText>
-                        </b:column>
-                        <b:column>
-                            <b:message for="descricaoAlterar"/>
-                        </b:column>
-                    </b:row>
-                    <b:row>
-                        <b:column colSm="2">
                             <h:outputLabel value="Professor:" />
                         </b:column>
                         <b:column colSm="7">
@@ -122,26 +96,10 @@
                 <p:outputPanel id="detalheTurma">
                     <b:row>
                         <b:column colSm="2">
-                            <h:outputLabel value="Código: " />
-                        </b:column>
-                        <b:column colSm="10">
-                            <h:outputText id="codigo" value="#{turmaController.turmaDetalhe.nome}" />   
-                        </b:column>
-                    </b:row>
-                    <b:row>
-                        <b:column colSm="2">
                             <h:outputLabel value="Disciplina: " />
                         </b:column>
                         <b:column colSm="10">
                             <h:outputText id="nome" value="#{turmaController.turmaDetalhe.disciplina.nome}" />   
-                        </b:column>
-                    </b:row>
-                    <b:row>
-                        <b:column colSm="2">
-                            <h:outputLabel value="Descrição:" />
-                        </b:column>
-                        <b:column colSm="10">
-                            <h:outputText id="descricao" value="#{turmaController.turmaDetalhe.descricao}" />   
                         </b:column>
                     </b:row>
                     <b:row>
@@ -244,14 +202,8 @@
                                                  paginator="true"
                                                  paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink} {RowsPerPageDropdown}"
                                                  rowsPerPageTemplate="5,10,15">
-                                        <p:column headerText="Código" style="width: 120px;" sortBy="#{turma.nome}">
-                                            <h:outputText id="nome" value="#{turma.nome}" />
-                                        </p:column>
                                         <p:column headerText="Disciplina" sortBy="#{turma.disciplina.nome}">
                                             <h:outputText value="#{turma.disciplina.nome}" />
-                                        </p:column>
-                                        <p:column headerText="Descrição" sortBy="#{turma.descricao}">
-                                            <h:outputText value="#{turma.descricao}" />
                                         </p:column>
                                         <p:column headerText="Curso" sortBy="#{turma.curso.nome}">
                                             <h:outputText value="#{turma.curso.nome}" />
