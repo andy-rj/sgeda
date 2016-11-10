@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Curso Idealizar</title>
+        <style type="text/css">
+            .ui-growl {
+                z-index:9999 !important;
+            }
+        </style>
+    </h:head>
+    <h:body style="background-color: #e3e3e3">
+        <h:form id="cadastro">
+            
+            <p:dialog header="Filtros" modal="true" resizable="false"  draggable="false" widgetVar="modalFiltro"
+                      minimizable="false" maximizable="false" width="400" height="100" visible="true">
+                <p:outputPanel id="painelFiltro">
+                    <b:row>
+                        <b:column colSm="2">
+                            <b:commandButton value="Filtrar" update=":#{p:component('container')}" action="#{relatorioController.gerarRelatorioMatricula}" oncomplete="PF('modalFiltro').hide();"/>
+                        </b:column>
+                    </b:row>
+                </p:outputPanel>
+            </p:dialog>
+            
+            <p:growl  globalOnly="true" id="info"/>
+            <b:fetchBeanInfos/>
+            <ui:insert name="navbar">
+                <ui:include src="/template/navbar.xhtml"/>
+            </ui:insert>
+            <b:container id="container">
+                <b:row style="margin-left: -45px; margin-right: -45px;">
+                    <b:column>
+                        <b:panel title="Relátorio de Matrículas" collapsible="false" look="info">
+                            <b:row>
+                                <b:column>
+                                    <p:chart rendered="#{not empty relatorioController.horizontalBarModel}" type="bar" model="#{relatorioController.horizontalBarModel}" style="height:300px"/>
+                                </b:column>
+                            </b:row>
+                        </b:panel>
+                    </b:column>
+                </b:row>
+            </b:container>
+        </h:form>
+    </h:body>
+</html>
+
