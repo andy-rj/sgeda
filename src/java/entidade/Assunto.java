@@ -59,7 +59,7 @@ public class Assunto  implements java.io.Serializable {
         this.idAssunto = idAssunto;
     }
 
-@ManyToOne(fetch=FetchType.EAGER)
+@ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="idDisciplina", nullable=false)
     public Disciplina getDisciplina() {
         return this.disciplina;

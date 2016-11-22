@@ -12,10 +12,13 @@
             .ui-growl {
                 z-index:9999 !important;
             }
+            .ui-dialog-titlebar-close {
+                margin-top: 0px !important;
+            }
         </style>
     </h:head>
     <h:body style="background-color: #e3e3e3">
-
+        <h:form id="consulta">
         <p:dialog modal="true" draggable="false" width="700" height="300" header="Realizar Simulado" closable="false"
                   widgetVar="modalRealizarSimulado" resizable="false" footer="" onHide="PF('modalDetalheTurma').show();">
             <p:outputPanel id="conteudoRealizarSimulado">
@@ -43,15 +46,18 @@
                     <b:column colSm="2">
                         <h:outputText value="Código:"/> 
                     </b:column>
-                    <b:column colSm="7">
+                    <b:column colSm="4">
                         <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.nome}"/> 
                     </b:column>
+<!--                    <b:column colSm="6">
+                        <p:chart type="line" model="#{relatorioAlunoController.lineModel2}" style="height:200px;"/>
+                    </b:column>-->
                 </b:row>
                 <b:row>
                     <b:column colSm="2">
                         <h:outputText value="Disciplina:"/> 
                     </b:column>
-                    <b:column colSm="7">
+                    <b:column colSm="4">
                         <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.disciplina.nome}"/> 
                     </b:column>
                 </b:row>
@@ -59,7 +65,7 @@
                     <b:column colSm="2">
                         <h:outputText value="Descrição:"/> 
                     </b:column>
-                    <b:column colSm="7">
+                    <b:column colSm="4">
                         <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.descricao}"/> 
                     </b:column>
                 </b:row>
@@ -67,7 +73,7 @@
                     <b:column colSm="2">
                         <h:outputText value="Professor:"/> 
                     </b:column>
-                    <b:column colSm="7">
+                    <b:column colSm="4">
                         <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.professor.pessoa.nome}"/> 
                     </b:column>
                 </b:row>
@@ -75,7 +81,7 @@
                     <b:column colSm="2">
                         <h:outputText value="Turno:"/> 
                     </b:column>
-                    <b:column colSm="7">
+                    <b:column colSm="4">
                         <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.turno}"/> 
                     </b:column>
                 </b:row>
@@ -83,12 +89,12 @@
                     <b:column colSm="2">
                         <h:outputText value="Curso:"/> 
                     </b:column>
-                    <b:column colSm="7">
+                    <b:column colSm="4">
                         <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.curso.nome}"/> 
                     </b:column>
                 </b:row>
 
-                <b:row>
+                <b:row style="margin-top: 85px;">
                     <b:column>
                         <p:separator/> 
                     </b:column>
@@ -135,11 +141,11 @@
                 </b:row>
             </p:outputPanel>
             <f:facet name="footer">
-                <p:commandButton onclick="PF('modalDetalheTurma').hide();" value="Fechar"/>
+                <b:commandButton onclick="PF('modalDetalheTurma').hide();" value="Fechar" look="info"/>
             </f:facet>
         </p:dialog>
 
-        <h:form id="consulta">
+        
             <p:growl  globalOnly="true" id="info"  />
             <b:fetchBeanInfos/>
             <ui:insert name="navbar">
@@ -168,10 +174,11 @@
                                         <p:column style="width: 140px;text-align: center" headerText="">
                                             <b:label style="margin-left: 3px;" rendered="#{not turma.turma.isSimuladosAbertosRealizados(turmaController.alunoOnline) and turma.turma.simuladoAberto}" text="Simulado aberto" severity="danger"/>
                                         </p:column>
-                                        <p:column style="width: 115px;" headerText="">
-                                            <p:commandButton value="Detalhes" process="@this" update=":#{p:component('conteudoDetalhe')}" oncomplete="PF('modalDetalheTurma').show();" action="#{turmaController.detalheTurmaAluno(turma)}"/>
+                                        <p:column style="width: 75px;text-align: center">
+                                            <p:commandLink update=":#{p:component('conteudoDetalhe')}" action="#{turmaController.detalheTurmaAluno(turma)}" oncomplete="PF('modalDetalheTurma').show();" title="Detalhes"  style="margin-right: 5px;">
+                                                <h:graphicImage url="/resource/imagens/detalhe.png" width="24" height="24"/>
+                                            </p:commandLink>
                                         </p:column>
-
                                     </p:dataTable>
                                 </b:column>
                             </b:row>

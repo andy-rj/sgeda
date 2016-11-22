@@ -141,7 +141,7 @@ public class Turma implements java.io.Serializable {
         this.turno = turno;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "turma")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "turma")
     public Set<TurmaSimulado> getTurmaSimulados() {
         return this.turmaSimulados;
     }
@@ -150,7 +150,7 @@ public class Turma implements java.io.Serializable {
         this.turmaSimulados = turmaSimulados;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "turma")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "turma")
     public Set<TurmaAluno> getTurmaAlunos() {
         return this.turmaAlunos;
     }

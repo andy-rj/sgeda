@@ -46,7 +46,7 @@ public class QuestaoController {
     private DisciplinaHelper disciplinaHelper;
     private String disciplinaSelecionada;
     private List<Disciplina> disciplinasDisponiveis;
-    private String entradaConsulta;
+    private String stringConsulta;
     private String enunciado;
     private Figura figura;
     private List<Figura> figuras;
@@ -65,6 +65,15 @@ public class QuestaoController {
     boolean uploaded;
     private int width;
     private String nivel;
+    private Integer dificuldade;
+
+    public Integer getDificuldade() {
+        return dificuldade;
+    }
+
+    public void setDificuldade(Integer dificuldade) {
+        this.dificuldade = dificuldade;
+    }
 
     public String getNivel() {
         return nivel;
@@ -189,6 +198,7 @@ public class QuestaoController {
 
         questao.setTipo("Objetiva");
         questao.setNivel(nivel);
+        questao.setDificuldade(dificuldade);
         Objetiva questaoObjetiva = new Objetiva();
         questaoObjetiva.setQuestao(questao);
         if (opcoes != null) {
@@ -284,6 +294,7 @@ public class QuestaoController {
         
         questao.setTipo("Discursiva");
         questao.setNivel(nivel);
+        questao.setDificuldade(dificuldade);
         Discursiva questaoDiscursiva = new Discursiva();
         questaoDiscursiva.setQuestao(questao);
         questaoDiscursiva.setRespostaPadrao(resposta);
@@ -377,6 +388,7 @@ public class QuestaoController {
 
         questao.setTipo("Redação");
         questao.setNivel(nivel);
+        questao.setDificuldade(dificuldade);
         Redacao redacao = new Redacao();
         redacao.setQuestao(questao);
 
@@ -420,7 +432,7 @@ public class QuestaoController {
     }
 
     public void consultar() {
-        resultadoConsulta = questaoHelper.getQuestoes(entradaConsulta);
+        resultadoConsulta = questaoHelper.getQuestoes(stringConsulta);
         if (resultadoConsulta == null || resultadoConsulta.isEmpty()) {
             addMessage(null, FacesMessage.SEVERITY_INFO, "Nenhum resultado encontrado!");
         }
@@ -430,9 +442,8 @@ public class QuestaoController {
         opcoes.remove(opcao);
     }
 
-    public String exibirDetalhes(Questao questao) {
-        questaoDetalhe = questao;
-        return "/restrito/professor/detalhe/questao?faces-redirect=true";
+    public void exibirDetalhes(Questao questao) {
+        questaoDetalhe = questaoHelper.getQuestaoByIdEager(questao.getIdQuestao());
     }
 
     public String getAno() {
@@ -444,6 +455,7 @@ public class QuestaoController {
     }
 
     public List<Assunto> getAssuntosDetalhe() {
+        if(questaoDetalhe == null) return new ArrayList<>();
         if (questaoDetalhe.getAssuntos()!= null) {
             return new ArrayList<>(questaoDetalhe.getAssuntos());
         }
@@ -471,12 +483,12 @@ public class QuestaoController {
         return disciplinasDisponiveis;
     }
 
-    public String getEntradaConsulta() {
-        return entradaConsulta;
+    public String getStringConsulta() {
+        return stringConsulta;
     }
 
-    public void setEntradaConsulta(String entradaConsulta) {
-        this.entradaConsulta = entradaConsulta;
+    public void setStringConsulta(String entradaConsulta) {
+        this.stringConsulta = entradaConsulta;
     }
 
     public String getEnunciado() {
@@ -637,6 +649,7 @@ public class QuestaoController {
         opcoes = null;
         assuntosSelecionados = new ArrayList<>();
         nivel = null;
+        dificuldade = null;
     }
 
     public String limparFormularioCadastro() {
@@ -648,18 +661,20 @@ public class QuestaoController {
         return novoCadastroObjetiva(idProfessorAtual);
     }
 
-    public String limparFormularioConsulta() {
-        return "";
+    public void limparFormularioConsulta() {
+        stringConsulta = null;
+        resultadoConsulta = null;
     }
 
     public String novaConsulta() {
         limparCampos();
+        consultar();
         return "/restrito/professor/consulta/questao?faces-redirect=true";
     }
 
     public String novoCadastroDiscursiva(Integer idProfessor) {
         limparCampos();
-        Professor professor = professorHelper.getById(idProfessor);
+        Professor professor = professorHelper.getByIdEagerDisciplinas(idProfessor);
         idProfessorAtual = idProfessor;
         if (professor != null) {
             disciplinasDisponiveis = new ArrayList<>(professor.getDisciplinas());
@@ -674,7 +689,7 @@ public class QuestaoController {
 
     public String novoCadastroObjetiva(Integer idProfessor) {
         limparCampos();
-        Professor professor = professorHelper.getById(idProfessor);
+        Professor professor = professorHelper.getByIdEagerDisciplinas(idProfessor);
         idProfessorAtual = idProfessor;
         if (professor != null) {
             disciplinasDisponiveis = new ArrayList<>(professor.getDisciplinas());
@@ -684,7 +699,7 @@ public class QuestaoController {
 
     public String novoCadastroRedacao(Integer idProfessor) {
         limparCampos();
-        Professor professor = professorHelper.getById(idProfessor);
+        Professor professor = professorHelper.getByIdEagerDisciplinas(idProfessor);
         idProfessorAtual = idProfessor;
         if (professor != null) {
             disciplinasDisponiveis = new ArrayList<>(professor.getDisciplinas());

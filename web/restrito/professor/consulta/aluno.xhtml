@@ -12,6 +12,9 @@
             .ui-growl {
                 z-index:9999 !important;
             }
+            .ui-dialog-titlebar-close {
+                margin-top: 0px !important;
+            }
         </style>
     </h:head>
     <h:body style="background-color: #e3e3e3">
@@ -90,7 +93,7 @@
                     <p:commandButton value="Fechar" onclick="PF('modalCorrigir').hide()" />
                 </f:facet>
             </p:dialog>
-            
+
             <p:dialog modal="true" draggable="false" width="700" height="500" header="Detalhe Simulado"
                       maximizable="true" widgetVar="modalSimulado" resizable="false" footer="" onHide="PF('modalDetalhe').show()">
                 <p:outputPanel id="detalheSimulado">
@@ -298,7 +301,7 @@
                                     <h:outputText rendered="#{not turmaController.alunoDetalhe.simuladoRealizado(simulado) and not simulado.simuladoAberto}" value="0.0" />
                                 </p:column>
                                 <p:column headerText="" style=" width: 75px;">
-                                    <p:commandLink update=":#{p:component('detalheSimulado')}" action="#{professorController.corrigirSimulado(turmaController.alunoDetalhe,simulado)}" oncomplete="PF('modalSimulado').show();PF('modalDetalhe').hide()" title="Detalhes Simulado"  style="margin-right: 5px;">
+                                    <p:commandLink rendered="#{turmaController.alunoDetalhe.simuladoRealizado(simulado)}" update=":#{p:component('detalheSimulado')}" action="#{professorController.corrigirSimulado(turmaController.alunoDetalhe,simulado)}" oncomplete="PF('modalSimulado').show();PF('modalDetalhe').hide()" title="Detalhes Simulado"  style="margin-right: 5px;">
                                         <h:graphicImage url="/resource/imagens/detalhe.png" width="24" height="24"/>
                                     </p:commandLink>
                                     <p:commandLink rendered="#{turmaController.alunoDetalhe.simuladoRealizado(simulado) and not turmaController.alunoDetalhe.simuladoCorrigido(simulado)}" update=":#{p:component('detalheCorrigir')}" action="#{professorController.corrigirSimulado(turmaController.alunoDetalhe,simulado)}" oncomplete="PF('modalCorrigir').show();PF('modalDetalhe').hide()" title="Corrigir Simulado" >
@@ -338,8 +341,10 @@
                                                 <p:column style="width: 120px; text-align: center">
                                                     <b:label text="Atenção" rendered="#{aluno.aluno.existeSimuladoParaCorrecao()}" severity="warning"/>
                                                 </p:column>
-                                                <p:column style="width: 125px;" headerText="">
-                                                    <p:commandButton value="Detalhes" process="@this" update=":#{p:component('detalheAluno')}" oncomplete="PF('modalDetalhe').show();" action="#{turmaController.detalheAluno(aluno.aluno, turma)}"/>
+                                                <p:column style="width: 75px;text-align: center">
+                                                    <p:commandLink update=":#{p:component('detalheAluno')}" action="#{turmaController.detalheAluno(aluno.aluno, turma)}" oncomplete="PF('modalDetalhe').show();" title="Detalhes"  style="margin-right: 5px;">
+                                                        <h:graphicImage url="/resource/imagens/detalhe.png" width="24" height="24"/>
+                                                    </p:commandLink>
                                                 </p:column>
                                             </p:dataTable>
                                         </p:tab>

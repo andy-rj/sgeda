@@ -1,105 +1,99 @@
 package controller;
 
+import com.lowagie.text.BadElementException;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Image;
+import com.lowagie.text.PageSize;
 import entidade.Aluno;
 import entidade.Curso;
-import entidade.Foto;
+import entidade.Disciplina;
+import entidade.Funcionario;
 import entidade.Pessoa;
+import entidade.Professor;
+import entidade.Simulado;
 import entidade.Telefone;
 import entidade.Turma;
+import entidade.TurmaAluno;
+import entidade.TurmaSimulado;
+import entidade.TurmaSimuladoId;
 import helper.AlunoHelper;
 import helper.CursoHelper;
+import helper.DisciplinaHelper;
+import helper.FuncionarioHelper;
 import helper.LoginHelper;
+import helper.ProfessorHelper;
+import helper.SimuladoHelper;
 import helper.TurmaHelper;
+import java.io.File;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.StringTokenizer;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
-import org.hibernate.validator.constraints.br.CPF;
-import org.primefaces.model.StreamedContent;
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
+import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.HorizontalBarChartModel;
-import util.EmailSender;
 
 @ManagedBean
 @SessionScoped
 public class RelatorioController {
-    private Aluno alunoDetalhe;
+    private BarChartModel BarModelDesistentes;
+
     private final AlunoHelper alunoHelper;
-    private Boolean ativoAlterar;
-    private String bairro;
-    private String bairroAlterar;
-    private String cep;
-    private String cepAlterar;
-    private String cidade;
-    private String cidadeAlterar;
-    private String complemento;
-    private String complementoAlterar;
-    @CPF(message = "CPF inválido!")
-    private String cpf;
-    private String cpfResponsavel;
-    private String cpfResponsavelAlterar;
+    private List<Aluno> alunosInscritos;
+    private Integer anoFim;
+    private Integer anoInicio;
     private final CursoHelper cursoHelper;
-    private Integer cursoSelecionado;
-    private List<Curso> cursosCadastrados;
-    private List<String> dataInicioDisponiveis;
-    private String dataInicioSelecionada;
-    private Date dataNascAlterar;
-    @NotNull(message = "Data de nascimento é obrigatória!")
-    @Past(message = "Data de nascimento inválida!")
-    private Date dataNascimento;
-    private String ddd;
-    private String dddAlterar;
-    private String descricaoTelefone;
-    private String descricaoTelefoneAlterar;
-    private String email;
-    private String emailAlterar;
-    private final String emailHTML = "<div style=\"background-color: #f4f4f4; margin:0px;\"><table width=\"642\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\" style=\"border:20px #f4f4f4\" ><tbody><tr><td><table width=\"642\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"font-family:Arial, SansSerif, Myriad Pro;font-size:14px; \"><tbody><tr><td style=\"line-height: 0;\"><center><img src=\"http://cursoidealizar.acessotemporario.net/sgeda/resource/imagens/idealizar.png\" width=\"300\" height=\"80\" border=\"0\" style=\"display: block; margin-bottom: 10px; margin-top: 10px;\"></center></td></tr></tbody></table><table width=\"642\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"font-family:Arial, SansSerif, Myriad Pro;font-size:14px; padding:30px 40px 0px 40px; background:#ffffff;color:#373737;\" ><tbody><tr style=\"border-bottom:4px solid #f4f4f4; display:block; padding:20px 0;\"><td><p><strong>Bem vindo ao Curso Idealizar,</strong></p><p></p><p>Para acessar o sistema utilize os dados abaixo:</p>----------------------------------------------------------------------<div style=\"margin-left: 20px;\"><p>Curso: <strong>{0}</strong></p><p>Matrícula: <strong>{1}</strong></p><p>Senha: <strong>{2}</strong></p></div>----------------------------------------------------------------------<p>Clique <a href=\"http://cursoidealizar.acessotemporario.net/sgeda/\" target=\"_blank\">aqui</a> para login. <p><p></p><p></p><p>Atenciosamente,</p><p>Grupo Idealizar</p></td></tr></tbody></table><table width=\"642\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\" class=\"segundo-rodape\" style=\"font-family:SansSerif, Myriad Pro;font-size:14px; padding:35px 40px; background:#ffffff; color:#373737; text-align:center; \"><tbody><tr><td><p><center>Esta senha é gerada automaticamente.<br>Para alterar, acesse o sistema em \"Configuração\" >> \"Senha\".</center></p></td></tr></tbody></table></td></tr><tbody></table></div>";
-    private EmailSender emailSender;
-    private boolean enderecoEncontrado;
-    private String escolaridade;
-    private String estado;
-    private Foto foto;
-    private StreamedContent image;
+    private List<Curso> cursos;
+    private List<Curso> cursosParaRelatorio;
+    private List<String> cursosSelecionados;
+    private Date dataFim;
+    private String agrupamento;
+    private Date dataInicio;
+    private Integer fim;
+    private BarChartModel horizontalBarModel;
+    private Integer inicio;
     private final LoginHelper loginHelper;
-    private String logradouro;
-    private String logradouroAlterar;
-    private String nome;
-    private String nomeAlterar;
-    private String nomeResponsavel;
-    private String nomeResponsavelAlterar;
-    private String numero;
-    private String numeroAlterar;
-    private String numeroTelefone;
-    private Pessoa pessoa;
-    private List<Aluno> resultadoConsulta;
-    private String sexo;
-    private String sexoAlterar;
-    private String stringConsulta;
-    private String telefoneNumeroAlterar;
-    private String telefoneResponsavel;
-    private String telefoneResponsavelAlterar;
-    private Set<Telefone> telefones;
-    private HashSet<Telefone> telefonesAlterar;
-    private TurmaHelper turmaHelper;
-    private List<Turma> turmasDisponiveis;
-    private String turnoSelecionado;
-    private List<String> turnosDisponiveis;
-    private String ufAlterar;
-    private String motivoDesistencia;  
-    
+    private ProfessorHelper professorHelper;
+    private List<String> professoresAtividadeSelecionados;
+    private List<Professor> professoresCadastrados;
+    private List<Disciplina> disciplinasCadastradas;
+    private final DisciplinaHelper disciplinaHelper;
+    private final TurmaHelper turmaHelper;
+    private final FuncionarioHelper funcionarioHelper;
+    private List<Funcionario> funcionariosCadastrados;
+    private final SimuladoHelper simuladoHelper;
+
+    public List<Funcionario> getFuncionariosCadastrados() {
+        return funcionariosCadastrados;
+    }
+
     public RelatorioController() {
         cursoHelper = new CursoHelper();
         alunoHelper = new AlunoHelper();
         loginHelper = new LoginHelper();
         turmaHelper = new TurmaHelper();
+        professorHelper = new ProfessorHelper();
+        disciplinaHelper = new DisciplinaHelper();
+        funcionarioHelper = new FuncionarioHelper();
+        simuladoHelper = new SimuladoHelper();
+    }
+
+    public void updateCurso() {
+        Curso curso = cursoHelper.getCursoByIdEagerTurmaSimulado(Integer.parseInt(cursoSelecionadoRanking));
+        simulados = curso.getTurmasSimulados();
     }
 
     public void addMessage(String id, String summary) {
@@ -111,56 +105,492 @@ public class RelatorioController {
         FacesMessage message = new FacesMessage(severidade, summary, null);
         FacesContext.getCurrentInstance().addMessage(id, message);
     }
-    
-    public String novoRelatorioMatricula(){
-        return "/restrito/administrador/relatorio/matricula?faces-redirect=true";
+
+    public BarChartModel getBarModelDesistentes() {
+        return BarModelDesistentes;
     }
-    
-    public void gerarRelatorioMatricula(){
-        List<Curso> cursos = cursoHelper.getCursosDisponiveis();
-        createHorizontalBarModel(cursos);
-        
-    }
-    
-    private HorizontalBarChartModel horizontalBarModel;
- 
-     
-    public HorizontalBarChartModel getHorizontalBarModel() {
-        return horizontalBarModel;
-    }
-     
-    private void createHorizontalBarModel(List<Curso> cursos) {
-        horizontalBarModel = new HorizontalBarChartModel();
- 
-        int maiorMatriculas = -1;
-        ChartSeries desistentes = new ChartSeries();
-        desistentes.setLabel("Desistentes");
-        ChartSeries ativos = new ChartSeries();
-        ativos.setLabel("Matriculados");
-        for(Curso curso:cursos){
-            ativos.set(curso.getNome(), curso.getAlunosAtivos().size());
-            desistentes.set(curso.getNome(), curso.getAlunosDesistentes().size());
-           if(curso.getAlunosAtivos().size()+curso.getAlunosDesistentes().size() > maiorMatriculas){
-               maiorMatriculas = curso.getAlunosAtivos().size()+curso.getAlunosDesistentes().size();
+
+    private void createHorizontalBarModel(List<Aluno> alunos, Integer inicio, Integer fim) {
+
+        horizontalBarModel = new BarChartModel();
+        BarModelDesistentes = new BarChartModel();
+
+
+        List<String> cursosStr = new ArrayList<>();
+
+        for (Aluno aluno : alunos) {
+            if (!cursosStr.contains(aluno.getCurso().getNome())) {
+                cursosStr.add(aluno.getCurso().getNome());
             }
         }
-        
-        horizontalBarModel.addSeries(ativos);
-        horizontalBarModel.addSeries(desistentes);
-         
-        horizontalBarModel.setTitle("Matriculados por Curso");
+
+        for (String nomeCurso : cursosStr) {
+            ChartSeries chartSeriesAtivo = new ChartSeries();
+            ChartSeries chartSeriesDesistente = new ChartSeries();
+            chartSeriesAtivo.setLabel(nomeCurso + "Matriculados");
+            chartSeriesDesistente.setLabel(nomeCurso + "Desistentes");
+            int countAt = 0;
+            int countDe = 0;
+
+            if (agrupamento.equalsIgnoreCase("ano")) {
+                int anofim = alunos.get(alunos.size()-1).getDataInscricao().getYear() + 1900;
+                for (int ano = alunos.get(0).getDataInscricao().getYear() + 1900;ano<=anofim;ano++) {
+                    for (Aluno aluno : alunos) {
+                        if (aluno.getCurso().getNome().equalsIgnoreCase(nomeCurso) && aluno.getDataInscricao().getYear() + 1900 == ano) {
+                            if (aluno.getDesistente()) {
+                                countDe++;
+                            } else {
+                                countAt++;
+                            }
+                        }
+                    }
+                    chartSeriesAtivo.set(ano, countAt);
+                    chartSeriesDesistente.set(ano, countDe);
+                }
+            } else if (agrupamento.equalsIgnoreCase("semestre")) {
+                for (Aluno aluno : alunos) {
+                    if (aluno.getCurso().getNome().equalsIgnoreCase(nomeCurso)) {
+                    }
+                }
+            } else if (agrupamento.equalsIgnoreCase("bimestre")) {
+
+                for (Aluno aluno : alunos) {
+                    if (aluno.getCurso().getNome().equalsIgnoreCase(nomeCurso)) {
+                    }
+                }
+            }
+
+            horizontalBarModel.addSeries(chartSeriesAtivo);
+            BarModelDesistentes.addSeries(chartSeriesDesistente);
+        }
+
+        horizontalBarModel.setTitle("Matriculas Ativas");
         horizontalBarModel.setAnimate(true);
         horizontalBarModel.setLegendPosition("e");
-        horizontalBarModel.setStacked(true);
-         
+
         Axis xAxis = horizontalBarModel.getAxis(AxisType.X);
-        xAxis.setLabel("Quantidade de Matrículas");
-        xAxis.setTickFormat("%d");
+        xAxis.setLabel("Curso");
         xAxis.setMin(0);
-        xAxis.setMax(maiorMatriculas + 5);
-         
+        xAxis.setTickInterval("1");
+        xAxis.setTickFormat("%d");
+
         Axis yAxis = horizontalBarModel.getAxis(AxisType.Y);
-        yAxis.setLabel("Curso");        
+        yAxis.setLabel("Qt. Matriculas");
+        
+        BarModelDesistentes.setTitle("Desistentes");
+        BarModelDesistentes.setAnimate(true);
+        BarModelDesistentes.setLegendPosition("e");
+
+        xAxis = BarModelDesistentes.getAxis(AxisType.X);
+        xAxis.setLabel("Curso");
+        xAxis.setMin(0);
+        xAxis.setTickInterval("1");
+        xAxis.setTickFormat("%d");
+
+        yAxis = BarModelDesistentes.getAxis(AxisType.Y);
+        yAxis.setLabel("Qt. Matriculas");
+    }
+
+    public void gerarRelatorioMatricula() {
+        if (cursosSelecionados == null || cursosSelecionados.isEmpty()) {
+            addMessage(null, FacesMessage.SEVERITY_ERROR, "Selecione pelo menos um curso!");
+            return;
+        }
+
+        if (anoFim != null && anoInicio != null) {
+            if (anoFim < anoInicio) {
+                addMessage(null, FacesMessage.SEVERITY_ERROR, "Ano Final inválido!");
+                return;
+            }
+        }
+
+        inicio = anoInicio == null ? 0 : anoInicio;
+        fim = anoFim == null ? 4000 : anoFim;
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-YYYY");
+        String data;
+
+        if (inicio == 0) {
+            dataInicio = null;
+        } else {
+            data = "01-01-" + inicio;
+            try {
+                dataInicio = formatter.parse(data);
+            } catch (ParseException e) {
+
+            }
+        }
+
+        if (fim == 0) {
+            dataFim = null;
+        } else {
+            data = "31-12-" + fim;
+            try {
+                dataFim = formatter.parse(data);
+            } catch (ParseException e) {
+
+            }
+        }
+
+        List<Aluno> alunosRelatorioGerencial = alunoHelper.getAlunosByIdCurso(cursosSelecionados, dataInicio, dataFim);
+
+        createHorizontalBarModel(alunosRelatorioGerencial, inicio, fim);
+
+    }
+
+    public void gerarRelatorioMatriculaRoll() {
+        if (cursosSelecionados == null || cursosSelecionados.isEmpty()) {
+            addMessage(null, FacesMessage.SEVERITY_ERROR, "Selecione pelo menos um curso!");
+            return;
+        }
+
+        if (dataFim != null && dataInicio != null) {
+            if (dataFim.before(dataInicio)) {
+                addMessage(null, FacesMessage.SEVERITY_ERROR, "Data fim inválida!");
+                return;
+            }
+        }
+
+        alunosInscritos = alunoHelper.getAlunosByIdCurso(cursosSelecionados, dataInicio, dataFim);
+
+    }
+
+    private List<Aluno> alunosRanking;
+
+    public List<Aluno> getAlunosRanking() {
+        return alunosRanking;
+    }
+
+    private List<TurmaAluno> turmaAlunosRelatorio;
+
+    public List<TurmaAluno> getTurmaAlunosRelatorio() {
+        return turmaAlunosRelatorio;
+    }
+
+    private TurmaSimulado turmaSimuladoRelatorio;
+
+    public TurmaSimulado getTurmaSimuladoRelatorio() {
+        return turmaSimuladoRelatorio;
+    }
+
+    public void gerarRelatorioRankingNotasRoll() {
+
+        String turmaId;
+        String simuladoId;
+
+        if (simuladoSelecionado != null && !simuladoSelecionado.isEmpty()) {
+            StringTokenizer st = new StringTokenizer(simuladoSelecionado, ";");
+            turmaId = st.nextToken();
+            simuladoId = st.nextToken();
+        } else {
+            return;
+        }
+
+        turmaSimuladoRelatorio = simuladoHelper.getTurmaSimuladoByIdTurmaAlunoEager(new TurmaSimuladoId(Integer.parseInt(simuladoId), Integer.parseInt(turmaId)));
+        turmaAlunosRelatorio = new ArrayList<>(turmaSimuladoRelatorio.getTurma().getTurmaAlunos());
+
+    }
+
+    private List<Turma> turmasCadastradas;
+
+    public List<Turma> getTurmasCadastradas() {
+        return turmasCadastradas;
+    }
+
+    public void gerarRelatorioTurmasCadastradasRoll() {
+        if (cursosSelecionados == null || cursosSelecionados.isEmpty()) {
+            addMessage(null, FacesMessage.SEVERITY_ERROR, "Selecione pelo menos um curso!");
+            return;
+        }
+
+        turmasCadastradas = turmaHelper.getTurmas(cursosSelecionados);
+
+    }
+
+    public void gerarRelatorioProfessoresCadastradosRoll() {
+        if (professoresAtividadeSelecionados == null || professoresAtividadeSelecionados.isEmpty()) {
+            addMessage(null, FacesMessage.SEVERITY_ERROR, "Selecione pelo menos um tipo de cadastro!");
+            return;
+        }
+
+        professoresCadastrados = professorHelper.getProfessores(professoresAtividadeSelecionados);
+
+    }
+
+    public void gerarRelatorioFuncionariosCadastradosRoll() {
+        if (professoresAtividadeSelecionados == null || professoresAtividadeSelecionados.isEmpty()) {
+            addMessage(null, FacesMessage.SEVERITY_ERROR, "Selecione pelo menos um tipo de cadastro!");
+            return;
+        }
+
+        funcionariosCadastrados = funcionarioHelper.getFuncionarios(professoresAtividadeSelecionados);
+
+    }
+
+    public List<Aluno> getAlunosInscritos() {
+        return alunosInscritos;
+    }
+
+    public Integer getAnoFim() {
+        return anoFim;
+    }
+
+    public void setAnoFim(Integer anoFim) {
+        this.anoFim = anoFim;
+    }
+
+    public Integer getAnoInicio() {
+        return anoInicio;
+    }
+
+    public void setAnoInicio(Integer anoInicio) {
+        this.anoInicio = anoInicio;
+    }
+
+    public List<Curso> getCursos() {
+        return cursos;
+    }
+
+    public List<Curso> getCursosParaRelatorio() {
+        return cursosParaRelatorio;
+    }
+
+    private String simuladoSelecionado;
+
+    private String cursoSelecionadoRanking;
+
+    public String getCursoSelecionadoRanking() {
+        return cursoSelecionadoRanking;
+    }
+
+    public void setCursoSelecionadoRanking(String cursoSelecionadoRanking) {
+        this.cursoSelecionadoRanking = cursoSelecionadoRanking;
+    }
+
+    public String getSimuladoSelecionado() {
+        return simuladoSelecionado;
+    }
+
+    public void setSimuladoSelecionado(String simuladoSelecionado) {
+        this.simuladoSelecionado = simuladoSelecionado;
+    }
+
+    public List<String> getCursosSelecionados() {
+        return cursosSelecionados;
+    }
+
+    public void setCursosSelecionados(List<String> cursosSelecionados) {
+        this.cursosSelecionados = cursosSelecionados;
+    }
+
+    public Date getDataFim() {
+        return dataFim;
+    }
+
+    public void setDataFim(Date dataFim) {
+        this.dataFim = dataFim;
+    }
+
+    public Date getDataInicio() {
+        return dataInicio;
+    }
+
+    public void setDataInicio(Date dataInicio) {
+        this.dataInicio = dataInicio;
+    }
+
+    public Integer getFim() {
+        return fim;
+    }
+
+    public BarChartModel getHorizontalBarModel() {
+        return horizontalBarModel;
+    }
+
+    public Integer getInicio() {
+        return inicio;
+    }
+
+    public List<String> getProfessoresAtividadeSelecionados() {
+        return professoresAtividadeSelecionados;
+    }
+
+    public void setProfessoresAtividadeSelecionados(List<String> professoresAtividadeSelecionados) {
+        this.professoresAtividadeSelecionados = professoresAtividadeSelecionados;
+    }
+
+    public List<Professor> getProfessoresCadastrados() {
+        return professoresCadastrados;
+    }
+
+    private void limparCampos() {
+        this.anoFim = null;
+        this.anoInicio = null;
+        this.cursosSelecionados = null;
+        this.dataInicio = null;
+        this.dataFim = null;
+        this.cursos = null;
+        this.cursosParaRelatorio = null;
+        this.professoresAtividadeSelecionados = null;
+        this.cursoSelecionadoRanking = null;
+        this.simuladoSelecionado = null;
+        this.alunosRanking = null;
+        this.alunosInscritos = null;
+        this.disciplinasCadastradas = null;
+        this.turmaAlunosRelatorio = null;
+        this.agrupamento = null;
+    }
+
+    public String getAgrupamento() {
+        return agrupamento;
+    }
+
+    public void setAgrupamento(String agrupamento) {
+        this.agrupamento = agrupamento;
+    }
+
+    public String novoRelatorioMatricula() {
+        limparCampos();
+        cursos = cursoHelper.getCursosDisponiveisEager();
+        horizontalBarModel = null;
+        return "/restrito/administrador/relatorio/matricula?faces-redirect=true";
+    }
+
+    public String novoRelatorioMatriculaRoll() {
+        limparCampos();
+        cursos = cursoHelper.getCursosDisponiveisEager();
+        return "/restrito/administrador/relatorio/roll/alunosInscritos?faces-redirect=true";
+    }
+
+    public String novoRelatorioProfessoresCadastradosRoll() {
+        limparCampos();
+        return "/restrito/administrador/relatorio/roll/professoresCadastrados?faces-redirect=true";
+    }
+
+    public String novoRelatorioFuncionariosCadastradosRoll() {
+        limparCampos();
+        return "/restrito/administrador/relatorio/roll/funcionariosCadastrados?faces-redirect=true";
+    }
+
+    public String novoRelatorioTurmasCadastradasRoll() {
+        limparCampos();
+        cursos = cursoHelper.getCursosDisponiveisEager();
+        return "/restrito/administrador/relatorio/roll/turmasCadastradas?faces-redirect=true";
+    }
+
+    private List<TurmaSimulado> simulados;
+
+    public List<TurmaSimulado> getSimulados() {
+        return simulados;
+    }
+
+    public String novoRelatorioRankingNotasRoll() {
+        limparCampos();
+        cursos = cursoHelper.getCursosDisponiveisEager();
+        simulados = null;
+        return "/restrito/administrador/relatorio/roll/rankingNotas?faces-redirect=true";
+    }
+
+    public List<Disciplina> getDisciplinasCadastradas() {
+        return disciplinasCadastradas;
+    }
+
+    public String novoRelatorioDisciplinasCadastradasRoll() {
+        limparCampos();
+        disciplinasCadastradas = disciplinaHelper.getDisciplinas(null);
+        return "/restrito/administrador/relatorio/roll/disciplinasCadastradas?faces-redirect=true";
+    }
+
+    private List<Curso> cursosCadastrados;
+
+    public List<Curso> getCursosCadastrados() {
+        return cursosCadastrados;
+    }
+
+    public String novoRelatorioCursosCadastradosRoll() {
+        limparCampos();
+        cursosCadastrados = cursoHelper.getCursos(null);
+        return "/restrito/administrador/relatorio/roll/cursosCadastrados?faces-redirect=true";
+    }
+
+    public String now() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        Date date = new Date();
+        return dateFormat.format(date);
+    }
+
+    public void preProcessPDF(Object document) throws IOException, BadElementException, DocumentException {
+        Document pdf = (Document) document;
+        pdf.open();
+        pdf.setPageSize(PageSize.A4);
+
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        String logo = externalContext.getRealPath("") + File.separator + "resource" + File.separator + "imagens" + File.separator + "idealizarRelatorio.png";
+
+        pdf.add(Image.getInstance(logo));
+    }
+
+    public Integer totalAtivoIntegral() {
+        Integer soma = 0;
+        for (Curso curso : cursosParaRelatorio) {
+            soma += curso.getAlunosAtivosPorAnoIntegral(inicio, fim).size();
+        }
+        return soma;
+    }
+
+    public Integer totalAtivoManha() {
+        Integer soma = 0;
+        for (Curso curso : cursosParaRelatorio) {
+            soma += curso.getAlunosAtivosPorAnoManha(inicio, fim).size();
+        }
+        return soma;
+    }
+
+    public Integer totalAtivoNoite() {
+        Integer soma = 0;
+        for (Curso curso : cursosParaRelatorio) {
+            soma += curso.getAlunosAtivosPorAnoNoite(inicio, fim).size();
+        }
+        return soma;
+    }
+
+    public Integer totalAtivoTarde() {
+        Integer soma = 0;
+        for (Curso curso : cursosParaRelatorio) {
+            soma += curso.getAlunosAtivosPorAnoTarde(inicio, fim).size();
+        }
+        return soma;
+    }
+
+    public Integer totalDesistenteIntegral() {
+        Integer soma = 0;
+        for (Curso curso : cursosParaRelatorio) {
+            soma += curso.getAlunosDesistentesPorAnoIntegral(inicio, fim).size();
+        }
+        return soma;
+    }
+
+    public Integer totalDesistenteManha() {
+        Integer soma = 0;
+        for (Curso curso : cursosParaRelatorio) {
+            soma += curso.getAlunosDesistentesPorAnoManha(inicio, fim).size();
+        }
+        return soma;
+    }
+
+    public Integer totalDesistenteNoite() {
+        Integer soma = 0;
+        for (Curso curso : cursosParaRelatorio) {
+            soma += curso.getAlunosDesistentesPorAnoNoite(inicio, fim).size();
+        }
+        return soma;
+    }
+
+    public Integer totalDesistenteTarde() {
+        Integer soma = 0;
+        for (Curso curso : cursosParaRelatorio) {
+            soma += curso.getAlunosDesistentesPorAnoTarde(inicio, fim).size();
+        }
+        return soma;
     }
 
 }

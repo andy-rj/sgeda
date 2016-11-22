@@ -106,8 +106,8 @@ public class TurmaController {
     }
     
     public void detalheAluno(Aluno aluno, Turma turma){
-        this.alunoDetalhe = aluno;
-        this.alunoTurmaDetalhe = turma;
+        this.alunoDetalhe = alunoHelper.getByIdEagerAlunoSimulado(aluno.getIdAluno());
+        this.alunoTurmaDetalhe = turmaHelper.getTurmaEager(turma.getIdTurma());
     }
 
     public TurmaController() {
@@ -205,30 +205,27 @@ public class TurmaController {
     public void salvarAlteracao(){
         Turma turmaAlterar = turmaDetalhe;
         
-        if(turmaAlterar.getNome().equals(codigoAlterar)&&
-                turmaAlterar.getDescricao().equals(descricaoAlterar)&&
-                turmaAlterar.getDataInicio().getDay()==dataInicioAlterar.getDay()&&
-                turmaAlterar.getDataInicio().getMonth()==dataInicioAlterar.getMonth()&&
-                turmaAlterar.getDataInicio().getYear()==dataInicioAlterar.getYear()&&
-                turmaAlterar.getDataFim().getDay()==dataTerminoAlterar.getDay()&&
-                turmaAlterar.getDataFim().getMonth()==dataTerminoAlterar.getMonth()&&
-                turmaAlterar.getDataFim().getYear()==dataTerminoAlterar.getYear()&&
-                turmaAlterar.getTurno().equals(turnoAlterar)&&
-                turmaAlterar.getProfessor().getIdProfessor() == professorSelecionadoAlterar){
+//        if(turmaAlterar.getNome().equals(codigoAlterar)&&
+//                turmaAlterar.getDescricao().equals(descricaoAlterar)&&
+//                turmaAlterar.getDataInicio().getDay()==dataInicioAlterar.getDay()&&
+//                turmaAlterar.getDataInicio().getMonth()==dataInicioAlterar.getMonth()&&
+//                turmaAlterar.getDataInicio().getYear()==dataInicioAlterar.getYear()&&
+//                turmaAlterar.getDataFim().getDay()==dataTerminoAlterar.getDay()&&
+//                turmaAlterar.getDataFim().getMonth()==dataTerminoAlterar.getMonth()&&
+//                turmaAlterar.getDataFim().getYear()==dataTerminoAlterar.getYear()&&
+//                turmaAlterar.getTurno().equals(turnoAlterar)&&
+               if(turmaAlterar.getProfessor().getIdProfessor() == professorSelecionadoAlterar){
             addMessage(null, FacesMessage.SEVERITY_WARN, "Não houve alteração nos dados!");
             return;
         }
         
-        if(dataTerminoAlterar.before(dataInicioAlterar)){
-            addMessage(null, FacesMessage.SEVERITY_ERROR, "Data de término anterior a data de início!");
-            return;
-        }
         
-        turmaAlterar.setNome(codigoAlterar);
-        turmaAlterar.setDescricao(descricaoAlterar);
-        turmaAlterar.setDataInicio(dataInicioAlterar);
-        turmaAlterar.setDataFim(dataTerminoAlterar);
-        turmaAlterar.setTurno(turnoAlterar);
+        
+        //turmaAlterar.setNome(codigoAlterar);
+        //turmaAlterar.setDescricao(descricaoAlterar);
+        //turmaAlterar.setDataInicio(dataInicioAlterar);
+        //turmaAlterar.setDataFim(dataTerminoAlterar);
+        //turmaAlterar.setTurno(turnoAlterar);
         turmaAlterar.setProfessor(professorHelper.getById(professorSelecionadoAlterar));
         
         if(!turmaHelper.salvarAlteracaoTurma(turmaAlterar)){
@@ -243,17 +240,17 @@ public class TurmaController {
     }
 
     public void carregarAlterar() {
-        descricaoAlterar = turmaDetalhe.getDescricao();
-        codigoAlterar = turmaDetalhe.getNome();
-        dataInicioAlterar = turmaDetalhe.getDataInicio();
-        dataTerminoAlterar = turmaDetalhe.getDataFim();
+        //descricaoAlterar = turmaDetalhe.getDescricao();
+        //codigoAlterar = turmaDetalhe.getNome();
+        //dataInicioAlterar = turmaDetalhe.getDataInicio();
+        //dataTerminoAlterar = turmaDetalhe.getDataFim();
         if (turmaDetalhe.getProfessor().getPessoa().getAtivo()) {
             professorSelecionadoAlterar = turmaDetalhe.getProfessor().getIdProfessor();
         } else {
             professorSelecionadoAlterar = 0;
         }
         professoresAtivosAlterar = new HashSet<>(turmaDetalhe.getDisciplina().getProfessoresAtivos());
-        turnoAlterar = turmaDetalhe.getTurno();
+        //turnoAlterar = turmaDetalhe.getTurno();
     }
     
     public void carregarAlterarSimulado(TurmaSimulado simulado) {
@@ -299,7 +296,7 @@ public class TurmaController {
     }
 
     public void detalheTurmaProfessor(Turma turma) {
-        turmaProfessorDetalhe = turma;
+        turmaProfessorDetalhe = turmaHelper.getTurmaEager(turma.getIdTurma());
     }
 
     public void excluirTurma(Turma turma) {
@@ -307,7 +304,7 @@ public class TurmaController {
     }
 
     public void exibirDetalhes(Turma turma) {
-        turmaDetalhe = turma;
+        turmaDetalhe = turmaHelper.getTurmaEager(turma.getIdTurma());
     }
 
     public Aluno getAlunoOnline() {
@@ -449,6 +446,18 @@ public class TurmaController {
     public void setSimuladoSelecionado(Simulado simuladoSelecionado) {
         this.simuladoSelecionado = simuladoSelecionado;
     }
+    
+    public Simulado getSimuladoSelecionadoEager() {
+        return simuladoSelecionado;
+    }
+
+    public void setSimuladoSelecionadoEager(Simulado simuladoSelecionado) {
+        if(simuladoSelecionado == null){
+            this.simuladoSelecionado = null;
+            return;
+        }
+        this.simuladoSelecionado = simuladoHelper.getSimuladoByIdEager(simuladoSelecionado.getIdSimulado());
+    }
 
     public List<Simulado> getSimuladosCadastrados() {
         return simuladosCadastrados;
@@ -544,12 +553,12 @@ public class TurmaController {
     }
 
     public String novaConsultaAluno(Integer idAluno) {
-        alunoOnline = alunoHelper.getById(idAluno);
+        alunoOnline = alunoHelper.getByIdEagerAlunoSimulado(idAluno);
         return "/restrito/aluno/consulta/turma?faces-redirect=true";
     }
     
     public String novaConsultaSimuladoAluno(Integer idAluno) {
-        alunoOnline = alunoHelper.getById(idAluno);
+        alunoOnline = alunoHelper.getByIdEagerAlunoSimulado(idAluno);
         return "/restrito/aluno/consulta/simulado?faces-redirect=true";
     }
 
@@ -567,7 +576,7 @@ public class TurmaController {
     }
     
     public String novaConsultaAlunoProfessor(Integer idProfessor) {
-        turmasProfessor = turmaHelper.getTurmasByIdProfessor(idProfessor);
+        turmasProfessor = turmaHelper.getTurmasByIdProfessorEager(idProfessor);
         return "/restrito/professor/consulta/aluno?faces-redirect=true";
     }
 
@@ -628,8 +637,14 @@ public class TurmaController {
     }
     
     public void detalheSimulado(TurmaSimulado simulado){
-        simuladoTurmaDetalhe = simulado;
-        simuladoAlunoDetalhe = getSimuladoAluno(simulado);
+        simuladoTurmaDetalhe = simuladoHelper.getTurmaSimuladoByIdEager(simulado.getId());
+        AlunoSimulado alunoSimulado = getSimuladoAluno(simulado);
+        if(alunoSimulado != null){
+            simuladoAlunoDetalhe = simuladoHelper.getAlunoSimuladoByIdEager(getSimuladoAluno(simulado).getId());
+        }
+        else{
+            simuladoAlunoDetalhe = null;
+        }
     }
     
     public AlunoSimulado getSimuladoAluno(TurmaSimulado simulado){
@@ -654,4 +669,5 @@ public class TurmaController {
         return (getSimuladoAluno(simulado,alunoDetalhe)!=null? getSimuladoAluno(simulado,alunoDetalhe).getData():null);
     }
 
+       
 }

@@ -14,6 +14,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
@@ -196,7 +197,7 @@ public class LoginHelper {
         return false;
     }
     
-    public Usuario getByLoginSenha(String usuario, String senha) {
+    public Usuario getByLoginSenhaEager(String usuario, String senha) {
         if (senha == null || usuario == null) {
             return null;
         }
@@ -214,6 +215,9 @@ public class LoginHelper {
             Criteria crit = session.createCriteria(Usuario.class);
             crit.add(Restrictions.eq("senha", senha)).add(Restrictions.eq("login", usuario));
             Usuario login = (Usuario) crit.uniqueResult();
+            if(login != null){
+                login.getPapels().size();
+            }
             session.flush();
             tx.commit();
             return login;

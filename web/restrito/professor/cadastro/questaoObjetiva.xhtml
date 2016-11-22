@@ -12,6 +12,9 @@
             .ui-growl {
                 z-index:9999 !important;
             }
+            .ui-dialog-titlebar-close {
+                margin-top: 0px !important;
+            }
         </style>
     </h:head>
     <h:body style="background-color: #e3e3e3">
@@ -115,6 +118,19 @@
                                     <b:message for="disciplina"/>
                                 </b:column>
                               </b:row>
+                            <b:row>
+                                <b:column colSm="2">
+                                    <h:outputLabel value="Dificuldade" ></h:outputLabel>
+                                </b:column>
+                                <b:column colSm="7">
+                                    <p:rating stars="3" cancel="false" id="dificuldade" value="#{questaoController.dificuldade}" requiredMessage="Nível de dificuldade é obrigatório, selecione!">
+                                        <f:validateRequired/>
+                                    </p:rating>
+                                </b:column>
+                                <b:column colSm="3">
+                                    <b:message for="dificuldade"  />
+                                </b:column>
+                            </b:row>
                               <b:row>
                                   <b:column colSm="2">
                                       <h:outputLabel value="Assuntos" ></h:outputLabel>
@@ -223,7 +239,7 @@
                             <b:row>
                                 <br/>
                                 <b:column>
-                                    <p:commandButton value="Cadastrar" process="@this nivelQuestao instituicaoQuestao ano disciplina editor assuntos" update="info container" action="#{questaoController.cadastrarObjetiva}"/>
+                                    <p:commandButton value="Cadastrar" process="@this dificuldade nivelQuestao instituicaoQuestao ano disciplina editor assuntos" update="info container" action="#{questaoController.cadastrarObjetiva}"/>
                                     <p:commandButton value="Limpar" action="#{questaoController.limparFormularioCadastroObjetiva}" immediate="true"/>
                                 </b:column>
                             </b:row>

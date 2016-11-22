@@ -15,6 +15,7 @@ import entidade.Usuario;
 import helper.DisciplinaHelper;
 import helper.LoginHelper;
 import helper.ProfessorHelper;
+import helper.SimuladoHelper;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -51,7 +52,7 @@ public class ProfessorController {
     private String complementoAlterar;
     @CPF(message = "CPF inválido!")
     private String cpf;
-    
+    private SimuladoHelper simuladoHelper;
     private CroppedImage croppedImage;
     @NotNull(message = "Data de nascimento é obrigatória!")
     @Past(message = "Data de nascimento inválida!")
@@ -109,6 +110,7 @@ public class ProfessorController {
         professorHelper = new ProfessorHelper();
         loginHelper = new LoginHelper();
         emailSender = new EmailSender();
+        simuladoHelper = new SimuladoHelper();
                 
     }
 
@@ -949,7 +951,7 @@ public class ProfessorController {
     public void corrigirSimulado(Aluno aluno, TurmaSimulado simulado){
         for(AlunoSimulado alunoSimulado: aluno.getAlunoSimulados()){
             if(alunoSimulado.getTurmaSimulado().getId().equals(simulado.getId())){
-                alunoSimuladoCorrigir = alunoSimulado;
+                alunoSimuladoCorrigir = simuladoHelper.getAlunoSimuladoByIdEager(alunoSimulado.getId());
                 break;
             }
         }

@@ -12,6 +12,9 @@
             .ui-growl {
                 z-index:9999 !important;
             }
+            .ui-dialog-titlebar-close {
+                margin-top: 0px !important;
+            }
         </style>
     </h:head>
     <h:body style="background-color: #e3e3e3">
@@ -126,7 +129,7 @@
                     <b:column>
                         <font color ='red' >*</font><h:outputText style="font-size: 14px;color: red;" value="Utilize o botão direito do mouse para selecionar." />
                         <p:dataTable id="simuladoTable" widgetVar="simuladoWidget" var="simulado" value="#{turmaController.simuladosCadastrados}" 
-                                     selection="#{turmaController.simuladoSelecionado}" selectionMode="single" rowKey="#{simulado.idSimulado}" 
+                                     selection="#{turmaController.simuladoSelecionadoEager}" selectionMode="single" rowKey="#{simulado.idSimulado}" 
                                      style="margin-bottom:0" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                      rowsPerPageTemplate="5,10,15" emptyMessage="Não foram encontrados simulados para esses critérios!"
                                      filteredValue="#{turmaController.simuladosFiltrados}">
@@ -340,22 +343,25 @@
                             <b:row>
                                 <b:column>
                                     <p:dataTable var="turma" value="#{turmaController.turmasProfessor}" >
-                                        <p:column style="width: 125px;" headerText="Código">
-                                            <h:outputText value="#{turma.nome}"/>
-                                        </p:column>
-                                        <p:column headerText="Descrição">
-                                            <h:outputText value="#{turma.descricao}"/>
-                                        </p:column>
                                         <p:column headerText="Disciplina">
                                             <h:outputText value="#{turma.disciplina.nome}"/>
                                         </p:column>
                                         <p:column headerText="Curso">
                                             <h:outputText value="#{turma.curso.nome}"/>
                                         </p:column>
-                                        <p:column style="width: 115px;" headerText="">
-                                            <p:commandButton value="Detalhes" process="@this" update=":#{p:component('conteudoDetalhe')}" oncomplete="PF('modalDetalheTurma').show();" action="#{turmaController.detalheTurmaProfessor(turma)}"/>
+                                        <p:column style="width: 125px;" headerText="Abertura">
+                                            <h:outputText value="#{turma.dataInicio}">
+                                                <f:convertDateTime pattern="dd/MM/yy"/>
+                                            </h:outputText>
                                         </p:column>
-
+                                        <p:column headerText="Turno">
+                                            <h:outputText value="#{turma.turno}"/>
+                                        </p:column>
+                                        <p:column style="width: 75px;text-align: center">
+                                            <p:commandLink update=":#{p:component('conteudoDetalhe')}" action="#{turmaController.detalheTurmaProfessor(turma)}" oncomplete="PF('modalDetalheTurma').show();" title="Detalhes"  style="margin-right: 5px;">
+                                                <h:graphicImage url="/resource/imagens/detalhe.png" width="24" height="24"/>
+                                            </p:commandLink>
+                                        </p:column>
                                     </p:dataTable>
                                 </b:column>
                             </b:row>

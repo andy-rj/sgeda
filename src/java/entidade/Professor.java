@@ -2,7 +2,9 @@ package entidade;
 // Generated 09/09/2016 09:36:48 by Hibernate Tools 4.3.1
 
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -103,8 +105,18 @@ public class Professor  implements java.io.Serializable {
     public void setIntituicaoFormacao(String intituicaoFormacao) {
         this.intituicaoFormacao = intituicaoFormacao;
     }
+    
+    @Transient
+    public List<Disciplina> getDisciplinasList(){
+        List<Disciplina> list; 
+        if(this.getDisciplinas()!=null)
+            list = new ArrayList<>(this.getDisciplinas());
+        else
+            list = new ArrayList<>();
+        return list;
+    }
 
-@ManyToMany(fetch=FetchType.EAGER)
+@ManyToMany(fetch=FetchType.LAZY)
     @JoinTable(name="professor_habilitado_disciplina", catalog="kemdixip_sgedanovo", joinColumns = { 
         @JoinColumn(name="professor_idProfessor", nullable=false, updatable=false) }, inverseJoinColumns = { 
         @JoinColumn(name="disciplina_idDisciplina", nullable=false, updatable=false) })
@@ -142,6 +154,18 @@ public class Professor  implements java.io.Serializable {
     public void setQuestaos(Set<Questao> questaos) {
         this.questaos = questaos;
     }
+    
+    @Transient
+    public String getDisciplinasString(){
+        String diss = "";
+        if(getDisciplinas()!=null){
+           for(Disciplina dis: getDisciplinas()){
+               diss += dis.getNome() + "\n";
+            } 
+        }
+       return diss;
+    }
+
 
 }
 

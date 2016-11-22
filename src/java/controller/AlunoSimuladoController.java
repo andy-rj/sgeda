@@ -37,20 +37,14 @@ public class AlunoSimuladoController {
     private String opcaoAtualSelecionada;
     private Resposta questaoAtual;
     private String respostaAtual;
+    private List<Resposta> respostas;
     private AlunoSimulado simulado;
     private TurmaSimulado simuladoAtual;
     private SimuladoHelper simuladoHelper;
     private Long tempoRestante;
     private Long tempoTotal;
     
-    @PreDestroy
-    public void sessionDestroyed(){
-        if(simuladoAtual!=null){
-            forcarFinalizarSimulado();
-        }
-    }
-
-    public AlunoSimuladoController() {
+    public AlunoSimuladoController(){
         alunoHelper = new AlunoHelper();
         simuladoHelper = new SimuladoHelper();
     }
@@ -64,21 +58,21 @@ public class AlunoSimuladoController {
         FacesMessage message = new FacesMessage(severidade, summary, null);
         FacesContext.getCurrentInstance().addMessage(id, message);
     }
-    
-    
-    public void atualizaCronometro(){
+
+    public void atualizaCronometro() {
         agora = new Date();
         tempoRestante = tempoTotal - (agora.getTime() - inicio.getTime());
         if(tempoRestante <= 0){
             forcarFinalizarSimulado();
             RequestContext context = RequestContext.getCurrentInstance();
-            context.execute("PF('modalMensagens').show();");
-            context.execute("poll.stop();");
+            context.execute("PF('modalMensagensCronometro').show();");
+            //context.execute("poll.stop();");
         }
         
     }
     
-    public String cadastrar() {
+
+    public String cadastrar(){
         return "";
     }
     
@@ -88,18 +82,18 @@ public class AlunoSimuladoController {
 
     public void escolherQuestao(int indice) {
         if(questaoAtual.getQuestao().getObjetiva()!=null){
-        if(opcaoAtualSelecionada != null && !opcaoAtualSelecionada.isEmpty()){
-            respostas.get(indiceQuestaoAtual).setResposta(opcaoAtualSelecionada);
-            opcaoAtualSelecionada=null;
-        }
+            if(opcaoAtualSelecionada != null && !opcaoAtualSelecionada.isEmpty()){
+                respostas.get(indiceQuestaoAtual).setResposta(opcaoAtualSelecionada);
+                opcaoAtualSelecionada=null;
+            }
         }
         else
         {
-        
-        if(respostaAtual != null && !respostaAtual.isEmpty()){
-            respostas.get(indiceQuestaoAtual).setResposta(respostaAtual);
-            respostaAtual = null;
-        }
+            
+            if(respostaAtual != null && !respostaAtual.isEmpty()){
+                respostas.get(indiceQuestaoAtual).setResposta(respostaAtual);
+                respostaAtual = null;
+            }
         }
         
         indiceQuestaoAtual = indice;
@@ -122,16 +116,16 @@ public class AlunoSimuladoController {
     public void finalizarSimulado() {
         finalizado = true;
         if(questaoAtual.getQuestao().getObjetiva() != null){
-        if(opcaoAtualSelecionada != null && !opcaoAtualSelecionada.isEmpty()){
-            respostas.get(indiceQuestaoAtual).setResposta(opcaoAtualSelecionada);
-        }
+            if(opcaoAtualSelecionada != null && !opcaoAtualSelecionada.isEmpty()){
+                respostas.get(indiceQuestaoAtual).setResposta(opcaoAtualSelecionada);
+            }
         }
         else
         {
-        
-        if(respostaAtual != null && !respostaAtual.isEmpty()){
-            respostas.get(indiceQuestaoAtual).setResposta(respostaAtual);
-        }
+            
+            if(respostaAtual != null && !respostaAtual.isEmpty()){
+                respostas.get(indiceQuestaoAtual).setResposta(respostaAtual);
+            }
         }
         
         for(Resposta resposta:simulado.getRespostas()){
@@ -153,16 +147,16 @@ public class AlunoSimuladoController {
 
     public void forcarFinalizarSimulado() {
         if(questaoAtual.getQuestao().getObjetiva() != null){
-        if(opcaoAtualSelecionada != null && !opcaoAtualSelecionada.isEmpty()){
-            respostas.get(indiceQuestaoAtual).setResposta(opcaoAtualSelecionada);
-        }
+            if(opcaoAtualSelecionada != null && !opcaoAtualSelecionada.isEmpty()){
+                respostas.get(indiceQuestaoAtual).setResposta(opcaoAtualSelecionada);
+            }
         }
         else
         {
-        
-        if(respostaAtual != null && !respostaAtual.isEmpty()){
-            respostas.get(indiceQuestaoAtual).setResposta(respostaAtual);
-        }
+            
+            if(respostaAtual != null && !respostaAtual.isEmpty()){
+                respostas.get(indiceQuestaoAtual).setResposta(respostaAtual);
+            }
         }
         
         for(Resposta resposta:respostas){
@@ -186,27 +180,27 @@ public class AlunoSimuladoController {
         addMessage(null,FacesMessage.SEVERITY_ERROR, "Simulado não pode ser finalizado!");
         finalizado = false;
         simuladoAtual = null;
+
     }
     
-
     public String getHorasRestante() {
         Long hora = tempoRestante/3600000;
         if(hora < 0) return "0";
         return hora.toString();
     }
-
     
-    public Integer getIndiceQuestaoAtual(){
+
+    public Integer getIndiceQuestaoAtual() {
         return indiceQuestaoAtual;
     }
-
-    public String getMinutosRestante() {
+    
+    
+    public String getMinutosRestante(){
         Long minutos = (tempoRestante/60000)%60;
         if(minutos < 0) return "00";
         if(minutos<10) return "0"+minutos.toString();
         return minutos.toString();
     }
-    
 
     public Integer getNumeroQuestaoAtual() {
         return numeroQuestaoAtual;
@@ -216,6 +210,7 @@ public class AlunoSimuladoController {
     public Integer getNumeroQuestoes() {
         return numeroQuestoes;
     }
+    
 
     public String getOpcaoAtualSelecionada() {
         return opcaoAtualSelecionada;
@@ -232,10 +227,14 @@ public class AlunoSimuladoController {
     public String getRespostaAtual() {
         return respostaAtual;
     }
-    
 
     public void setRespostaAtual(String respostaAtual) {
         this.respostaAtual = respostaAtual;
+    }
+    
+
+    public List<Resposta> getRespostas() {
+        return respostas;
     }
 
     public String getSegundosRestante() {
@@ -267,12 +266,8 @@ public class AlunoSimuladoController {
     public Long getTempoRestante() {
         return tempoRestante;
     }
-    private List<Resposta> respostas;
-
-    public List<Resposta> getRespostas() {
-        return respostas;
-    }
-    public String iniciarRealizacaoSimulado(Integer idAluno){
+    
+    public String iniciarRealizacaoSimulado(Integer idAluno) {
         inicio = agora = new Date();
         tempoTotal = new Long(simuladoAtual.getDuracao().getHours()*3600000+simuladoAtual.getDuracao().getMinutes()*60000+simuladoAtual.getDuracao().getSeconds()*1000);
         tempoRestante = tempoTotal;
@@ -283,7 +278,13 @@ public class AlunoSimuladoController {
         simulado.setAluno(aluno);
         simulado.setTurmaSimulado(simuladoAtual);
         simulado.setData(new Date());
-        simulado.setId(new AlunoSimuladoId(simulado.getAluno().getIdAluno(),simulado.getTurmaSimulado().getSimulado().getIdSimulado(),simulado.getTurmaSimulado().getTurma().getIdTurma()));
+        AlunoSimuladoId idAlunoSimulado= new AlunoSimuladoId(simulado.getAluno().getIdAluno(),simulado.getTurmaSimulado().getSimulado().getIdSimulado(),simulado.getTurmaSimulado().getTurma().getIdTurma());
+        if(simuladoHelper.getAlunoSimuladoByIdEager(idAlunoSimulado)!=null){
+            addMessage(null, FacesMessage.SEVERITY_ERROR, "Simulado já foi realizado!");
+            simulado = null;
+            return null;
+        }
+        simulado.setId(idAlunoSimulado);
         respostas = new ArrayList<>();
         for(SimuladoQuestao questao : simuladoAtual.getSimulado().getSimuladoQuestaos()){
             Resposta resposta = new Resposta();
@@ -294,13 +295,15 @@ public class AlunoSimuladoController {
         
         questaoAtual = respostas.get(0);
         indiceQuestaoAtual = 0;
+        simulado.setRespostas(new HashSet<>(respostas));
         
         //toDo
-        //salvar simulado no banco para que não seja possivel realizalo novamente ao fechar a pagina
+        //salvar simulado no banco para que não seja possivel realiza-lo novamente ao fechar a pagina
+        
+        simuladoHelper.cadastrarSimuladoAluno(simulado);
         
         return "/restrito/aluno/simulado?faces-redirect=true";
     }
-    
     public boolean isFinalizado(){
         return finalizado;
     }
@@ -316,8 +319,8 @@ public class AlunoSimuladoController {
         limparCampos();
         return "";
     }
-
-    public void marcarRevisao() {
+    
+    public void marcarRevisao(){
         questaoAtual.setMarcadaRevisao(true);
     }
 
@@ -327,16 +330,16 @@ public class AlunoSimuladoController {
 
     public void proximaQuestao() {
         if(questaoAtual.getQuestao().getObjetiva() != null){
-        if(opcaoAtualSelecionada != null && !opcaoAtualSelecionada.isEmpty()){
-            respostas.get(indiceQuestaoAtual).setResposta(opcaoAtualSelecionada);
-            opcaoAtualSelecionada=null;
-        }
+            if(opcaoAtualSelecionada != null && !opcaoAtualSelecionada.isEmpty()){
+                respostas.get(indiceQuestaoAtual).setResposta(opcaoAtualSelecionada);
+                opcaoAtualSelecionada=null;
+            }
         }
         else {
-        if(respostaAtual != null && !respostaAtual.isEmpty()){
-            respostas.get(indiceQuestaoAtual).setResposta(respostaAtual);
-            respostaAtual = null;
-        }
+            if(respostaAtual != null && !respostaAtual.isEmpty()){
+                respostas.get(indiceQuestaoAtual).setResposta(respostaAtual);
+                respostaAtual = null;
+            }
         }
         
         indiceQuestaoAtual++;
@@ -350,18 +353,18 @@ public class AlunoSimuladoController {
 
     public void questaoAnterior() {
         if(questaoAtual.getQuestao().getObjetiva()!=null){
-        if(opcaoAtualSelecionada != null && !opcaoAtualSelecionada.isEmpty()){
-            respostas.get(indiceQuestaoAtual).setResposta(opcaoAtualSelecionada);
-            opcaoAtualSelecionada = null;
-        }
+            if(opcaoAtualSelecionada != null && !opcaoAtualSelecionada.isEmpty()){
+                respostas.get(indiceQuestaoAtual).setResposta(opcaoAtualSelecionada);
+                opcaoAtualSelecionada = null;
+            }
         }
         else
         {
-        
-        if(respostaAtual != null && !respostaAtual.isEmpty()){
-            respostas.get(indiceQuestaoAtual).setResposta(respostaAtual);
-            respostaAtual = null;
-        }
+            
+            if(respostaAtual != null && !respostaAtual.isEmpty()){
+                respostas.get(indiceQuestaoAtual).setResposta(respostaAtual);
+                respostaAtual = null;
+            }
         }
         
         indiceQuestaoAtual--;
@@ -374,8 +377,15 @@ public class AlunoSimuladoController {
     }
 
     public void realizarSimulado(TurmaSimulado simulado) {
-        simuladoAtual = simulado;
+        simuladoAtual = simuladoHelper.getTurmaSimuladoByIdEager(simulado.getId());
     }
+
+//    @PreDestroy
+//    public void sessionDestroyed() {
+//        if(simuladoAtual!=null){
+//            forcarFinalizarSimulado();
+//        }
+//    }
     
     
 

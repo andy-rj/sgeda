@@ -20,6 +20,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -42,6 +43,7 @@ import webservice.CepWebService;
 @ManagedBean
 @SessionScoped
 public class AlunoController {
+
     private Aluno alunoDetalhe;
     private final AlunoHelper alunoHelper;
     private Boolean ativoAlterar;
@@ -106,6 +108,85 @@ public class AlunoController {
     private List<String> turnosDisponiveis;
     private String ufAlterar;
     private String motivoDesistencia;
+    private Boolean maiorIdade;
+
+    public Boolean getMaiorIdade() {
+        return maiorIdade;
+    }
+
+    private int getAge(Date dateOfBirth) {
+
+        Calendar today = Calendar.getInstance();
+        Calendar birthDate = Calendar.getInstance();
+
+        int age = 0;
+
+        birthDate.setTime(dateOfBirth);
+
+        age = today.get(Calendar.YEAR) - birthDate.get(Calendar.YEAR);
+
+        // If birth date is greater than todays date (after 2 days adjustment of leap year) then decrement age one year   
+        if ((birthDate.get(Calendar.DAY_OF_YEAR) - today.get(Calendar.DAY_OF_YEAR) > 3)
+                || (birthDate.get(Calendar.MONTH) > today.get(Calendar.MONTH))) {
+            age--;
+
+            // If birth date and todays date are of same month and birth day of month is greater than todays day of month then decrement age
+        } else if ((birthDate.get(Calendar.MONTH) == today.get(Calendar.MONTH))
+                && (birthDate.get(Calendar.DAY_OF_MONTH) > today.get(Calendar.DAY_OF_MONTH))) {
+            age--;
+        }
+
+        return age;
+    }
+
+    public void updateDataNascimento() {
+        int idade = getAge(dataNascimento);
+        maiorIdade = idade >= 18;
+    }
+
+    public Boolean getAprovado() {
+        return aprovado;
+    }
+
+    public void setAprovado(Boolean aprovado) {
+        this.aprovado = aprovado;
+    }
+
+    public Integer getPosicao() {
+        return posicao;
+    }
+
+    public void aprovadoCheckBoxChange() {
+        if (!aprovado) {
+            posicao = null;
+            nota = null;
+            descricaoAprovado = null;
+        }
+    }
+
+    public void setPosicao(Integer posicao) {
+        this.posicao = posicao;
+    }
+
+    public String getNota() {
+        return nota;
+    }
+
+    public void setNota(String nota) {
+        this.nota = nota;
+    }
+
+    public String getDescricaoAprovado() {
+        return descricaoAprovado;
+    }
+
+    public void setDescricaoAprovado(String descricaoAprovado) {
+        this.descricaoAprovado = descricaoAprovado;
+    }
+    private Boolean aprovado;
+    private Integer posicao;
+    private String nota;
+    private String descricaoAprovado;
 
     public String getMotivoDesistencia() {
         return motivoDesistencia;
@@ -114,8 +195,7 @@ public class AlunoController {
     public void setMotivoDesistencia(String motivoDesistencia) {
         this.motivoDesistencia = motivoDesistencia;
     }
-    
-    
+
     public AlunoController() {
         enderecoEncontrado = true;
         cursoHelper = new CursoHelper();
@@ -153,26 +233,37 @@ public class AlunoController {
         logradouro = endereco.getLogradouro();
         complemento = endereco.getComplemento();
         enderecoEncontrado = true;
-        
+
     }
 
     public void cadastrar() {
-                
+
         if (telefones == null || telefones.isEmpty()) {
             addMessage("cadastro:telefone", "Cadastre pelo menos um telefone!");
             return;
         }
-        
+
+        if (!maiorIdade) {
+            if (telefoneResponsavel == null||telefoneResponsavel.isEmpty()) {
+                addMessage("cadastro:telefoneResponsavel", "Telefone do responsavel é obrigatório!");
+            }
+            if (nomeResponsavel == null||nomeResponsavel.isEmpty()) {
+                addMessage("cadastro:responsavel", "Nome do responsavel é obrigatório!");
+            }
+            if (cpfResponsavel == null||cpfResponsavel.isEmpty()) {
+                addMessage("cadastro:cpfResponsavel", "CPF do responsável é obrigatório!");
+            }
+            return;
+        }
+
         Endereco endereco = new Endereco(null, logradouro, numero, complemento, cep, bairro, cidade, estado);
         Pessoa pessoa = new Pessoa(cpf, "0", nome, dataNascimento, sexo, new Timestamp(new Date().getTime()), email, telefones, endereco);
         endereco.setPessoa(pessoa);
         Aluno aluno = new Aluno(pessoa, nomeResponsavel, escolaridade, cpfResponsavel, telefoneResponsavel, null, null);
         aluno.setDesistente(false);
-        
+
         pessoa.setFoto(foto);
         pessoa.setAtivo(true);
-        
- 
 
         for (Telefone telefone : telefones) {
             telefone.setPessoa(pessoa);
@@ -188,7 +279,7 @@ public class AlunoController {
         papeis.add(papelAluno);
 
         Usuario usuario = new Usuario(pessoa, "", senha, true, null, papeis);
-    
+
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         Date dataInicioSelecionada;
         try {
@@ -201,12 +292,12 @@ public class AlunoController {
         List<Turma> turmas = turmaHelper.getTurmasByCurso(cursoSelecionado, dataInicioSelecionada, turnoSelecionado);
 
         aluno.setTurmaAlunos(new HashSet<TurmaAluno>());
-        
-        for(Turma turma: turmas){
+
+        for (Turma turma : turmas) {
             TurmaAluno turmaAluno = new TurmaAluno(null, aluno, turma, new Timestamp(new Date().getTime()), null);
             aluno.getTurmaAlunos().add(turmaAluno);
         }
-        
+
         if (!alunoHelper.cadastrar(pessoa, endereco, aluno, usuario)) {
             addMessage(null, FacesMessage.SEVERITY_ERROR, "Erro ao Cadastrar Aluno, Tente novamente!");
             return;
@@ -215,7 +306,7 @@ public class AlunoController {
 
         addMessage(null, FacesMessage.SEVERITY_INFO, "Aluno Cadastrado com Sucesso!");
 
-        String corpoMessagem = emailHTML.replace("{0}",aluno.getCurso().getNome()).replace("{1}", pessoa.getMatricula()).replace("{2}", senha);
+        String corpoMessagem = emailHTML.replace("{0}", aluno.getCurso().getNome()).replace("{1}", pessoa.getMatricula()).replace("{2}", senha);
 
         if (emailSender.sendTo(email, "Idealizar", corpoMessagem)) {
             addMessage(null, FacesMessage.SEVERITY_INFO, "Email enviado com informações de login!");
@@ -228,19 +319,35 @@ public class AlunoController {
 
     public String consultar() {
         resultadoConsulta = alunoHelper.getAlunos(stringConsulta);
-        if(resultadoConsulta == null || resultadoConsulta.isEmpty()){
-            addMessage(null, FacesMessage.SEVERITY_INFO ,"Nenhum resultado encontrado!");
+        if (resultadoConsulta == null || resultadoConsulta.isEmpty()) {
+            addMessage(null, FacesMessage.SEVERITY_INFO, "Nenhum resultado encontrado!");
         }
         return "";
+    }
+
+    public void alterarAprovado() {
+        if (aprovado) {
+            alunoDetalhe.setAprovado(1);
+            alunoDetalhe.setNota(nota);
+            alunoDetalhe.setPosicao(posicao);
+            alunoDetalhe.setDescricaoAprovado(descricaoAprovado);
+        } else {
+            alunoDetalhe.setAprovado(0);
+        }
+
+        if (!alunoHelper.alterarAprovado(alunoDetalhe)) {
+            addMessage(null, FacesMessage.SEVERITY_ERROR, "Erro ao salvar Aluno, Tente novamente!");
+            return;
+        }
+        addMessage(null, FacesMessage.SEVERITY_INFO, "Aluno alterado com sucesso!");
     }
 
     public void excluirTelefone(Telefone telefone) {
         telefones.remove(telefone);
     }
 
-    
     public void exibirDetalhes(Aluno aluno) {
-        alunoDetalhe = aluno;
+        alunoDetalhe = alunoHelper.getByIdEager(aluno.getIdAluno());
     }
 
     public Boolean getAtivoAlterar() {
@@ -394,9 +501,9 @@ public class AlunoController {
     public void setUfAlterar(String ufAlterar) {
         this.ufAlterar = ufAlterar;
     }
-    
-    public void alterarAtividade(){
-        if(alunoDetalhe.getPessoa().getAtivo()){
+
+    public void alterarAtividade() {
+        if (alunoDetalhe.getPessoa().getAtivo()) {
             alunoDetalhe.getPessoa().setAtivo(false);
             alunoDetalhe.getPessoa().getUsuario().setAtivo(false);
             alunoDetalhe.setDesistente(true);
@@ -407,25 +514,25 @@ public class AlunoController {
             alunoDetalhe.setDesistente(false);
             alunoDetalhe.setMotivoDesistencia(null);
         }
-        
-        if(!alunoHelper.alterarAtividade(alunoDetalhe)){
-             addMessage(null, FacesMessage.SEVERITY_ERROR, "Erro ao salvar Aluno, Tente novamente!");
+
+        if (!alunoHelper.alterarAtividade(alunoDetalhe)) {
+            addMessage(null, FacesMessage.SEVERITY_ERROR, "Erro ao salvar Aluno, Tente novamente!");
             return;
 
         }
-        
-        if(alunoDetalhe.getPessoa().getAtivo()){
+
+        if (alunoDetalhe.getPessoa().getAtivo()) {
             addMessage(null, FacesMessage.SEVERITY_INFO, "Aluno reativado com Sucesso!");
         } else {
             addMessage(null, FacesMessage.SEVERITY_INFO, "Aluno inativado com Sucesso!");
         }
 
     }
-    
+
     public void excluirTelefoneAlterar(Telefone telefone) {
         telefonesAlterar.remove(telefone);
     }
-    
+
     public void buscarCepAlterar() {
         EnvelopeEndereco endereco = CepWebService.buscaEndereco(cepAlterar);
         if (endereco == null) {
@@ -446,30 +553,30 @@ public class AlunoController {
         enderecoEncontrado = true;
 
     }
-    
+
     private boolean alteracaoDeDados(Aluno aluno) {
-        
+
         boolean encontrado = false;
-        
-        if(telefonesAlterar.size()!=aluno.getPessoa().getTelefones().size()){
+
+        if (telefonesAlterar.size() != aluno.getPessoa().getTelefones().size()) {
             return true;
         }
-        
-        for(Telefone tel : telefonesAlterar){
+
+        for (Telefone tel : telefonesAlterar) {
             encontrado = false;
-            for(Telefone telC : aluno.getPessoa().getTelefones()){
-                if(tel.getDdd().equals(telC.getDdd())&&
-                        tel.getNumero().equals(telC.getNumero())&&
-                        tel.getDescricao().equals(telC.getDescricao())){
+            for (Telefone telC : aluno.getPessoa().getTelefones()) {
+                if (tel.getDdd().equals(telC.getDdd())
+                        && tel.getNumero().equals(telC.getNumero())
+                        && tel.getDescricao().equals(telC.getDescricao())) {
                     encontrado = true;
                     break;
                 }
             }
-            if(!encontrado){
+            if (!encontrado) {
                 return true;
             }
         }
-        
+
         return !(aluno.getPessoa().getNome().equals(nomeAlterar)
                 && aluno.getPessoa().getSexo().equals(sexoAlterar)
                 && aluno.getPessoa().getEmail().equals(emailAlterar)
@@ -486,10 +593,9 @@ public class AlunoController {
                 && aluno.getPessoa().getDataNascimento().getDay() == dataNascAlterar.getDay()
                 && aluno.getPessoa().getDataNascimento().getMonth() == dataNascAlterar.getMonth()
                 && aluno.getPessoa().getDataNascimento().getYear() == dataNascAlterar.getYear());
-                
+
     }
 
-    
     public void salvarAlteracao() {
         Set<Telefone> telefoneExcluir = new HashSet<>(alunoDetalhe.getPessoa().getTelefones());
         Aluno alunoAlterar = alunoDetalhe;
@@ -514,7 +620,6 @@ public class AlunoController {
         alunoAlterar.getPessoa().getEnderecos().setLogradouro(logradouroAlterar);
         alunoAlterar.getPessoa().getEnderecos().setNumero(numeroAlterar);
         alunoAlterar.getPessoa().setDataNascimento(dataNascAlterar);
-        
 
         if (!alunoHelper.salvarAlteracaoAluno(alunoAlterar, telefoneExcluir)) {
             addMessage(null, FacesMessage.SEVERITY_ERROR, "Não foi possível salvar alterações!");
@@ -527,7 +632,7 @@ public class AlunoController {
         alunoDetalhe = alunoAlterar;
         carregarAlterar();
     }
-    
+
     public void incluirTelefoneAlterar() {
         if (dddAlterar == null || dddAlterar.isEmpty()) {
             addMessage("cadastro:dddA", "DDD inválido!");
@@ -553,7 +658,7 @@ public class AlunoController {
         descricaoTelefoneAlterar = null;
 
     }
-     
+
     public void carregarAlterar() {
         nomeAlterar = alunoDetalhe.getPessoa().getNome();
         dataNascAlterar = alunoDetalhe.getPessoa().getDataNascimento();
@@ -570,7 +675,7 @@ public class AlunoController {
         cidadeAlterar = alunoDetalhe.getPessoa().getEnderecos().getCidade();
         bairroAlterar = alunoDetalhe.getPessoa().getEnderecos().getBairro();
         telefonesAlterar = new HashSet<>();
-        for(Telefone telefone: alunoDetalhe.getPessoa().getTelefones()){
+        for (Telefone telefone : alunoDetalhe.getPessoa().getTelefones()) {
             Telefone novoTelefone = new Telefone(alunoDetalhe.getPessoa(), telefone.getDdd(), telefone.getNumero(), telefone.getDescricao());
             telefone.setIdTelefone(telefone.getIdTelefone());
             telefonesAlterar.add(novoTelefone);
@@ -579,6 +684,18 @@ public class AlunoController {
         telefoneNumeroAlterar = "";
         descricaoTelefoneAlterar = "";
         ativoAlterar = alunoDetalhe.getPessoa().getAtivo();
+    }
+
+    public void carregarAlterarAprovado() {
+        if (alunoDetalhe.getAprovado().equals(1)) {
+            aprovado = true;
+        } else {
+            aprovado = false;
+        }
+
+        nota = alunoDetalhe.getNota();
+        posicao = alunoDetalhe.getPosicao();
+        descricaoAprovado = alunoDetalhe.getDescricaoAprovado();
     }
 
     public Aluno getAlunoDetalhe() {
@@ -600,12 +717,12 @@ public class AlunoController {
     public void setCep(String cep) {
         this.cep = cep;
     }
-    
-    public String getCidade(){
+
+    public String getCidade() {
         return cidade;
     }
-    
-    public void setCidade(String cidade){
+
+    public void setCidade(String cidade) {
         this.cidade = cidade;
     }
 
@@ -644,7 +761,7 @@ public class AlunoController {
     public List<Curso> getCursosCadastrados() {
         return cursosCadastrados;
     }
-    
+
     public List<String> getDataInicioDisponiveis() {
         return dataInicioDisponiveis;
     }
@@ -656,7 +773,7 @@ public class AlunoController {
     public void setDataInicioSelecionada(String dataInicioSelecionada) {
         this.dataInicioSelecionada = dataInicioSelecionada;
     }
-    
+
     public Date getDataNascimento() {
         return dataNascimento;
     }
@@ -665,7 +782,6 @@ public class AlunoController {
         this.dataNascimento = dataNascimento;
     }
 
-    
     public String getDdd() {
         return ddd;
     }
@@ -709,11 +825,11 @@ public class AlunoController {
     public Foto getFoto() {
         return foto;
     }
-    
+
     public void setFoto(Foto foto) {
         this.foto = foto;
     }
-    
+
     public String getLogradouro() {
         return logradouro;
     }
@@ -781,7 +897,7 @@ public class AlunoController {
     public void setStringConsulta(String stringConsulta) {
         this.stringConsulta = stringConsulta;
     }
-    
+
     public String getTelefoneResponsavel() {
         return telefoneResponsavel;
     }
@@ -805,11 +921,11 @@ public class AlunoController {
     public void setTurnoSelecionado(String turnoSelecionado) {
         this.turnoSelecionado = turnoSelecionado;
     }
-    
+
     public List<String> getTurnosDisponiveis() {
         return turnosDisponiveis;
     }
-    
+
     public void incluirTelefone() {
         if (ddd == null || ddd.isEmpty()) {
             addMessage("cadastro:ddd", "DDD inválido!");
@@ -819,23 +935,22 @@ public class AlunoController {
             addMessage("cadastro:telefone", "Número do telefone inválido");
             return;
         }
-        
+
         Telefone telefone = new Telefone();
         telefone.setDdd(ddd);
         telefone.setNumero(numeroTelefone);
         telefone.setDescricao(descricaoTelefone);
-        
+
         if (telefones == null) {
             telefones = new HashSet<>();
         }
         telefones.add(telefone);
-        
+
         ddd = null;
         numeroTelefone = null;
         descricaoTelefone = null;
 
     }
-    
 
     public boolean isEnderecoEncontrado() {
         return enderecoEncontrado;
@@ -870,82 +985,84 @@ public class AlunoController {
         turnosDisponiveis = new ArrayList<>();
         dataInicioDisponiveis = new ArrayList<>();
     }
-    
 
     public String limparFormularioCadastro() {
         return novoCadastro();
     }
 
-    public void limparFormularioConsulta(){
+    public void limparFormularioConsulta() {
         stringConsulta = null;
         consultar();
     }
-    
+
     public String novaConsulta() {
         limparCampos();
         consultar();
         return "/restrito/cadastro/consulta/aluno?faces-redirect=true";
     }
-    
 
     public String novoCadastro() {
         cursosCadastrados = cursoHelper.getCursosDisponiveis();
         limparCampos();
+        maiorIdade = true;
         return "/restrito/cadastro/aluno?faces-redirect=true";
     }
-    
+
     public void onChangeCurso() {
-        if(cursoSelecionado !=null && !cursoSelecionado.equals(0)){
+        if (cursoSelecionado != null && !cursoSelecionado.equals(0)) {
             turmasDisponiveis = turmaHelper.getTurmasByCurso(cursoSelecionado);
             turnosDisponiveis = new ArrayList<>();
-            for(Turma turma : turmasDisponiveis){
+            for (Turma turma : turmasDisponiveis) {
                 boolean encontrado = false;
-                for(String str: turnosDisponiveis){
-                    if(str.equalsIgnoreCase(turma.getTurno())){
+                for (String str : turnosDisponiveis) {
+                    if (str.equalsIgnoreCase(turma.getTurno())) {
                         encontrado = true;
                         break;
                     }
                 }
-                if(!encontrado){
+                if (!encontrado) {
                     turnosDisponiveis.add(turma.getTurno());
                 }
             }
             dataInicioDisponiveis = new ArrayList<>();
-        }else
+        } else {
             turmasDisponiveis = new ArrayList<>();
+        }
     }
-    
+
     public void onChangeTurno() {
         SimpleDateFormat format;
         format = new SimpleDateFormat("dd/MM/yyyy");
-        if(turnoSelecionado !=null && !turnoSelecionado.equals("0")){
+        if (turnoSelecionado != null && !turnoSelecionado.equals("0")) {
             dataInicioDisponiveis = new ArrayList<>();
-            for(Turma turma : turmasDisponiveis){
+            for (Turma turma : turmasDisponiveis) {
                 boolean encontrado = false;
-                for(String date: dataInicioDisponiveis){
-                    if(date.equalsIgnoreCase(format.format(turma.getDataInicio()))){
+                for (String date : dataInicioDisponiveis) {
+                    if (date.equalsIgnoreCase(format.format(turma.getDataInicio()))) {
                         encontrado = true;
                         break;
                     }
                 }
-                if(!encontrado){
-                    if(turma.getTurno().equalsIgnoreCase(turnoSelecionado))
+                if (!encontrado) {
+                    if (turma.getTurno().equalsIgnoreCase(turnoSelecionado)) {
                         dataInicioDisponiveis.add(format.format(turma.getDataInicio()));
+                    }
                 }
             }
-        }else
+        } else {
             dataInicioDisponiveis = new ArrayList<>();
+        }
     }
-    
+
     public void reenviarEmail() {
         String email = alunoDetalhe.getPessoa().getEmail();
         String senha = Long.toHexString(Double.doubleToLongBits(Math.random()));
         if (senha.length() > 6) {
             senha = senha.substring(0, 6);
         }
-        String corpoMessagem = emailHTML.replace("{0}",alunoDetalhe.getCurso().getNome()).replace("{1}", alunoDetalhe.getPessoa().getMatricula()).replace("{2}", senha);
+        String corpoMessagem = emailHTML.replace("{0}", alunoDetalhe.getCurso().getNome()).replace("{1}", alunoDetalhe.getPessoa().getMatricula()).replace("{2}", senha);
         Usuario usuario = loginHelper.getByIdPessoa(alunoDetalhe.getIdAluno());
-        if(!loginHelper.alterarSenha(senha, usuario)){
+        if (!loginHelper.alterarSenha(senha, usuario)) {
             addMessage(null, FacesMessage.SEVERITY_INFO, "Não foi possivel recuperar senha!");
             return;
         }
@@ -955,8 +1072,8 @@ public class AlunoController {
             addMessage(null, FacesMessage.SEVERITY_ERROR, "Email com informações de login não pode ser enviado! Verifique sua conexão e tente reeviar através da página de detalhes");
         }
     }
-    
-    public void upload(FileUploadEvent event){
+
+    public void upload(FileUploadEvent event) {
         UploadedFile uploadedFile = event.getFile();
         String contentType = uploadedFile.getContentType();
         foto = new Foto();

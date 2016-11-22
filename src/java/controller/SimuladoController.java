@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -161,7 +162,45 @@ public class SimuladoController {
 
     public String novaConsulta() {
         limparCampos();
+        consultar();
         return "/restrito/professor/consulta/simulado?faces-redirect=true";
+    }
+    
+    private String stringConsulta;
+    private List<Simulado> resultadoConsulta;
+
+    public String getStringConsulta() {
+        return stringConsulta;
+    }
+
+    public void setStringConsulta(String stringConsulta) {
+        this.stringConsulta = stringConsulta;
+    }
+
+    public List<Simulado> getResultadoConsulta() {
+        return resultadoConsulta;
+    }
+    
+    public void consultar() {
+        resultadoConsulta = simuladoHelper.getSimulados(stringConsulta);
+        if (resultadoConsulta == null || resultadoConsulta.isEmpty()) {
+            addMessage(null, FacesMessage.SEVERITY_INFO, "Nenhum resultado encontrado!");
+        }
+    }
+    
+    private Simulado simuladoDetalhe;
+
+    public Simulado getSimuladoDetalhe() {
+        return simuladoDetalhe;
+    }
+    
+    public void exibirDetalhes(Simulado simulado) {
+        simuladoDetalhe = simuladoHelper.getSimuladoByIdEager(simulado.getIdSimulado());
+    }
+    
+    public void limparFormularioConsulta() {
+        stringConsulta = null;
+        resultadoConsulta = null;
     }
 
     private List<String> instituicoes;
@@ -193,12 +232,18 @@ public class SimuladoController {
     public List<String> getAssuntos() {
         return assuntos;
     }
+    private List<String> dificuldades;
+
+    public List<String> getDificuldades() {
+        return dificuldades;
+    }
     private List<String> anos;
     private List<String> professores;
     private List<String> disciplinas;
     private List<String> assuntos;
     private List<String> tipos;
     private Professor professor;
+    
     public String novoCadastro(Integer idProfessorAtual) {
         this.professor = professorHelper.getById(idProfessorAtual);
         limparCampos();
@@ -211,6 +256,7 @@ public class SimuladoController {
             instituicoes = new ArrayList<>();
             tipos = new ArrayList<>();
             niveis = new ArrayList<>();
+            dificuldades = new ArrayList<>(Arrays.asList("fácil","médio", "difícil"));
             
             for (Questao questao : questoesCadastradas) {
                 if (!anos.contains(questao.getAno())) {
@@ -296,6 +342,26 @@ public class SimuladoController {
                 if (assunto.getNome().equals(filtro)) {
                     return true;
                 }
+            }
+        }
+        return false;
+    }
+    
+    public boolean filtroPorDificuldade(Object value, Object filter, Locale locale) {
+        String[] filterText = (filter == null) ? null : (String[]) filter;
+        if (filterText == null || filterText.length == 0) {
+            return true;
+        }
+
+        Integer dificuldade = (value == null) ? null : (Integer) value;
+
+        if (dificuldade == null) {
+            return false;
+        }
+        
+        for (String filtro : filterText) {
+            if (dificuldade.equals(Integer.parseInt(filtro))) {
+                return true;
             }
         }
         return false;

@@ -51,7 +51,7 @@ public class Funcionario  implements java.io.Serializable {
         this.idFuncionario = idFuncionario;
     }
 
-@OneToOne(fetch=FetchType.LAZY)@PrimaryKeyJoinColumn
+@OneToOne(fetch=FetchType.EAGER)@PrimaryKeyJoinColumn
     public Pessoa getPessoa() {
         return this.pessoa;
     }

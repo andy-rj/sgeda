@@ -2,8 +2,10 @@ package entidade;
 // Generated 09/09/2016 09:36:48 by Hibernate Tools 4.3.1
 
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,6 +20,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
 /**
@@ -164,9 +167,19 @@ public class Pessoa  implements java.io.Serializable {
         this.email = email;
     }
 
-@OneToMany(fetch=FetchType.EAGER, mappedBy="pessoa")
+@OneToMany(fetch=FetchType.LAZY, mappedBy="pessoa")
     public Set<Telefone> getTelefones() {
         return this.telefones;
+    }
+    
+    @Transient
+    public List<Telefone> getTelefonesList(){
+        List<Telefone> list; 
+        if(this.getTelefones()!=null)
+            list = new ArrayList<>(this.getTelefones());
+        else
+            list = new ArrayList<>();
+        return list;
     }
     
     public void setTelefones(Set<Telefone> telefones) {
@@ -190,6 +203,22 @@ public class Pessoa  implements java.io.Serializable {
     
     public void setFoto(Foto foto) {
         this.foto = foto;
+    }
+    
+    @Transient
+    public String getTelefonesString(){
+    String tels = "";
+        if(getTelefones()!=null){
+           for(Telefone tel: getTelefones()){
+               tels += "(" + tel.getDdd()+ ")" + tel.getNumero().substring(0, 4) + "-" + tel.getNumero().substring(4);
+               if(tel.getDescricao()!=null && !tel.getDescricao().isEmpty()){
+                   tels += " - " + tel.getDescricao() + "\n";
+               } else {
+                   tels += "\n";
+               }
+            } 
+        }
+       return tels;
     }
 
 }

@@ -43,6 +43,47 @@ public class Aluno  implements java.io.Serializable {
      private Set<AlunoSimulado> alunoSimulados = new HashSet(0);
      private Boolean desistente;
      private String motivoDesistencia;
+     private Integer aprovado;
+
+    @Column(name="aprovado")
+    public Integer getAprovado() {
+        return aprovado;
+    }
+
+    public void setAprovado(Integer aprovado) {
+        this.aprovado = aprovado;
+    }
+    
+    @Column(name="posicao")
+    public Integer getPosicao() {
+        return posicao;
+    }
+
+    public void setPosicao(Integer posicao) {
+        this.posicao = posicao;
+    }
+
+    @Column(name="nota")
+    public String getNota() {
+        return nota;
+    }
+
+    public void setNota(String nota) {
+        this.nota = nota;
+    }
+    
+    @Column(name="descricaoAprovado")
+    public String getDescricaoAprovado() {
+        return descricaoAprovado;
+    }
+
+    public void setDescricaoAprovado(String descricaoAprovado) {
+        this.descricaoAprovado = descricaoAprovado;
+    }
+     private Integer posicao;
+     private String nota;
+     private String descricaoAprovado;
+
 
     public Aluno() {
     }
@@ -131,7 +172,7 @@ public class Aluno  implements java.io.Serializable {
     }
 
     
-    @OneToMany(fetch=FetchType.EAGER, mappedBy="aluno")
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="aluno")
     public Set<TurmaAluno> getTurmaAlunos() {
         return this.turmaAlunos;
     }
@@ -140,7 +181,7 @@ public class Aluno  implements java.io.Serializable {
         this.turmaAlunos = turmaAlunos;
     }
 
-    @OneToMany(fetch=FetchType.EAGER, mappedBy="aluno")
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="aluno")
     public Set<AlunoSimulado> getAlunoSimulados() {
         return this.alunoSimulados;
     }
@@ -239,13 +280,15 @@ public class Aluno  implements java.io.Serializable {
     }
     
     public BigDecimal notaSimulado(TurmaSimulado simulado){
-        if(alunoSimulados == null) return BigDecimal.ZERO;
+        if(alunoSimulados == null && !simulado.isSimuladoAberto()) return BigDecimal.ZERO;
+        else if (alunoSimulados == null) return null;
         for(AlunoSimulado alunoSimulado: alunoSimulados){
             if(alunoSimulado.getTurmaSimulado().getId().equals(simulado.getId())){
                 return alunoSimulado.getNota();
             }
         }
-        return BigDecimal.ZERO;
+        if(simulado.isSimuladoAberto()) return null;
+        else return BigDecimal.ZERO;
     }
 
     @Column(name="desistente")

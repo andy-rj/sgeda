@@ -102,7 +102,7 @@ public class AlunoSimulado implements java.io.Serializable {
         this.data = data;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "alunoSimulado")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "alunoSimulado")
     public Set<Resposta> getRespostas() {
         return this.respostas;
     }

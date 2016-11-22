@@ -13,48 +13,100 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
 public class CursoHelper {
+
     Session session = null;
 
     public boolean cadastrar(Curso curso) {
         session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.getTransaction();
-         
-        try{
+
+        try {
             tx.begin();
             session.save(curso);
             session.flush();
             tx.commit();
         } catch (Exception e) {
-            if(tx != null){
+            if (tx != null) {
                 tx.rollback();
             }
             e.printStackTrace();
             return false;
         } finally {
-            if(session != null){
+            if (session != null) {
                 session.close();
             }
         }
         return true;
     }
+
+    public Curso getCursoByIdEager(Integer idCurso) {
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.getTransaction();
+        try {
+            tx.begin();
+            Curso curso = (Curso) session.createCriteria(Curso.class).add(Restrictions.eq("idCurso", idCurso)).uniqueResult();
+            if(curso!=null){
+                curso.getDisciplinas().size();
+                curso.getTurmas().size();
+            }
+            tx.commit();
+            return curso;
+        } catch (HibernateException e){
+            if(tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+        return null;
+    }
     
+    public Curso getCursoByIdEagerTurmaSimulado(Integer idCurso) {
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.getTransaction();
+        try {
+            tx.begin();
+            Curso curso = (Curso) session.createCriteria(Curso.class).add(Restrictions.eq("idCurso", idCurso)).uniqueResult();
+            if(curso!=null){
+                curso.getDisciplinas().size();
+                curso.getTurmas().size();
+                for(Turma turma: curso.getTurmas()){
+                    turma.getTurmaSimulados().size();
+                }
+            }
+            tx.commit();
+            return curso;
+        } catch (HibernateException e){
+            if(tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+        return null;
+    }
+
     public boolean salvarAlteracaoCurso(Curso curso) {
         session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.getTransaction();
-         
-        try{
+
+        try {
             tx.begin();
             session.update(curso);
             session.flush();
             tx.commit();
         } catch (Exception e) {
-            if(tx != null){
+            if (tx != null) {
                 tx.rollback();
             }
             e.printStackTrace();
             return false;
         } finally {
-            if(session != null){
+            if (session != null) {
                 session.close();
             }
         }
@@ -69,7 +121,7 @@ public class CursoHelper {
             Criteria crit = session.createCriteria(Curso.class);
 
             crit.createAlias("disciplinas", "disciplina");
-            
+
             if (stringConsulta != null && !stringConsulta.isEmpty()) {
                 crit.add(Restrictions.disjunction()
                         .add(Restrictions.ilike("nome", "%" + stringConsulta + "%"))
@@ -83,45 +135,73 @@ public class CursoHelper {
 
             List<Curso> retorno = crit.list();
 
-            //for (Curso curso : retorno) {
-                
-            //}
-            
+            for (Curso curso : retorno) {
+                curso.getDisciplinas().size();
+            }
             session.flush();
             tx.commit();
             return retorno;
-        } catch (HibernateException e){
-            if(tx != null){
+        } catch (HibernateException e) {
+            if (tx != null) {
                 tx.rollback();
             }
         } finally {
-            if(session != null){
+            if (session != null) {
                 session.close();
             }
         }
         return null;
     }
-    
-    public List<Curso> getCursosDisponiveis(){
-        
+
+    public List<Curso> getCursosDisponiveis() {
+
         session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.getTransaction();
-        try{
+        try {
             tx.begin();
             List<Curso> cursos = session.createCriteria(Curso.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
             session.flush();
             tx.commit();
             return cursos;
-        }catch(HibernateException e){
-            if(tx != null){
+        } catch (HibernateException e) {
+            if (tx != null) {
                 tx.rollback();
             }
-        }finally{
-            if(session != null){
+        } finally {
+            if (session != null) {
                 session.close();
             }
         }
         return null;
     }
-    
+
+    public List<Curso> getCursosDisponiveisEager() {
+
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.getTransaction();
+        try {
+            tx.begin();
+            List<Curso> cursos = session.createCriteria(Curso.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+            session.flush();
+            tx.commit();
+            if (cursos != null) {
+                for (Curso curso : cursos) {
+                    for (Turma turma : curso.getTurmas()) {
+                        turma.getTurmaAlunos().size();
+                    }
+                }
+            }
+            return cursos;
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return null;
+    }
+
 }

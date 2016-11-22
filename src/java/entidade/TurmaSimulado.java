@@ -75,7 +75,7 @@ public class TurmaSimulado  implements java.io.Serializable {
         this.simulado = simulado;
     }
 
-@ManyToOne(fetch=FetchType.LAZY)
+@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="turma_idTurma", nullable=false, insertable=false, updatable=false)
     public Turma getTurma() {
         return this.turma;

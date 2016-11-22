@@ -13,13 +13,16 @@
             .ui-growl {
                 z-index:9999 !important;
             }
+            .ui-dialog-titlebar-close {
+                margin-top: 0px !important;
+            }
         </style>
     </h:head>
     <h:body style="background-color: #e3e3e3">
         <h:form id="cadastro">
 
             <p:dialog header="Questões" modal="true" resizable="false"  draggable="false" widgetVar="modalQuestao"
-                      minimizable="true" maximizable="true" width="800" height="500">
+                      minimizable="true" maximizable="true" width="900" height="500">
                 <b:row>
                     <b:column>
                         <font color ='red' >*</font><h:outputText style="font-size: 14px;color: red;" value="Utilize o botão direito do mouse para selecionar." />
@@ -35,7 +38,7 @@
                                     <p:inputText id="globalFilter" onkeyup="PF('tableQuestoes').filter()" style="width:150px" placeholder="Procurar"/>
                                 </p:outputPanel>
                             </f:facet>
-                            <p:column style="text-align: center;width: 73px;" headerText="Código">
+                            <p:column style="text-align: center;width: 63px;" headerText="Código">
                                 <h:outputText value="#{questao.idQuestao}" />
                             </p:column>
                             <p:column style="text-align: center;" filterBy="#{questao.tipo}" filterMatchMode="in" >
@@ -54,6 +57,16 @@
                                 </f:facet>
                                 <h:outputText value="#{questao.nivel}" />
                             </p:column>
+                            <p:column style="text-align: center;" filterBy="#{questao.dificuldade}" filterFunction="#{simuladoController.filtroPorDificuldade}" >
+                                <f:facet name="filter">
+                                    <p:selectCheckboxMenu label="dificuldade" onchange="PF('tableQuestoes').filter()" panelStyle="width:125px" scrollHeight="150">
+                                        <f:selectItem itemLabel="fácil" itemValue="1" />
+                                        <f:selectItem itemLabel="médio" itemValue="2" />
+                                        <f:selectItem itemLabel="difícil" itemValue="3" />
+                                    </p:selectCheckboxMenu>
+                                </f:facet>
+                                <p:rating stars="3" readonly="true" value="#{questao.dificuldade}" />
+                            </p:column>
                             <p:column style="text-align: center;" filterBy="#{questao.instituicao}" filterMatchMode="in" >
                                 <f:facet name="filter">
                                     <p:selectCheckboxMenu label="instituição" onchange="PF('tableQuestoes').filter()" panelStyle="width:225px" scrollHeight="150">
@@ -62,7 +75,7 @@
                                 </f:facet>
                                 <h:outputText value="#{questao.instituicao}" />
                             </p:column>
-                            <p:column style="text-align: center;width: 86px;" filterBy="#{questao.ano}" filterMatchMode="in" >
+                            <p:column style="text-align: center;width: 76px;" filterBy="#{questao.ano}" filterMatchMode="in" >
                                 <f:facet name="filter">
                                     <p:selectCheckboxMenu label="ano" onchange="PF('tableQuestoes').filter()" panelStyle="width:125px" scrollHeight="150">
                                         <f:selectItems value="#{simuladoController.anos}" />
@@ -86,7 +99,7 @@
                                 </f:facet>
                                 <h:outputText value="#{questao.disciplina.nome}" />
                             </p:column>
-                            <p:column style="text-align: center;" filterBy="#{questao.assuntos}" filterFunction="#{simuladoController.filtroPorAssunto}">
+                            <p:column style="text-align: center;" filterBy="#{questao.assuntosList}" filterFunction="#{simuladoController.filtroPorAssunto}">
                                 <f:facet name="filter">
                                     <p:selectCheckboxMenu label="assunto" onchange="PF('tableQuestoes').filter()" panelStyle="width:200px" scrollHeight="150">
                                         <f:selectItems value="#{simuladoController.assuntos}" />
@@ -107,16 +120,15 @@
             </p:contextMenu>
 
             <p:overlayPanel widgetVar="detalheQuestaoO" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" my="right top" at="right top">
-                <p:outputPanel id="detalheQuestao" style="text-align:center;">
-                    <p:panelGrid  columns="2" rendered="#{not empty simuladoController.questaoSelecionada}" >
-
-                        <h:outputText value="Código:" />
-                        <h:outputText value="#{simuladoController.questaoSelecionada.idQuestao}" />
-
-                        <h:outputText value="Enunciado" />
-                        <h:outputText value="#{simuladoController.questaoSelecionada.enunciado}" escape="false" />
-
-                    </p:panelGrid>
+                <p:outputPanel id="detalheQuestao">
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Enunciado" /><br/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{simuladoController.questaoSelecionada.enunciado}" escape="false" />
+                        </p:column>
+                    </p:row>
                 </p:outputPanel>
             </p:overlayPanel>
 

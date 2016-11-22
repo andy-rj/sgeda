@@ -12,14 +12,17 @@
             .ui-growl {
                 z-index:9999 !important;
             }
+            .ui-dialog-titlebar-close {
+                margin-top: 0px !important;
+            }
         </style>
     </h:head>
     <h:body style="background-color: #e3e3e3">
 
         <h:form id="consulta">
-<!--        ***************************
-            modal de alteração de dados
-            ***************************-->
+            <!--        ***************************
+                        modal de alteração de dados
+                        ***************************-->
             <p:dialog rendered="#{loginController.usuarioLogado.administrador}" header="Alterar Disciplina" modal="true" resizable="false"  draggable="false" widgetVar="modalAlterar"
                       minimizable="true" maximizable="true" width="500" height="300" onHide="PF('modalDetalhe').show();">
                 <p:outputPanel id="alterarDisciplina">
@@ -36,7 +39,7 @@
                             <b:message for="codigoAlterar"/>
                         </b:column>
                     </b:row>
-                     <b:row>
+                    <b:row>
                         <b:column colSm="2">
                             <h:outputLabel value="Nome: " />
                         </b:column>
@@ -45,7 +48,7 @@
                                 <f:validateRequired/>
                             </p:inputText>
                         </b:column>
-                         <b:column>
+                        <b:column>
                             <b:message for="nomeAlterar"/>
                         </b:column>
                     </b:row>
@@ -68,10 +71,10 @@
                     <p:commandButton value="Fechar" onclick="PF('modalAlterar').hide();" />
                 </f:facet>
             </p:dialog>
-            
-<!--        ***************************
-            modal de detalhes
-            ***************************-->
+
+            <!--        ***************************
+                        modal de detalhes
+                        ***************************-->
             <p:dialog header="Detalhes" modal="true" resizable="false"  draggable="false" widgetVar="modalDetalhe"
                       minimizable="true" maximizable="true" width="500" height="300">
                 <p:outputPanel id="detalheDisciplina">
@@ -83,7 +86,7 @@
                             <h:outputText id="codigo" value="#{disciplinaController.disciplinaDetalhe.codigo}" />   
                         </b:column>
                     </b:row>
-                     <b:row>
+                    <b:row>
                         <b:column colSm="2">
                             <h:outputLabel value="Nome: " />
                         </b:column>
@@ -133,11 +136,11 @@
                                                  paginator="true"
                                                  paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink} {RowsPerPageDropdown}"
                                                  rowsPerPageTemplate="5,10,15">
-                                       
+
                                         <p:column style="width: 120px;" headerText="Código" sortBy="#{disciplina.codigo}">
                                             <h:outputText id="matricula" value="#{disciplina.codigo}" />
                                         </p:column>
-                                        
+
                                         <p:column headerText="Nome" sortBy="#{disciplina.nome}">
                                             <h:outputText value="#{disciplina.nome}" />
                                         </p:column>

@@ -70,7 +70,8 @@
                                 </b:column>
                                 <b:column colSm="7">
                                     <p:calendar id="nascimento" value="#{alunoController.dataNascimento}" locale="pt" navigator="true" pattern="dd-MM-yyyy" yearRange="c-90:c">
-                                        <f:validateBean />
+                                        <f:validateBean/>
+                                        <p:ajax event="dateSelect" update=":#{p:component('responsavel')} :#{p:component('telefoneResponsavel')} :#{p:component('cpfResponsavel')}" listener="#{alunoController.updateDataNascimento}"/>
                                     </p:calendar>
                                 </b:column>
                                 <b:column colSm="3">
@@ -159,7 +160,15 @@
                                     <h:outputLabel value="Escolaridade" ><font color ='red' >*</font></h:outputLabel>
                                 </b:column>
                                 <b:column colSm="7">
-                                    <p:inputText id="escolaridade" value="#{alunoController.escolaridade}" required="true" requiredMessage="Escolaridade é obrigatório!" maxlength="50"/>
+                                    <p:selectOneMenu id="escolaridade" value="#{alunoController.escolaridade}" required="true" requiredMessage="Turno é obrigatório!" style="width:100%">
+                                        <f:selectItem itemLabel="Selecione" itemValue="0" noSelectionOption="true" />
+                                        <f:selectItem itemLabel="Ensino Fundamental Completo" itemValue="Ensino Fundamental Completo" />
+                                        <f:selectItem itemLabel="Ensino Fundamental Incompleto" itemValue="Ensino Fundamental Incompleto" />
+                                        <f:selectItem itemLabel="Ensino Médio Completo" itemValue="Ensino Médio Completo" />
+                                        <f:selectItem itemLabel="Ensino Médio Incompleto" itemValue="Ensino Médio Incompleto" />
+                                        <f:selectItem itemLabel="Ensino Superior Completo" itemValue="Ensino Superior Completo" />
+                                        <f:selectItem itemLabel="Ensino Superior Incompleto" itemValue="Ensino Superior Incompleto" />
+                                    </p:selectOneMenu>
                                 </b:column>
                                 <b:column colSm="3">
                                     <b:message for="escolaridade"/>
@@ -170,7 +179,7 @@
                                     <h:outputLabel value="Nome do Responsável" ></h:outputLabel>
                                 </b:column>
                                 <b:column colSm="7">
-                                    <p:inputText id="responsavel" value="#{alunoController.nomeResponsavel}" maxlength="100"/>
+                                    <p:inputText id="responsavel" disabled="#{alunoController.maiorIdade}" value="#{alunoController.nomeResponsavel}" maxlength="100"/>
                                 </b:column>
                                 <b:column colSm="3">
                                     <b:message for="responsavel"/>
@@ -181,7 +190,7 @@
                                     <h:outputLabel value="CPF do Responsável" />
                                 </b:column>
                                 <b:column colSm="7">
-                                    <p:inputMask id="cpfResponsavel" value="#{alunoController.cpfResponsavel}" maxlength="11" validatorMessage="Nome é obrigatório e deve ter até 50 caracteres" mask="999.999.999-99" converter="converter.cpfConverter">
+                                    <p:inputMask id="cpfResponsavel" disabled="#{alunoController.maiorIdade}" value="#{alunoController.cpfResponsavel}" maxlength="11" validatorMessage="Nome é obrigatório e deve ter até 50 caracteres" mask="999.999.999-99" converter="converter.cpfConverter">
                                     </p:inputMask>
                                 </b:column>
                                 <b:column colSm="3">
@@ -194,7 +203,7 @@
                                     <h:outputLabel value="Telefone do Responsável" />
                                 </b:column>
                                 <b:column colSm="7">
-                                    <p:inputMask id="telefoneResponsavel" value="#{alunoController.telefoneResponsavel}" mask="(99)9999-9999?9" converter="converter.telefoneResponsavelConverter"/>
+                                    <p:inputMask id="telefoneResponsavel" disabled="#{alunoController.maiorIdade}" value="#{alunoController.telefoneResponsavel}" mask="(99)9999-9999?9" converter="converter.telefoneResponsavelConverter"/>
                                 </b:column>
                                 <b:column colSm="3">
                                     <b:message for="telefoneResponsavel"/>

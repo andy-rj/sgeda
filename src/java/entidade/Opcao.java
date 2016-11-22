@@ -54,7 +54,7 @@ public class Opcao  implements java.io.Serializable {
         this.idOpcao = idOpcao;
     }
 
-@ManyToOne(fetch=FetchType.LAZY)
+@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="idObjetiva", nullable=false)
     public Objetiva getObjetiva() {
         return this.objetiva;

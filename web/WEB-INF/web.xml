@@ -89,6 +89,5 @@
     <filter-mapping>
         <filter-name>PrimeFacesFileUploadFilter</filter-name>
         <servlet-name>Faces Servlet</servlet-name>
-    </filter-mapping>
-    
-</web-app>
+    </filter-mapping>   
+ </web-app>

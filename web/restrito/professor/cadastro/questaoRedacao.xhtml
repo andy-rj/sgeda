@@ -12,11 +12,14 @@
             .ui-growl {
                 z-index:9999 !important;
             }
+            .ui-dialog-titlebar-close {
+                margin-top: 0px !important;
+            }
         </style>
     </h:head>
     <h:body style="background-color: #e3e3e3">
         <h:form id="cadastro">
-            
+
             <p:dialog header="Inserir Figura" widgetVar="modalFigura" modal="true" height="500" width="526" draggable="false" resizable="false">
                 <b:row>
                     <b:column id="figuraColumn">
@@ -41,7 +44,7 @@
                     </b:column>
                 </b:row>
             </p:dialog>
-            
+
             <p:growl  globalOnly="true" id="info"  />
             <b:fetchBeanInfos/>
             <ui:insert name="navbar">
@@ -100,7 +103,7 @@
                                     <b:message for="nivelQuestao"  />
                                 </b:column>
                             </b:row>
-                              <b:row id="disciplinas">
+                            <b:row id="disciplinas">
                                 <b:column colSm="2">
                                     <h:outputLabel for="disciplina" value="Disciplina"/>
                                 </b:column>
@@ -114,27 +117,40 @@
                                 <b:column colSm="3">
                                     <b:message for="disciplina"/>
                                 </b:column>
-                              </b:row>
-                              <b:row>
-                                  <b:column colSm="2">
-                                      <h:outputLabel value="Assuntos" ></h:outputLabel>
-                                  </b:column>
-                                  <b:column colSm="7">
-                                      <p:autoComplete id="assuntos" multiple="true" value="#{questaoController.assuntosSelecionados}" completeMethod="#{questaoController.completarAssuntos}"
-                                                      var="assunto" itemLabel="#{assunto}" itemValue="#{assunto}">
-                                          <p:column style="width:10%">
-                                              <h:outputText styleClass="ui-theme ui-theme-#{assunto}" />
-                                          </p:column>
+                            </b:row>
+                            <b:row>
+                                <b:column colSm="2">
+                                    <h:outputLabel value="Dificuldade" ></h:outputLabel>
+                                </b:column>
+                                <b:column colSm="7">
+                                    <p:rating stars="3" cancel="false" id="dificuldade" value="#{questaoController.dificuldade}" requiredMessage="Nível de dificuldade é obrigatório, selecione!">
+                                        <f:validateRequired/>
+                                    </p:rating>
+                                </b:column>
+                                <b:column colSm="3">
+                                    <b:message for="dificuldade"  />
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column colSm="2">
+                                    <h:outputLabel value="Assuntos" ></h:outputLabel>
+                                </b:column>
+                                <b:column colSm="7">
+                                    <p:autoComplete id="assuntos" multiple="true" value="#{questaoController.assuntosSelecionados}" completeMethod="#{questaoController.completarAssuntos}"
+                                                    var="assunto" itemLabel="#{assunto}" itemValue="#{assunto}">
+                                        <p:column style="width:10%">
+                                            <h:outputText styleClass="ui-theme ui-theme-#{assunto}" />
+                                        </p:column>
 
-                                          <p:column>
-                                              <h:outputText value="#{assunto}" />
-                                          </p:column>
-                                      </p:autoComplete>
-                                  </b:column>
-                                  <b:column colSm="3">
-                                      <b:message for="assuntos"  />
-                                  </b:column>
-                              </b:row>
+                                        <p:column>
+                                            <h:outputText value="#{assunto}" />
+                                        </p:column>
+                                    </p:autoComplete>
+                                </b:column>
+                                <b:column colSm="3">
+                                    <b:message for="assuntos"  />
+                                </b:column>
+                            </b:row>
                             <b:row>
                                 <b:column col-sm="12">
                                     <strong style="color: #999999;">Enunciado</strong>
@@ -160,12 +176,12 @@
                                     <hr style= "border-top: 1px solid #999999;"/>
                                 </b:column>
                             </b:row>
-                            
-                                                        
+
+
                             <b:row>
                                 <br/>
                                 <b:column>
-                                    <p:commandButton value="Cadastrar" process="@this nivelQuestao instituicaoQuestao ano disciplina editor assuntos" update="info container" action="#{questaoController.cadastrarRedacao}"/>
+                                    <p:commandButton value="Cadastrar" process="@this dificuldade nivelQuestao instituicaoQuestao ano disciplina editor assuntos" update="info container" action="#{questaoController.cadastrarRedacao}"/>
                                     <p:commandButton value="Limpar" action="#{questaoController.limparFormularioCadastroObjetiva}" immediate="true"/>
                                 </b:column>
                             </b:row>

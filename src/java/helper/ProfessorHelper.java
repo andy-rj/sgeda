@@ -11,6 +11,7 @@ import entidade.Telefone;
 import entidade.Usuario;
 import hibernate.HibernateUtil;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
@@ -219,6 +220,49 @@ public class ProfessorHelper {
         }
         return null;
     }
+    
+    public List<Professor> getProfessores(List<String> stringConsulta) {
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.getTransaction();
+        try {
+            tx.begin();
+            Criteria crit = session.createCriteria(Professor.class);
+
+            crit.createAlias("pessoa", "pessoa");
+            List<Boolean> list = new ArrayList<>();
+            if(stringConsulta !=null && !stringConsulta.isEmpty()){
+                for(String str:stringConsulta){
+                    if(str.equals("1")){
+                        list.add(Boolean.TRUE);
+                    }else if(str.equals("0")){
+                        list.add(Boolean.FALSE);
+                    }
+                }
+                crit.add(Restrictions.in("pessoa.ativo", list));
+            }
+            
+            crit.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+
+            List<Professor> retorno = crit.list();
+
+            for (Professor professor : retorno) {
+                professor.getPessoa().getTelefones().size();
+                professor.getDisciplinas().size();
+            }
+            session.flush();
+            tx.commit();
+            return retorno;
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return null;
+    }
 
     public Professor getById(Integer Id) {
         session = HibernateUtil.getSessionFactory().openSession();
@@ -229,6 +273,30 @@ public class ProfessorHelper {
             session.flush();
             tx.commit();
             return professore;
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return null;
+    }
+    
+    public Professor getByIdEagerDisciplinas(Integer Id) {
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.getTransaction();
+        try {
+            tx.begin();
+            Professor professor = (Professor) session.createCriteria(Professor.class).add(Restrictions.eq("idProfessor", Id)).uniqueResult();
+            if(professor!=null){
+                professor.getDisciplinas().size();
+            }
+            session.flush();
+            tx.commit();
+            return professor;
         } catch (HibernateException e) {
             if (tx != null) {
                 tx.rollback();

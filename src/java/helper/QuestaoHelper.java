@@ -140,6 +140,31 @@ public class QuestaoHelper {
         }
         return true;
     }
+
+    public Questao getQuestaoByIdEager(Integer idQuestao) {
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.getTransaction();
+        try {
+            tx.begin();
+            Questao questao = (Questao) session.createCriteria(Questao.class).add(Restrictions.eq("idQuestao", idQuestao)).uniqueResult();
+            if(questao!=null){
+                questao.getFiguras().size();
+                questao.getAssuntos().size();
+                questao.getObjetiva().getOpcaos().size();
+            }
+            tx.commit();
+            return questao;
+        } catch (HibernateException e){
+            if(tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+        return null;
+    }
     
     public List<Questao> getQuestoes(String string){
         session = HibernateUtil.getSessionFactory().openSession();
@@ -184,6 +209,11 @@ public class QuestaoHelper {
             crit.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
             List<Questao> retorno = crit.list();
+            if(retorno != null){
+                for(Questao questao: retorno){
+                    questao.getAssuntos().size();
+                }
+            }
             session.flush();
             tx.commit();
             return retorno;

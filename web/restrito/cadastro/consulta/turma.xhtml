@@ -12,6 +12,9 @@
             .ui-growl {
                 z-index:9999 !important;
             }
+            .ui-dialog-titlebar-close {
+                margin-top: 0px !important;
+            }
         </style>
     </h:head>
     <h:body style="background-color: #e3e3e3">
@@ -37,7 +40,7 @@
                             <b:message for="professorAlterar"/>
                         </b:column>
                     </b:row>
-                    <b:row>
+<!--                    <b:row>
                         <b:column colSm="2">
                             <h:outputLabel value="Turno:" />
                         </b:column>
@@ -79,7 +82,7 @@
                         <b:column colSm="3">
                             <b:message for="dataFimAlterar"  />
                         </b:column>
-                    </b:row>
+                    </b:row>-->
                 </p:outputPanel>
                 <f:facet name="footer">
                     <p:commandButton value="Fechar" onclick="PF('modalAlterar').hide();

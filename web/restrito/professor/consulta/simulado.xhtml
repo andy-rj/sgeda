@@ -8,50 +8,145 @@
       xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>Curso Idealizar</title>
+        <style type="text/css">
+            .ui-growl {
+                z-index:9999 !important;
+            }
+            .ui-dialog-titlebar-close {
+                margin-top: 0px !important;
+            }
+        </style>
     </h:head>
     <h:body>
 
-        <h:form id="cadastro">
+        <h:form id="consulta">
+
+            <!--        ***************************
+                        modal de detalhes
+                        ***************************-->
+            <p:dialog header="Detalhes" modal="true" resizable="false"  draggable="false" widgetVar="modalDetalhe"
+                      minimizable="true" maximizable="true" width="800" height="500">
+                <p:outputPanel id="detalheSimulado">
+                    
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputLabel value="Código: " />
+                        </b:column>
+                        <b:column colSm="10">
+                            <h:outputText id="disciplinadetalhe" value="#{simuladoController.simuladoDetalhe.nome}" />   
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputLabel value="Descrição:" />
+                        </b:column>
+                        <b:column colSm="10">
+                            <h:outputText id="professordetalhe" value="#{simuladoController.simuladoDetalhe.descricao}" />   
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputLabel value="Professor:" />
+                        </b:column>
+                        <b:column colSm="10">
+                            <h:outputText id="tipodetalhe" value="#{simuladoController.simuladoDetalhe.professor.pessoa.nome}" />   
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputLabel value="Data Cadastro:" />
+                        </b:column>
+                        <b:column colSm="10">
+                            <h:outputText id="instituicaodetalhe" value="#{simuladoController.simuladoDetalhe.dataCadastro}">
+                                <f:convertDateTime pattern="dd/MM/yy"/>
+                            </h:outputText>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputLabel value="Questões:" />
+                        </b:column>
+                    </b:row>
+                    <ui:repeat var="questao" value="#{simuladoController.simuladoDetalhe.simuladoQuestaosList}">
+                        <p:separator/>
+                        <b:row>
+                            <b:column>
+                                <h:outputLabel value="Código: "/>
+                                <h:outputText value=" #{questao.questao.idQuestao}"/>
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:column colSm="2">
+                                <h:outputLabel value="Nota: "/>
+                                <h:outputText value=" #{questao.valorQuestao}">
+                                    <f:convertNumber pattern="#0.0"/>
+                                </h:outputText>
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:column>
+                                <h:outputLabel value="Enunciado: "/>
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:column>
+                                <h:outputText value="#{questao.questao.enunciado}" escape="false"/>
+                            </b:column>
+                        </b:row>
+                    </ui:repeat>
+
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <b:row id="footer">
+                        <p:commandButton value="Fechar" onclick="PF('modalDetalhe').hide();" />
+                    </b:row>
+                </f:facet>
+            </p:dialog>
+
+            <p:growl  globalOnly="true" id="info"  />
             <b:fetchBeanInfos/>
             <ui:insert name="navbar">
                 <ui:include src="/template/navbar.xhtml"/>
             </ui:insert>
-            <b:container fluid="true">
-                <b:row>
-                    <b:column colSm="8">
-                        <b:panel title="Consulta de Simulado" collapsible="false" style="margin-top: 66px; " look="info">
-                            
+            <b:container>
+                <b:row style="margin-left: -45px; margin-right: -45px;">
+                    <b:column >
+                        <b:panel title="Consulta de Simulado" style="min-height: 200px;" collapsible="false" look="info">
                             <b:row>
-                                <b:column colSm="2">
-                                    <h:outputLabel value="Título" />
+                                <b:column colSm="5" offset="2">
+                                    <p:inputText id="entradaConsulta" placeholder="Nome ou Professor" value="#{simuladoController.stringConsulta}" maxlength="50" style="width: 100%"/>
                                 </b:column>
-                                <b:column colSm="7">
-                                    <p:inputText id="titulo" value="#{simuladoController.nome}" maxlength="50" >
-                                    </p:inputText>
-                                </b:column>
-      
-                            </b:row>
-                           
-                            <b:row>
-                                <b:column colSm="2">
-                                    <h:outputLabel value="Disciplina" ></h:outputLabel>
-                                </b:column>
-                                <b:column colSm="7">
-                                    <p:selectOneMenu id="disciplina" value="#{simuladoController.disciplina}" style="width:125px">
-                                        <f:selectItem itemLabel="Selecione..." itemValue="" />
-                                        <f:selectItem itemLabel="Matemática" itemValue="Matemática" />
-                                        <f:selectItem itemLabel="Português" itemValue="Português" />
-                                        <f:selectItem itemLabel="História" itemValue="História" />
-                                    </p:selectOneMenu>
+                                <b:column colSm="5">
+                                    <p:commandButton update="resultado info" process="@this entradaConsulta" value="Buscar" action="#{simuladoController.consultar}" icon=" ui-icon-search "/>
+                                    <p:commandButton global="false" value="Limpar" update="entradaConsulta resultado" action="#{simuladoController.limparFormularioConsulta}" immediate="true"/>
                                 </b:column>
                             </b:row>
-                            
-                            <b:row>
-                                <br/>
-                                <p:commandButton value="Consultar" action="#{simuladoController.cadastrar}"/>
-                                <p:commandButton value="Limpar" action="#{simuladoController.limparFormularioCadastro}" immediate="true"/>
+                            <b:row id="resultado">
+                                <b:column>
+                                    <p:dataTable rendered="#{not empty simuladoController.resultadoConsulta}" value="#{simuladoController.resultadoConsulta}" var="simulado" id="datatable" styleClass="table table-striped table-bordered"
+                                                 style="width:100%; margin-top: 20px;"
+                                                 rows="10"
+                                                 paginatorPosition="bottom"
+                                                 paginator="true"
+                                                 paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink} {RowsPerPageDropdown}"
+                                                 rowsPerPageTemplate="5,10,15">
+                                        <p:column headerText="Código" sortBy="#{simulado.nome}">
+                                            <h:outputText value="#{simulado.nome}" />
+                                        </p:column>
+                                        <p:column headerText="Descrição" sortBy="#{simulado.descricao}">
+                                            <h:outputText value="#{simulado.descricao}" />
+                                        </p:column>
+                                        <p:column headerText="Professor" sortBy="#{simulado.professor.pessoa.nome}">
+                                            <h:outputText value="#{simulado.professor.pessoa.nome}" />
+                                        </p:column>
+                                        <p:column style="width: 75px;text-align: center">
+                                            <p:commandLink update=":#{p:component('detalheSimulado')} :#{p:component('footer')}" action="#{simuladoController.exibirDetalhes(simulado)}" oncomplete="PF('modalDetalhe').show();" title="Detalhes"  style="margin-right: 5px;">
+                                                <h:graphicImage url="/resource/imagens/detalhe.png" width="24" height="24"/>
+                                            </p:commandLink>
+                                        </p:column>
+                                    </p:dataTable>
+                                </b:column>
                             </b:row>
-
                         </b:panel>
                     </b:column>
                 </b:row>

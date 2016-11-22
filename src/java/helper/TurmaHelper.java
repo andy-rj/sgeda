@@ -1,5 +1,6 @@
 package helper;
 
+import entidade.AlunoSimulado;
 import entidade.Curso;
 import entidade.Disciplina;
 import entidade.Professor;
@@ -8,6 +9,7 @@ import entidade.Turma;
 import entidade.TurmaAluno;
 import entidade.TurmaSimulado;
 import hibernate.HibernateUtil;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -16,6 +18,7 @@ import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
 
 public class TurmaHelper {
@@ -46,30 +49,61 @@ public class TurmaHelper {
         }
         return true;
     }
-    
+
+    public Turma getTurmaEager(Integer idTurma) {
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.getTransaction();
+        try {
+            tx.begin();
+            Criteria crit = session.createCriteria(Turma.class);
+
+            crit.add(Restrictions.eq("idTurma", idTurma));
+
+            Turma retorno = (Turma) crit.uniqueResult();
+
+            if (retorno != null) {
+                retorno.getTurmaAlunos().size();
+                retorno.getTurmaSimulados().size();
+            }
+
+            session.flush();
+            tx.commit();
+            return retorno;
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return null;
+    }
+
     public boolean salvarAlteracaoTurma(Turma turma) {
         session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.getTransaction();
-         
-        try{
+
+        try {
             tx.begin();
             session.update(turma);
             session.flush();
             tx.commit();
         } catch (Exception e) {
-            if(tx != null){
+            if (tx != null) {
                 tx.rollback();
             }
             e.printStackTrace();
             return false;
         } finally {
-            if(session != null){
+            if (session != null) {
                 session.close();
             }
         }
         return true;
     }
-    
+
     public boolean cadastrarSimulado(TurmaSimulado turmaSimulado) {
         session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.getTransaction();
@@ -90,8 +124,9 @@ public class TurmaHelper {
                 session.close();
             }
         }
-        return true;    }
-    
+        return true;
+    }
+
     public boolean atualizarSimulado(TurmaSimulado turmaSimulado) {
         session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.getTransaction();
@@ -112,7 +147,7 @@ public class TurmaHelper {
                 session.close();
             }
         }
-        return true;    
+        return true;
     }
 
     public List<Turma> getTurmas(String stringConsulta) {
@@ -152,6 +187,43 @@ public class TurmaHelper {
             }
         } finally {
             if (session != null) {
+                session.close();
+            }
+        }
+        return null;
+    }
+    
+    public List<Turma> getTurmas(List<String> cursosSelecionados) {
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.getTransaction();
+        try {
+            tx.begin();
+            Criteria crit = session.createCriteria(Turma.class);
+
+            crit.createAlias("curso", "curso");
+            
+            List<Integer> ids = new ArrayList<>();
+            
+            if(cursosSelecionados != null && !cursosSelecionados.isEmpty()){
+                for(String str:cursosSelecionados){
+                    ids.add(Integer.parseInt(str));
+                }
+                crit.add(Restrictions.in("curso.idCurso", ids));
+            }
+
+            crit.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+
+            List<Turma> retorno = crit.list();
+            
+            session.flush();
+            tx.commit();
+            return retorno;
+        } catch (HibernateException e){
+            if(tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(session != null){
                 session.close();
             }
         }
@@ -206,6 +278,58 @@ public class TurmaHelper {
             crit.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
             List<Turma> retorno = crit.list();
+            
+            if(retorno!=null){
+                for(Turma turma : retorno){
+                    turma.getTurmaAlunos().size();
+                }
+            }
+            
+            session.flush();
+            tx.commit();
+            return retorno;
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return null;
+    }
+    
+    public List<Turma> getTurmasByIdProfessorEager(Integer idProfessor) {
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.getTransaction();
+        try {
+            tx.begin();
+            Criteria crit = session.createCriteria(Turma.class);
+            crit.createAlias("professor", "professor");
+
+            crit.add(Restrictions.conjunction()
+                    .add(Restrictions.eq("professor.idProfessor", idProfessor))
+            );
+
+            crit.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+
+            List<Turma> retorno = crit.list();
+            
+            if(retorno!=null){
+                for(Turma turma : retorno){
+                    turma.getTurmaAlunos().size();
+                    if(turma.getTurmaAlunos()!=null){
+                    for(TurmaAluno turmaAluno:turma.getTurmaAlunos()){
+                        turmaAluno.getAluno().getAlunoSimulados().size();
+                        for(AlunoSimulado simulado:turmaAluno.getAluno().getAlunoSimulados()){
+                            simulado.getRespostas().size();
+                        }
+                    }
+                    }
+                }
+            }
+            
             session.flush();
             tx.commit();
             return retorno;

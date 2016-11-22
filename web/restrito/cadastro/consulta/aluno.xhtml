@@ -12,17 +12,76 @@
             .ui-growl {
                 z-index:9999 !important;
             }
+            .ui-dialog-titlebar-close {
+                margin-top: 0px !important;
+            }
         </style>
     </h:head>
     <h:body style="background-color: #e3e3e3">
 
         <h:form id="consulta">
-            
+
             <p:ajaxStatus  onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
             <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
                 <p:graphicImage url="/resource/imagens/loading.gif" />
             </p:dialog>
             
+            <p:dialog header="Confirmar" modal="true" resizable="false"  draggable="false" widgetVar="modalAprovado"
+                      minimizable="true" maximizable="true" width="600" height="200" onHide="PF('modalDetalhe').show()">
+                <p:outputPanel id="alterarAprovado">
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputLabel value="Aprovado" ></h:outputLabel>
+                        </b:column>
+                        <b:column colSm="7">
+                            <p:selectBooleanCheckbox value="#{alunoController.aprovado}">
+                                <p:ajax update="posicao notaAprovado descricaoAprovado" listener="#{alunoController.aprovadoCheckBoxChange}"/>
+                            </p:selectBooleanCheckbox>
+                        </b:column>
+                    </b:row>
+                    <b:row id="posicao">
+                        <b:column colSm="2">
+                            <h:outputLabel value="Posição" ></h:outputLabel>
+                        </b:column>
+                        <b:column colSm="7">
+                            <p:inputMask disabled="#{not alunoController.aprovado}" id="posicaoInput" mask="9?999" value="#{alunoController.posicao}"/> 
+                        </b:column>
+                        <b:column colSm="3">
+                            <b:message for="posicao"/>
+                        </b:column>
+                    </b:row>
+                    <b:row id="notaAprovado">
+                        <b:column colSm="2">
+                            <h:outputLabel value="Nota" ></h:outputLabel>
+                        </b:column>
+                        <b:column colSm="7">
+                            <p:inputText id="notaAprovadoInput" disabled="#{not alunoController.aprovado}" value="#{alunoController.nota}" maxlength="10"/>
+                        </b:column>
+                        <b:column colSm="3">
+                            <b:message for="notaAprovadoInput"/>
+                        </b:column>
+                    </b:row>
+                    <b:row id="descricaoAprovado">
+                        <b:column colSm="2">
+                            <h:outputLabel value="Descrição" ></h:outputLabel>
+                        </b:column>
+                        <b:column colSm="7">
+                            <p:inputText id="descricaoAprovadoInput" disabled="#{not alunoController.aprovado}" value="#{alunoController.descricaoAprovado}" maxlength="100"/>
+                        </b:column>
+                        <b:column colSm="3">
+                            <b:message for="descricaoAprovadoInput"/>
+                        </b:column>
+                    </b:row>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <b:row id="footerAlterar">
+                        <p:commandButton value="Cancelar" onclick="PF('modalAprovado').hide()" />
+                        <p:commandButton global="false" process="@this descricaoAprovadoInput notaAprovadoInput posicaoInput" action="#{alunoController.alterarAprovado}" update=":#{p:component('detalheAluno')} :#{p:component('info')}" oncomplete="PF('modalAprovado').hide();"
+                                         value="salvar"/>                    
+                    </b:row>
+                </f:facet>
+            </p:dialog>
+
             <p:dialog header="Confirmar" modal="true" resizable="false"  draggable="false" widgetVar="modalInativar"
                       minimizable="true" maximizable="true" width="400" height="100">
                 <p:outputPanel id="painelInativar">
@@ -497,9 +556,52 @@
                             <h:outputText id="bairro" value="#{alunoController.alunoDetalhe.pessoa.enderecos.bairro}" />
                         </b:column>
                     </b:row>
-                    <b:row>
-                        <b:column>
-                            <p:separator/>
+                    <!--Dados Adicionais-->
+                    
+                    <b:row rendered="#{alunoController.alunoDetalhe.aprovado == 1 or alunoController.alunoDetalhe.aprovado == 0}">
+                        <br/>
+                        <b:column col-sm="12">
+                            <strong style="color: #999999;">Dados Adicionais</strong>
+                            <hr style= "border-top: 1px solid #999999;"/>
+                        </b:column>
+                    </b:row>
+                    <b:row rendered="#{alunoController.alunoDetalhe.aprovado == 1 or alunoController.alunoDetalhe.aprovado == 0}">
+                        <b:column colSm="2">
+                            <h:outputLabel value="Aprovado" ></h:outputLabel>
+                        </b:column>
+                        <b:column colSm="7">
+                            <h:outputText value="#{alunoController.alunoDetalhe.aprovado == 1? 'Sim' : 'Não'}"/>
+                        </b:column>
+                    </b:row>
+                    <b:row  rendered="#{alunoController.alunoDetalhe.aprovado == 1 }">
+                        <b:column colSm="2">
+                            <h:outputLabel value="Posição" ></h:outputLabel>
+                        </b:column>
+                        <b:column colSm="7">
+                            <h:outputText value="#{alunoController.alunoDetalhe.posicao}"/> 
+                        </b:column>
+                    </b:row>
+                    <b:row rendered="#{alunoController.alunoDetalhe.aprovado == 1}">
+                        <b:column colSm="2">
+                            <h:outputLabel value="Nota" ></h:outputLabel>
+                        </b:column>
+                        <b:column colSm="7">
+                            <h:outputText value="#{alunoController.alunoDetalhe.nota}"/>
+                        </b:column>
+                    </b:row>
+                    <b:row rendered="#{alunoController.alunoDetalhe.aprovado == 1}">
+                        <b:column colSm="2">
+                            <h:outputLabel value="Descrição" ></h:outputLabel>
+                        </b:column>
+                        <b:column colSm="7">
+                            <h:outputText value="#{alunoController.alunoDetalhe.descricaoAprovado}"/>
+                        </b:column>
+                    </b:row>
+                    <b:row >
+                        <br/>
+                        <b:column col-sm="12">
+                            <strong style="color: #999999;">Dados do Curso</strong>
+                            <hr style= "border-top: 1px solid #999999;"/>
                         </b:column>
                     </b:row>
                     <b:row>
@@ -575,6 +677,8 @@
                         <p:commandButton rendered="#{alunoController.alunoDetalhe.pessoa.ativo}" oncomplete="PF('modalInativar').show();" process="@this" update=":#{p:component('painelInativar')}" value="Inativar Aluno"/>
                         <p:commandButton rendered="#{not alunoController.alunoDetalhe.pessoa.ativo}" action="#{alunoController.alterarAtividade}" ajax="true" process="@this" update="footer :#{p:component('resultado')}  :#{p:component('info')} :#{p:component('detalheAluno')}" value="Reativar Aluno"/>
                         <p:commandButton process="@this" update=":#{p:component('info')}" action="#{alunoController.reenviarEmail}" onclick="return confirm('Confirma o envio do email?');" value="Enviar email"/>
+                        <p:commandButton global="false" process="@this" action="#{alunoController.carregarAlterarAprovado}" update=":#{p:component('alterarAprovado')}" oncomplete="PF('modalDetalhe').hide();
+                                         PF('modalAprovado').show();" value="Alterar informações adicionais"/>                    
                     </b:row>
                 </f:facet>
             </p:dialog>

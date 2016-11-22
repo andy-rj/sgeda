@@ -366,7 +366,7 @@ public class FuncionarioController {
     }
 
     public void exibirDetalhes(Funcionario funcionario) {
-        funcionarioDetalhe = funcionario;
+        funcionarioDetalhe = funcionarioHelper.getFuncionarioEager(funcionario.getIdFuncionario());
     }
 
     public String getBairro() {

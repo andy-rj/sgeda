@@ -2,7 +2,9 @@ package entidade;
 // Generated 09/09/2016 09:36:48 by Hibernate Tools 4.3.1
 
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -84,7 +86,7 @@ public class Curso  implements java.io.Serializable {
         this.descricao = descricao;
     }
 
-    @OneToMany(fetch=FetchType.EAGER, mappedBy = "curso")
+    @OneToMany(fetch=FetchType.LAZY, mappedBy = "curso")
     public Set<Turma> getTurmas() {
         return turmas;
     }
@@ -93,7 +95,7 @@ public class Curso  implements java.io.Serializable {
         this.turmas = turmas;
     }
 
-@ManyToMany(fetch=FetchType.EAGER)
+@ManyToMany(fetch=FetchType.LAZY)
     @JoinTable(name="curso_disciplina", catalog="kemdixip_sgedanovo", joinColumns = { 
         @JoinColumn(name="curso_idCurso", nullable=false, updatable=false) }, inverseJoinColumns = { 
         @JoinColumn(name="disciplina_idDisciplina", nullable=false, updatable=false) })
@@ -135,6 +137,154 @@ public class Curso  implements java.io.Serializable {
         }
         return setAlunos;
     }
+    
+    public Set<Aluno> getAlunosAtivosPorAno(Integer inicio, Integer fim){
+        Set<Aluno> setAlunos = new HashSet<>();
+        for(TurmaAluno turmaAluno:this.getTurmaAlunos()){
+            if(!turmaAluno.getAluno().getDesistente() && (turmaAluno.getAluno().getPessoa().getDataCadastro().getYear()+1900)>=inicio && (turmaAluno.getAluno().getPessoa().getDataCadastro().getYear()+1900)<=fim){
+                setAlunos.add(turmaAluno.getAluno());
+            }
+        }
+        return setAlunos;
+    }
+    
+    public Set<Aluno> getAlunosAtivosPorAnoNoite(Integer inicio, Integer fim){
+        Set<Aluno> setAlunos = new HashSet<>();
+        for(TurmaAluno turmaAluno:this.getTurmaAlunos()){
+            if(!turmaAluno.getAluno().getDesistente() && 
+                    (turmaAluno.getAluno().getPessoa().getDataCadastro().getYear()+1900)>=inicio && 
+                    (turmaAluno.getAluno().getPessoa().getDataCadastro().getYear()+1900)<=fim &&
+                    turmaAluno.getTurma().getTurno().equalsIgnoreCase("noite")){
+                setAlunos.add(turmaAluno.getAluno());
+            }
+        }
+        return setAlunos;
+    }
+    
+    public Set<Aluno> getAlunosAtivosPorAnoManha(Integer inicio, Integer fim){
+        Set<Aluno> setAlunos = new HashSet<>();
+        for(TurmaAluno turmaAluno:this.getTurmaAlunos()){
+            if(!turmaAluno.getAluno().getDesistente() && 
+                    (turmaAluno.getAluno().getPessoa().getDataCadastro().getYear()+1900)>=inicio && 
+                    (turmaAluno.getAluno().getPessoa().getDataCadastro().getYear()+1900)<=fim &&
+                    turmaAluno.getTurma().getTurno().equalsIgnoreCase("manhã")){
+                setAlunos.add(turmaAluno.getAluno());
+            }
+        }
+        return setAlunos;
+    }
+    
+    public Set<Aluno> getAlunosAtivosPorAnoTarde(Integer inicio, Integer fim){
+        Set<Aluno> setAlunos = new HashSet<>();
+        for(TurmaAluno turmaAluno:this.getTurmaAlunos()){
+            if(!turmaAluno.getAluno().getDesistente() && 
+                    (turmaAluno.getAluno().getPessoa().getDataCadastro().getYear()+1900)>=inicio && 
+                    (turmaAluno.getAluno().getPessoa().getDataCadastro().getYear()+1900)<=fim &&
+                    turmaAluno.getTurma().getTurno().equalsIgnoreCase("tarde")){
+                setAlunos.add(turmaAluno.getAluno());
+            }
+        }
+        return setAlunos;
+    }
+    
+    public Set<Aluno> getAlunosAtivosPorAnoIntegral(Integer inicio, Integer fim){
+        Set<Aluno> setAlunos = new HashSet<>();
+        for(TurmaAluno turmaAluno:this.getTurmaAlunos()){
+            if(!turmaAluno.getAluno().getDesistente() && 
+                    (turmaAluno.getAluno().getPessoa().getDataCadastro().getYear()+1900)>=inicio && 
+                    (turmaAluno.getAluno().getPessoa().getDataCadastro().getYear()+1900)<=fim &&
+                    turmaAluno.getTurma().getTurno().equalsIgnoreCase("integral")){
+                setAlunos.add(turmaAluno.getAluno());
+            }
+        }
+        return setAlunos;
+    }
+    
+     public Set<Aluno> getAlunosDesistentesPorAno(Integer inicio, Integer fim){
+        Set<Aluno> setAlunos = new HashSet<>();
+        for(TurmaAluno turmaAluno:this.getTurmaAlunos()){
+            if(turmaAluno.getAluno().getDesistente() && (turmaAluno.getAluno().getPessoa().getDataCadastro().getYear()+1900)>=inicio && (turmaAluno.getAluno().getPessoa().getDataCadastro().getYear()+1900)<=fim){
+                setAlunos.add(turmaAluno.getAluno());
+            }
+        }
+        return setAlunos;
+    }
+     
+     public Set<Aluno> getAlunosDesistentesPorAnoTarde(Integer inicio, Integer fim){
+        Set<Aluno> setAlunos = new HashSet<>();
+        for(TurmaAluno turmaAluno:this.getTurmaAlunos()){
+            if(turmaAluno.getAluno().getDesistente() && 
+                    (turmaAluno.getAluno().getPessoa().getDataCadastro().getYear()+1900)>=inicio && 
+                    (turmaAluno.getAluno().getPessoa().getDataCadastro().getYear()+1900)<=fim &&
+                    turmaAluno.getTurma().getTurno().equalsIgnoreCase("tarde")){
+                setAlunos.add(turmaAluno.getAluno());
+            }
+        }
+        return setAlunos;
+    }
+     
+     public Set<Aluno> getAlunosDesistentesPorAnoManha(Integer inicio, Integer fim){
+        Set<Aluno> setAlunos = new HashSet<>();
+        for(TurmaAluno turmaAluno:this.getTurmaAlunos()){
+            if(turmaAluno.getAluno().getDesistente() && 
+                    (turmaAluno.getAluno().getPessoa().getDataCadastro().getYear()+1900)>=inicio && 
+                    (turmaAluno.getAluno().getPessoa().getDataCadastro().getYear()+1900)<=fim &&
+                    turmaAluno.getTurma().getTurno().equalsIgnoreCase("manhã")){
+                setAlunos.add(turmaAluno.getAluno());
+            }
+        }
+        return setAlunos;
+    }
+     
+     public Set<Aluno> getAlunosDesistentesPorAnoNoite(Integer inicio, Integer fim){
+        Set<Aluno> setAlunos = new HashSet<>();
+        for(TurmaAluno turmaAluno:this.getTurmaAlunos()){
+            if(turmaAluno.getAluno().getDesistente() && 
+                    (turmaAluno.getAluno().getPessoa().getDataCadastro().getYear()+1900)>=inicio && 
+                    (turmaAluno.getAluno().getPessoa().getDataCadastro().getYear()+1900)<=fim &&
+                    turmaAluno.getTurma().getTurno().equalsIgnoreCase("noite")){
+                setAlunos.add(turmaAluno.getAluno());
+            }
+        }
+        return setAlunos;
+    }
+     
+     public Set<Aluno> getAlunosDesistentesPorAnoIntegral(Integer inicio, Integer fim){
+        Set<Aluno> setAlunos = new HashSet<>();
+        for(TurmaAluno turmaAluno:this.getTurmaAlunos()){
+            if(turmaAluno.getAluno().getDesistente() && 
+                    (turmaAluno.getAluno().getPessoa().getDataCadastro().getYear()+1900)>=inicio && 
+                    (turmaAluno.getAluno().getPessoa().getDataCadastro().getYear()+1900)<=fim &&
+                    turmaAluno.getTurma().getTurno().equalsIgnoreCase("integral")){
+                setAlunos.add(turmaAluno.getAluno());
+            }
+        }
+        return setAlunos;
+    }
+     
+     @Transient
+     public String getDisciplinasString(){
+        String diss = "";
+        if(getDisciplinas()!=null){
+           for(Disciplina dis: getDisciplinas()){
+               diss += dis.getNome() + "\n";
+            } 
+        }
+       return diss;
+     }
+     
+     @Transient
+     public List<TurmaSimulado> getTurmasSimulados(){
+         List<TurmaSimulado> lista = new ArrayList<>();
+         if(this.getTurmas()!=null){
+             for(Turma turma: this.getTurmas()){
+                 if(turma.getTurmaSimulados()!=null){
+                     lista.addAll(turma.getTurmaSimulados());
+                 }
+             }
+         }
+         return lista;
+     }
 
 }
 

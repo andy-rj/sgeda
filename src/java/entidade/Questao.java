@@ -48,6 +48,16 @@ public class Questao  implements java.io.Serializable {
      private Objetiva objetiva;
      private Set<Assunto> assuntos = new HashSet<>(0);
      private Set<Resposta> respostas = new HashSet(0);
+     private Integer dificuldade;
+
+     @Column(name="dificuldade")
+    public Integer getDificuldade() {
+        return dificuldade;
+    }
+
+    public void setDificuldade(Integer dificuldade) {
+        this.dificuldade = dificuldade;
+    }
 
     public Questao() {
     }
@@ -172,7 +182,7 @@ public class Questao  implements java.io.Serializable {
         this.discursiva = discursiva;
     }
 
-@OneToMany(fetch=FetchType.EAGER, mappedBy="questao")
+@OneToMany(fetch=FetchType.LAZY, mappedBy="questao")
     public Set<SimuladoQuestao> getSimuladoQuestaos() {
         return this.simuladoQuestaos;
     }
@@ -181,7 +191,7 @@ public class Questao  implements java.io.Serializable {
         this.simuladoQuestaos = simuladoQuestaos;
     }
 
-@OneToMany(fetch=FetchType.EAGER, mappedBy="questao")
+@OneToMany(fetch=FetchType.LAZY, mappedBy="questao")
     public Set<Figura> getFiguras() {
         return this.figuras;
     }
@@ -208,7 +218,7 @@ public class Questao  implements java.io.Serializable {
         this.objetiva = objetiva;
     }
 
-@ManyToMany(fetch=FetchType.EAGER)
+@ManyToMany(fetch=FetchType.LAZY)
     @JoinTable(name="questao_assunto", catalog="kemdixip_sgedanovo", joinColumns = { 
         @JoinColumn(name="questao_idQuestao", nullable=false, updatable=false) }, inverseJoinColumns = { 
         @JoinColumn(name="assunto_idAssunto", nullable=false, updatable=false) })
@@ -220,7 +230,7 @@ public class Questao  implements java.io.Serializable {
         this.assuntos = assuntos;
     }
 
-@OneToMany(fetch=FetchType.EAGER, mappedBy="questao")
+@OneToMany(fetch=FetchType.LAZY, mappedBy="questao")
     public Set<Resposta> getRespostas() {
         return this.respostas;
     }

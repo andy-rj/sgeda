@@ -70,7 +70,7 @@ public class LoginController {
     }
 
     public String entrar() {
-        usuarioLogado = helper.getByLoginSenha(usuario, senha);
+        usuarioLogado = helper.getByLoginSenhaEager(usuario, senha);
        
         if (usuarioLogado == null) {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuário ou senha inválidos!", "Usuário ou senha inválidos!");

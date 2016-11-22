@@ -117,7 +117,7 @@ public class CursoController {
     }
 
     public void exibirDetalhes(Curso curso) {
-        cursoDetalhe = curso;
+        cursoDetalhe = cursoHelper.getCursoByIdEager(curso.getIdCurso());
         codigoAlterar = cursoDetalhe.getCodigo();
         nomeAlterar = cursoDetalhe.getNome();
         descricaoAlterar = cursoDetalhe.getDescricao();

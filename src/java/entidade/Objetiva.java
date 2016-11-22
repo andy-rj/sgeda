@@ -59,7 +59,7 @@ public class Objetiva  implements java.io.Serializable {
         this.idObjetiva = idObjetiva;
     }
 
-@OneToOne(fetch=FetchType.LAZY)@PrimaryKeyJoinColumn
+@OneToOne(fetch=FetchType.EAGER)@PrimaryKeyJoinColumn
     public Questao getQuestao() {
         return this.questao;
     }
@@ -68,7 +68,7 @@ public class Objetiva  implements java.io.Serializable {
         this.questao = questao;
     }
 
-@OneToMany(fetch=FetchType.EAGER, mappedBy="objetiva")
+@OneToMany(fetch=FetchType.LAZY, mappedBy="objetiva")
     public Set<Opcao> getOpcaos() {
         return this.opcaos;
     }

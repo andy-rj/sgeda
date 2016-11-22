@@ -128,10 +128,18 @@
                     <b:navCommandLink value="Consultar" action="#{turmaController.novaConsulta}" immediate="true"/>
                 </b:dropMenu>
                 <b:dropMenu value="Relatórios">
-                    <b:navCommandLink value="Matrícula" action="#{relatorioController.novoRelatorioMatricula}" immediate="true"/>
-                    <b:navCommandLink value="Relatório 2" action="#{questaoController.novaConsulta}" immediate="true"/>
-                    <b:navCommandLink value="Relatório 3" action="#{questaoController.novaConsulta}" immediate="true"/>
-                    <b:navCommandLink value="Relatório 4" action="#{questaoController.novaConsulta}" immediate="true"/>
+                    <b:dropMenu value="Gerencial">
+                        <b:navCommandLink value="Matrícula por curso" action="#{relatorioController.novoRelatorioMatricula}" immediate="true"/>
+                    </b:dropMenu>
+                    <b:dropMenu value="Roll">
+                        <b:navCommandLink value="Matrícula por curso" action="#{relatorioController.novoRelatorioMatriculaRoll}" immediate="true"/>
+                        <b:navCommandLink value="Professores Cadastrados" action="#{relatorioController.novoRelatorioProfessoresCadastradosRoll}" immediate="true"/>
+                        <b:navCommandLink value="Funcionários Cadastrados" action="#{relatorioController.novoRelatorioFuncionariosCadastradosRoll()}" immediate="true"/>
+                        <b:navCommandLink value="Disciplinas Cadastradas" action="#{relatorioController.novoRelatorioDisciplinasCadastradasRoll}" immediate="true"/>
+                        <b:navCommandLink value="Cursos Cadastrados" action="#{relatorioController.novoRelatorioCursosCadastradosRoll}" immediate="true"/>
+                        <b:navCommandLink value="Turmas Cadastradas" action="#{relatorioController.novoRelatorioTurmasCadastradasRoll}" immediate="true"/>
+                        <b:navCommandLink value="Ranking de notas" action="#{relatorioController.novoRelatorioRankingNotasRoll}" immediate="true"/>
+                    </b:dropMenu>
                 </b:dropMenu>
             </b:navbarLinks>
         </b:navBar>

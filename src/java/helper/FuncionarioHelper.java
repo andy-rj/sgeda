@@ -7,6 +7,7 @@ import entidade.Telefone;
 import entidade.Usuario;
 import hibernate.HibernateUtil;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
@@ -90,6 +91,30 @@ public class FuncionarioHelper {
         }
         return true;
     }
+
+    public Funcionario getFuncionarioEager(int idFuncionario) {
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.getTransaction();
+        try {
+            tx.begin();
+            Funcionario funcionario = (Funcionario) session.createCriteria(Funcionario.class).add(Restrictions.eq("idFuncionario", idFuncionario)).uniqueResult();
+            if(funcionario!=null){
+                funcionario.getPessoa().getUsuario().getPapels().size();
+                funcionario.getPessoa().getTelefones().size();
+            }
+            tx.commit();
+            return funcionario;
+        } catch (HibernateException e){
+            if(tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+        return null;
+    }
     
      public boolean salvarAlteracaoFuncionario(Funcionario funcionario, Set<Telefone> telefonesExcluir){
         
@@ -142,6 +167,49 @@ public class FuncionarioHelper {
             }
         } finally {
             if(session != null){
+                session.close();
+            }
+        }
+        return null;
+    }
+    
+    public List<Funcionario> getFuncionarios(List<String> stringConsulta) {
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.getTransaction();
+        try {
+            tx.begin();
+            Criteria crit = session.createCriteria(Funcionario.class);
+
+            crit.createAlias("pessoa", "pessoa");
+            List<Boolean> list = new ArrayList<>();
+            if(stringConsulta !=null && !stringConsulta.isEmpty()){
+                for(String str:stringConsulta){
+                    if(str.equals("1")){
+                        list.add(Boolean.TRUE);
+                    }else if(str.equals("0")){
+                        list.add(Boolean.FALSE);
+                    }
+                }
+                crit.add(Restrictions.in("pessoa.ativo", list));
+            }
+            
+            crit.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+
+            List<Funcionario> retorno = crit.list();
+            if(retorno !=null)
+                for (Funcionario funcionario : retorno) {
+                    funcionario.getPessoa().getTelefones().size();
+                }
+
+            session.flush();
+            tx.commit();
+            return retorno;
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            if (session != null) {
                 session.close();
             }
         }

@@ -12,30 +12,33 @@
             .ui-growl {
                 z-index:9999 !important;
             }
+            .ui-dialog-titlebar-close {
+                margin-top: 0px !important;
+            }
         </style>
     </h:head>
     <h:body style="background-color: #e3e3e3">
         <h:form id="consulta">
-            
+
             <p:dialog modal="true" draggable="false" width="700" height="300" header="Realizar Simulado" closable="false"
-                  widgetVar="modalRealizarSimulado" resizable="false" footer="" >
-            <p:outputPanel id="conteudoRealizarSimulado">
-                <b:row style="text-align: center; padding-left: 15px;padding-right: 15px;">
-                    <b:alert severity="warning" title="Atenção!">
-                        <h:outputText value = "Ao clicar em \'Começar\' você terá " />
-                        <h:outputText value = "#{alunoSimuladoController.simuladoAtual.duracao}">
-                            <f:convertDateTime pattern="HH:mm:ss"/>
-                        </h:outputText>
-                        <h:outputText value=" para concluir o simulado! Lembrando que esse simulado só poderá ser realizado uma única vez."/>
-                    </b:alert>
-                </b:row>
-                <b:row style="text-align: center">
-                    <br/>
-                    <p:commandButton value="Começar" process="@this" action="#{alunoSimuladoController.iniciarRealizacaoSimulado(loginController.usuarioLogado.pessoa.idPessoa)}"/>
-                    <p:commandButton id="btVoltar" value="Voltar" process="@this"  action="#{alunoSimuladoController.fecharConfirmacaoSimulado()}" oncomplete="PF('modalRealizarSimulado').hide();PF('modalDetalhe').show();"/>
-                </b:row>
-            </p:outputPanel>
-        </p:dialog>
+                      widgetVar="modalRealizarSimulado" resizable="false" footer="" >
+                <p:outputPanel id="conteudoRealizarSimulado">
+                    <b:row style="text-align: center; padding-left: 15px;padding-right: 15px;">
+                        <b:alert severity="warning" title="Atenção!">
+                            <h:outputText value = "Ao clicar em \'Começar\' você terá " />
+                            <h:outputText value = "#{alunoSimuladoController.simuladoAtual.duracao}">
+                                <f:convertDateTime pattern="HH:mm:ss"/>
+                            </h:outputText>
+                            <h:outputText value=" para concluir o simulado! Lembrando que esse simulado só poderá ser realizado uma única vez."/>
+                        </b:alert>
+                    </b:row>
+                    <b:row style="text-align: center">
+                        <br/>
+                        <p:commandButton value="Começar" process="@this" update=":#{p:component('info')}" action="#{alunoSimuladoController.iniciarRealizacaoSimulado(loginController.usuarioLogado.pessoa.idPessoa)}"/>
+                        <p:commandButton id="btVoltar" value="Voltar" process="@this"  action="#{alunoSimuladoController.fecharConfirmacaoSimulado()}" oncomplete="PF('modalRealizarSimulado').hide();PF('modalDetalhe').show();"/>
+                    </b:row>
+                </p:outputPanel>
+            </p:dialog>
 
             <p:dialog modal="true" draggable="false" width="700" height="400" header="Detalhes"
                       maximizable="true" widgetVar="modalDetalhe" resizable="false" footer="">
@@ -134,8 +137,8 @@
                 <f:facet name="footer">
                     <b:row id="footer">
                         <b:column>
-                        <p:commandButton onclick="PF('modalDetalhe').hide();" value="Fechar"/>
-                        <p:commandButton rendered="#{turmaController.simuladoTurmaDetalhe.simuladoAberto and empty turmaController.simuladoAlunoDetalhe}" value="Realizar simulado" process="@this" update=":#{p:component('conteudoRealizarSimulado')}"  oncomplete="PF('modalRealizarSimulado').show();PF('modalDetalhe').hide();" action="#{alunoSimuladoController.realizarSimulado(turmaController.simuladoTurmaDetalhe)}"/>
+                            <p:commandButton onclick="PF('modalDetalhe').hide();" value="Fechar"/>
+                            <p:commandButton rendered="#{turmaController.simuladoTurmaDetalhe.simuladoAberto and empty turmaController.simuladoAlunoDetalhe}" value="Realizar simulado" process="@this" update=":#{p:component('conteudoRealizarSimulado')}"  oncomplete="PF('modalRealizarSimulado').show();PF('modalDetalhe').hide();" action="#{alunoSimuladoController.realizarSimulado(turmaController.simuladoTurmaDetalhe)}"/>
                         </b:column>
                     </b:row>
                 </f:facet>
@@ -164,9 +167,10 @@
                                                 <f:convertDateTime pattern="HH:mm:ss"/>
                                             </h:outputText>
                                         </p:column>
-                                        <p:column style="text-align: center; width: 100px;" headerText="Status" >
+                                        <p:column style="text-align: center; width: 120px;" headerText="Status" >
                                             <b:label rendered="#{not turma.aluno.simuladoRealizado(simulado) and simulado.simuladoAberto}" text="aberto" severity="danger"/>
                                             <b:label rendered="#{turma.aluno.simuladoRealizado(simulado)}" text="realizado" severity="info"/>
+                                            <b:label rendered="#{not turma.aluno.simuladoRealizado(simulado) and not simulado.simuladoAberto}" text="não realizado" severity="danger"/>
                                         </p:column>
 
                                         <p:column headerText="Nota" style="text-align: center; width: 80px;">
@@ -176,8 +180,10 @@
                                             <h:outputText rendered="#{not turma.aluno.simuladoRealizado(simulado) and not simulado.simuladoAberto}" value="0.0"/>
                                         </p:column>
 
-                                        <p:column style="width: 115px;" headerText="">
-                                            <p:commandButton value="Detalhes" process="@this" update=":#{p:component('conteudoDetalhe')} :#{p:component('footer')}" oncomplete="PF('modalDetalhe').show();" action="#{turmaController.detalheSimulado(simulado)}"/>
+                                        <p:column style="width: 75px;text-align: center">
+                                            <p:commandLink update=":#{p:component('conteudoDetalhe')} :#{p:component('footer')}" action="#{turmaController.detalheSimulado(simulado)}" oncomplete="PF('modalDetalhe').show();" title="Detalhes"  style="margin-right: 5px;">
+                                                <h:graphicImage url="/resource/imagens/detalhe.png" width="24" height="24"/>
+                                            </p:commandLink>
                                         </p:column>
                                     </p:dataTable>
                                 </p:tab>
