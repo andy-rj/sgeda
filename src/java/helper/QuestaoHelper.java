@@ -7,7 +7,10 @@ import entidade.Opcao;
 import entidade.Questao;
 import entidade.Redacao;
 import entidade.Assunto;
+import entidade.Resposta;
 import hibernate.HibernateUtil;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
@@ -141,6 +144,10 @@ public class QuestaoHelper {
         return true;
     }
 
+    public Integer getNumeroRespostasCorretas(int idObjetiva, Date inicio, Date fim) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public Questao getQuestaoByIdEager(Integer idQuestao) {
         session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.getTransaction();
@@ -228,6 +235,102 @@ public class QuestaoHelper {
         }
         return null;
     }
+
+    public List<Objetiva> getQuestoesObjetivas(List<String> disciplinasSelecionadas, Date dataInicio, Date dataFim) {
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.getTransaction();
+        try {
+            tx.begin();
+            Criteria crit = session.createCriteria(Objetiva.class);
+
+            crit.createAlias("questao", "questao");
+            crit.createAlias("questao.disciplina", "disciplina");
+            crit.createAlias("questao.respostas", "respostas");
+            crit.createAlias("respostas.alunoSimulado", "alunoSimulado");
+
+            if (dataInicio != null) {
+                crit.add(Restrictions.ge("alunoSimulado.data", dataInicio));
+            }
+
+            if (dataFim != null) {
+                crit.add(Restrictions.le("alunoSimulado.data", dataFim));
+            }
+
+            List<Integer> ids = new ArrayList<>();
+
+            if (disciplinasSelecionadas != null && !disciplinasSelecionadas.isEmpty()) {
+                for (String str : disciplinasSelecionadas) {
+                    ids.add(Integer.parseInt(str));
+                }
+                crit.add(Restrictions.in("disciplina.idDisciplina", ids));
+            }
+
+            crit.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+
+            List<Objetiva> retorno = crit.list();
+            session.flush();
+            tx.commit();
+            return retorno;
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return null;    }
+
+    public List<Resposta> getRespostasPorDisciplina(String disciplinasSelecionadas, Date dataInicio, Date dataFim) {
+         session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.getTransaction();
+        try {
+            tx.begin();
+            Criteria crit = session.createCriteria(Resposta.class);
+
+            crit.createAlias("questao", "questao");
+            crit.createAlias("questao.objetiva","objetiva");
+            crit.createAlias("questao.disciplina", "disciplina");
+            crit.createAlias("alunoSimulado", "alunoSimulado");
+
+            if (dataInicio != null) {
+                crit.add(Restrictions.ge("alunoSimulado.data", dataInicio));
+            }
+
+            if (dataFim != null) {
+                crit.add(Restrictions.le("alunoSimulado.data", dataFim));
+            }
+
+
+            if (disciplinasSelecionadas != null) {
+                crit.add(Restrictions.eq("disciplina.idDisciplina", Integer.parseInt(disciplinasSelecionadas)));
+            }
+
+            crit.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+
+            List<Resposta> retorno = crit.list();
+            if(retorno!=null){
+                for(Resposta resposta: retorno){
+                    resposta.getQuestao().getObjetiva().getOpcaos().size();
+                }
+            }
+            
+            session.flush();
+            tx.commit();
+            return retorno;
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return null;    
+    }
+
 
 
 

@@ -3,30 +3,62 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:b="http://bootsfaces.net/ui"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+
+      xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>Curso Idealizar</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </h:head>
-    <h:body style="background-color: #e3e3e3">
+    <h:body style="background-color: #ebeff2">
         <h:form>
-            
-                    <ui:insert name="navbar">
-                        <ui:include src="/template/navbar.xhtml"/>
-                    </ui:insert>
-            <b:container>
-                <b:row style="margin-left: -45px; margin-right: -45px;">
-                    <b:row>
-                        <b:column colSm="6">
-                            <b:panel title="Turmas">
-                            </b:panel>
-                        </b:column>
-                        <b:column colSm="6">
-                            <b:panel title="Simulados Abertos">
-                            </b:panel>
-                        </b:column>
-                    </b:row>
-                </b:row>
-            </b:container>
+            <div id="wrapper">
+                <!-- Sidebar -->
+                <ui:insert name="navbar">
+                    <ui:include src="/template/navbar.xhtml"/>
+                </ui:insert>
+
+                <div id="page-content-wrapper">
+
+                    <b:container>
+                        <b:row style="margin-top: -50px;margin-bottom: 40px;">
+                            <h:outputText value="Navegar:" style="font-size: 30px;margin-left: 10px;"/>
+                        </b:row>
+                        <b:row>
+                            <b:column colSm="3">
+                                <div class="rcorners shadow">
+                                    <h:graphicImage value="/resource/imagens/turma.png" style="width: 105px; height: 105px;"/>
+                                    <p:commandLink styleClass="dbotaoAzul" value = "Turmas" action="#{alunoController.novoCadastro}" style="margin-top:20px;margin-left: 4px;"/>
+                                </div>
+                            </b:column>
+                            <b:column colSm="3">
+                                <div class="rcorners shadow">
+                                    <h:graphicImage value="/resource/imagens/simulado.png" style="width: 105px; height: 105px;"/>
+                                    <p:commandLink styleClass="dbotaoLaranja" value = "Simulados" action="#{alunoController.novoCadastro}" style="margin-top:20px;margin-left: 4px;"/>
+                                </div>
+                            </b:column>
+
+                        </b:row>
+                        <b:row style="margin-top: 10px;margin-bottom: 40px;">
+                            <h:outputText value="Alertas:" style="font-size: 30px;margin-left: 10px;"/>
+                        </b:row>
+                        <b:row>
+                            <b:column colSm="4">
+                                <div class="thumbnail">
+                                    <h:graphicImage value="/resource/imagens/aleta.png" style="width:100%"/>
+                                    <div class="caption">
+                                        <h3>Simulados Abertos </h3>
+                                        <p></p>
+                                        <p></p>
+                                    </div>
+                                </div>
+                            </b:column>
+                        </b:row>
+                    </b:container>
+                </div>
+            </div>
+            <!-- /#wrapper -->
         </h:form>
     </h:body>
 </html>

@@ -1,6 +1,9 @@
 package entidade;
 // Generated 09/09/2016 09:36:48 by Hibernate Tools 4.3.1
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -60,6 +63,24 @@ public class Turma implements java.io.Serializable {
         this.turno = turno;
         this.turmaSimulados = turmaSimulados;
         this.turmaAlunos = turmaAlunos;
+    }
+
+    @Transient
+    public BigDecimal getDesempenho() {
+        BigDecimal media = new BigDecimal(BigInteger.ZERO);
+        int alunosAtivos = 0;
+        if (this.turmaAlunos != null) {
+            for (TurmaAluno turmaAluno : turmaAlunos) {
+                if (turmaAluno.getAluno().getPessoa().getAtivo()) {
+                    alunosAtivos++;
+                    media = media.add(turmaAluno.getAluno().getMedia(turmaSimulados));
+                }
+            }
+        }
+        if (alunosAtivos != 0) {
+            media = media.divide(new BigDecimal(alunosAtivos), 2, RoundingMode.HALF_DOWN);
+        }
+        return media;
     }
 
     @Id
@@ -198,27 +219,49 @@ public class Turma implements java.io.Serializable {
         if (turmaSimulados == null) {
             return false;
         }
-        
-        if(!isSimuladoAberto()) return false;
-        
+
+        if (!isSimuladoAberto()) {
+            return false;
+        }
+
         for (TurmaSimulado simulado : turmaSimulados) {
             if (simulado.isSimuladoAberto() && !isSimuladoRealizado(simulado, aluno.getAlunoSimulados())) {
                 return false;
             }
         }
-        
+
         return true;
     }
-    
+
     @Transient
-    public List<TurmaSimulado> getTurmaSimuladosListOrd(){
+    public List<TurmaSimulado> getTurmaSimuladosListOrd() {
         List<TurmaSimulado> lista = new ArrayList<>(this.getTurmaSimulados());
-        Collections.sort( lista, new Comparator<TurmaSimulado>() {
+        Collections.sort(lista, new Comparator<TurmaSimulado>() {
             public int compare(TurmaSimulado obj1, TurmaSimulado obj2) {
                 return obj1.getDataAbertura().compareTo(obj2.getDataAbertura());
             }
         });
         return lista;
+    }
+
+    @Transient
+    public String getProgresso() {
+        Integer progresso = 0;
+        Long duracao = getDataFim().getTime() - getDataInicio().getTime();
+        Long atual = (new Date()).getTime() - getDataInicio().getTime();
+        if (atual < 0) {
+            atual = new Long(0);
+        }
+        if (duracao == 0) {
+            duracao = new Long(1);
+        }
+        Long progressoAtual = ((atual * 100) / duracao);
+        progresso = progressoAtual.intValue();
+        if (progresso > 100) {
+            progresso = 100;
+        }
+
+        return progresso.toString();
     }
 
 }

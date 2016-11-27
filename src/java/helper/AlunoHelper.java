@@ -276,6 +276,49 @@ public class AlunoHelper {
         return null;
     }
     
+    public List<Aluno> getAlunosTop20(String stringConsulta) {
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.getTransaction();
+        try {
+            tx.begin();
+            Criteria crit = session.createCriteria(Aluno.class);
+
+            crit.createAlias("pessoa", "pessoa");
+
+            if (stringConsulta != null && !stringConsulta.isEmpty()) {
+                crit.add(Restrictions.disjunction()
+                        .add(Restrictions.ilike("pessoa.cpf", "%" + stringConsulta + "%"))
+                        .add(Restrictions.ilike("pessoa.matricula", "%" + stringConsulta + "%"))
+                        .add(Restrictions.ilike("pessoa.nome", "%" + stringConsulta + "%"))
+                );
+            }
+
+            crit.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+            crit.addOrder(Order.desc("pessoa.dataCadastro"));
+            crit.setMaxResults(20);
+
+            List<Aluno> retorno = crit.list();
+
+            for (Aluno aluno : retorno) {
+                for (Telefone telefone : aluno.getPessoa().getTelefones()) {
+                    telefone.getDdd();
+                }
+            }
+            session.flush();
+            tx.commit();
+            return retorno;
+        } catch (HibernateException e){
+            if(tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+        return null;
+    }
+    
     public Aluno getById(Integer idAluno) {
         session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.getTransaction();

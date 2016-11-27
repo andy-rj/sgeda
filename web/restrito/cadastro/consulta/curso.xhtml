@@ -8,6 +8,8 @@
       xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>Curso Idealizar</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <style type="text/css">
             .ui-growl {
                 z-index:9999 !important;
@@ -17,7 +19,7 @@
             }
         </style>
     </h:head>
-    <h:body style="background-color: #e3e3e3">
+    <h:body style="background-color: #ebeff2">
 
         <h:form id="consulta">
 
@@ -26,7 +28,7 @@
             ***************************-->
             <p:dialog rendered="#{loginController.usuarioLogado.administrador}" header="Alterar Curso" modal="true" resizable="false"  draggable="false" widgetVar="modalAlterar"
                       minimizable="true" maximizable="true" width="700" height="300" onHide="PF('modalDetalhe').show();">
-                <p:outputPanel id="alterarCurso">
+                <p:outputPanel styleClass="painelCentral" style="padding: 10px 10px 10px 10px;margin-bottom: 10px; width: 96%;" id="alterarCurso">
                     <b:row>
                         <b:column colSm="2">
                             <h:outputLabel value="Código " />
@@ -70,14 +72,14 @@
                         <b:column colSm="2">
                             <h:outputLabel for="disciplina" value="Disciplina"/>
                         </b:column>
-                        <b:column colSm="3">
+                        <b:column colSm="4">
                             <p:selectOneMenu id="disciplina" value="#{cursoController.disciplinaSelecionadaAlterar}" style="width:100%">
                                 <f:selectItem itemLabel="Selecione a disciplina" itemValue="0" noSelectionOption="true" />
                                 <f:selectItems value="#{cursoController.disciplinasDisponiveisAlterar}" var="disciplina" itemLabel="#{disciplina.nome}" itemValue="#{disciplina.idDisciplina}" />
                             </p:selectOneMenu>
                         </b:column>
-                        <b:column colSm="2">
-                            <p:commandButton value="Adicionar" update="tabelaDisciplinas disciplinas" process="@this disciplinas" action="#{cursoController.incluirDisciplinaAlterar}" icon="ui-icon-check" />
+                        <b:column colSm="3">
+                            <p:commandButton styleClass="dbotaoPadrao" value="Adicionar" update="tabelaDisciplinas disciplinas" process="@this disciplinas" action="#{cursoController.incluirDisciplinaAlterar}" icon="ui-icon-check" />
                         </b:column>
 
                     </b:row>
@@ -94,15 +96,18 @@
                                     <h:outputText value="#{disciplina.descricao}" />
                                 </p:column>
                                 <p:column headerText="">
-                                    <p:commandButton value="Excluir" process="@this" ajax="true" immediate="true" update=":#{p:component('tabelaDisciplinas')} :#{p:component('disciplinas')}" action="#{cursoController.excluirDisciplinaAlterar(disciplina)}"/>
+                                    <p:commandButton styleClass="dbotaoPadrao" value="Excluir" process="@this" ajax="true" immediate="true" update=":#{p:component('tabelaDisciplinas')} :#{p:component('disciplinas')}" action="#{cursoController.excluirDisciplinaAlterar(disciplina)}"/>
                                 </p:column>
                             </p:dataTable> 
                         </b:column>
                     </b:row>
                 </p:outputPanel>
                 <f:facet name="footer">
-                    <p:commandButton value="Salvar" process="@this :#{p:component('alterarCurso')}" update=":#{p:component('alterarCurso')} :#{p:component('resultado')} :#{p:component('info')} :#{p:component('detalheCurso')}" action="#{cursoController.salvarAlteracao}" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('modalAlterar').hide()" />
-                    <p:commandButton value="Fechar" onclick="PF('modalAlterar').hide();" />
+                    <b:row>
+                        <b:column>
+                            <p:commandButton styleClass="dbotaoPadrao" value="Salvar" process="@this :#{p:component('alterarCurso')}" update=":#{p:component('alterarCurso')} :#{p:component('resultado')} :#{p:component('info')} :#{p:component('detalheCurso')}" action="#{cursoController.salvarAlteracao}" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('modalAlterar').hide()" />
+                            <p:commandButton styleClass="dbotaoPadrao" value="Fechar" onclick="PF('modalAlterar').hide();" />                        </b:column>
+                    </b:row>
                 </f:facet>
             </p:dialog>
 
@@ -111,7 +116,7 @@
                         ***************************-->
             <p:dialog header="Detalhes" modal="true" resizable="false"  draggable="false" widgetVar="modalDetalhe"
                       minimizable="true" maximizable="true" width="500" height="300">
-                <p:outputPanel id="detalheCurso">
+                <p:outputPanel styleClass="painelCentral" style="padding: 10px 10px 10px 10px;margin-bottom: 10px; width: 96%;" id="detalheCurso">
                     <b:row>
                         <b:column colSm="2">
                             <h:outputLabel value="Código: " />
@@ -151,58 +156,74 @@
                     </b:row>
                 </p:outputPanel>
                 <f:facet name="footer">
-                    <p:commandButton value="Fechar" onclick="PF('modalDetalhe').hide();" />
-                    <p:commandButton process="@this" action="#{cursoController.carregarDisciplinas}" rendered="#{loginController.usuarioLogado.administrador}" update=":#{p:component('alterarCurso')}" oncomplete="PF('modalDetalhe').hide();
-                            PF('modalAlterar').show();" value="Alterar"/>
+                    <b:row>
+                        <b:column>
+                            <p:commandButton styleClass="dbotaoPadrao" value="Fechar" onclick="PF('modalDetalhe').hide();" />
+                            <p:commandButton styleClass="dbotaoPadrao" process="@this" action="#{cursoController.carregarDisciplinas}" rendered="#{loginController.usuarioLogado.administrador}" update=":#{p:component('alterarCurso')}" oncomplete="PF('modalDetalhe').hide();
+                                             PF('modalAlterar').show();" value="Alterar"/>
+                        </b:column>
+                    </b:row>
                 </f:facet>
             </p:dialog>
 
             <p:growl  globalOnly="true" id="info"  />
             <b:fetchBeanInfos/>
-            <ui:insert name="navbar">
-                <ui:include src="/template/navbar.xhtml"/>
-            </ui:insert>
-            <b:container>
-                <b:row style="margin-left: -45px; margin-right: -45px;">
-                    <b:column >
-                        <b:panel title="Consulta de Curso" style="min-height: 200px;" collapsible="false" look="info">
-                            <b:row>
-                                <b:column colSm="5" offset="2">
-                                    <p:inputText id="entradaConsulta" placeholder="Código, Nome, Disciplina ou Descrição" value="#{cursoController.stringConsulta}" maxlength="50" style="width: 100%"/>
-                                </b:column>
-                                <b:column colSm="5">
-                                    <p:commandButton process="@this entradaConsulta" update="resultado info" value="Buscar" action="#{cursoController.consultar}" icon=" ui-icon-search "/>
-                                    <p:commandButton value="Limpar" update="entradaConsulta resultado" action="#{cursoController.limparFormularioConsulta}" immediate="true"/>
-                                </b:column>
-                            </b:row>
-                            <b:row id="resultado">
-                                <b:column>
-                                    <p:dataTable rendered="#{not empty cursoController.resultadoConsulta}" value="#{cursoController.resultadoConsulta}" var="curso" id="datatable" styleClass="table table-striped table-bordered"
-                                                 style="width:100%; margin-top: 20px;"
-                                                 rows="10"
-                                                 paginatorPosition="bottom"
-                                                 paginator="true"
-                                                 paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink} {RowsPerPageDropdown}"
-                                                 rowsPerPageTemplate="5,10,15">
+            <div id="wrapper">
+                <!-- Sidebar -->
+                <ui:insert name="navbar">
+                    <ui:include src="/template/navbar.xhtml"/>
+                </ui:insert>
 
-                                        <p:column headerText="Código" style="width: 120px;" sortBy="#{curso.codigo}">
-                                            <h:outputText id="codigo" value="#{curso.codigo}" />
-                                        </p:column>
+                <div id="page-content-wrapper">
+                    <b:container id="container">
+                        <b:row style="margin-top: -50px;margin-bottom: 40px;">
+                            <h:outputText value="Consulta de curso:" style="font-size: 30px;margin-left: 10px;"/>
+                        </b:row>
+                        <b:row>
+                            <b:panel styleClass="painelCentral">
+                                <b:row>
+                                    <b:column colSm="5" offset="2">
+                                        <p:inputText id="entradaConsulta" placeholder="Código, Nome, Disciplina ou Descrição" value="#{cursoController.stringConsulta}" maxlength="50" style="width: 100%"/>
+                                    </b:column>
+                                    <b:column colSm="5">
+                                        <p:commandButton process="@this entradaConsulta" update="resultado info" value="Buscar" style="background-image: url('/sgeda/faces/resource/imagens/detalhe.png')!important;" styleClass="dbotaoPadraoIcon" action="#{cursoController.consultar}" icon=" ui-icon-search "/>
+                                        <p:commandButton styleClass="dbotaoDark" value="Limpar" update="entradaConsulta resultado" action="#{cursoController.limparFormularioConsulta}" immediate="true"/>
+                                    </b:column>
+                                </b:row>
+                                <b:row id="resultado">
+                                    <b:column>
+                                        <br/>
+                                        <div class="tabelaWrapper">
+                                            <p:dataTable rendered="#{not empty cursoController.resultadoConsulta}" value="#{cursoController.resultadoConsulta}" var="curso" id="datatable" styleClass="table table-striped table-bordered"
+                                                         style="width:100%; margin-top: 20px;"
+                                                         rows="10"
+                                                         paginatorPosition="bottom"
+                                                         paginator="true"
+                                                         paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink} {RowsPerPageDropdown}"
+                                                         rowsPerPageTemplate="5,10,15">
 
-                                        <p:column headerText="Nome" sortBy="#{curso.nome}">
-                                            <h:outputText id="nome" value="#{curso.nome}" />
-                                        </p:column>
+                                                <p:column headerText="Código" style="width: 120px;" sortBy="#{curso.codigo}">
+                                                    <h:outputText id="codigo" value="#{curso.codigo}" />
+                                                </p:column>
 
-                                        <p:column style="width: 120px;">
-                                            <p:commandButton process="@this" update=":#{p:component('detalheCurso')}" action="#{cursoController.exibirDetalhes(curso)}" oncomplete="PF('modalDetalhe').show();" value="Detalhes" style="width: 100px"/>
-                                        </p:column>
-                                    </p:dataTable>
-                                </b:column>
-                            </b:row>
-                        </b:panel>
-                    </b:column>
-                </b:row>
-            </b:container>
+                                                <p:column headerText="Nome" sortBy="#{curso.nome}">
+                                                    <h:outputText id="nome" value="#{curso.nome}" />
+                                                </p:column>
+
+                                                <p:column style="width: 75px;text-align: center">
+                                                    <p:commandLink process="@this" update=":#{p:component('detalheCurso')}" action="#{cursoController.exibirDetalhes(curso)}" oncomplete="PF('modalDetalhe').show();" title="Detalhes do Curso"  style="margin-right: 5px;">
+                                                        <h:graphicImage url="/resource/imagens/detalhe.png" width="24" height="24"/>
+                                                    </p:commandLink>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </div>
+                                    </b:column>
+                                </b:row>
+                            </b:panel>
+                        </b:row>
+                    </b:container>
+                </div>
+            </div>
         </h:form>
     </h:body>
 </html>

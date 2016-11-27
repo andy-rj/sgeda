@@ -8,6 +8,8 @@
       xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>Curso Idealizar</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <style type="text/css">
             .ui-growl {
                 z-index:9999 !important;
@@ -17,7 +19,7 @@
             }
         </style>
     </h:head>
-    <h:body style="background-color: #e3e3e3">
+    <h:body style="background-color: #ebeff2">
         <h:form id="cadastro">
 
             <p:dialog header="Inserir Figura" widgetVar="modalFigura" modal="true" height="500" width="526" draggable="false" resizable="false">
@@ -47,149 +49,155 @@
 
             <p:growl  globalOnly="true" id="info"  />
             <b:fetchBeanInfos/>
-            <ui:insert name="navbar">
-                <ui:include src="/template/navbar.xhtml"/>
-            </ui:insert>
-            <b:container id="container">
-                <b:row style="margin-left: -45px; margin-right: -45px;">
-                    <b:column>
-                        <b:panel title="Cadastro de Redação" collapsible="false" look="info">
-                            <b:row>
-                                <b:column>
-                                    <font color ='red' >*</font><h:outputText style="font-size: 12px;color: red;" value="Preenchimento Obrigatório." />
-                                </b:column>
-                            </b:row>
-                            <br/>
-                            <b:row>
-                                <b:column col-sm="12">
-                                    <hr style= "border-top: 1px solid #999999;"/>
-                                </b:column>
-                            </b:row>
-                            <b:row>
-                                <b:column colSm="2">
-                                    <h:outputLabel value="Instituição" ></h:outputLabel>
-                                </b:column>
-                                <b:column colSm="7">
-                                    <p:inputText id="instituicaoQuestao" value="#{questaoController.instituicao}" maxlength="10" />
-                                </b:column>
-                                <b:column colSm="3">
-                                    <b:message for="instituicaoQuestao"  />
-                                </b:column>
-                            </b:row>
-                            <b:row>
-                                <b:column colSm="2">
-                                    <h:outputLabel value="Ano" ></h:outputLabel>
-                                </b:column>
-                                <b:column colSm="7">
-                                    <p:inputMask id="ano" value="#{questaoController.ano}" mask="9999" />
-                                </b:column>
-                                <b:column colSm="3">
-                                    <b:message for="ano"  />
-                                </b:column>
-                            </b:row>
-                            <b:row>
-                                <b:column colSm="2">
-                                    <h:outputLabel value="Nível" ></h:outputLabel>
-                                </b:column>
-                                <b:column colSm="7">
-                                    <p:selectOneMenu id="nivelQuestao" value="#{questaoController.nivel}" style="width:100%" required="true">
-                                        <f:selectItem itemLabel="Selecione a disciplina" itemValue="0" noSelectionOption="true" />
-                                        <f:selectItem itemLabel="Ensino Fundamental" itemValue="Ensino Fundamental" />
-                                        <f:selectItem itemLabel="Ensino Médio" itemValue="Ensino Médio" />
-                                        <f:selectItem itemLabel="Ensino Superior" itemValue="Ensino Superior" />
-                                    </p:selectOneMenu>
-                                </b:column>
-                                <b:column colSm="3">
-                                    <b:message for="nivelQuestao"  />
-                                </b:column>
-                            </b:row>
-                            <b:row id="disciplinas">
-                                <b:column colSm="2">
-                                    <h:outputLabel for="disciplina" value="Disciplina"/>
-                                </b:column>
-                                <b:column colSm="7">
-                                    <p:selectOneMenu id="disciplina" value="#{questaoController.disciplinaSelecionada}" style="width:100%" required="true">
-                                        <p:ajax process="@this" update="assuntos" />
-                                        <f:selectItem itemLabel="Selecione a disciplina" itemValue="0" noSelectionOption="true" />
-                                        <f:selectItems value="#{questaoController.disciplinasDisponiveis}" var="disciplina" itemLabel="#{disciplina.codigo} - #{disciplina.nome}" itemValue="#{disciplina.idDisciplina}" />
-                                    </p:selectOneMenu>
-                                </b:column>
-                                <b:column colSm="3">
-                                    <b:message for="disciplina"/>
-                                </b:column>
-                            </b:row>
-                            <b:row>
-                                <b:column colSm="2">
-                                    <h:outputLabel value="Dificuldade" ></h:outputLabel>
-                                </b:column>
-                                <b:column colSm="7">
-                                    <p:rating stars="3" cancel="false" id="dificuldade" value="#{questaoController.dificuldade}" requiredMessage="Nível de dificuldade é obrigatório, selecione!">
-                                        <f:validateRequired/>
-                                    </p:rating>
-                                </b:column>
-                                <b:column colSm="3">
-                                    <b:message for="dificuldade"  />
-                                </b:column>
-                            </b:row>
-                            <b:row>
-                                <b:column colSm="2">
-                                    <h:outputLabel value="Assuntos" ></h:outputLabel>
-                                </b:column>
-                                <b:column colSm="7">
-                                    <p:autoComplete id="assuntos" multiple="true" value="#{questaoController.assuntosSelecionados}" completeMethod="#{questaoController.completarAssuntos}"
-                                                    var="assunto" itemLabel="#{assunto}" itemValue="#{assunto}">
-                                        <p:column style="width:10%">
-                                            <h:outputText styleClass="ui-theme ui-theme-#{assunto}" />
-                                        </p:column>
+            <div id="wrapper">
+                <!-- Sidebar -->
+                <ui:insert name="navbar">
+                    <ui:include src="/template/navbar.xhtml"/>
+                </ui:insert>
 
-                                        <p:column>
-                                            <h:outputText value="#{assunto}" />
-                                        </p:column>
-                                    </p:autoComplete>
-                                </b:column>
-                                <b:column colSm="3">
-                                    <b:message for="assuntos"  />
-                                </b:column>
-                            </b:row>
-                            <b:row>
-                                <b:column col-sm="12">
-                                    <strong style="color: #999999;">Enunciado</strong>
-                                    <hr style= "border-top: 1px solid #999999;"/>
-                                </b:column>
-                            </b:row>
-                            <b:row>
-                                <b:column id="editorColumn">
-                                    <p:editor id="editor" controls="bold italic underline subscript superscript font size style color highlight bullets numbering alignleft center alignright justify undo redo cut copy paste" widgetVar="editorWidget" value="#{questaoController.enunciado}" maxlength="3000"/>
-                                </b:column>
-                            </b:row>
-                            <b:row>
-                                <br/>
-                                <b:column colSm="2">
-                                    <h:outputLabel value="Figura"/>
-                                </b:column>
-                                <b:column colSm="7">
-                                    <p:commandButton process="@this" onclick="PF('modalFigura').show();" value="Inserir"/>
-                                </b:column>
-                            </b:row>
-                            <b:row>
-                                <b:column col-sm="12">
-                                    <hr style= "border-top: 1px solid #999999;"/>
-                                </b:column>
-                            </b:row>
+                <div id="page-content-wrapper">
+                    <b:container id="container">
+                        <b:row style="margin-left: -45px; margin-right: -45px;">
+                            <b:column>
+                                <b:panel title="Cadastro de Redação" collapsible="false" look="info">
+                                    <b:row>
+                                        <b:column>
+                                            <font color ='red' >*</font><h:outputText style="font-size: 12px;color: red;" value="Preenchimento Obrigatório." />
+                                        </b:column>
+                                    </b:row>
+                                    <br/>
+                                    <b:row>
+                                        <b:column col-sm="12">
+                                            <hr style= "border-top: 1px solid #999999;"/>
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <b:column colSm="2">
+                                            <h:outputLabel value="Instituição" ></h:outputLabel>
+                                        </b:column>
+                                        <b:column colSm="7">
+                                            <p:inputText id="instituicaoQuestao" value="#{questaoController.instituicao}" maxlength="10" />
+                                        </b:column>
+                                        <b:column colSm="3">
+                                            <b:message for="instituicaoQuestao"  />
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <b:column colSm="2">
+                                            <h:outputLabel value="Ano" ></h:outputLabel>
+                                        </b:column>
+                                        <b:column colSm="7">
+                                            <p:inputMask id="ano" value="#{questaoController.ano}" mask="9999" />
+                                        </b:column>
+                                        <b:column colSm="3">
+                                            <b:message for="ano"  />
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <b:column colSm="2">
+                                            <h:outputLabel value="Nível" ></h:outputLabel>
+                                        </b:column>
+                                        <b:column colSm="7">
+                                            <p:selectOneMenu id="nivelQuestao" value="#{questaoController.nivel}" style="width:100%" required="true">
+                                                <f:selectItem itemLabel="Selecione a disciplina" itemValue="0" noSelectionOption="true" />
+                                                <f:selectItem itemLabel="Ensino Fundamental" itemValue="Ensino Fundamental" />
+                                                <f:selectItem itemLabel="Ensino Médio" itemValue="Ensino Médio" />
+                                                <f:selectItem itemLabel="Ensino Superior" itemValue="Ensino Superior" />
+                                            </p:selectOneMenu>
+                                        </b:column>
+                                        <b:column colSm="3">
+                                            <b:message for="nivelQuestao"  />
+                                        </b:column>
+                                    </b:row>
+                                    <b:row id="disciplinas">
+                                        <b:column colSm="2">
+                                            <h:outputLabel for="disciplina" value="Disciplina"/>
+                                        </b:column>
+                                        <b:column colSm="7">
+                                            <p:selectOneMenu id="disciplina" value="#{questaoController.disciplinaSelecionada}" style="width:100%" required="true">
+                                                <p:ajax process="@this" update="assuntos" />
+                                                <f:selectItem itemLabel="Selecione a disciplina" itemValue="0" noSelectionOption="true" />
+                                                <f:selectItems value="#{questaoController.disciplinasDisponiveis}" var="disciplina" itemLabel="#{disciplina.codigo} - #{disciplina.nome}" itemValue="#{disciplina.idDisciplina}" />
+                                            </p:selectOneMenu>
+                                        </b:column>
+                                        <b:column colSm="3">
+                                            <b:message for="disciplina"/>
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <b:column colSm="2">
+                                            <h:outputLabel value="Dificuldade" ></h:outputLabel>
+                                        </b:column>
+                                        <b:column colSm="7">
+                                            <p:rating stars="3" cancel="false" id="dificuldade" value="#{questaoController.dificuldade}" requiredMessage="Nível de dificuldade é obrigatório, selecione!">
+                                                <f:validateRequired/>
+                                            </p:rating>
+                                        </b:column>
+                                        <b:column colSm="3">
+                                            <b:message for="dificuldade"  />
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <b:column colSm="2">
+                                            <h:outputLabel value="Assuntos" ></h:outputLabel>
+                                        </b:column>
+                                        <b:column colSm="7">
+                                            <p:autoComplete id="assuntos" multiple="true" value="#{questaoController.assuntosSelecionados}" completeMethod="#{questaoController.completarAssuntos}"
+                                                            var="assunto" itemLabel="#{assunto}" itemValue="#{assunto}">
+                                                <p:column style="width:10%">
+                                                    <h:outputText styleClass="ui-theme ui-theme-#{assunto}" />
+                                                </p:column>
+
+                                                <p:column>
+                                                    <h:outputText value="#{assunto}" />
+                                                </p:column>
+                                            </p:autoComplete>
+                                        </b:column>
+                                        <b:column colSm="3">
+                                            <b:message for="assuntos"  />
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <b:column col-sm="12">
+                                            <strong style="color: #999999;">Enunciado</strong>
+                                            <hr style= "border-top: 1px solid #999999;"/>
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <b:column id="editorColumn">
+                                            <p:editor id="editor" controls="bold italic underline subscript superscript font size style color highlight bullets numbering alignleft center alignright justify undo redo cut copy paste" widgetVar="editorWidget" value="#{questaoController.enunciado}" maxlength="3000"/>
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <br/>
+                                        <b:column colSm="2">
+                                            <h:outputLabel value="Figura"/>
+                                        </b:column>
+                                        <b:column colSm="7">
+                                            <p:commandButton process="@this" onclick="PF('modalFigura').show();" value="Inserir"/>
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <b:column col-sm="12">
+                                            <hr style= "border-top: 1px solid #999999;"/>
+                                        </b:column>
+                                    </b:row>
 
 
-                            <b:row>
-                                <br/>
-                                <b:column>
-                                    <p:commandButton value="Cadastrar" process="@this dificuldade nivelQuestao instituicaoQuestao ano disciplina editor assuntos" update="info container" action="#{questaoController.cadastrarRedacao}"/>
-                                    <p:commandButton value="Limpar" action="#{questaoController.limparFormularioCadastroObjetiva}" immediate="true"/>
-                                </b:column>
-                            </b:row>
+                                    <b:row>
+                                        <br/>
+                                        <b:column>
+                                            <p:commandButton value="Cadastrar" process="@this dificuldade nivelQuestao instituicaoQuestao ano disciplina editor assuntos" update="info container" action="#{questaoController.cadastrarRedacao}"/>
+                                            <p:commandButton value="Limpar" action="#{questaoController.limparFormularioCadastroObjetiva}" immediate="true"/>
+                                        </b:column>
+                                    </b:row>
 
-                        </b:panel>
-                    </b:column>
-                </b:row>
-            </b:container>
+                                </b:panel>
+                            </b:column>
+                        </b:row>
+                    </b:container>
+                </div>
+            </div>
         </h:form>
     </h:body>
 </html>

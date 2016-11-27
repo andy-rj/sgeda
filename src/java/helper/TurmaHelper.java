@@ -64,6 +64,7 @@ public class TurmaHelper {
             if (retorno != null) {
                 retorno.getTurmaAlunos().size();
                 retorno.getTurmaSimulados().size();
+                retorno.getDisciplina().getProfessors().size();
             }
 
             session.flush();

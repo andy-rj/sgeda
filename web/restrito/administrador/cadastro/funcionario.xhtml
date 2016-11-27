@@ -8,287 +8,232 @@
       xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>Curso Idealizar</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </h:head>
-    <h:body style="background-color: #e3e3e3">
+    <h:body style="background-color: #ebeff2">
         <h:outputStylesheet>
-             .ui-growl {
-                z-index:9999 !important;
+            .ui-growl {
+            z-index:9999 !important;
             }
         </h:outputStylesheet>
 
         <h:form id="cadastro">
             <p:growl  globalOnly="true" id="info"  />
             <b:fetchBeanInfos/>
-            <ui:insert name="navbar">
-                <ui:include src="/template/navbar.xhtml"/>
-            </ui:insert>
-            <b:container id="container">
-                <b:row style="margin-left: -45px; margin-right: -45px;">
-                    <b:column>
-                        <b:panel title="Cadastro de Funcionário" collapsible="false" look="info">
-                            <b:row>
-                                <b:column>
-                                    <font color ='red' >*</font><h:outputText style="font-size: 12px;color: red;" value="Preenchimento Obrigatório." />
-                                </b:column>
-                            </b:row>
-                            <br/>
-                            <!--Dados Pessoais-->
-                            <b:row>
-                                <b:column col-sm="12">
-                                    <strong style="color: #999999;">Dados Pessoais</strong>
-                                    <hr style= "border-top: 1px solid #999999;"/>
-                                </b:column>
-                            </b:row>
-                            <b:row>
-                                <b:column colSm="2">
-                                    <h:outputLabel value="Nome" ><font color ='red' >*</font></h:outputLabel>
-                                </b:column>
-                                <b:column colSm="7">
-                                    <p:inputText id="nomeFuncionario" value="#{funcionarioController.nome}" maxlength="50" validatorMessage="Nome é obrigatório e deve ter até 50 caracteres" >
-                                        <f:validateRequired />
-                                    </p:inputText>
-                                </b:column>
-                                <b:column colSm="3">
-                                    <b:message for="nomeFuncionario"  />
-                                </b:column>
-                            </b:row>
-                            <b:row>
-                                <b:column colSm="2">
-                                    <h:outputLabel value="CPF" ><font color ='red' >*</font></h:outputLabel>
-                                </b:column>
-                                <b:column colSm="7">
-                                    <p:inputMask id="cpf" value="#{funcionarioController.cpf}" maxlength="11" validatorMessage="Nome é obrigatório e deve ter até 50 caracteres" mask="999.999.999-99" converter="converter.cpfConverter">
-                                        <f:validateBean />
-                                    </p:inputMask>
-                                </b:column>
-                                <b:column colSm="3">
-                                    <b:message for="cpf"  />
-                                </b:column>
-                            </b:row>
-                            <b:row>
-                                <b:column colSm="2">
-                                    <h:outputLabel value="Data de Nascimento" ><font color ='red' >*</font></h:outputLabel>
-                                </b:column>
-                                <b:column colSm="7">
-                                    <p:calendar id="nascimentoFuncionario" value="#{funcionarioController.dataNascimento}" locale="pt" navigator="true" pattern="dd-MM-yyyy" yearRange="c-90:c">
-                                        <f:validateBean />
-                                    </p:calendar>
-                                </b:column>
-                                <b:column colSm="3">
-                                    <b:message for="nascimentoFuncionario"  />
-                                </b:column>
-                            </b:row>
-                            <b:row>
-                                <b:column colSm="2">
-                                    <h:outputLabel value="Sexo" ><font color ='red' >*</font></h:outputLabel>
-                                </b:column>
-                                <b:column colSm="7">
-                                    <p:selectOneRadio requiredMessage="Sexo é obrigatorio!" id="sexo" value="#{funcionarioController.sexo}">
-                                        <f:selectItem itemLabel="Masculino" itemValue="M" />
-                                        <f:selectItem itemLabel="Feminino" itemValue="F" />
-                                        <f:validateRequired/>
-                                    </p:selectOneRadio>
-                                </b:column>
-                                <b:column colSm="3">
-                                    <b:message for="sexo"  />
-                                </b:column>
-                            </b:row>
-                            <b:row id="entradaTelefone">
-                                <b:column colSm="2">
-                                    <h:outputLabel value="Telefone" ><font color ='red' >*</font></h:outputLabel>
-                                </b:column>
-                                <b:column colSm="1">
-                                    <p:inputMask id="ddd" placeholder="DDD" value="#{funcionarioController.ddd}" mask="99"/>
-                                </b:column>
-                                <b:column colSm="1">
-                                    <p:inputMask id="telefone" placeholder="Telefone" value="#{funcionarioController.numeroTelefone}" mask="9999-9999?9" converter="converter.telefoneConverter"/>
-                                </b:column>
-                                <b:column colSm="3">
-                                    <p:inputText id="descricao" value="#{funcionarioController.descricaoTelefone}" placeholder="Observação" maxlength="50" style="width: 100%"/>
-                                </b:column>
-                                <b:column colSm="1">
-                                    <p:commandButton global="false" process="@this :#{p:component('ddd')} :#{p:component('telefone')} :#{p:component('descricao')}" update=":#{p:component('tabelaTelefone')} :#{p:component('entradaTelefone')}" value="Incluir" action="#{funcionarioController.incluirTelefone}" icon="ui-icon-arrowthickstop-1-s"/>
-                                </b:column>
-                                <b:column colSm="3">
-                                    <b:message for="ddd" />
-                                    <b:message for="telefone" />
-                                </b:column>
-                            </b:row>
-                            <b:row id="tabelaTelefone">
-                                <b:column colSm="9">
-                                    <p:dataTable   rendered="#{not empty funcionarioController.telefones}" var="telefone" value="#{funcionarioController.telefones}">
-                                        <p:column headerText="DDD">
-                                            <p:inplace id="dddTabela" editor="true">
-                                                <p:inputMask value="#{telefone.ddd}" required="true" mask="99"/>
-                                            </p:inplace>
-                                        </p:column>
-                                        
-                                        <p:column headerText="Número">
-                                            <p:inplace id="telefoneTabela" editor="true">
-                                                <p:inputMask  value="#{telefone.numero}" required="true" mask="9999-9999?9" converter="converter.telefoneConverter"/>
-                                            </p:inplace>
-                                        </p:column>
+            <div id="wrapper">
+                <!-- Sidebar -->
+                <ui:insert name="navbar">
+                    <ui:include src="/template/navbar.xhtml"/>
+                </ui:insert>
 
-                                        <p:column headerText="Observação">
-                                            <p:inplace id="observacaoTabela" editor="true">
-                                                <p:inputText  value="#{telefone.descricao}"/>
-                                            </p:inplace>
-                                        </p:column>
+                <div id="page-content-wrapper">
 
-                                        <p:column headerText="">
-                                            <p:commandButton global="false" value="Excluir" ajax="true" immediate="true" update=":#{p:component('tabelaTelefone')}" action="#{funcionarioController.excluirTelefone(telefone)}"/>
-                                        </p:column>
-                                     
-                                    </p:dataTable> 
-                                </b:column>
-                            </b:row>
-                            <b:row>
-                                <b:column colSm="2">
-                                    <h:outputLabel value="Email" ><font color ='red' >*</font></h:outputLabel>
-                                </b:column>
-                                <b:column colSm="7">
-                                    <p:inputText id="email" value="#{funcionarioController.email}" maxlength="50" validatorMessage="Email é obrigatório! Email inválido!">
-                                        <f:validateRegex
-                                            pattern="^(([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5}){1,25})+([;.](([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5}){1,25})+)*$" />
-                                    </p:inputText>
-                                </b:column>
-                                <b:column colSm="3">
-                                    <b:message for="email"/>
-                                </b:column>
-                            </b:row>
-                            <b:row>
-                                <b:column colSm="2">
-                                    <h:outputLabel value="Cargo" ><font color ='red' >*</font></h:outputLabel>
-                                </b:column>
-                                <b:column colSm="7">
-                                    <p:inputText id="cargo" value="#{funcionarioController.cargo}" maxlength="100"/>
-                                </b:column>
-                                <b:column colSm="3">
-                                </b:column>
-                            </b:row>
-                            <b:row>
-                                <b:column colSm="2">
-                                    <h:outputLabel value="Administrador" ></h:outputLabel>
-                                </b:column>
-                                <b:column colSm="7">
-                                    <p:selectBooleanCheckbox value="#{funcionarioController.papelAdmistrador}" />
-                                </b:column>
-                                <b:column colSm="3">
-                                </b:column>
-                            </b:row>
-                            
-                            <!--Dados de endereço-->
-                            <b:row>
-                                <b:column col-sm="12">
-                                    <br/>
-                                    <strong style="color: #999999;">Dados do Endereço</strong>
-                                    <hr style= "border-top: 1px solid #999999;"/>
-                                </b:column>
-                            </b:row>
-                             <b:row>
-                                <b:column colSm="2">
-                                    <h:outputLabel value="CEP" ><font color ='red' >*</font></h:outputLabel>
-                                </b:column>
-                                <b:column colSm="3">
-                                    <p:inputMask  id="cep" value="#{funcionarioController.cep}" mask="99999-999" converter="converter.cepConverter" required="true" requiredMessage="Cep é obrigatório!"/>
-                                </b:column>
-                                 <b:column colSm="4">
-                                     <p:commandButton process="@this cep" update="messageCep logradouro cidade bairro uf complemento" id="buscaCep" value="Pesquisar" icon="ui-icon-circle-zoomin" action="#{funcionarioController.buscarCep}"/>
-                                </b:column>
-                                <b:column colSm="3">
-                                    <b:message id="messageCep" for="cep"/>
-                                </b:column>
-                            </b:row>
-                            <b:row>
-                                <b:column colSm="2">
-                                    <h:outputLabel value="Logradouro" ><font color ='red' >*</font></h:outputLabel>
-                                </b:column>
-                                <b:column colSm="7">
-                                    <p:inputText disabled="#{funcionarioController.enderecoEncontrado}" id="logradouro" value="#{funcionarioController.logradouro}" maxlength="255" validatorMessage="Logradouro é obrigatório!">
-                                        <f:validateRequired/>
-                                    </p:inputText>
-                                </b:column>
-                                <b:column colSm="3">
-                                    <b:message for="logradouro"/>
-                                </b:column>
-                            </b:row>
-                            <b:row>
-                                <b:column colSm="2">
-                                    <h:outputLabel value="Número" ><font color ='red' >*</font></h:outputLabel>
-                                </b:column>
-                                <b:column colSm="7">
-                                    <p:inputText id="numero" value="#{funcionarioController.numero}" maxlength="50" validatorMessage="Numero é obrigatório!">
-                                        <f:validateRequired />
-                                    </p:inputText>
-                                </b:column>
+                    <b:container id="container">
+                        <b:row style="margin-top: -50px;margin-bottom: 40px;">
+                            <h:outputText value="Novo Funcionário:" style="font-size: 30px;margin-left: 10px;"/>
+                        </b:row>
+                        <b:row>
+                            <b:column>
+                                <font color ='red' >*</font><h:outputText style="font-size: 12px;color: red;" value="Preenchimento Obrigatório." />
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:panel styleClass="painelCentral">
+                                <b:row>
+                                    <!--Primeira coluna-->
+                                    <b:column colSm="6">
+                                        <b:row styleClass="rowMarginBotton">
+                                            <b:column>
+                                                <h:outputLabel value="Dados Pessoais"/>
+                                                <hr style= "border-top: 1px solid #999999;"/>
+                                            </b:column>
+                                        </b:row>
+                                        <b:row styleClass="rowMarginBotton">
+                                            <b:column>
+                                                <p:inputText id="nome" styleClass="inputStyle" placeholder="Nome*" value="#{funcionarioController.nome}" maxlength="50" validatorMessage="Nome é obrigatório e deve ter até 50 caracteres" style="width: 100%">
+                                                    <f:validateRequired />
+                                                </p:inputText>
+                                            </b:column>
+                                        </b:row>
+                                        <b:row styleClass="rowMarginBotton">
+                                            <b:column colSm="6">
+                                                <p:inputMask style="width: 100%" id="cpf" placeholder="CPF*" styleClass="inputStyle" value="#{funcionarioController.cpf}" maxlength="11" validatorMessage="CPF é obrigatório!" mask="999.999.999-99" converter="converter.cpfConverter">
+                                                    <f:validateBean />
+                                                </p:inputMask>
+                                            </b:column>
+                                            <b:column colSm="6">
+                                                <p:calendar style="width: 100%" placeholder="Data de Nascimento*" id="nascimento" value="#{funcionarioController.dataNascimento}" locale="pt" navigator="true" pattern="dd-MM-yyyy" yearRange="c-90:c">
+                                                    <f:validateBean/>
+                                                </p:calendar>
+                                            </b:column>
+                                        </b:row>
+                                        <b:row styleClass="rowMarginBotton">
+                                            <b:column>
+                                                <div class="inputStyle" style="width: 100%;padding:9px">
+                                                    <p style="color: #6C7377;text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75); width: 20px;">Sexo*</p>
+                                                    <p:selectOneRadio style="margin-left: 80px;margin-top: -35px;" id="sexo" value="#{funcionarioController.sexo}">
+                                                        <f:selectItem itemLabel="Masculino" itemValue="M" />
+                                                        <f:selectItem itemLabel="Feminino" itemValue="F" />
+                                                    </p:selectOneRadio>
+                                                </div>
+                                            </b:column>
+                                        </b:row>
+                                        <b:row id="entradaTelefone" styleClass="rowMarginBotton">
+                                            <b:column colSm="9">
+                                                <p:inputMask id="ddd" placeholder="DDD" value="#{funcionarioController.ddd}" mask="99" style="width:70px;"/>
+                                                <p:inputMask id="telefone" placeholder="Telefone" value="#{funcionarioController.numeroTelefone}" mask="9999-9999?9" converter="converter.telefoneConverter" style="width: 115px;"/>
+                                                <p:inputText id="descricao" value="#{funcionarioController.descricaoTelefone}" placeholder="Observação" maxlength="50" style="width:200px;"/>
+                                            </b:column>
+                                            <b:column colSm="3">
+                                                <p:commandButton styleClass="dbotaoPadraoIcon" global="false" style="background-image: url('/sgeda/faces/resource/imagens/inserirTelefone.png')!important;width:100%;" process="@this :#{p:component('ddd')} :#{p:component('telefone')} :#{p:component('descricao')}" update=":#{p:component('tabelaTelefone')} :#{p:component('entradaTelefone')}" value="Incluir" action="#{funcionarioController.incluirTelefone}" />
+                                            </b:column>
+                                        </b:row>
+                                        <b:row id="tabelaTelefone" styleClass="rowMarginBotton">
+                                            <b:column>
+                                                <div class="tabelaWrapper">
+                                                    <p:dataTable   rendered="#{not empty funcionarioController.telefones}" var="telefone" value="#{funcionarioController.telefones}">
+                                                        <p:column headerText="DDD">
+                                                            <p:inplace id="dddTabela" editor="true">
+                                                                <p:inputMask value="#{telefone.ddd}" required="true" mask="99"/>
+                                                            </p:inplace>
+                                                        </p:column>
 
-                                <b:column colSm="3">
-                                    <b:message for="numero"/>
-                                </b:column>
-                            </b:row>
-                            <b:row>
-                                <b:column colSm="2">
-                                    <h:outputLabel value="Complemento" />
-                                </b:column>
-                                <b:column colSm="7">
-                                    <p:inputText id="complemento" value="#{funcionarioController.complemento}" maxlength="255"/>
-                                </b:column>
-                            </b:row>
+                                                        <p:column headerText="Número">
+                                                            <p:inplace id="telefoneTabela" editor="true">
+                                                                <p:inputMask  value="#{telefone.numero}" required="true" mask="9999-9999?9" converter="converter.telefoneConverter"/>
+                                                            </p:inplace>
+                                                        </p:column>
 
-                            <b:row>
-                                <b:column colSm="2">
-                                    <h:outputLabel value="UF" ><font color ='red' >*</font></h:outputLabel>
-                                </b:column>
-                                <b:column colSm="7">
-                                    <p:inputText disabled="#{funcionarioController.enderecoEncontrado}" id="uf" value="#{funcionarioController.estado}" maxlength="2" validatorMessage="UF é obrigatório!">
-                                        <f:validateRequired/>
-                                    </p:inputText>
-                                </b:column>
-                                <b:column colSm="3">
-                                    <b:message for="uf"/>
-                                </b:column>
-                            </b:row>
-                            <b:row>
-                                <b:column colSm="2">
-                                    <h:outputLabel value="Cidade" ><font color ='red' >*</font></h:outputLabel>
-                                </b:column>
-                                <b:column colSm="7">
-                                    <p:inputText disabled="#{funcionarioController.enderecoEncontrado}" id="cidade" value="#{funcionarioController.cidade}" validatorMessage="Cidade é obrigatório!">
-                                        <f:validateRequired/>
-                                    </p:inputText>
-                                </b:column>
-                                <b:column colSm="3">
-                                    <b:message for="cidade"/>
-                                </b:column>
-                            </b:row>
-                            <b:row>
-                                <b:column colSm="2">
-                                    <h:outputLabel value="Bairro" ><font color ='red' >*</font></h:outputLabel>
-                                </b:column>
-                                <b:column colSm="7">
-                                    <p:inputText disabled="#{funcionarioController.enderecoEncontrado}" id="bairro" value="#{funcionarioController.bairro}" required="true" requiredMessage="Bairro é obrigatório!">
+                                                        <p:column headerText="Observação">
+                                                            <p:inplace id="observacaoTabela" editor="true">
+                                                                <p:inputText  value="#{telefone.descricao}"/>
+                                                            </p:inplace>
+                                                        </p:column>
 
-                                    </p:inputText>
-                                </b:column>
-                                <b:column colSm="3">
-                                    <b:message for="bairro"/>
-                                </b:column>
-                            </b:row>
-                            <b:row>
+                                                        <p:column style="text-align: center" headerText="">
+                                                            <p:commandButton global="false" style="dbotaoPadrao" value="Excluir" ajax="true" immediate="true" update=":#{p:component('tabelaTelefone')}" action="#{funcionarioController.excluirTelefone(telefone)}"/>
+                                                        </p:column>
+                                                    </p:dataTable> 
+                                                </div>
+                                            </b:column>
+                                        </b:row>
+                                        <b:row styleClass="rowMarginBotton">
+                                            <b:column>
+                                                <p:inputText placeholder="Email*" id="email" value="#{funcionarioController.email}" maxlength="50" validatorMessage="Email é obrigatório! Email inválido!" style="width: 100%">
+                                                    <f:validateRegex
+                                                        pattern="^(([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5}){1,25})+([;.](([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5}){1,25})+)*$" />
+                                                </p:inputText>
+                                            </b:column>
+                                        </b:row>
+                                        <b:row styleClass="rowMarginBotton">
+                                            <b:column>
+                                                <p:inputText placeholder="Cargo" id="cargo" value="#{funcionarioController.cargo}" maxlength="100"/>
+                                            </b:column>
+                                        </b:row>
+
+                                        <b:row styleClass="rowMarginBotton">
+                                            <b:column>
+                                                <div class="inputStyle" style="width: 100%;padding:9px">
+                                                    <h:outputText value="Administrador&#160;&#160;&#160;"/>
+                                                    <p:selectBooleanCheckbox value="#{funcionarioController.papelAdmistrador}" />
+                                                </div>
+                                            </b:column>
+                                        </b:row>
+                                    </b:column>
+
+                                    <!--Segunda coluna-->
+                                    <b:column colSm="6">
+                                        <b:row styleClass="rowMarginBotton">
+                                            <b:column>
+                                                <h:outputLabel value="Dados de Endereço"/>
+                                                <hr style= "border-top: 1px solid #999999;"/>
+                                            </b:column>
+                                        </b:row>
+                                        <b:row styleClass="rowMarginBotton">
+                                            <b:column colSm="9">
+                                                <p:inputMask placeholder="CEP*" style="width: 100%" id="cep" value="#{funcionarioController.cep}" mask="99999-999" converter="converter.cepConverter" required="true" requiredMessage="Cep é obrigatório!"/>
+                                            </b:column>
+                                            <b:column colSm="3">
+                                                <p:commandButton styleClass="dbotaoPadraoIcon" value="Pesquisar" action="#{funcionarioController.buscarCep}" process="@this cep" update="logradouro cidade bairro uf complemento" id="buscaCep" style="background-image: url('/sgeda/faces/resource/imagens/pesquisarCep.png')!important;width:100%;"/>
+                                            </b:column>
+                                        </b:row>
+                                        <b:row styleClass="rowMarginBotton">
+                                            <b:column colSm="10">
+                                                <p:inputText style="width: 100%" placeholder="Logradouro*" disabled="#{funcionarioController.enderecoEncontrado}" id="logradouro" value="#{funcionarioController.logradouro}" maxlength="255" validatorMessage="Logradouro é obrigatório!">
+                                                    <f:validateRequired/>
+                                                </p:inputText>
+                                            </b:column>
+                                            <b:column colSm="2">
+                                                <p:inputText placeholder="Nr.*" style="width:100%" id="numero" value="#{funcionarioController.numero}" maxlength="50" validatorMessage="Numero é obrigatório!">
+                                                    <f:validateRequired />
+                                                </p:inputText>
+                                            </b:column>
+                                        </b:row>
+                                        <b:row styleClass="rowMarginBotton">
+                                            <b:column colSm="10">
+                                                <p:inputText placeholder="Complemento" style="width: 100%" id="complemento" value="#{funcionarioController.complemento}" maxlength="255"/>
+                                            </b:column>
+                                            <b:column colSm="2">
+                                                <p:inputText placeholder="UF*" style="width: 100%" disabled="#{funcionarioController.enderecoEncontrado}" id="uf" value="#{funcionarioController.estado}" maxlength="2" validatorMessage="UF é obrigatório!">
+                                                    <f:validateRequired/>
+                                                </p:inputText>                                            
+                                            </b:column>
+                                        </b:row>
+                                        <b:row styleClass="rowMarginBotton">
+                                            <b:column colSm="6">
+                                                <p:inputText placeholder="Cidade*" style="width: 100%" disabled="#{funcionarioController.enderecoEncontrado}" id="cidade" value="#{funcionarioController.cidade}" validatorMessage="Cidade é obrigatório!">
+                                                    <f:validateRequired/>
+                                                </p:inputText>                                            </b:column>
+                                            <b:column colSm="6">
+                                                <p:inputText placeholder="Bairro*" style="width: 100%" disabled="#{funcionarioController.enderecoEncontrado}" id="bairro" value="#{funcionarioController.bairro}" required="true" requiredMessage="Bairro é obrigatório!">
+
+                                                </p:inputText>                                            </b:column>
+                                        </b:row>
+                                        <b:row styleClass="rowMarginBotton">
+                                            <b:column>
+                                                <b:message for="nome" />  
+                                                <b:message for="cpf" />                                          
+                                                <b:message for="nascimento" /> 
+                                                <b:message for="sexo" /> 
+                                                <b:message for="telefone" />                                          
+                                                <b:message for="email" />                                          
+                                                <b:message for="cargo" />  
+                                                <b:message for="cep" /> 
+                                                <b:message for="logradouro" />                                          
+                                                <b:message for="numero" />                                          
+                                                <b:message for="uf" /> 
+                                                <b:message for="cidade" />                                          
+                                                <b:message for="bairro" />                                          
+                                            </b:column>
+
+                                        </b:row>
+                                    </b:column>
+                                </b:row>
+                                <b:row>
+                                    <b:column>
+                                        <hr style= "border-top: 1px solid #999999;"/>
+                                        <br/>
+                                    </b:column>
+                                </b:row>
+                                <b:row>
+                                    <b:column offset="9" colSm="12">
+                                        <p:commandLink styleClass="dbotaoAzul" style="display: inline;" update=":#{p:component('container')} :#{p:component('info')}" value="Cadastrar" action="#{funcionarioController.cadastrar}" oncomplete="window.scrollTo(0,0);"/>
+                                        <p:commandLink styleClass="dbotaoLaranja" style="display: inline; margin-left: 10px;" global="false" update=":#{p:component('container')} " process="@this" value="Limpar" action="#{funcionarioController.limparFormularioCadastro}" immediate="true"/>
+                                    </b:column>
+                                </b:row>
                                 <br/>
-                                <b:column colSm="12">
-                                    <p:commandButton update=":#{p:component('container')} :#{p:component('info')}" value="Cadastrar" action="#{funcionarioController.cadastrar}" oncomplete="window.scrollTo(0,0);"/>
-                                    <p:commandButton global="false" update=":#{p:component('container')} " process="@this" value="Limpar" action="#{funcionarioController.limparFormularioCadastro}" immediate="true"/>
-                                </b:column>
-                                <p:ajaxStatus  onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
-                                <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
-                                    <p:graphicImage url="/resource/imagens/loading.gif" />
-                                </p:dialog>
-                            </b:row>
-                        </b:panel>
-                    </b:column>
-                </b:row>
-            </b:container>
+                            </b:panel>
+                        </b:row>
+
+                        <p:ajaxStatus  onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+                        <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                            <p:graphicImage url="/resource/imagens/loading.gif" />
+                        </p:dialog>
+
+                    </b:container>
+                </div>
+            </div>
         </h:form>
     </h:body>
 </html>

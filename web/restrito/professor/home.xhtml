@@ -3,40 +3,51 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:b="http://bootsfaces.net/ui"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>Curso Idealizar</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </h:head>
-    <h:body style="background-color: #e3e3e3">
+    <h:body style="background-color: #ebeff2">
         <h:form id="cadastro">
-            
-                    <ui:insert name="navbar">
-                        <ui:include src="/template/navbar.xhtml"/>
-                    </ui:insert>
-            <b:container>
-                <b:row style="margin-left: -45px; margin-right: -45px;">
-                    <b:row>
-                        <b:column colSm="6">
-                            <b:panel title="Alunos">
-                            </b:panel>
-                        </b:column>
-                        <b:column colSm="6">
-                            <b:panel title="Questões">
-                            </b:panel>
-                        </b:column>
-                    </b:row>
-                    <b:row>
-                        <b:column colSm="6">
-                            <b:panel title="Simulados">
-                            </b:panel>
-                        </b:column>
-                        <b:column colSm="6">
-                            <b:panel title="Notas">
-                            </b:panel>
-                        </b:column>
-                    </b:row>
-                </b:row>
-            </b:container>
+            <div id="wrapper">
+                <!-- Sidebar -->
+                <ui:insert name="navbar">
+                    <ui:include src="/template/navbar.xhtml"/>
+                </ui:insert>
+
+                <div id="page-content-wrapper">
+
+                    <b:container>
+                        <b:row style="margin-top: -50px;margin-bottom: 10px;">
+                            <h:outputText value="Inserir novo cadastro:" style="font-size: 30px;margin-left: 10px;"/>
+                        </b:row>
+                        <b:row>
+                            <b:column colSm="3">
+
+                            </b:column>
+                            <b:column colSm="3">
+
+                            </b:column>
+                            <b:column colSm="3">
+
+                            </b:column>
+                            <b:column colSm="3">
+
+                            </b:column>
+                        </b:row>
+                        <b:row style="margin-top: 10px;margin-bottom: 10px;">
+                            <h:outputText value="Andamento das turmas:" style="font-size: 30px;margin-left: 10px;"/>
+                        </b:row>
+                        <b:row>
+
+                        </b:row>
+                    </b:container>
+                </div>
+            </div>
+            <!-- /#wrapper -->
         </h:form>
     </h:body>
 </html>

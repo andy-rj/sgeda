@@ -8,81 +8,98 @@
       xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>Curso Idealizar</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <style type="text/css">
             .ui-growl {
                 z-index:9999 !important;
             }
         </style>
     </h:head>
-    <h:body style="background-color: #e3e3e3">
+    <h:body style="background-color: #ebeff2">
         <h:form id="cadastro">
             <p:growl globalOnly="true" id="info"/>
             <b:fetchBeanInfos/>
-            <ui:insert name="navbar">
-                <ui:include src="/template/navbar.xhtml"/>
-            </ui:insert>
-            <b:container id="container">
-                <b:row style="margin-left: -45px; margin-right: -45px;">
-                    <b:column>
-                        <b:panel title="Cadastro de Disciplina" collapsible="false" look="info">
-                            <b:row>
-                                <b:column>
-                                    <font color ='red' >*</font><h:outputText style="font-size: 12px;color: red;" value="Preenchimento Obrigatório." />
-                                </b:column>
-                            </b:row>
-                            <br/>
-                            
-                            <b:row>
-                                <b:column colSm="2">
-                                    <h:outputLabel value="Código" ><font color ='red' >*</font></h:outputLabel>
-                                </b:column>
-                                <b:column colSm="7">
-                                    <p:inputText id="codigoDisciplina" value="#{disciplinaController.codigo}" maxlength="10" validatorMessage="Código é obrigatório e deve ter até 10 caracteres!" style="width: 100%">
-                                        <f:validateRequired />
-                                    </p:inputText>
-                                </b:column>
-                                <b:column colSm="3">
-                                    <b:message for="codigoDisciplina"  />
-                                </b:column>
-                            </b:row>
-                            <b:row>
-                                <b:column colSm="2">
-                                    <h:outputLabel value="Nome" ><font color ='red' >*</font></h:outputLabel>
-                                </b:column>
-                                <b:column colSm="7">
-                                    <p:inputText id="nomeDisciplina" value="#{disciplinaController.nome}" maxlength="255" validatorMessage="Nome é obrigatório e deve ter até 255 caracteres!" style="width: 100%">
-                                        <f:validateRequired />
-                                    </p:inputText>
-                                </b:column>
-                                <b:column colSm="3">
-                                    <b:message for="nomeDisciplina"  />
-                                </b:column>
-                            </b:row>
-                            <b:row>
-                                <b:column colSm="2">
-                                    <h:outputLabel value="Descrição" ><font color ='red' >*</font></h:outputLabel>
-                                </b:column>
-                                <b:column colSm="7">
-                                    <p:inputText id="descricaoDisciplina" value="#{disciplinaController.descricao}" maxlength="255" validatorMessage="Descrição é obrigatório e deve ter até 255 caracteres!" style="width: 100%">
-                                        <f:validateRequired />
-                                    </p:inputText>
-                                </b:column>
-                                <b:column colSm="3">
-                                    <b:message for="descricaoDisciplina"  />
-                                </b:column>
-                            </b:row>
-                            
-                            <b:row>
+            <div id="wrapper">
+                <!-- Sidebar -->
+                <ui:insert name="navbar">
+                    <ui:include src="/template/navbar.xhtml"/>
+                </ui:insert>
+
+                <div id="page-content-wrapper">
+
+                    <b:container id="container">
+                        <b:row style="margin-top: -50px;margin-bottom: 10px;">
+                            <h:outputText value="Nova disciplina:" style="font-size: 30px;margin-left: 10px;"/>
+                        </b:row>
+                        <b:row>
+                            <b:column>
+                                <font color ='red' >*</font><h:outputText style="font-size: 12px;color: red;" value="Preenchimento Obrigatório." />
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:panel styleClass="painelCentral">
+                                <b:row>
+                                    <!--Primeira coluna-->
+                                    <b:column colSm="6">
+                                        <b:row styleClass="rowMarginBotton">
+                                            <b:column>
+                                                <h:outputLabel value="Dados da disciplina"/>
+                                                <hr style= "border-top: 1px solid #999999;"/>
+                                            </b:column>
+                                        </b:row>
+                                        <b:row styleClass="rowMarginBotton">
+                                            <b:column>
+                                                <p:inputText placeholder="Código*" id="codigoDisciplina" value="#{disciplinaController.codigo}" maxlength="10" validatorMessage="Código é obrigatório e deve ter até 10 caracteres!" style="width: 100%">
+                                                    <f:validateRequired />
+                                                </p:inputText>
+                                            </b:column>
+                                        </b:row>
+                                        <b:row styleClass="rowMarginBotton">
+                                            <b:column>
+                                                <p:inputText placeholder="Nome*" id="nomeDisciplina" value="#{disciplinaController.nome}" maxlength="255" validatorMessage="Nome é obrigatório e deve ter até 255 caracteres!" style="width: 100%">
+                                                <f:validateRequired />
+                                            </p:inputText>
+                                            </b:column>
+                                        </b:row>
+                                        <b:row styleClass="rowMarginBotton">
+                                            <b:column>
+                                                <p:inputText placeholder="Descrição*" id="descricaoDisciplina" value="#{disciplinaController.descricao}" maxlength="255" validatorMessage="Descrição é obrigatório e deve ter até 255 caracteres!" style="width: 100%">
+                                                <f:validateRequired />
+                                            </p:inputText>
+                                            </b:column>
+                                        </b:row>
+                                    </b:column>
+
+                                    <!--Segunda coluna-->
+                                    <b:column colSm="6">
+                                        <b:row styleClass="rowMarginBotton">
+                                            <b:column>
+                                                <b:message for="codigoDisciplina"  />
+                                                <b:message for="nomeDisciplina"  />
+                                                <b:message for="descricaoDisciplina"  />
+                                            </b:column>
+                                        </b:row>
+                                    </b:column>
+                                </b:row>
+                                <b:row>
+                                    <b:column>
+                                        <hr style= "border-top: 1px solid #999999;"/>
+                                        <br/>
+                                    </b:column>
+                                </b:row>
+                                <b:row>
+                                    <b:column offset="9" colSm="12">
+                                        <p:commandLink styleClass="dbotaoAzul" style="display: inline;" update=":#{p:component('container')} :#{p:component('info')}" value="Cadastrar" action="#{disciplinaController.cadastrar}" oncomplete="window.scrollTo(0,0);"/>
+                                        <p:commandLink styleClass="dbotaoLaranja" style="display: inline; margin-left: 10px;" global="false" update=":#{p:component('container')} " process="@this" value="Limpar" action="#{disciplinaController.limparFormularioCadastro}" immediate="true"/>
+                                    </b:column>
+                                </b:row>
                                 <br/>
-                                <b:column colSm="12">
-                                    <p:commandButton update=":#{p:component('container')} :#{p:component('info')}" value="Cadastrar" action="#{disciplinaController.cadastrar}"/>
-                                    <p:commandButton value="Limpar" action="#{disciplinaController.limparFormularioCadastro}" immediate="true"/>
-                                </b:column>
-                            </b:row>
-                        </b:panel>
-                    </b:column>
-                </b:row>
-            </b:container>
+                            </b:panel>
+                        </b:row>
+                    </b:container>
+                </div>
+            </div>
         </h:form>
     </h:body>
 </html>

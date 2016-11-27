@@ -253,7 +253,10 @@ public class AlunoController {
             if (cpfResponsavel == null||cpfResponsavel.isEmpty()) {
                 addMessage("cadastro:cpfResponsavel", "CPF do responsável é obrigatório!");
             }
-            return;
+            if((telefoneResponsavel == null||telefoneResponsavel.isEmpty())||
+               (nomeResponsavel == null||nomeResponsavel.isEmpty()) ||
+               (cpfResponsavel == null||cpfResponsavel.isEmpty()))
+                return;
         }
 
         Endereco endereco = new Endereco(null, logradouro, numero, complemento, cep, bairro, cidade, estado);
@@ -292,6 +295,7 @@ public class AlunoController {
         List<Turma> turmas = turmaHelper.getTurmasByCurso(cursoSelecionado, dataInicioSelecionada, turnoSelecionado);
 
         aluno.setTurmaAlunos(new HashSet<TurmaAluno>());
+        aluno.setAprovado(2);
 
         for (Turma turma : turmas) {
             TurmaAluno turmaAluno = new TurmaAluno(null, aluno, turma, new Timestamp(new Date().getTime()), null);
@@ -319,6 +323,14 @@ public class AlunoController {
 
     public String consultar() {
         resultadoConsulta = alunoHelper.getAlunos(stringConsulta);
+        if (resultadoConsulta == null || resultadoConsulta.isEmpty()) {
+            addMessage(null, FacesMessage.SEVERITY_INFO, "Nenhum resultado encontrado!");
+        }
+        return "";
+    }
+    
+    public String consultarInicial() {
+        resultadoConsulta = alunoHelper.getAlunosTop20(stringConsulta);
         if (resultadoConsulta == null || resultadoConsulta.isEmpty()) {
             addMessage(null, FacesMessage.SEVERITY_INFO, "Nenhum resultado encontrado!");
         }
@@ -984,6 +996,7 @@ public class AlunoController {
         dataInicioSelecionada = null;
         turnosDisponiveis = new ArrayList<>();
         dataInicioDisponiveis = new ArrayList<>();
+        stringConsulta = null;
     }
 
     public String limparFormularioCadastro() {
@@ -991,13 +1004,12 @@ public class AlunoController {
     }
 
     public void limparFormularioConsulta() {
-        stringConsulta = null;
-        consultar();
+       novaConsulta();
     }
 
     public String novaConsulta() {
         limparCampos();
-        consultar();
+        consultarInicial();
         return "/restrito/cadastro/consulta/aluno?faces-redirect=true";
     }
 

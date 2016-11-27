@@ -12,18 +12,6 @@
             .ui-growl {
                 z-index:9999 !important;
             }
-              .navbar-default {
-            background-color: #6F2222;
-            border: none;
-            }
-            .navbar-default .navbar-nav > li > a:hover,.navbar-default .navbar-nav > li > a:focus {
-            color: #fff;
-            background-color: #014E7A;
-            }
-            .navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
-            background-color: #014E7A;
-            color: #fff;
-            }
             .ui-dialog-titlebar-close {
                 margin-top: 0px !important;
             }
@@ -32,40 +20,7 @@
     </h:head>
     <h:body style="background-color: #e3e3e3" >      
         <h:form id="consulta">
-            <b:row>
-                <b:navBar onclick="PF('modalAviso').show();return false;" brandImg="/sgeda/resource/imagens/idealizar.png" brandHref="/../../sgeda/faces/home.xhtml" brandAlign="left" brand-img-style="width:145px;" style="margin-bottom: 0px; border-bottom: none;border-radius: 0%" >
-                    <b:navbarLinks pull="right">
-                        <b:dropMenu value="#{loginController.usuarioLogado.pessoa.nome}">
-                            <b:navCommandLink onclick="PF('modalAviso').show();return false;" value="Sair" action="#{loginController.sair}" immediate="true"/>
-                            <b:dropMenu value="Configuração">
-                                <b:navCommandLink onclick="PF('modalAviso').show();return false;" value="senha" action="#{loginController.alterarSenha}" immediate="true"/>
-                                <b:navCommandLink onclick="PF('modalAviso').show();return false;" value="foto"/>
-                            </b:dropMenu>                    
-                        </b:dropMenu>
-                    </b:navbarLinks>
-                </b:navBar>
-            </b:row>
-            <b:row id="fotoPerfil" style="background-color: #6F2222;height: 85px;">
-                <p:graphicImage cache="false" rendered="#{loginController.usuarioLogado.pessoa.foto != null}" value="#{loginController.image}" 
-                                width="110" height="110" 
-                                style="border-radius: 50%; margin-left: 150px;position: absolute;z-index: 1; margin-top: 5px;">
-                </p:graphicImage>
-                <h:graphicImage rendered="#{loginController.usuarioLogado.pessoa.foto == null}" value="/resource/imagens/fotoPerfil.png" 
-                                width="110" height="110" 
-                                style="border-radius: 50%; margin-left: 150px;position: absolute;z-index: 1; margin-top: 5px;">
-                </h:graphicImage>
-            </b:row>
-            <b:navBar id="navBarAluno" rendered="#{loginController.usuarioLogado.aluno}" style="border-top: none; border-radius: 0%;background-color: rgb(10, 58, 86);border:none;" >
-                <b:navbarLinks style="margin-left: 130px;">
-                    <b:navCommandLink value="Turmas" onclick="PF('modalAviso').show();
-                            return false;" action="#{turmaController.novaConsultaAluno(loginController.usuarioLogado.pessoa.idPessoa)}"/>
-                    <b:navCommandLink value="Simulados" onclick="PF('modalAviso').show();
-                            return false;" action="#{professorController.turmas}" immediate="true"/>
-                    <b:navCommandLink value="Desempenho" onclick="PF('modalAviso').show();
-                            return false;" action="#{alunoController.desempenho}" immediate="true"/>
-                </b:navbarLinks>
-            </b:navBar>
-
+            
             <p:dialog id="modalAviso" header="Aviso" widgetVar="modalAviso" height="40">
                 <h:outputText value="Finalize o simulado antes de navegar!"/>
             </p:dialog>

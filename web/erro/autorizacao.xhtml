@@ -2,27 +2,27 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:b="http://bootsfaces.net/ui"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:b="http://bootsfaces.net/ui">
     <h:head>
         <link rel="shortcut icon" type="image/png" href="/sgeda/resource/imagens/favicon.png"/>
         <title>Curso Idealizar</title>
     </h:head>
-    <h:body style="background-color: #e3e3e3">
+    <h:body style="background-color: #273238">
         <h:form>
             <h:panelGrid columns="1" style="width: 100%">
                 <h:panelGroup style="display:block; text-align:center">
                     <b:row style="margin-top: 200px;">
-                        <b:image style="width:205px;" value="/resource/imagens/idealizar.png"/>
+                        <b:image style="width:205px;" value="/resource/imagens/idealizarNovo.png"/>
                     </b:row>
                     <br/><br/>
-                    <b:row>
-                        <b:alert>Erro de Autorização.</b:alert>
+                    <b:row class="painelCentral">
+                        <div style="text-align: center">
+                            <h:outputText style="font-weight: bold; color: whitesmoke; font-size: 18px;" value="Erro de Autorização"/><br/>
+                            <h:outputText style="color: whitesmoke; font-size: 15px;" value="Usuário sem autorização para visualizar essa página!"/>
+                        </div>
                     </b:row>
-                   
                 </h:panelGroup>
             </h:panelGrid>
-
         </h:form>
     </h:body>
 </html>

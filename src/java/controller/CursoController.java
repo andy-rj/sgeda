@@ -27,7 +27,7 @@ public class CursoController {
     private String descricao;
     private String descricaoAlterar;
     private DisciplinaHelper disciplinaHelper;
-    private Integer disciplinaSelecionada;
+    private List<String> disciplinasSelecionada;
     private Integer disciplinaSelecionadaAlterar;
     private List<Disciplina> disciplinasCurso;
     private List<Disciplina> disciplinasCursoAlterar;
@@ -100,14 +100,13 @@ public class CursoController {
         }
     }
 
-    public void excluirDisciplina(Disciplina disciplina) {
-        if (disciplina != null) {
-            disciplinasCurso.remove(disciplina);
-            disciplinasDisponiveis.add(disciplina);
-        }
-        disciplinaSelecionada = null;
-    }
-    
+//    public void excluirDisciplina(Disciplina disciplina) {
+//        if (disciplina != null) {
+//            disciplinasCurso.remove(disciplina);
+//            disciplinasDisponiveis.add(disciplina);
+//        }
+//        disciplinaSelecionada = null;
+//    }
     public void excluirDisciplinaAlterar(Disciplina disciplina) {
         if (disciplina != null) {
             disciplinasCursoAlterar.remove(disciplina);
@@ -163,12 +162,12 @@ public class CursoController {
         this.descricaoAlterar = descricaoAlterar;
     }
 
-    public Integer getDisciplinaSelecionada() {
-        return disciplinaSelecionada;
+    public List<String> getDisciplinasSelecionada() {
+        return disciplinasSelecionada;
     }
 
-    public void setDisciplinaSelecionada(Integer disciplinaSelecionada) {
-        this.disciplinaSelecionada = disciplinaSelecionada;
+    public void setDisciplinasSelecionada(List<String> disciplinasSelecionada) {
+        this.disciplinasSelecionada = disciplinasSelecionada;
     }
 
     public List<Disciplina> getDisciplinasCurso() {
@@ -232,22 +231,19 @@ public class CursoController {
     }
 
     public void incluirDisciplina() {
-        if (disciplinaSelecionada != null) {
-            if (disciplinasCurso == null) {
-                disciplinasCurso = new ArrayList<>();
-            }
+        if (disciplinasSelecionada != null) {
+            disciplinasCurso = new ArrayList<>();
             for (Disciplina disciplina : disciplinasDisponiveis) {
-                if (disciplina.getIdDisciplina().equals(disciplinaSelecionada)) {
-                    if (!disciplinasCurso.contains(disciplina)) {
-                        disciplinasCurso.add(disciplina);
-                        disciplinasDisponiveis.remove(disciplina);
-                        break;
+                for (String id : disciplinasSelecionada) {
+                    if (disciplina.getIdDisciplina().equals(Integer.parseInt(id))) {
+                            disciplinasCurso.add(disciplina);
+                            break;
                     }
                 }
             }
         }
     }
-    
+
     public void incluirDisciplinaAlterar() {
         if (disciplinaSelecionadaAlterar != null) {
             if (disciplinasCursoAlterar == null) {
@@ -304,10 +300,10 @@ public class CursoController {
     public void carregarDisciplinas() {
 
         disciplinasDisponiveisAlterar = disciplinaHelper.getDisciplinasDisponiveis();
-        
+
         List<Disciplina> excluir = new ArrayList<>();
         disciplinasCursoAlterar = new ArrayList<>(cursoDetalhe.getDisciplinas());
-        
+
         if (disciplinasDisponiveisAlterar != null) {
             for (Disciplina disciplina : disciplinasCursoAlterar) {
                 for (Disciplina disciplinaDisponivel : disciplinasDisponiveisAlterar) {
@@ -318,34 +314,34 @@ public class CursoController {
                 }
             }
         }
-        
+
         disciplinasDisponiveisAlterar.removeAll(excluir);
         disciplinaSelecionadaAlterar = null;
     }
-    
-    public void salvarAlteracao(){
+
+    public void salvarAlteracao() {
         Curso cursoAlterar = cursoDetalhe;
-        
-        if(cursoAlterar.getCodigo().equals(codigoAlterar)&&
-                cursoAlterar.getDescricao().equals(descricaoAlterar)&&
-                cursoAlterar.getNome().equals(nomeAlterar)&&
-                !isAlteracaoDisciplinas()){
+
+        if (cursoAlterar.getCodigo().equals(codigoAlterar)
+                && cursoAlterar.getDescricao().equals(descricaoAlterar)
+                && cursoAlterar.getNome().equals(nomeAlterar)
+                && !isAlteracaoDisciplinas()) {
             addMessage(null, FacesMessage.SEVERITY_WARN, "Não houve alteração nos dados!");
             return;
         }
-        
+
         cursoAlterar.setCodigo(codigoAlterar);
         cursoAlterar.setDescricao(descricaoAlterar);
         cursoAlterar.setNome(nomeAlterar);
         cursoAlterar.setDisciplinas(new HashSet<>(disciplinasCursoAlterar));
-        
-        if(!cursoHelper.salvarAlteracaoCurso(cursoAlterar)){
-            addMessage(null,FacesMessage.SEVERITY_ERROR, "Não foi possível salvar alterações!");
+
+        if (!cursoHelper.salvarAlteracaoCurso(cursoAlterar)) {
+            addMessage(null, FacesMessage.SEVERITY_ERROR, "Não foi possível salvar alterações!");
             return;
         }
-        
-        addMessage(null,FacesMessage.SEVERITY_INFO, "Alterações salvas com sucesso!");
-        
+
+        addMessage(null, FacesMessage.SEVERITY_INFO, "Alterações salvas com sucesso!");
+
         consultar();
         cursoDetalhe = cursoAlterar;
         nomeAlterar = cursoDetalhe.getNome();
@@ -354,35 +350,35 @@ public class CursoController {
         disciplinasCursoAlterar = new ArrayList<>(cursoDetalhe.getDisciplinas());
     }
 
-    public void onChangeDisciplina() {
-        if (disciplinaSelecionada != null && !disciplinaSelecionada.equals(0)) {
-            subdisciplinas = disciplinaHelper.getSubdisciplinas(disciplinaSelecionada);
-        } else {
-            subdisciplinas = new ArrayList<>();
-        }
-    }
+//    public void onChangeDisciplina() {
+//        if (disciplinaSelecionada != null && !disciplinaSelecionada.equals(0)) {
+//            subdisciplinas = disciplinaHelper.getSubdisciplinas(disciplinaSelecionada);
+//        } else {
+//            subdisciplinas = new ArrayList<>();
+//        }
+//    }
 
     private boolean isAlteracaoDisciplinas() {
-        
-        if(disciplinasCursoAlterar.size()!=cursoDetalhe.getDisciplinas().size()){
+
+        if (disciplinasCursoAlterar.size() != cursoDetalhe.getDisciplinas().size()) {
             return true;
         }
-        
+
         boolean encontrado;
-        
-        for(Disciplina disciplina: disciplinasCursoAlterar){
-            encontrado =false;
-            for(Disciplina disciplinaAntiga: cursoDetalhe.getDisciplinas()){
-                if(disciplina.getIdDisciplina().equals(disciplinaAntiga.getIdDisciplina())){
+
+        for (Disciplina disciplina : disciplinasCursoAlterar) {
+            encontrado = false;
+            for (Disciplina disciplinaAntiga : cursoDetalhe.getDisciplinas()) {
+                if (disciplina.getIdDisciplina().equals(disciplinaAntiga.getIdDisciplina())) {
                     encontrado = true;
                     break;
                 }
-                if(!encontrado){
+                if (!encontrado) {
                     return true;
                 }
             }
         }
-        
+
         return false;
     }
 }

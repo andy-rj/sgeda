@@ -8,6 +8,8 @@
       xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>Curso Idealizar</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <style type="text/css">
             .ui-growl {
                 z-index:9999 !important;
@@ -17,15 +19,15 @@
             }
         </style>
     </h:head>
-    <h:body style="background-color: #e3e3e3">
+    <h:body style="background-color: #ebeff2">
 
         <h:form id="consulta">
             <!--        ***************************
                         modal de alteração de dados
                         ***************************-->
             <p:dialog rendered="#{loginController.usuarioLogado.administrador}" header="Alterar Turma" modal="true" resizable="false"  draggable="false" widgetVar="modalAlterar"
-                      minimizable="true" maximizable="true" width="800" height="400">
-                <p:outputPanel id="alterarTurma">
+                      minimizable="true" maximizable="true" width="700" height="300">
+                <p:outputPanel styleClass="painelCentral" style="padding: 10px 10px 10px 10px;margin-bottom: 10px; width: 96%;" id="alterarTurma">
                     <b:row>
                         <b:column colSm="2">
                             <h:outputLabel value="Professor:" />
@@ -40,54 +42,58 @@
                             <b:message for="professorAlterar"/>
                         </b:column>
                     </b:row>
-<!--                    <b:row>
-                        <b:column colSm="2">
-                            <h:outputLabel value="Turno:" />
-                        </b:column>
-                        <b:column colSm="7">
-                            <p:selectOneMenu id="turnoAlterar" value="#{turmaController.turnoAlterar}" required="true" requiredMessage="Turno é obrigatório!" style="width:100%">
-                                <f:selectItem itemLabel="Selecione o turno" itemValue="0" noSelectionOption="true" />
-                                <f:selectItem itemLabel="Manhã" itemValue="Manhã" />
-                                <f:selectItem itemLabel="Tarde" itemValue="Tarde" />
-                                <f:selectItem itemLabel="Noite" itemValue="Noite" />
-                                <f:selectItem itemLabel="Integral" itemValue="Integral" />
-                            </p:selectOneMenu>
-                        </b:column>
-                        <b:column colSm="3">
-                            <b:message for="turnoAlterar"  />
-                        </b:column>
-                    </b:row>
-                    <b:row>
-                        <b:column colSm="2">
-                            <h:outputLabel value="Data de Início" />
-                        </b:column>
-                        <b:column colSm="7">
-                            <p:calendar id="dataInicioAlterar" value="#{turmaController.dataInicioAlterar}" locale="pt" navigator="true" pattern="dd-MM-yyyy">
-                                <f:validateBean />
-                            </p:calendar>
-                        </b:column>
-                        <b:column colSm="3">
-                            <b:message for="dataInicioAlterar"  />
-                        </b:column>
-                    </b:row>
-                    <b:row>
-                        <b:column colSm="2">
-                            <h:outputLabel value="Data de Término" />
-                        </b:column>
-                        <b:column colSm="7">
-                            <p:calendar id="dataFimAlterar" value="#{turmaController.dataTerminoAlterar}" locale="pt" navigator="true" pattern="dd-MM-yyyy">
-                                <f:validateBean/>
-                            </p:calendar>
-                        </b:column>
-                        <b:column colSm="3">
-                            <b:message for="dataFimAlterar"  />
-                        </b:column>
-                    </b:row>-->
+                    <!--                    <b:row>
+                                            <b:column colSm="2">
+                                                <h:outputLabel value="Turno:" />
+                                            </b:column>
+                                            <b:column colSm="7">
+                                                <p:selectOneMenu id="turnoAlterar" value="#{turmaController.turnoAlterar}" required="true" requiredMessage="Turno é obrigatório!" style="width:100%">
+                                                    <f:selectItem itemLabel="Selecione o turno" itemValue="0" noSelectionOption="true" />
+                                                    <f:selectItem itemLabel="Manhã" itemValue="Manhã" />
+                                                    <f:selectItem itemLabel="Tarde" itemValue="Tarde" />
+                                                    <f:selectItem itemLabel="Noite" itemValue="Noite" />
+                                                    <f:selectItem itemLabel="Integral" itemValue="Integral" />
+                                                </p:selectOneMenu>
+                                            </b:column>
+                                            <b:column colSm="3">
+                                                <b:message for="turnoAlterar"  />
+                                            </b:column>
+                                        </b:row>
+                                        <b:row>
+                                            <b:column colSm="2">
+                                                <h:outputLabel value="Data de Início" />
+                                            </b:column>
+                                            <b:column colSm="7">
+                                                <p:calendar id="dataInicioAlterar" value="#{turmaController.dataInicioAlterar}" locale="pt" navigator="true" pattern="dd-MM-yyyy">
+                                                    <f:validateBean />
+                                                </p:calendar>
+                                            </b:column>
+                                            <b:column colSm="3">
+                                                <b:message for="dataInicioAlterar"  />
+                                            </b:column>
+                                        </b:row>
+                                        <b:row>
+                                            <b:column colSm="2">
+                                                <h:outputLabel value="Data de Término" />
+                                            </b:column>
+                                            <b:column colSm="7">
+                                                <p:calendar id="dataFimAlterar" value="#{turmaController.dataTerminoAlterar}" locale="pt" navigator="true" pattern="dd-MM-yyyy">
+                                                    <f:validateBean/>
+                                                </p:calendar>
+                                            </b:column>
+                                            <b:column colSm="3">
+                                                <b:message for="dataFimAlterar"  />
+                                            </b:column>
+                                        </b:row>-->
                 </p:outputPanel>
                 <f:facet name="footer">
-                    <p:commandButton value="Fechar" onclick="PF('modalAlterar').hide();
-                            PF('modalDetalhe').show();" />
-                    <p:commandButton action="#{turmaController.salvarAlteracao}" ajax="true" process="@this alterarTurma" update="alterarTurma :#{p:component('resultado')}  :#{p:component('info')} :#{p:component('detalheTurma')}" value="Salvar"/>
+                    <b:row>
+                        <b:column>
+                            <p:commandButton class="dbotaoPadrao" value="Fechar" onclick="PF('modalAlterar').hide();
+                                    PF('modalDetalhe').show();" />
+                            <p:commandButton class="dbotaoPadrao" action="#{turmaController.salvarAlteracao}" ajax="true" process="@this alterarTurma" update="alterarTurma :#{p:component('resultado')}  :#{p:component('info')} :#{p:component('detalheTurma')}" value="Salvar"/>
+                        </b:column>
+                    </b:row>
                 </f:facet>
             </p:dialog>
 
@@ -96,7 +102,7 @@
                         ***************************-->
             <p:dialog header="Detalhes" modal="true" resizable="false"  draggable="false" widgetVar="modalDetalhe"
                       minimizable="true" maximizable="true" width="800" height="400">
-                <p:outputPanel id="detalheTurma">
+                <p:outputPanel styleClass="painelCentral" style="padding: 10px 10px 10px 10px;margin-bottom: 10px; width: 96%;" id="detalheTurma">
                     <b:row>
                         <b:column colSm="2">
                             <h:outputLabel value="Disciplina: " />
@@ -155,7 +161,7 @@
                         </b:column>
                     </b:row>
                     <b:row>
-                        <b:column colSm="12">
+                        <b:column>
                             <p:dataTable  var="alunos" value="#{turmaController.turmaDetalhe.turmaAlunos}">
                                 <p:column headerText="Nome">
                                     <h:outputText value="#{alunos.aluno.pessoa.nome}" />
@@ -172,63 +178,79 @@
                     </b:row>
                 </p:outputPanel>
                 <f:facet name="footer">
-                    <p:commandButton value="Fechar" onclick="PF('modalDetalhe').hide();" />
-                    <p:commandButton process="@this" action="#{turmaController.carregarAlterar}" rendered="#{loginController.usuarioLogado.administrador}" update=":#{p:component('alterarTurma')}" oncomplete="PF('modalDetalhe').hide();
-                                     PF('modalAlterar').show();" value="Alterar"/>
+                    <b:row>
+                        <b:column>
+                            <p:commandButton class="dbotaoPadrao" value="Fechar" onclick="PF('modalDetalhe').hide();" />
+                            <p:commandButton class="dbotaoPadrao" process="@this" action="#{turmaController.carregarAlterar}" rendered="#{loginController.usuarioLogado.administrador}" update=":#{p:component('alterarTurma')}" oncomplete="PF('modalDetalhe').hide();
+                                             PF('modalAlterar').show();" value="Alterar"/>
+                        </b:column>
+                    </b:row>
                 </f:facet>
             </p:dialog>
 
             <p:growl  globalOnly="true" id="info"  />
             <b:fetchBeanInfos/>
-            <ui:insert name="navbar">
-                <ui:include src="/template/navbar.xhtml"/>
-            </ui:insert>
-            <b:container>
-                <b:row style="margin-left: -45px; margin-right: -45px;">
-                    <b:column >
-                        <b:panel title="Consulta de Turma" style="min-height: 200px;" collapsible="false" look="info">
-                            <b:row>
-                                <b:column colSm="5" offset="2">
-                                    <p:inputText id="entradaConsulta" placeholder="Curso, Disciplina, Turno ou Professor" value="#{turmaController.stringConsulta}" maxlength="50" style="width: 100%"/>
-                                </b:column>
-                                <b:column colSm="5">
-                                    <p:commandButton process="@this entradaConsulta" update="resultado info" value="Buscar" action="#{turmaController.consultar}" icon=" ui-icon-search "/>
-                                    <p:commandButton value="Limpar" update="entradaConsulta resultado" action="#{turmaController.limparFormularioConsulta}" immediate="true"/>
-                                </b:column>
-                            </b:row>
-                            <b:row id="resultado">
-                                <b:column>
-                                    <p:dataTable rendered="#{not empty turmaController.resultadoConsulta}" value="#{turmaController.resultadoConsulta}" var="turma" id="datatable" styleClass="table table-striped table-bordered"
-                                                 style="width:100%; margin-top: 20px;"
-                                                 rows="10"
-                                                 paginatorPosition="bottom"
-                                                 paginator="true"
-                                                 paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink} {RowsPerPageDropdown}"
-                                                 rowsPerPageTemplate="5,10,15">
-                                        <p:column headerText="Disciplina" sortBy="#{turma.disciplina.nome}">
-                                            <h:outputText value="#{turma.disciplina.nome}" />
-                                        </p:column>
-                                        <p:column headerText="Curso" sortBy="#{turma.curso.nome}">
-                                            <h:outputText value="#{turma.curso.nome}" />
-                                        </p:column>
-                                        <p:column headerText="Turno" sortBy="#{turma.turno}">
-                                            <h:outputText value="#{turma.turno}" />
-                                        </p:column>
-                                        <p:column headerText="Início" sortBy="#{turma.dataInicio}">
-                                            <h:outputText value="#{turma.dataInicio}" >
-                                                <f:convertDateTime pattern="dd/MM/yyyy"/>
-                                            </h:outputText>
-                                        </p:column>
-                                        <p:column>
-                                            <p:commandButton process="@this" update=":#{p:component('detalheTurma')}" action="#{turmaController.exibirDetalhes(turma)}" oncomplete="PF('modalDetalhe').show();" value="Detalhes" style="width: 100px"/>
-                                        </p:column>
-                                    </p:dataTable>
-                                </b:column>
-                            </b:row>
-                        </b:panel>
-                    </b:column>
-                </b:row>
-            </b:container>
+            <div id="wrapper">
+                <!-- Sidebar -->
+                <ui:insert name="navbar">
+                    <ui:include src="/template/navbar.xhtml"/>
+                </ui:insert>
+
+                <div id="page-content-wrapper">
+                    <b:container id="container">
+                        <b:row style="margin-top: -50px;margin-bottom: 40px;">
+                            <h:outputText value="Consulta de Turma:" style="font-size: 30px;margin-left: 10px; margin-bottom: "/>
+                        </b:row>
+                        <b:row>
+                            <b:panel styleClass="painelCentral">
+                                <b:row>
+                                    <b:column colSm="5" offset="2">
+                                        <p:inputText id="entradaConsulta" placeholder="Código, Nome, Disciplina ou Descrição" value="#{turmaController.stringConsulta}" maxlength="50" style="width: 100%"/>
+                                    </b:column>
+                                    <b:column colSm="5">
+                                        <p:commandButton process="@this entradaConsulta" update="resultado info" value="Buscar" style="background-image: url('/sgeda/faces/resource/imagens/detalhe.png')!important;" styleClass="dbotaoPadraoIcon" action="#{turmaController.consultar}" icon=" ui-icon-search "/>
+                                        <p:commandButton styleClass="dbotaoDark" value="Limpar" update="entradaConsulta resultado" action="#{turmaController.limparFormularioConsulta}" immediate="true"/>
+                                    </b:column>
+                                </b:row>
+                                <b:row id="resultado">
+                                    <b:column>
+                                        <br/>
+                                        <div class="tabelaWrapper">
+                                            <p:dataTable rendered="#{not empty turmaController.resultadoConsulta}" value="#{turmaController.resultadoConsulta}" var="turma" id="datatable" styleClass="table table-striped table-bordered"
+                                                         style="width:100%; margin-top: 20px;"
+                                                         rows="10"
+                                                         paginatorPosition="bottom"
+                                                         paginator="true"
+                                                         paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink} {RowsPerPageDropdown}"
+                                                         rowsPerPageTemplate="5,10,15">
+                                                <p:column headerText="Disciplina" sortBy="#{turma.disciplina.nome}">
+                                                    <h:outputText value="#{turma.disciplina.nome}" />
+                                                </p:column>
+                                                <p:column headerText="Curso" sortBy="#{turma.curso.nome}">
+                                                    <h:outputText value="#{turma.curso.nome}" />
+                                                </p:column>
+                                                <p:column headerText="Turno" sortBy="#{turma.turno}">
+                                                    <h:outputText value="#{turma.turno}" />
+                                                </p:column>
+                                                <p:column headerText="Início" sortBy="#{turma.dataInicio}">
+                                                    <h:outputText value="#{turma.dataInicio}" >
+                                                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                                    </h:outputText>
+                                                </p:column>
+                                                <p:column style="width: 75px;text-align: center">
+                                                    <p:commandLink process="@this" update=":#{p:component('detalheTurma')}" action="#{turmaController.exibirDetalhes(turma)}" oncomplete="PF('modalDetalhe').show();" title="Detalhes do Turma"  style="margin-right: 5px;">
+                                                        <h:graphicImage url="/resource/imagens/detalhe.png" width="24" height="24"/>
+                                                    </p:commandLink>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </div>
+                                    </b:column>
+                                </b:row>
+                            </b:panel>
+                        </b:row>
+                    </b:container>
+                </div>
+            </div>
         </h:form>
     </h:body>
 </html>

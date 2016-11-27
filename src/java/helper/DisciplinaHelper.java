@@ -181,6 +181,33 @@ public class DisciplinaHelper {
         }
         return null;
     }
+    
+    public List<Disciplina> getDisciplinasDisponiveisQuestaoEager(){
+        
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.getTransaction();
+        try{
+            tx.begin();
+            List<Disciplina> disciplinas = session.createCriteria(Disciplina.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+            if(disciplinas!=null){
+                for(Disciplina disciplina: disciplinas){
+                    disciplina.getQuestaos().size();
+                }
+            }
+            session.flush();
+            tx.commit();
+            return disciplinas;
+        }catch(HibernateException e){
+            if(tx != null){
+                tx.rollback();
+            }
+        }finally{
+            if(session != null){
+                session.close();
+            }
+        }
+        return null;
+    }
 
     public List<Assunto> getSubdisciplinas(Integer disciplina) {
         session = HibernateUtil.getSessionFactory().openSession();
@@ -234,6 +261,9 @@ public class DisciplinaHelper {
             List<Disciplina> disciplina = session.createCriteria(Disciplina.class).createAlias("cursos", "curso").add(Restrictions.eq("curso.idCurso", curso)).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
             session.flush();
             tx.commit();
+            for(Disciplina dis: disciplina){
+                dis.getProfessors().size();
+            }
             return disciplina;
         } catch (HibernateException e) {
             if (tx != null) {

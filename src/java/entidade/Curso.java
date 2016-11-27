@@ -3,6 +3,7 @@ package entidade;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -88,6 +89,15 @@ public class Curso  implements java.io.Serializable {
 
     @OneToMany(fetch=FetchType.LAZY, mappedBy = "curso")
     public Set<Turma> getTurmas() {
+        return turmas;
+    }
+    
+    @Transient
+    public List<Turma> getTurmasList(){
+        List<Turma> turmas = new ArrayList<>();
+        if(getTurmas()!= null){
+            turmas = new ArrayList<>(getTurmas());
+        }
         return turmas;
     }
 
@@ -285,6 +295,7 @@ public class Curso  implements java.io.Serializable {
          }
          return lista;
      }
+     
 
 }
 

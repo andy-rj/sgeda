@@ -8,6 +8,8 @@
       xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>Curso Idealizar</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <style type="text/css">
             .ui-growl {
                 z-index:9999 !important;
@@ -17,10 +19,10 @@
             }
         </style>
     </h:head>
-    <h:body style="background-color: #e3e3e3">
+    <h:body style="background-color: #ebeff2">
 
         <h:form id="consulta">
-            
+
             <p:ajaxStatus  onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
             <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
                 <p:graphicImage url="/resource/imagens/loading.gif" />
@@ -31,7 +33,7 @@
                         ***************************-->
             <p:dialog rendered="#{loginController.usuarioLogado.administrador}" header="Alterar Funcionário" modal="true" resizable="false"  draggable="false" widgetVar="modalAlterar"
                       minimizable="true" maximizable="true" width="800" height="400">
-                <p:outputPanel id="alterarFuncionario">
+                <p:outputPanel styleClass="painelCentral" style="padding: 10px 10px 10px 10px;margin-bottom: 10px; width: 96%;" id="alterarFuncionario">
                     <!--Dados Pessoais-->
                     <b:row>
                         <b:column col-sm="12">
@@ -92,8 +94,8 @@
                         <b:column colSm="2">
                             <p:inputText id="descricaoA" value="#{funcionarioController.descricaoTelefoneAlterar}" placeholder="Observação" maxlength="50" style="width: 100%"/>
                         </b:column>
-                        <b:column colSm="1">
-                            <p:commandButton global="false" process="@this :#{p:component('dddA')} :#{p:component('telefoneA')} :#{p:component('descricaoA')}" update=":#{p:component('tabelaTelefone')} :#{p:component('entradaTelefone')}" value="Incluir" action="#{funcionarioController.incluirTelefoneAlterar}" icon="ui-icon-arrowthickstop-1-s"/>
+                        <b:column colSm="2">
+                            <p:commandButton styleClass="dbotaoPadraoIcon" style="background-image: url('/sgeda/faces/resource/imagens/inserirTelefone.png')!important;width:100%;" global="false" process="@this :#{p:component('dddA')} :#{p:component('telefoneA')} :#{p:component('descricaoA')}" update=":#{p:component('tabelaTelefone')} :#{p:component('entradaTelefone')}" value="Incluir" action="#{funcionarioController.incluirTelefoneAlterar}" icon="ui-icon-arrowthickstop-1-s"/>
                         </b:column>
                         <b:column colSm="3">
                             <b:message for="dddA" />
@@ -101,7 +103,7 @@
                         </b:column>
                     </b:row>
                     <b:row id="tabelaTelefone">
-                        <b:column colSm="9">
+                        <b:column>
                             <p:dataTable   rendered="#{not empty funcionarioController.telefonesAlterar}" var="telefone" value="#{funcionarioController.telefonesAlterar}">
                                 <p:column headerText="DDD">
                                     <p:inplace id="dddTabela" editor="true">
@@ -122,7 +124,7 @@
                                 </p:column>
 
                                 <p:column headerText="">
-                                    <p:commandButton global="false" value="Excluir" ajax="true" immediate="true" update=":#{p:component('tabelaTelefone')}" action="#{funcionarioController.excluirTelefoneAlterar(telefone)}"/>
+                                    <p:commandButton class="dbotaoPadrao" global="false" value="Excluir" ajax="true" immediate="true" update=":#{p:component('tabelaTelefone')}" action="#{funcionarioController.excluirTelefoneAlterar(telefone)}"/>
                                 </p:column>
 
                             </p:dataTable> 
@@ -175,11 +177,11 @@
                         <b:column colSm="2">
                             <h:outputLabel value="CEP" ><font color ='red' >*</font></h:outputLabel>
                         </b:column>
-                        <b:column colSm="3">
+                        <b:column colSm="4">
                             <p:inputMask  id="cepA" value="#{funcionarioController.cepAlterar}" mask="99999-999" converter="converter.cepConverter" required="true" requiredMessage="Cep é obrigatório!"/>
                         </b:column>
-                        <b:column colSm="4">
-                            <p:commandButton process="@this cepA" update="messageCepA logradouroA cidadeA bairroA ufA complementoA" id="buscaCep" value="Pesquisar" icon="ui-icon-circle-zoomin" action="#{funcionarioController.buscarCepAlterar}"/>
+                        <b:column colSm="3">
+                            <p:commandButton styleClass="dbotaoPadraoIcon" style="background-image: url('/sgeda/faces/resource/imagens/pesquisarCep.png')!important;" process="@this cepA" update="messageCepA logradouroA cidadeA bairroA ufA complementoA" id="buscaCep" value="Pesquisar" icon="ui-icon-circle-zoomin" action="#{funcionarioController.buscarCepAlterar}"/>
                         </b:column>
                         <b:column colSm="3">
                             <b:message id="messageCepA" for="cep"/>
@@ -262,10 +264,14 @@
                     </b:row>
                 </p:outputPanel>
                 <f:facet name="footer">
-                    <p:commandButton value="Fechar" onclick="PF('modalAlterar').hide();
+                    <b:row>
+                        <b:column>
+                            <p:commandButton value="Fechar" onclick="PF('modalAlterar').hide();
                             PF('modalDetalhe').show();" />
-                    <p:commandButton action="#{funcionarioController.salvarAlteracao}" ajax="true" process="@this alterarFuncionario" update="alterarFuncionario :#{p:component('resultado')}  :#{p:component('info')} :#{p:component('detalheFuncionario')}" value="Salvar"/>
-                </f:facet>
+                            <p:commandButton action="#{funcionarioController.salvarAlteracao}" ajax="true" process="@this alterarFuncionario" update="alterarFuncionario :#{p:component('resultado')}  :#{p:component('info')} :#{p:component('detalheFuncionario')}" value="Salvar"/>
+                        </b:column>
+                    </b:row>
+                    </f:facet>
             </p:dialog>
 
             <!--        ***************************
@@ -273,7 +279,7 @@
                         ***************************-->
             <p:dialog header="Detalhes" modal="true" resizable="false"  draggable="false" widgetVar="modalDetalhe"
                       minimizable="true" maximizable="true" width="800" height="400">
-                <p:outputPanel id="detalheFuncionario">
+                <p:outputPanel styleClass="painelCentral" style="padding: 10px 10px 10px 10px;margin-bottom: 10px; width: 96%;" id="detalheFuncionario">
                     <b:row>
                         <b:column colSm="3">
                             <h:outputLabel value="Cadastro ativo:" />
@@ -338,7 +344,7 @@
                         </b:column>
                     </b:row>
                     <b:row>
-                        <b:column colSm="7">
+                        <b:column>
                             <p:dataTable  var="telefone" value="#{funcionarioController.funcionarioDetalhe.pessoa.telefones}">
                                 <p:column headerText="DDD">
                                     <h:outputText value="#{telefone.ddd}" />
@@ -372,8 +378,8 @@
                             <h:outputText id="instituicao" value="#{funcionarioController.funcionarioDetalhe.cargo}"/>
                         </b:column>    
                     </b:row>
-                    
-                     <b:row>
+
+                    <b:row>
                         <b:column colSm="2">
                             <h:outputLabel value="Administrador:" />
                         </b:column>
@@ -450,63 +456,78 @@
                 </p:outputPanel>
                 <f:facet name="footer">
                     <b:row id="footer">
-                    <p:commandButton value="Fechar" onclick="PF('modalDetalhe').hide();" />
-                    <p:commandButton global="false" process="@this" action="#{funcionarioController.carregarAlterar}" rendered="#{loginController.usuarioLogado.administrador}" update=":#{p:component('alterarFuncionario')}" oncomplete="PF('modalDetalhe').hide();
-                                     PF('modalAlterar').show();" value="Alterar"/>
-                    <p:commandButton rendered="#{funcionarioController.funcionarioDetalhe.pessoa.ativo}" action="#{funcionarioController.alterarAtividade}" ajax="true" process="@this" update="footer :#{p:component('resultado')}  :#{p:component('info')} :#{p:component('detalheFuncionario')}" value="Inativar Funcionário"/>
-                    <p:commandButton rendered="#{not funcionarioController.funcionarioDetalhe.pessoa.ativo}" action="#{funcionarioController.alterarAtividade}" ajax="true" process="@this" update="footer :#{p:component('resultado')}  :#{p:component('info')} :#{p:component('detalheFuncionario')}" value="Reativar Funcionário"/>
-                    <p:commandButton process="@this" update=":#{p:component('info')}" action="#{funcionarioController.reenviarEmail}" onclick="return confirm('Confirma o envio do email?');" value="Enviar email"/>
+                        <b:column>
+                            <p:commandButton class="dbotaoPadrao" value="Fechar" onclick="PF('modalDetalhe').hide();" />
+                            <p:commandButton class="dbotaoPadrao" global="false" process="@this" action="#{funcionarioController.carregarAlterar}" rendered="#{loginController.usuarioLogado.administrador}" update=":#{p:component('alterarFuncionario')}" oncomplete="PF('modalDetalhe').hide();
+                                             PF('modalAlterar').show();" value="Alterar"/>
+                            <p:commandButton class="dbotaoPadrao" rendered="#{funcionarioController.funcionarioDetalhe.pessoa.ativo}" action="#{funcionarioController.alterarAtividade}" ajax="true" process="@this" update="footer :#{p:component('resultado')}  :#{p:component('info')} :#{p:component('detalheFuncionario')}" value="Inativar Funcionário"/>
+                            <p:commandButton class="dbotaoPadrao" rendered="#{not funcionarioController.funcionarioDetalhe.pessoa.ativo}" action="#{funcionarioController.alterarAtividade}" ajax="true" process="@this" update="footer :#{p:component('resultado')}  :#{p:component('info')} :#{p:component('detalheFuncionario')}" value="Reativar Funcionário"/>
+                            <p:commandButton class="dbotaoPadrao" process="@this" update=":#{p:component('info')}" action="#{funcionarioController.reenviarEmail}" onclick="return confirm('Confirma o envio do email?');" value="Enviar email"/>
+                        </b:column>
                     </b:row>
                 </f:facet>
             </p:dialog>
 
             <p:growl  globalOnly="true" id="info"  />
             <b:fetchBeanInfos/>
-            <ui:insert name="navbar">
-                <ui:include src="/template/navbar.xhtml"/>
-            </ui:insert>
-            <b:container>
-                <b:row style="margin-left: -45px; margin-right: -45px;">
-                    <b:column >
-                        <b:panel title="Consulta de Funcionário" style="min-height: 200px;" collapsible="false" look="info">
-                            <b:row>
-                                <b:column colSm="5" offset="2">
-                                    <p:inputText id="entradaConsulta" placeholder="Matrícula, Nome ou CPF" value="#{funcionarioController.stringConsulta}" maxlength="50" style="width: 100%"/>
-                                </b:column>
-                                <b:column colSm="5">
-                                    <p:commandButton process="@this entradaConsulta" update="resultado info" value="Buscar" action="#{funcionarioController.consultar}" icon=" ui-icon-search "/>
-                                    <p:commandButton global="false" value="Limpar" update="entradaConsulta resultado" action="#{funcionarioController.limparFormularioConsulta}" immediate="true"/>
-                                </b:column>
-                            </b:row>
-                            <b:row id="resultado">
-                                <b:column>
-                                    <p:dataTable rendered="#{not empty funcionarioController.resultadoConsulta}" value="#{funcionarioController.resultadoConsulta}" var="funcionario" id="datatable" styleClass="table table-striped table-bordered"
-                                                 style="width:100%; margin-top: 20px;"
-                                                 rows="10"
-                                                 paginatorPosition="bottom"
-                                                 paginator="true"
-                                                 paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink} {RowsPerPageDropdown}"
-                                                 rowsPerPageTemplate="5,10,15">
-                                        <p:column headerText="Matrícula" style="width: 140px;" sortBy="#{funcionario.pessoa.matricula}">
-                                            <h:outputText id="matricula" value="#{funcionario.pessoa.matricula}" />
-                                        </p:column>
-                                        <p:column headerText="Nome" sortBy="#{funcionario.pessoa.nome}">
-                                            <h:outputText value="#{funcionario.pessoa.nome}" />
-                                        </p:column>
-                                        <p:column headerText="CPF" style="width: 160px;" sortBy="#{funcionario.pessoa.cpf}">
-                                            <h:outputText converter="converter.cpfConverter" value="#{funcionario.pessoa.cpf}" />
-                                        </p:column>
+            <div id="wrapper">
+                <!-- Sidebar -->
+                <ui:insert name="navbar">
+                    <ui:include src="/template/navbar.xhtml"/>
+                </ui:insert>
 
-                                        <p:column style="width: 160px">
-                                            <p:commandButton global="false" process="@this" update=":#{p:component('detalheFuncionario')}" action="#{funcionarioController.exibirDetalhes(funcionario)}" oncomplete="PF('modalDetalhe').show();" value="Detalhes" style="width: 100px"/>
-                                        </p:column>
-                                    </p:dataTable>
-                                </b:column>
-                            </b:row>
-                        </b:panel>
-                    </b:column>
-                </b:row>
-            </b:container>
+                <div id="page-content-wrapper">
+                    <b:container id="container">
+                        <b:row style="margin-top: -50px;margin-bottom: 40px;">
+                            <h:outputText value="Consulta de funcionário:" style="font-size: 30px;margin-left: 10px;"/>
+                        </b:row>
+                        <b:row>
+                            <b:panel styleClass="painelCentral">
+                                <b:row>
+                                    <b:column colSm="5" offset="2">
+                                        <p:inputText id="entradaConsulta" placeholder="Matrícula, Nome ou CPF" value="#{alunoController.stringConsulta}" maxlength="50" style="width: 100%"/>
+                                    </b:column>
+                                    <b:column colSm="5">
+                                        <p:commandButton global="false" style="background-image: url('/sgeda/faces/resource/imagens/detalhe.png')!important;" styleClass="dbotaoPadraoIcon" update="resultado info" process="@this entradaConsulta" value="Buscar" action="#{alunoController.consultar}" icon=" ui-icon-search "/>
+                                        <p:commandButton global="false" style="float:left;" styleClass="dbotaoDark" value="Limpar" update="entradaConsulta resultado" action="#{alunoController.limparFormularioConsulta}" immediate="true"/>
+                                    </b:column>
+                                </b:row>
+                                <b:row id="resultado">
+                                    <b:column>
+                                        <br/>
+                                        <div class="tabelaWrapper">
+                                            <p:dataTable rendered="#{not empty funcionarioController.resultadoConsulta}" value="#{funcionarioController.resultadoConsulta}" var="funcionario" id="datatable" styleClass="table table-striped table-bordered"
+                                                         style="width:100%; margin-top: 20px;"
+                                                         rows="10"
+                                                         paginatorPosition="bottom"
+                                                         paginator="true"
+                                                         paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink} {RowsPerPageDropdown}"
+                                                         rowsPerPageTemplate="5,10,15">
+                                                <p:column headerText="Matrícula" style="width: 140px;" sortBy="#{funcionario.pessoa.matricula}">
+                                                    <h:outputText id="matricula" value="#{funcionario.pessoa.matricula}" />
+                                                </p:column>
+                                                <p:column headerText="Nome" sortBy="#{funcionario.pessoa.nome}">
+                                                    <h:outputText value="#{funcionario.pessoa.nome}" />
+                                                </p:column>
+                                                <p:column headerText="CPF" style="width: 160px;" sortBy="#{funcionario.pessoa.cpf}">
+                                                    <h:outputText converter="converter.cpfConverter" value="#{funcionario.pessoa.cpf}" />
+                                                </p:column>
+
+                                                <p:column style="width: 75px;text-align: center">
+                                                    <p:commandLink global="false" process="@this" update=":#{p:component('detalheFuncionario')} :#{p:component('footer')}" action="#{funcionarioController.exibirDetalhes(funcionario)}" oncomplete="PF('modalDetalhe').show();" title="Detalhes do Funcionário"  style="margin-right: 5px;">
+                                                        <h:graphicImage url="/resource/imagens/detalhe.png" width="24" height="24"/>
+                                                    </p:commandLink>
+                                                </p:column>
+
+                                            </p:dataTable>
+                                        </div>
+                                    </b:column>
+                                </b:row>
+                            </b:panel>
+                        </b:row>
+                    </b:container>
+                </div>
+            </div>
         </h:form>
     </h:body>
 </html>

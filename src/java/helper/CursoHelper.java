@@ -5,6 +5,7 @@ import entidade.Disciplina;
 import entidade.Professor;
 import entidade.Turma;
 import hibernate.HibernateUtil;
+import java.util.Date;
 import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
@@ -137,6 +138,41 @@ public class CursoHelper {
 
             for (Curso curso : retorno) {
                 curso.getDisciplinas().size();
+            }
+            session.flush();
+            tx.commit();
+            return retorno;
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return null;
+    }
+    
+    public List<Curso> getCursosEmAndamento() {
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.getTransaction();
+        Date now = new Date();
+        now = new Date(now.getTime() + 1296000000);
+        try {
+            tx.begin();
+            Criteria crit = session.createCriteria(Curso.class);
+
+            crit.createAlias("turmas", "turmas");
+
+            crit.add(Restrictions.ge("turmas.dataFim", now));
+                        
+            crit.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+
+            List<Curso> retorno = crit.list();
+
+            for (Curso curso : retorno) {
+                curso.getTurmas().size();
             }
             session.flush();
             tx.commit();

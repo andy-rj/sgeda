@@ -8,6 +8,8 @@
       xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>Curso Idealizar</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <style type="text/css">
             .ui-growl {
                 z-index:9999 !important;
@@ -17,175 +19,181 @@
             }
         </style>
     </h:head>
-    <h:body style="background-color: #e3e3e3">
+    <h:body style="background-color: #ebeff2">
         <h:form id="consulta">
-        <p:dialog modal="true" draggable="false" width="700" height="300" header="Realizar Simulado" closable="false"
-                  widgetVar="modalRealizarSimulado" resizable="false" footer="" onHide="PF('modalDetalheTurma').show();">
-            <p:outputPanel id="conteudoRealizarSimulado">
-                <b:row style="text-align: center; padding-left: 15px;padding-right: 15px;">
-                    <b:alert severity="warning" title="Atenção!">
-                        <h:outputText value = "Ao clicar em \'Começar\' você terá " />
-                        <h:outputText value = "#{alunoSimuladoController.simuladoAtual.duracao}">
-                            <f:convertDateTime pattern="HH:mm:ss"/>
-                        </h:outputText>
-                        <h:outputText value=" para concluir o simulado! Lembrando que esse simulado só poderá ser realizado uma única vez."/>
-                    </b:alert>
-                </b:row>
-                <b:row style="text-align: center">
-                    <br/>
-                    <p:commandButton value="Começar" process="@this" action="#{alunoSimuladoController.iniciarRealizacaoSimulado(loginController.usuarioLogado.pessoa.idPessoa)}"/>
-                    <p:commandButton value="Voltar" process="@this"  action="#{alunoSimuladoController.fecharConfirmacaoSimulado()}" oncomplete="PF('modalRealizarSimulado').hide();"/>
-                </b:row>
-            </p:outputPanel>
-        </p:dialog>
+            <p:dialog modal="true" draggable="false" width="700" height="300" header="Realizar Simulado" closable="false"
+                      widgetVar="modalRealizarSimulado" resizable="false" footer="" onHide="PF('modalDetalheTurma').show();">
+                <p:outputPanel id="conteudoRealizarSimulado">
+                    <b:row style="text-align: center; padding-left: 15px;padding-right: 15px;">
+                        <b:alert severity="warning" title="Atenção!">
+                            <h:outputText value = "Ao clicar em \'Começar\' você terá " />
+                            <h:outputText value = "#{alunoSimuladoController.simuladoAtual.duracao}">
+                                <f:convertDateTime pattern="HH:mm:ss"/>
+                            </h:outputText>
+                            <h:outputText value=" para concluir o simulado! Lembrando que esse simulado só poderá ser realizado uma única vez."/>
+                        </b:alert>
+                    </b:row>
+                    <b:row style="text-align: center">
+                        <br/>
+                        <p:commandButton value="Começar" process="@this" action="#{alunoSimuladoController.iniciarRealizacaoSimulado(loginController.usuarioLogado.pessoa.idPessoa)}"/>
+                        <p:commandButton value="Voltar" process="@this"  action="#{alunoSimuladoController.fecharConfirmacaoSimulado()}" oncomplete="PF('modalRealizarSimulado').hide();"/>
+                    </b:row>
+                </p:outputPanel>
+            </p:dialog>
 
-        <p:dialog modal="true" draggable="false" width="700" height="400" header="Detalhes"
-                  maximizable="true" widgetVar="modalDetalheTurma" resizable="false" footer="">
-            <p:outputPanel id="conteudoDetalhe">
-                <b:row>
-                    <b:column colSm="2">
-                        <h:outputText value="Código:"/> 
-                    </b:column>
-                    <b:column colSm="4">
-                        <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.nome}"/> 
-                    </b:column>
-<!--                    <b:column colSm="6">
-                        <p:chart type="line" model="#{relatorioAlunoController.lineModel2}" style="height:200px;"/>
-                    </b:column>-->
-                </b:row>
-                <b:row>
-                    <b:column colSm="2">
-                        <h:outputText value="Disciplina:"/> 
-                    </b:column>
-                    <b:column colSm="4">
-                        <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.disciplina.nome}"/> 
-                    </b:column>
-                </b:row>
-                <b:row>
-                    <b:column colSm="2">
-                        <h:outputText value="Descrição:"/> 
-                    </b:column>
-                    <b:column colSm="4">
-                        <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.descricao}"/> 
-                    </b:column>
-                </b:row>
-                <b:row>
-                    <b:column colSm="2">
-                        <h:outputText value="Professor:"/> 
-                    </b:column>
-                    <b:column colSm="4">
-                        <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.professor.pessoa.nome}"/> 
-                    </b:column>
-                </b:row>
-                <b:row>
-                    <b:column colSm="2">
-                        <h:outputText value="Turno:"/> 
-                    </b:column>
-                    <b:column colSm="4">
-                        <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.turno}"/> 
-                    </b:column>
-                </b:row>
-                <b:row>
-                    <b:column colSm="2">
-                        <h:outputText value="Curso:"/> 
-                    </b:column>
-                    <b:column colSm="4">
-                        <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.curso.nome}"/> 
-                    </b:column>
-                </b:row>
+            <p:dialog modal="true" draggable="false" width="700" height="400" header="Detalhes"
+                      maximizable="true" widgetVar="modalDetalheTurma" resizable="false" footer="">
+                <p:outputPanel id="conteudoDetalhe">
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputText value="Código:"/> 
+                        </b:column>
+                        <b:column colSm="4">
+                            <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.nome}"/> 
+                        </b:column>
+                        <!--                    <b:column colSm="6">
+                                                <p:chart type="line" model="#{relatorioAlunoController.lineModel2}" style="height:200px;"/>
+                                            </b:column>-->
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputText value="Disciplina:"/> 
+                        </b:column>
+                        <b:column colSm="4">
+                            <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.disciplina.nome}"/> 
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputText value="Descrição:"/> 
+                        </b:column>
+                        <b:column colSm="4">
+                            <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.descricao}"/> 
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputText value="Professor:"/> 
+                        </b:column>
+                        <b:column colSm="4">
+                            <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.professor.pessoa.nome}"/> 
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputText value="Turno:"/> 
+                        </b:column>
+                        <b:column colSm="4">
+                            <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.turno}"/> 
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column colSm="2">
+                            <h:outputText value="Curso:"/> 
+                        </b:column>
+                        <b:column colSm="4">
+                            <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.curso.nome}"/> 
+                        </b:column>
+                    </b:row>
 
-                <b:row style="margin-top: 85px;">
-                    <b:column>
-                        <p:separator/> 
-                    </b:column>
-                </b:row>
+                    <b:row style="margin-top: 85px;">
+                        <b:column>
+                            <p:separator/> 
+                        </b:column>
+                    </b:row>
 
-                <b:row>
-                    <b:column>
-                        <p:dataTable emptyMessage="Não existem simulados para essa turma" var="simulado" value="#{turmaController.turmaAlunoDetalhe.turma.turmaSimuladosListOrd}">
-                            <f:facet name="header">
-                                <h:outputText value="Simulados"/>
-                            </f:facet>
-                            <p:column headerText="Código">
-                                <h:outputText value="#{simulado.simulado.nome}"/>
-                            </p:column>
-                            <p:column headerText="Descrição">
-                                <h:outputText value="#{simulado.simulado.descricao}"/>
-                            </p:column>
-<!--                            <p:column headerText="Abertura">
-                                <h:outputText value="#{simulado.dataAbertura}">
-                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
-                                </h:outputText>
-                            </p:column>-->
-                            <p:column headerText="Encerramento">
-                                <h:outputText value="#{simulado.dataEncerramento}">
-                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
-                                </h:outputText>
-                            </p:column>
-                            <p:column headerText="Duração">
-                                <h:outputText value="#{simulado.duracao}">
-                                    <f:convertDateTime pattern="HH:mm:ss"/>
-                                </h:outputText>
-                            </p:column>
-                            <p:column style="text-align: center ;width:100px" headerText="">
-                                <b:label rendered="#{not turmaController.turmaAlunoDetalhe.aluno.simuladoRealizado(simulado) and simulado.simuladoAberto}" text="aberto" severity="danger"/>
-                                <b:label rendered="#{turmaController.turmaAlunoDetalhe.aluno.simuladoRealizado(simulado)}" text="realizado" severity="info"/>
-                                <b:label rendered="#{not turmaController.turmaAlunoDetalhe.aluno.simuladoRealizado(simulado) and not simulado.simuladoAberto}" text="fora do prazo" severity="danger"/>
-                            </p:column>
+                    <b:row>
+                        <b:column>
+                            <p:dataTable emptyMessage="Não existem simulados para essa turma" var="simulado" value="#{turmaController.turmaAlunoDetalhe.turma.turmaSimuladosListOrd}">
+                                <f:facet name="header">
+                                    <h:outputText value="Simulados"/>
+                                </f:facet>
+                                <p:column headerText="Código">
+                                    <h:outputText value="#{simulado.simulado.nome}"/>
+                                </p:column>
+                                <p:column headerText="Descrição">
+                                    <h:outputText value="#{simulado.simulado.descricao}"/>
+                                </p:column>
+                                <!--                            <p:column headerText="Abertura">
+                                                                <h:outputText value="#{simulado.dataAbertura}">
+                                                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                                                </h:outputText>
+                                                            </p:column>-->
+                                <p:column headerText="Encerramento">
+                                    <h:outputText value="#{simulado.dataEncerramento}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="Duração">
+                                    <h:outputText value="#{simulado.duracao}">
+                                        <f:convertDateTime pattern="HH:mm:ss"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column style="text-align: center ;width:100px" headerText="">
+                                    <b:label rendered="#{not turmaController.turmaAlunoDetalhe.aluno.simuladoRealizado(simulado) and simulado.simuladoAberto}" text="aberto" severity="danger"/>
+                                    <b:label rendered="#{turmaController.turmaAlunoDetalhe.aluno.simuladoRealizado(simulado)}" text="realizado" severity="info"/>
+                                    <b:label rendered="#{not turmaController.turmaAlunoDetalhe.aluno.simuladoRealizado(simulado) and not simulado.simuladoAberto}" text="fora do prazo" severity="danger"/>
+                                </p:column>
 
-                            <p:column style="width: 115px;" headerText="">
-                                <p:commandButton rendered="#{not turmaController.turmaAlunoDetalhe.aluno.simuladoRealizado(simulado) and simulado.simuladoAberto}" value="Realizar" process="@this" update=":#{p:component('conteudoRealizarSimulado')}" oncomplete="PF('modalRealizarSimulado').show();PF('modalDetalheTurma').hide();" action="#{alunoSimuladoController.realizarSimulado(simulado)}"/>
-                            </p:column>
-                        </p:dataTable> 
-                    </b:column>
-                </b:row>
-            </p:outputPanel>
-            <f:facet name="footer">
-                <b:commandButton onclick="PF('modalDetalheTurma').hide();" value="Fechar" look="info"/>
-            </f:facet>
-        </p:dialog>
+                                <p:column style="width: 115px;" headerText="">
+                                    <p:commandButton rendered="#{not turmaController.turmaAlunoDetalhe.aluno.simuladoRealizado(simulado) and simulado.simuladoAberto}" value="Realizar" process="@this" update=":#{p:component('conteudoRealizarSimulado')}" oncomplete="PF('modalRealizarSimulado').show();PF('modalDetalheTurma').hide();" action="#{alunoSimuladoController.realizarSimulado(simulado)}"/>
+                                </p:column>
+                            </p:dataTable> 
+                        </b:column>
+                    </b:row>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <b:commandButton onclick="PF('modalDetalheTurma').hide();" value="Fechar" look="info"/>
+                </f:facet>
+            </p:dialog>
 
-        
+
             <p:growl  globalOnly="true" id="info"  />
             <b:fetchBeanInfos/>
-            <ui:insert name="navbar">
-                <ui:include src="/template/navbar.xhtml"/>
-            </ui:insert>
-            <b:container >
-                <b:row style="margin-left: -45px; margin-right: -45px;">
-                    <b:column >
-                        <b:panel title="Turmas" style="min-height: 200px;" collapsible="false" look="info">
-                            <b:row>
-                                <b:column>
-                                    <p:dataTable var="turma" value="#{turmaController.alunoOnline.turmaAlunosOrd}" >
+            <div id="wrapper">
+                <!-- Sidebar -->
+                <ui:insert name="navbar">
+                    <ui:include src="/template/navbar.xhtml"/>
+                </ui:insert>
 
-                                        <p:column style="width: 125px;" headerText="Código">
-                                            <h:outputText value="#{turma.turma.nome}"/>
-                                        </p:column>
-                                        <p:column headerText="Descrição">
-                                            <h:outputText value="#{turma.turma.descricao}"/>
-                                        </p:column>
-                                        <p:column headerText="Disciplina">
-                                            <h:outputText value="#{turma.turma.disciplina.nome}"/>
-                                        </p:column>
-                                        <p:column headerText="Professor">
-                                            <h:outputText value="#{turma.turma.professor.pessoa.nome}"/>
-                                        </p:column>
-                                        <p:column style="width: 140px;text-align: center" headerText="">
-                                            <b:label style="margin-left: 3px;" rendered="#{not turma.turma.isSimuladosAbertosRealizados(turmaController.alunoOnline) and turma.turma.simuladoAberto}" text="Simulado aberto" severity="danger"/>
-                                        </p:column>
-                                        <p:column style="width: 75px;text-align: center">
-                                            <p:commandLink update=":#{p:component('conteudoDetalhe')}" action="#{turmaController.detalheTurmaAluno(turma)}" oncomplete="PF('modalDetalheTurma').show();" title="Detalhes"  style="margin-right: 5px;">
-                                                <h:graphicImage url="/resource/imagens/detalhe.png" width="24" height="24"/>
-                                            </p:commandLink>
-                                        </p:column>
-                                    </p:dataTable>
-                                </b:column>
-                            </b:row>
-                        </b:panel>
-                    </b:column>
-                </b:row>
-            </b:container>
+                <div id="page-content-wrapper">
+                    <b:container >
+                        <b:row style="margin-left: -45px; margin-right: -45px;">
+                            <b:column >
+                                <b:panel title="Turmas" style="min-height: 200px;" collapsible="false" look="info">
+                                    <b:row>
+                                        <b:column>
+                                            <p:dataTable var="turma" value="#{turmaController.alunoOnline.turmaAlunosOrd}" >
+
+                                                <p:column style="width: 125px;" headerText="Código">
+                                                    <h:outputText value="#{turma.turma.nome}"/>
+                                                </p:column>
+                                                <p:column headerText="Descrição">
+                                                    <h:outputText value="#{turma.turma.descricao}"/>
+                                                </p:column>
+                                                <p:column headerText="Disciplina">
+                                                    <h:outputText value="#{turma.turma.disciplina.nome}"/>
+                                                </p:column>
+                                                <p:column headerText="Professor">
+                                                    <h:outputText value="#{turma.turma.professor.pessoa.nome}"/>
+                                                </p:column>
+                                                <p:column style="width: 140px;text-align: center" headerText="">
+                                                    <b:label style="margin-left: 3px;" rendered="#{not turma.turma.isSimuladosAbertosRealizados(turmaController.alunoOnline) and turma.turma.simuladoAberto}" text="Simulado aberto" severity="danger"/>
+                                                </p:column>
+                                                <p:column style="width: 75px;text-align: center">
+                                                    <p:commandLink update=":#{p:component('conteudoDetalhe')}" action="#{turmaController.detalheTurmaAluno(turma)}" oncomplete="PF('modalDetalheTurma').show();" title="Detalhes"  style="margin-right: 5px;">
+                                                        <h:graphicImage url="/resource/imagens/detalhe.png" width="24" height="24"/>
+                                                    </p:commandLink>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </b:column>
+                                    </b:row>
+                                </b:panel>
+                            </b:column>
+                        </b:row>
+                    </b:container>
+                </div>
+            </div>
         </h:form>
     </h:body>
 </html>

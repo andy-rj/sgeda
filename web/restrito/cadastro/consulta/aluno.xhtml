@@ -8,6 +8,8 @@
       xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>Curso Idealizar</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <style type="text/css">
             .ui-growl {
                 z-index:9999 !important;
@@ -17,7 +19,7 @@
             }
         </style>
     </h:head>
-    <h:body style="background-color: #e3e3e3">
+    <h:body style="background-color: #ebeff2">
 
         <h:form id="consulta">
 
@@ -25,7 +27,7 @@
             <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
                 <p:graphicImage url="/resource/imagens/loading.gif" />
             </p:dialog>
-            
+
             <p:dialog header="Confirmar" modal="true" resizable="false"  draggable="false" widgetVar="modalAprovado"
                       minimizable="true" maximizable="true" width="600" height="200" onHide="PF('modalDetalhe').show()">
                 <p:outputPanel id="alterarAprovado">
@@ -75,16 +77,18 @@
                 </p:outputPanel>
                 <f:facet name="footer">
                     <b:row id="footerAlterar">
-                        <p:commandButton value="Cancelar" onclick="PF('modalAprovado').hide()" />
-                        <p:commandButton global="false" process="@this descricaoAprovadoInput notaAprovadoInput posicaoInput" action="#{alunoController.alterarAprovado}" update=":#{p:component('detalheAluno')} :#{p:component('info')}" oncomplete="PF('modalAprovado').hide();"
-                                         value="salvar"/>                    
+                        <b:column>
+                        <p:commandButton styleClass="dbotaoPadrao" value="Cancelar" onclick="PF('modalAprovado').hide()" />
+                        <p:commandButton styleClass="dbotaoPadrao" global="false" process="@this descricaoAprovadoInput notaAprovadoInput posicaoInput" action="#{alunoController.alterarAprovado}" update=":#{p:component('detalheAluno')} :#{p:component('info')}" oncomplete="PF('modalAprovado').hide();"
+                                         value="salvar"/>  
+                        </b:column>
                     </b:row>
                 </f:facet>
             </p:dialog>
 
             <p:dialog header="Confirmar" modal="true" resizable="false"  draggable="false" widgetVar="modalInativar"
                       minimizable="true" maximizable="true" width="400" height="100">
-                <p:outputPanel id="painelInativar">
+                <p:outputPanel  id="painelInativar">
                     <b:row rendered="#{alunoController.alunoDetalhe.pessoa.ativo}" style="text-align: center">
                         <p:selectOneMenu id="selectMotivo" required="true" requiredMessage="Selecione um motivo!" value="#{alunoController.motivoDesistencia}" >
                             <f:selectItem itemLabel="Selecione" itemValue="0" noSelectionOption="true"/>
@@ -96,9 +100,8 @@
                         <b:message for="selectMotivo"/>
                     </b:row>
                     <b:row  style="text-align: center">
-                        <br/>
-                        <p:commandButton rendered="#{alunoController.alunoDetalhe.pessoa.ativo}" action="#{alunoController.alterarAtividade}"  ajax="true" process="@this selectMotivo" update=":#{p:component('footer')} :#{p:component('painelInativar')} :#{p:component('resultado')} :#{p:component('info')} :#{p:component('detalheAluno')}" value="Confirmar"/>
-                        <p:commandButton rendered="#{not alunoController.alunoDetalhe.pessoa.ativo}" onclick="PF('modalInativar').hide();" value="Fechar"/>
+                        <p:commandButton styleClass="dbotaoPadrao" style="margin-left:36%" rendered="#{alunoController.alunoDetalhe.pessoa.ativo}" action="#{alunoController.alterarAtividade}"  ajax="true" process="@this selectMotivo" update=":#{p:component('footer')} :#{p:component('painelInativar')} :#{p:component('resultado')} :#{p:component('info')} :#{p:component('detalheAluno')}" value="Confirmar"/>
+                        <p:commandButton styleClass="dbotaoPadrao" style="margin-left:36%" rendered="#{not alunoController.alunoDetalhe.pessoa.ativo}" onclick="PF('modalInativar').hide();" value="Fechar"/>
                     </b:row>
                 </p:outputPanel>
             </p:dialog>
@@ -108,7 +111,7 @@
                         ***************************-->
             <p:dialog header="Alterar Aluno" modal="true" resizable="false"  draggable="false" widgetVar="modalAlterar"
                       minimizable="true" maximizable="true" width="800" height="400">
-                <p:outputPanel id="alterarAluno">
+                <p:outputPanel styleClass="painelCentral" style="padding: 10px 10px 10px 10px;margin-bottom: 10px; width: 735px;" id="alterarAluno">
                     <!--Dados Pessoais-->
                     <b:row>
                         <b:column col-sm="12">
@@ -116,7 +119,7 @@
                             <hr style= "border-top: 1px solid #999999;"/>
                         </b:column>
                     </b:row>
-                    <b:row>
+                    <b:row class="rowMarginBotton">
                         <b:column colSm="2">
                             <h:outputLabel value="Nome" ><font color ='red' >*</font></h:outputLabel>
                         </b:column>
@@ -129,20 +132,20 @@
                             <b:message for="nomeFuncionarioAlterar"  />
                         </b:column>
                     </b:row>
-                    <b:row>
+                    <b:row class="rowMarginBotton">
                         <b:column colSm="2">
                             <h:outputLabel value="Data de Nascimento" ><font color ='red' >*</font></h:outputLabel>
                         </b:column>
-                        <b:column colSm="7">
+                        <b:column colSm="4">
                             <p:calendar id="nascimentoFuncionarioAlterar" value="#{alunoController.dataNascAlterar}" locale="pt" navigator="true" pattern="dd-MM-yyyy" yearRange="c-90:c">
                                 <f:validateBean />
                             </p:calendar>
                         </b:column>
-                        <b:column colSm="3">
+                        <b:column offset="3" colSm="3">
                             <b:message for="nascimentoFuncionarioAlterar"  />
                         </b:column>
                     </b:row>
-                    <b:row>
+                    <b:row class="rowMarginBotton">
                         <b:column colSm="2">
                             <h:outputLabel value="Sexo" ><font color ='red' >*</font></h:outputLabel>
                         </b:column>
@@ -156,7 +159,7 @@
                             <b:message for="sexoAlterar"  />
                         </b:column>
                     </b:row>
-                    <b:row id="entradaTelefone">
+                    <b:row class="rowMarginBotton" id="entradaTelefone">
                         <b:column colSm="2">
                             <h:outputLabel value="Telefone" ><font color ='red' >*</font></h:outputLabel>
                         </b:column>
@@ -169,43 +172,45 @@
                         <b:column colSm="2">
                             <p:inputText id="descricaoA" value="#{alunoController.descricaoTelefoneAlterar}" placeholder="Observação" maxlength="50" style="width: 100%"/>
                         </b:column>
-                        <b:column colSm="1">
-                            <p:commandButton global="false" process="@this :#{p:component('dddA')} :#{p:component('telefoneA')} :#{p:component('descricaoA')}" update=":#{p:component('tabelaTelefone')} :#{p:component('entradaTelefone')}" value="Incluir" action="#{alunoController.incluirTelefoneAlterar}" icon="ui-icon-arrowthickstop-1-s"/>
+                        <b:column colSm="2">
+                            <p:commandButton styleClass="dbotaoPadraoIcon" global="false" style="background-image: url('/sgeda/faces/resource/imagens/inserirTelefone.png')!important;width:100%;" process="@this :#{p:component('dddA')} :#{p:component('telefoneA')} :#{p:component('descricaoA')}" update=":#{p:component('tabelaTelefone')} :#{p:component('entradaTelefone')}" value="Incluir" action="#{alunoController.incluirTelefoneAlterar}"/>
                         </b:column>
-                        <b:column colSm="3">
+                        <b:column colSm="2">
                             <b:message for="dddA" />
                             <b:message for="telefoneA" />
                         </b:column>
                     </b:row>
-                    <b:row id="tabelaTelefone">
+                    <b:row class="rowMarginBotton" id="tabelaTelefone">
                         <b:column colSm="9">
-                            <p:dataTable   rendered="#{not empty alunoController.telefonesAlterar}" var="telefone" value="#{alunoController.telefonesAlterar}">
-                                <p:column headerText="DDD">
-                                    <p:inplace id="dddTabela" editor="true">
-                                        <p:inputMask value="#{telefone.ddd}" required="true" mask="99"/>
-                                    </p:inplace>
-                                </p:column>
+                            <div class="tabelaWrapper">
+                                <p:dataTable   rendered="#{not empty alunoController.telefonesAlterar}" var="telefone" value="#{alunoController.telefonesAlterar}">
+                                    <p:column headerText="DDD">
+                                        <p:inplace id="dddTabela" editor="true">
+                                            <p:inputMask value="#{telefone.ddd}" required="true" mask="99"/>
+                                        </p:inplace>
+                                    </p:column>
 
-                                <p:column headerText="Número">
-                                    <p:inplace id="telefoneTabela" editor="true">
-                                        <p:inputMask  value="#{telefone.numero}" required="true" mask="9999-9999?9" converter="converter.telefoneConverter"/>
-                                    </p:inplace>
-                                </p:column>
+                                    <p:column headerText="Número">
+                                        <p:inplace id="telefoneTabela" editor="true">
+                                            <p:inputMask  value="#{telefone.numero}" required="true" mask="9999-9999?9" converter="converter.telefoneConverter"/>
+                                        </p:inplace>
+                                    </p:column>
 
-                                <p:column headerText="Observação">
-                                    <p:inplace id="observacaoTabela" editor="true">
-                                        <p:inputText  value="#{telefone.descricao}"/>
-                                    </p:inplace>
-                                </p:column>
+                                    <p:column headerText="Observação">
+                                        <p:inplace id="observacaoTabela" editor="true">
+                                            <p:inputText  value="#{telefone.descricao}"/>
+                                        </p:inplace>
+                                    </p:column>
 
-                                <p:column headerText="">
-                                    <p:commandButton global="false" value="Excluir" ajax="true" immediate="true" update=":#{p:component('tabelaTelefone')}" action="#{alunoController.excluirTelefoneAlterar(telefone)}"/>
-                                </p:column>
+                                    <p:column style="text-align: center" headerText="">
+                                        <p:commandButton global="false" styleClass="dbotaoPadrao" value="Excluir" ajax="true" immediate="true" update=":#{p:component('tabelaTelefone')}" action="#{alunoController.excluirTelefoneAlterar(telefone)}"/>
+                                    </p:column>
 
-                            </p:dataTable> 
+                                </p:dataTable> 
+                            </div>
                         </b:column>
                     </b:row>
-                    <b:row>
+                    <b:row class="rowMarginBotton">
                         <b:column colSm="2">
                             <h:outputLabel value="Email" ><font color ='red' >*</font></h:outputLabel>
                         </b:column>
@@ -219,7 +224,7 @@
                             <b:message for="emailA"/>
                         </b:column>
                     </b:row>
-                    <b:row>
+                    <b:row class="rowMarginBotton">
                         <b:column colSm="2">
                             <h:outputLabel value="Nome Responsavel" />
                         </b:column>
@@ -229,8 +234,7 @@
                         <b:column colSm="3">
                         </b:column>
                     </b:row>
-
-                    <b:row>
+                    <b:row class="rowMarginBotton">
                         <b:column colSm="2">
                             <h:outputLabel value="CPF Responsável" />
                         </b:column>
@@ -242,7 +246,7 @@
                         </b:column>
                     </b:row>
 
-                    <b:row>
+                    <b:row class="rowMarginBotton">
                         <b:column colSm="2">
                             <h:outputLabel value="Telefone Responsavel"/> 
                         </b:column>
@@ -261,21 +265,21 @@
                             <hr style= "border-top: 1px solid #999999;"/>
                         </b:column>
                     </b:row>
-                    <b:row>
+                    <b:row class="rowMarginBotton">
                         <b:column colSm="2">
                             <h:outputLabel value="CEP" ><font color ='red' >*</font></h:outputLabel>
                         </b:column>
                         <b:column colSm="3">
-                            <p:inputMask  id="cepA" value="#{alunoController.cepAlterar}" mask="99999-999" converter="converter.cepConverter" required="true" requiredMessage="Cep é obrigatório!"/>
+                            <p:inputMask style="width: 100%"  id="cepA" value="#{alunoController.cepAlterar}" mask="99999-999" converter="converter.cepConverter" required="true" requiredMessage="Cep é obrigatório!"/>
                         </b:column>
                         <b:column colSm="4">
-                            <p:commandButton process="@this cepA" update="messageCepA logradouroA cidadeA bairroA ufA complementoA" id="buscaCep" value="Pesquisar" icon="ui-icon-circle-zoomin" action="#{alunoController.buscarCepAlterar}"/>
+                            <p:commandButton styleClass="dbotaoPadraoIcon" style="background-image: url('/sgeda/faces/resource/imagens/pesquisarCep.png')!important;" process="@this cepA" update="messageCepA logradouroA cidadeA bairroA ufA complementoA" id="buscaCep" value="Pesquisar" action="#{alunoController.buscarCepAlterar}"/>
                         </b:column>
                         <b:column colSm="3">
                             <b:message id="messageCepA" for="cep"/>
                         </b:column>
                     </b:row>
-                    <b:row>
+                    <b:row class="rowMarginBotton">
                         <b:column colSm="2">
                             <h:outputLabel value="Logradouro" ><font color ='red' >*</font></h:outputLabel>
                         </b:column>
@@ -288,7 +292,7 @@
                             <b:message for="logradouroA"/>
                         </b:column>
                     </b:row>
-                    <b:row>
+                    <b:row class="rowMarginBotton">
                         <b:column colSm="2">
                             <h:outputLabel value="Número" ><font color ='red' >*</font></h:outputLabel>
                         </b:column>
@@ -302,7 +306,7 @@
                             <b:message for="numeroA"/>
                         </b:column>
                     </b:row>
-                    <b:row>
+                    <b:row class="rowMarginBotton">
                         <b:column colSm="2">
                             <h:outputLabel value="Complemento" />
                         </b:column>
@@ -311,7 +315,7 @@
                         </b:column>
                     </b:row>
 
-                    <b:row>
+                    <b:row class="rowMarginBotton">
                         <b:column colSm="2">
                             <h:outputLabel value="UF" ><font color ='red' >*</font></h:outputLabel>
                         </b:column>
@@ -324,7 +328,7 @@
                             <b:message for="ufA"/>
                         </b:column>
                     </b:row>
-                    <b:row>
+                    <b:row class="rowMarginBotton">
                         <b:column colSm="2">
                             <h:outputLabel value="Cidade" ><font color ='red' >*</font></h:outputLabel>
                         </b:column>
@@ -337,7 +341,7 @@
                             <b:message for="cidadeA"/>
                         </b:column>
                     </b:row>
-                    <b:row>
+                    <b:row class="rowMarginBotton">
                         <b:column colSm="2">
                             <h:outputLabel value="Bairro" ><font color ='red' >*</font></h:outputLabel>
                         </b:column>
@@ -352,9 +356,13 @@
                     </b:row>
                 </p:outputPanel>
                 <f:facet name="footer">
-                    <p:commandButton value="Fechar" onclick="PF('modalAlterar').hide();
+                    <b:row>
+                        <b:column>
+                            <p:commandButton styleClass="dbotaoPadrao" value="Fechar" onclick="PF('modalAlterar').hide();
                             PF('modalDetalhe').show();" />
-                    <p:commandButton action="#{alunoController.salvarAlteracao}" ajax="true" process="@this alterarAluno" update="alterarAluno :#{p:component('resultado')}  :#{p:component('info')} :#{p:component('detalheAluno')}" value="Salvar"/>
+                            <p:commandButton styleClass="dbotaoPadrao" action="#{alunoController.salvarAlteracao}" ajax="true" process="@this alterarAluno" update="alterarAluno :#{p:component('resultado')}  :#{p:component('info')} :#{p:component('detalheAluno')}" value="Salvar"/>
+                        </b:column>
+                    </b:row>
                 </f:facet>
             </p:dialog>
 
@@ -363,7 +371,7 @@
                         ***************************-->
             <p:dialog header="Detalhes" modal="true" resizable="false"  draggable="false" widgetVar="modalDetalhe"
                       minimizable="true" maximizable="true" width="800" height="500">
-                <p:outputPanel id="detalheAluno">
+                <p:outputPanel styleClass="painelCentral" style="padding: 10px 10px 10px 10px;margin-bottom: 10px; width: 735px;" id="detalheAluno">
                     <b:row>
                         <b:column colSm="3">
                             <h:outputLabel value="Cadastro ativo:" />
@@ -429,19 +437,21 @@
                     </b:row>
                     <b:row>
                         <b:column colSm="12">
-                            <p:dataTable  var="telefone" value="#{alunoController.alunoDetalhe.pessoa.telefones}">
-                                <p:column headerText="DDD">
-                                    <h:outputText value="#{telefone.ddd}" />
-                                </p:column>
+                            <div class="tabelaWrapper">
+                                <p:dataTable  var="telefone" value="#{alunoController.alunoDetalhe.pessoa.telefones}">
+                                    <p:column headerText="DDD">
+                                        <h:outputText value="#{telefone.ddd}" />
+                                    </p:column>
 
-                                <p:column headerText="Número">
-                                    <h:outputText value="#{telefone.numero}" converter="converter.telefoneConverter"/>
-                                </p:column>
+                                    <p:column headerText="Número">
+                                        <h:outputText value="#{telefone.numero}" converter="converter.telefoneConverter"/>
+                                    </p:column>
 
-                                <p:column headerText="Observação">
-                                    <h:outputText value="#{telefone.descricao}" />
-                                </p:column>                                        
-                            </p:dataTable> 
+                                    <p:column headerText="Observação">
+                                        <h:outputText value="#{telefone.descricao}" />
+                                    </p:column>                                        
+                                </p:dataTable> 
+                            </div>
                             <br/>
                         </b:column>
                     </b:row>
@@ -557,7 +567,7 @@
                         </b:column>
                     </b:row>
                     <!--Dados Adicionais-->
-                    
+
                     <b:row rendered="#{alunoController.alunoDetalhe.aprovado == 1 or alunoController.alunoDetalhe.aprovado == 0}">
                         <br/>
                         <b:column col-sm="12">
@@ -658,78 +668,93 @@
                     </b:row>
                     <b:row>
                         <b:column colSm="12">
-                            <p:dataTable  var="turma" value="#{alunoController.alunoDetalhe.turmaAlunos}">
-                                <p:column headerText="Turma">
-                                    <h:outputText value="#{turma.turma.disciplina.nome}" />
-                                </p:column>
-                                <p:column headerText="Professor">
-                                    <h:outputText value="#{turma.turma.professor.pessoa.nome}" />
-                                </p:column>
-                            </p:dataTable> 
+                            <div class="tabelaWrapper">
+                                <p:dataTable  var="turma" value="#{alunoController.alunoDetalhe.turmaAlunos}">
+                                    <p:column headerText="Turma">
+                                        <h:outputText value="#{turma.turma.disciplina.nome}" />
+                                    </p:column>
+                                    <p:column headerText="Professor">
+                                        <h:outputText value="#{turma.turma.professor.pessoa.nome}" />
+                                    </p:column>
+                                </p:dataTable> 
+                            </div>
                         </b:column>
                     </b:row>
                 </p:outputPanel>
                 <f:facet name="footer">
                     <b:row id="footer">
-                        <p:commandButton value="Fechar" onclick="PF('modalDetalhe').hide();" />
-                        <p:commandButton global="false" process="@this" action="#{alunoController.carregarAlterar}" update=":#{p:component('alterarAluno')}" oncomplete="PF('modalDetalhe').hide();
-                                         PF('modalAlterar').show();" value="Alterar"/>
-                        <p:commandButton rendered="#{alunoController.alunoDetalhe.pessoa.ativo}" oncomplete="PF('modalInativar').show();" process="@this" update=":#{p:component('painelInativar')}" value="Inativar Aluno"/>
-                        <p:commandButton rendered="#{not alunoController.alunoDetalhe.pessoa.ativo}" action="#{alunoController.alterarAtividade}" ajax="true" process="@this" update="footer :#{p:component('resultado')}  :#{p:component('info')} :#{p:component('detalheAluno')}" value="Reativar Aluno"/>
-                        <p:commandButton process="@this" update=":#{p:component('info')}" action="#{alunoController.reenviarEmail}" onclick="return confirm('Confirma o envio do email?');" value="Enviar email"/>
-                        <p:commandButton global="false" process="@this" action="#{alunoController.carregarAlterarAprovado}" update=":#{p:component('alterarAprovado')}" oncomplete="PF('modalDetalhe').hide();
-                                         PF('modalAprovado').show();" value="Alterar informações adicionais"/>                    
+                        <b:column>
+                            <p:commandButton styleClass="dbotaoPadrao" value="Fechar" onclick="PF('modalDetalhe').hide();" />
+                            <p:commandButton styleClass="dbotaoPadrao" global="false" process="@this" action="#{alunoController.carregarAlterar}" update=":#{p:component('alterarAluno')}" oncomplete="PF('modalDetalhe').hide();
+                                             PF('modalAlterar').show();" value="Alterar"/>
+                            <p:commandButton styleClass="dbotaoPadrao" rendered="#{alunoController.alunoDetalhe.pessoa.ativo}" oncomplete="PF('modalInativar').show();" process="@this" update=":#{p:component('painelInativar')}" value="Inativar Aluno"/>
+                            <p:commandButton styleClass="dbotaoPadrao" rendered="#{not alunoController.alunoDetalhe.pessoa.ativo}" action="#{alunoController.alterarAtividade}" ajax="true" process="@this" update="footer :#{p:component('resultado')}  :#{p:component('info')} :#{p:component('detalheAluno')}" value="Reativar Aluno"/>
+                            <p:commandButton styleClass="dbotaoPadrao" process="@this" update=":#{p:component('info')}" action="#{alunoController.reenviarEmail}" onclick="return confirm('Confirma o envio do email?');" value="Enviar email"/>
+                            <p:commandButton styleClass="dbotaoPadrao" global="false" process="@this" action="#{alunoController.carregarAlterarAprovado}" update=":#{p:component('alterarAprovado')}" oncomplete="PF('modalDetalhe').hide();
+                                             PF('modalAprovado').show();" value="Alterar informações adicionais"/>                    
+                        </b:column>
                     </b:row>
                 </f:facet>
             </p:dialog>
 
             <p:growl  globalOnly="true" id="info"  />
             <b:fetchBeanInfos/>
-            <ui:insert name="navbar">
-                <ui:include src="/template/navbar.xhtml"/>
-            </ui:insert>
-            <b:container>
-                <b:row style="margin-left: -45px; margin-right: -45px;">
-                    <b:column >
-                        <b:panel title="Consulta de Aluno" style="min-height: 200px;" collapsible="false" look="info">
-                            <b:row>
-                                <b:column colSm="5" offset="2">
-                                    <p:inputText id="entradaConsulta" placeholder="Matrícula, Nome ou CPF" value="#{alunoController.stringConsulta}" maxlength="50" style="width: 100%"/>
-                                </b:column>
-                                <b:column colSm="5">
-                                    <p:commandButton update="resultado info" process="@this entradaConsulta" value="Buscar" action="#{alunoController.consultar}" icon=" ui-icon-search "/>
-                                    <p:commandButton global="false" value="Limpar" update="entradaConsulta resultado" action="#{alunoController.limparFormularioConsulta}" immediate="true"/>
-                                </b:column>
-                            </b:row>
-                            <b:row id="resultado">
-                                <b:column>
-                                    <p:dataTable rendered="#{not empty alunoController.resultadoConsulta}" value="#{alunoController.resultadoConsulta}" var="aluno" id="datatable" styleClass="table table-striped table-bordered"
-                                                 style="width:100%; margin-top: 20px;"
-                                                 rows="10"
-                                                 paginatorPosition="bottom"
-                                                 paginator="true"
-                                                 paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink} {RowsPerPageDropdown}"
-                                                 rowsPerPageTemplate="5,10,15">
-                                        <p:column headerText="Matrícula" style="width: 140px;" sortBy="#{aluno.pessoa.matricula}">
-                                            <h:outputText id="matricula" value="#{aluno.pessoa.matricula}" />
-                                        </p:column>
-                                        <p:column headerText="Nome" sortBy="#{aluno.pessoa.nome}">
-                                            <h:outputText value="#{aluno.pessoa.nome}" />
-                                        </p:column>
-                                        <p:column headerText="CPF" style="width: 160px;" sortBy="#{aluno.pessoa.cpf}">
-                                            <h:outputText converter="converter.cpfConverter" value="#{aluno.pessoa.cpf}" />
-                                        </p:column>
+            <div id="wrapper">
+                <ui:insert name="navbar">
+                    <ui:include src="/template/navbar.xhtml"/>
+                </ui:insert>
 
-                                        <p:column style="width: 160px">
-                                            <p:commandButton global="false" process="@this" update=":#{p:component('painelInativar')} :#{p:component('detalheAluno')} :#{p:component('footer')}" action="#{alunoController.exibirDetalhes(aluno)}" oncomplete="PF('modalDetalhe').show();" value="Detalhes" style="width: 100px"/>
-                                        </p:column>
-                                    </p:dataTable>
-                                </b:column>
-                            </b:row>
-                        </b:panel>
-                    </b:column>
-                </b:row>
-            </b:container>
+                <div id="page-content-wrapper">
+                    <b:container id="container">
+                        <b:row style="margin-top: -50px;margin-bottom: 40px;">
+                            <h:outputText value="Consulta de aluno:" style="font-size: 30px;margin-left: 10px;"/>
+                        </b:row>
+                        <b:row>
+                            <b:panel styleClass="painelCentral">
+                                <b:row>
+                                    <b:column colSm="5" offset="2">
+                                        <p:inputText id="entradaConsulta" placeholder="Matrícula, Nome ou CPF" value="#{alunoController.stringConsulta}" maxlength="50" style="width: 100%"/>
+                                    </b:column>
+                                    <b:column colSm="5">
+                                        <p:commandButton global="false" style="background-image: url('/sgeda/faces/resource/imagens/detalhe.png')!important;" styleClass="dbotaoPadraoIcon" update="resultado info" process="@this entradaConsulta" value="Buscar" action="#{alunoController.consultar}" icon=" ui-icon-search "/>
+                                        <p:commandButton global="false" style="float:left;" styleClass="dbotaoDark" value="Limpar" update="entradaConsulta resultado" action="#{alunoController.limparFormularioConsulta}" immediate="true"/>
+                                    </b:column>
+                                </b:row>
+                                <b:row id="resultado">
+                                    <b:column>
+                                        <br/>
+                                        <div class="tabelaWrapper">
+                                            <p:dataTable rendered="#{not empty alunoController.resultadoConsulta}" value="#{alunoController.resultadoConsulta}" var="aluno" id="datatable"
+                                                         style="width:100%; margin-top: 20px;"
+                                                         rows="10"
+                                                         paginatorPosition="bottom"
+                                                         paginator="true"
+                                                         paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink} {RowsPerPageDropdown}"
+                                                         rowsPerPageTemplate="5,10,15">
+                                                <p:column headerText="Matrícula" style="width: 140px;" sortBy="#{aluno.pessoa.matricula}">
+                                                    <h:outputText id="matricula" value="#{aluno.pessoa.matricula}" />
+                                                </p:column>
+                                                <p:column headerText="Nome" sortBy="#{aluno.pessoa.nome}">
+                                                    <h:outputText value="#{aluno.pessoa.nome}" />
+                                                </p:column>
+                                                <p:column headerText="CPF" style="width: 160px;" sortBy="#{aluno.pessoa.cpf}">
+                                                    <h:outputText converter="converter.cpfConverter" value="#{aluno.pessoa.cpf}" />
+                                                </p:column>
+
+                                                <p:column style="width: 75px;text-align: center">
+                                                    <p:commandLink global="false" process="@this" update=":#{p:component('painelInativar')} :#{p:component('detalheAluno')} :#{p:component('footer')}" action="#{alunoController.exibirDetalhes(aluno)}" oncomplete="PF('modalDetalhe').show();" title="Detalhes do Aluno"  style="margin-right: 5px;">
+                                                        <h:graphicImage url="/resource/imagens/detalhe.png" width="24" height="24"/>
+                                                    </p:commandLink>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </div>
+                                    </b:column>
+                                </b:row>
+                            </b:panel>
+                        </b:row>
+                    </b:container>
+                </div>
+            </div>
         </h:form>
     </h:body>
 </html>

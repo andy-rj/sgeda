@@ -8,6 +8,8 @@
       xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>Curso Idealizar</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <style type="text/css">
             .ui-growl {
                 z-index:9999 !important;
@@ -17,7 +19,7 @@
             }
         </style>
     </h:head>
-    <h:body style="background-color: #e3e3e3">
+    <h:body style="background-color: #ebeff2">
         <h:form id="cadastro">
 
             <p:dialog header="Filtros" modal="true" resizable="false"  draggable="false" widgetVar="modalFiltro"
@@ -47,64 +49,70 @@
 
             <p:growl  globalOnly="true" id="info"/>
             <b:fetchBeanInfos/>
-            <ui:insert name="navbar">
-                <ui:include src="/template/navbar.xhtml"/>
-            </ui:insert>
-            <b:container id="container">
-                <b:row style="margin-left: -45px; margin-right: -45px;">
-                    <b:column>
-                        <b:panel title="Relátorio de Funcionarios Cadastrados" collapsible="false" look="info">
-                            
-                            <b:row>
-                                <b:column>
-                                    <p:dataTable id="tbl" emptyMessage="Não foram encontrados Funcionários para os critérios de pesquisa" var="funcionario" value="#{relatorioController.funcionariosCadastrados}" 
-                                                 paginatorTemplate="{Exporters} {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
-                                                 paginator="true" rows="50" style="margin-bottom:20px">
-                                        <f:facet name="header">
-                                            Relatório
-                                        </f:facet>
+            <div id="wrapper">
+                <!-- Sidebar -->
+                <ui:insert name="navbar">
+                    <ui:include src="/template/navbar.xhtml"/>
+                </ui:insert>
 
-                                        <f:facet name="{Exporters}">
-                                            <div style="float:left">
-                                                <h:commandLink>
-                                                    <h:graphicImage url="/resource/imagens/pdf.png" width="24" height="24" title="Salvar em PDF"/>
-                                                    <p:dataExporter type="pdf" target="tbl" fileName="RelatorioProfessores#{relatorioController.now()}" preProcessor="#{relatorioController.preProcessPDF}" encoding="iso-8859-1"/>
-                                                </h:commandLink>
-                                            </div>
-                                        </f:facet>
-                                        <p:column headerText="Matrícula" style="width: 120px;">
-                                            <h:outputText value="#{funcionario.pessoa.matricula}" />
-                                        </p:column>
-                                        <p:column headerText="Nome">
-                                            <h:outputText value="#{funcionario.pessoa.nome}" />
-                                        </p:column>
-                                        <p:column headerText="CPF" style="width: 150px;">
-                                            <h:outputText value="#{funcionario.pessoa.cpf}" converter="converter.cpfConverter" />
-                                        </p:column>
-                                        <p:column headerText="Cargo">
-                                            <h:outputText value="#{funcionario.cargo}"/>
-                                        </p:column>
-                                        <p:column headerText="Email" style="word-wrap: break-word;">
-                                            <h:outputText value="#{funcionario.pessoa.email}" />
-                                        </p:column>
-                                        <p:column headerText="Telefone">
-                                            <h:outputText value="#{funcionario.pessoa.telefonesString}"/>
-                                        </p:column>
-                                        <p:column headerText="Cadastro">
-                                            <h:outputText rendered="#{funcionario.pessoa.ativo}" value="Ativo" />
-                                            <h:outputText rendered="#{not funcionario.pessoa.ativo}" value="Inativo" />
-                                        </p:column>
-                                        <p:column headerText="Adm">
-                                            <h:outputText id="adm" value="#{funcionario.pessoa.usuario.administrador?'Sim':'Não'}"/>
-                                        </p:column>
+                <div id="page-content-wrapper">
+                    <b:container id="container">
+                        <b:row style="margin-left: -45px; margin-right: -45px;">
+                            <b:column>
+                                <b:panel title="Relátorio de Funcionarios Cadastrados" collapsible="false" look="info">
 
-                                    </p:dataTable>
-                                </b:column>
-                            </b:row>
-                        </b:panel>
-                    </b:column>
-                </b:row>
-            </b:container>
+                                    <b:row>
+                                        <b:column>
+                                            <p:dataTable id="tbl" emptyMessage="Não foram encontrados Funcionários para os critérios de pesquisa" var="funcionario" value="#{relatorioController.funcionariosCadastrados}" 
+                                                         paginatorTemplate="{Exporters} {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                                                         paginator="true" rows="50" style="margin-bottom:20px">
+                                                <f:facet name="header">
+                                                    Relatório
+                                                </f:facet>
+
+                                                <f:facet name="{Exporters}">
+                                                    <div style="float:left">
+                                                        <h:commandLink>
+                                                            <h:graphicImage url="/resource/imagens/pdf.png" width="24" height="24" title="Salvar em PDF"/>
+                                                            <p:dataExporter type="pdf" target="tbl" fileName="RelatorioProfessores#{relatorioController.now()}" preProcessor="#{relatorioController.preProcessPDF}" encoding="iso-8859-1"/>
+                                                        </h:commandLink>
+                                                    </div>
+                                                </f:facet>
+                                                <p:column headerText="Matrícula" style="width: 120px;">
+                                                    <h:outputText value="#{funcionario.pessoa.matricula}" />
+                                                </p:column>
+                                                <p:column headerText="Nome">
+                                                    <h:outputText value="#{funcionario.pessoa.nome}" />
+                                                </p:column>
+                                                <p:column headerText="CPF" style="width: 150px;">
+                                                    <h:outputText value="#{funcionario.pessoa.cpf}" converter="converter.cpfConverter" />
+                                                </p:column>
+                                                <p:column headerText="Cargo">
+                                                    <h:outputText value="#{funcionario.cargo}"/>
+                                                </p:column>
+                                                <p:column headerText="Email" style="word-wrap: break-word;">
+                                                    <h:outputText value="#{funcionario.pessoa.email}" />
+                                                </p:column>
+                                                <p:column headerText="Telefone">
+                                                    <h:outputText value="#{funcionario.pessoa.telefonesString}"/>
+                                                </p:column>
+                                                <p:column headerText="Cadastro">
+                                                    <h:outputText rendered="#{funcionario.pessoa.ativo}" value="Ativo" />
+                                                    <h:outputText rendered="#{not funcionario.pessoa.ativo}" value="Inativo" />
+                                                </p:column>
+                                                <p:column headerText="Adm">
+                                                    <h:outputText id="adm" value="#{funcionario.pessoa.usuario.administrador?'Sim':'Não'}"/>
+                                                </p:column>
+
+                                            </p:dataTable>
+                                        </b:column>
+                                    </b:row>
+                                </b:panel>
+                            </b:column>
+                        </b:row>
+                    </b:container>
+                </div>
+            </div>
         </h:form>
     </h:body>
 </html>
