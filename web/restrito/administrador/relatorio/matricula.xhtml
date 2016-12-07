@@ -109,7 +109,7 @@
                                     <b:row>
                                         <b:column>
                                             <div style="background-color: lemonchiffon; border-radius: 10px; padding: 5px; text-align: justify; line-height: 200%">
-                                                <h:outputText rendered="#{not empty relatorioController.horizontalBarModel}" value="Este relatório mostra o numero de matrículas ativas dentro do período selecionado, podendo agrupar o período por ano ou semestre. Neste mesmo relatório, há o gráfico informativo com o percentual de alunos desistentes de acordo com o curso selecionado no filtro do relatório."/>
+                                                <h:outputText rendered="#{not empty relatorioController.horizontalBarModel}" value="Este relatório mostra o numero de matrículas realizadas dentro do período selecionado, podendo agrupar o período por ano ou semestre. Neste mesmo relatório, há o gráfico informativo com o percentual de alunos desistentes de acordo com o curso selecionado no filtro do relatório."/>
                                             </div>
                                             <br/>
                                         </b:column>
@@ -125,8 +125,49 @@
                                     <p:chart rendered="#{not empty relatorioController.pieModelDesistentes}" type="pie" model="#{relatorioController.pieModelDesistentes}" style="height:500px"/>
                                 </b:column>
                             </b:row>
-                            <p:separator/>
-
+                            <b:row>
+                                <b:column>
+                                    <p:separator/>
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column>
+                                    <p:dataTable var="ano" value="#{relatorioController.cursoAno}">
+                                        <p:columnGroup type="header">
+                                            <p:row>
+                                                <p:column headerText="Ano" />
+                                                <p:column headerText="Curso" />
+                                                <p:column headerText="Qt. Matriculas" />
+                                                <p:column headerText="Qt. Desistentes" />
+                                            </p:row>
+                                        </p:columnGroup>
+                                        <p:subTable var="curso" value="#{relatorioController.cursoTotalAno(ano)}">
+                                            <f:facet name="header">
+                                                <h:outputText value="#{ano}" />
+                                            </f:facet>
+                                            <p:column headerText="Semestre">
+                                                <h:outputText rendered="#{not empty curso.semestre}" value="#{curso.semestre}"/>
+                                            </p:column>
+                                            <p:column headerText="Nome">
+                                                <h:outputText value="#{curso.nome}"/>
+                                            </p:column>
+                                            <p:column style="text-align: center" headerText="Qt. Ativos">
+                                                <h:outputText  value="#{curso.totalAtivos}"/>
+                                            </p:column>
+                                            <p:column style="text-align: center"  headerText="Qt. Desistentes">
+                                                <h:outputText  value="#{curso.totalDesistente}"/>
+                                            </p:column>
+                                        </p:subTable>
+                                        <p:columnGroup type="footer">
+                                            <p:row>
+                                                <p:column colspan="2" footerText="Total: " style="text-align:right"/>
+                                                <p:column footerText="#{relatorioController.totalMatriculas}" />
+                                                <p:column footerText="#{relatorioController.totalDesistentes}" />
+                                            </p:row>
+                                        </p:columnGroup>
+                                    </p:dataTable>
+                                </b:column>
+                            </b:row>
                         </b:panel>
                     </b:container>
                 </div>

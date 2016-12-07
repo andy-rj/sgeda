@@ -93,7 +93,7 @@
                 <f:facet name="footer">
                     <b:row>
                         <b:column>
-                            <p:commandButton class="dbotaoPadrao" value="Salvar" process="@this :#{p:component('detalheCorrigir')}" update=":#{p:component('detalheAluno')} :#{p:component('resultados')} :#{p:component('detalheCorrigir')} :#{p:component('info')}" action="#{professorController.salvarNotaSimulado(loginController.usuarioLogado.pessoa.idPessoa)}" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('modalCorrigir').hide()" />
+                            <p:commandButton class="dbotaoPadrao" value="Salvar" process="@this :#{p:component('detalheCorrigir')}" update=":#{p:component('detalheAluno')} :#{p:component('resultados')} :#{p:component('detalheCorrigir')} :#{p:component('info')}" action="#{professorController.salvarNotaSimulado}" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('modalCorrigir').hide()" />
                             <p:commandButton class="dbotaoPadrao" value="Fechar" onclick="PF('modalCorrigir').hide()" />
                         </b:column>
                     </b:row>

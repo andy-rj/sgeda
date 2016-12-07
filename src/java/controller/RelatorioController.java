@@ -427,6 +427,92 @@ public class RelatorioController {
         yAxis.setMin(0);
         yAxis.setMax(10);
     }
+    
+    public class CursoTotal{
+        String nome;
+        Integer totalDesistente;
+        Integer totalAtivos;
+        Integer ano;
+        String semestre;
+
+        public String getSemestre() {
+            return semestre;
+        }
+
+        public void setSemestre(String semestre) {
+            this.semestre = semestre;
+        }
+
+        public Integer getAno() {
+            return ano;
+        }
+
+        public void setAno(Integer ano) {
+            this.ano = ano;
+        }
+
+        public String getNome() {
+            return nome;
+        }
+
+        public void setNome(String nome) {
+            this.nome = nome;
+        }
+
+        public Integer getTotalDesistente() {
+            return totalDesistente;
+        }
+
+        public void setTotalDesistente(Integer totalDesistente) {
+            this.totalDesistente = totalDesistente;
+        }
+
+        public Integer getTotalAtivos() {
+            return totalAtivos;
+        }
+
+        public void setTotalAtivos(Integer totalAtivos) {
+            this.totalAtivos = totalAtivos;
+        }
+        
+    }
+    
+    private List<CursoTotal> cursoTotal;
+    private List<Integer> cursoAno;
+
+    public List<CursoTotal> cursoTotalAno(Integer ano){
+        List<CursoTotal> c = new ArrayList<>();
+        for(CursoTotal ct: cursoTotal){
+            if(ct.getAno().equals(ano)){
+                c.add(ct);
+            }
+        }
+        return c;
+    }
+    
+    public Integer getTotalMatriculas(){
+        Integer total = 0;
+        for(CursoTotal ct: cursoTotal){
+            total+=ct.getTotalAtivos();
+        }
+        return total;
+    }
+    
+    public Integer getTotalDesistentes(){
+        Integer total = 0;
+        for(CursoTotal ct: cursoTotal){
+            total+=ct.getTotalDesistente();
+        }
+        return total;
+    }
+    
+    public List<Integer> getCursoAno() {
+        return cursoAno;
+    }
+
+    public List<CursoTotal> getCursoTotal() {
+        return cursoTotal;
+    }
 
     private void createHorizontalBarModel(List<Aluno> alunos, Integer inicio, Integer fim) {
 
@@ -435,6 +521,9 @@ public class RelatorioController {
         pieModelDesistentes.setTitle("Total de Desistentes");
         pieModelDesistentes.setLegendPosition("s");
 
+        cursoTotal = new ArrayList<>();
+        cursoAno = new ArrayList<>();
+        
         List<String> cursosStr = new ArrayList<>();
 
         for (Aluno aluno : alunos) {
@@ -464,7 +553,9 @@ public class RelatorioController {
             chartSeriesAtivo.setLabel(nomeCurso);
 
             int countAt = 0;
+            int countAtTotal = 0;
             int countDe = 0;
+            int countDesisTotal = 0;
 
             int countAt1S = 0;
             int countDe1S = 0;
@@ -474,46 +565,87 @@ public class RelatorioController {
             if (agrupamento.equalsIgnoreCase("ano")) {
                 int anofim = alunos.get(alunos.size() - 1).getDataInscricao().getYear() + 1900;
                 for (int ano = alunos.get(0).getDataInscricao().getYear() + 1900; ano <= anofim; ano++) {
+                    if(!cursoAno.contains(ano)){
+                        cursoAno.add(ano);
+                    }
                     countAt = 0;
+                    countDe = 0;
                     for (Aluno aluno : alunos) {
                         if (aluno.getCurso().getNome().equalsIgnoreCase(nomeCurso) && aluno.getDataInscricao().getYear() + 1900 == ano) {
                             if (aluno.getDesistente()) {
                                 countDe++;
+                                countDesisTotal++;
                             } else {
                                 countAt++;
+                                countAtTotal++;
                             }
                         }
                     }
-                    chartSeriesAtivo.set(ano, countAt);
+                    chartSeriesAtivo.set(ano, countAt+countDe);
+                    //Para tabela do relatorio com totais em quantidades
+                CursoTotal c = new CursoTotal();
+                c.setNome(nomeCurso);
+                c.setAno(ano);
+                c.setTotalAtivos(countAt+countDe);
+                c.setTotalDesistente(countDe);
+                cursoTotal.add(c);
                 }
-                pieModelDesistentes.set(nomeCurso, new BigDecimal(countDe).divide((new BigDecimal(countDeTotal)), 2, RoundingMode.HALF_DOWN)
+                
+                
+                pieModelDesistentes.set(nomeCurso, new BigDecimal(countDesisTotal).divide((new BigDecimal(countDeTotal)), 2, RoundingMode.HALF_DOWN)
                         .multiply(new BigDecimal(100)));
             } else if (agrupamento.equalsIgnoreCase("semestre")) {
                 int anofim = alunos.get(alunos.size() - 1).getDataInscricao().getYear() + 1900;
                 for (int ano = alunos.get(0).getDataInscricao().getYear() + 1900; ano <= anofim; ano++) {
+                    if(!cursoAno.contains(ano)){
+                        cursoAno.add(ano);
+                    }
                     countAt1S = 0;
                     countAt2S = 0;
+                    countDe1S = 0;
+                    countDe2S = 0;
                     for (Aluno aluno : alunos) {
                         if (aluno.getCurso().getNome().equalsIgnoreCase(nomeCurso) && aluno.getDataInscricao().getYear() + 1900 == ano) {
                             if (aluno.getDesistente()) {
                                 if ((aluno.getDataInscricao().getMonth() / 6) == 0) {
                                     countDe1S++;
+                                    countDesisTotal++;
                                 } else {
                                     countDe2S++;
+                                    countDesisTotal++;
                                 }
                             } else {
                                 if ((aluno.getDataInscricao().getMonth() / 6) == 0) {
                                     countAt1S++;
+                                    countAtTotal++;
                                 } else {
                                     countAt2S++;
+                                    countAtTotal++;
                                 }
                             }
                         }
                     }
-                    chartSeriesAtivo.set(ano + "/1º Sem", countAt1S);
-                    chartSeriesAtivo.set(ano + "/2º Sem", countAt2S);
+                    chartSeriesAtivo.set(ano + "/1º Sem", countAt1S+countDe1S);
+                    chartSeriesAtivo.set(ano + "/2º Sem", countAt2S+countDe2S);
+                    //Para tabela do relatorio com totais em quantidades
+                CursoTotal c = new CursoTotal();
+                c.setAno(ano);
+                c.setSemestre("1º Semestre");
+                c.setNome(nomeCurso);
+                c.setTotalAtivos(countAt1S+countDe1S);
+                c.setTotalDesistente(countDe1S);
+                cursoTotal.add(c);
+                c = new CursoTotal();
+                c.setAno(ano);
+                c.setSemestre("2º Semestre");
+                c.setNome(nomeCurso);
+                c.setTotalAtivos(countAt2S+countDe2S);
+                c.setTotalDesistente(countDe2S);
+                cursoTotal.add(c);
+                
                 }
-                pieModelDesistentes.set(nomeCurso, new BigDecimal(countDe1S + countDe2S).divide((new BigDecimal(countDeTotal)), 2, RoundingMode.HALF_DOWN)
+                
+                pieModelDesistentes.set(nomeCurso, new BigDecimal(countDesisTotal).divide((new BigDecimal(countDeTotal)), 2, RoundingMode.HALF_DOWN)
                     .multiply(new BigDecimal(100)));
             }
             
@@ -521,7 +653,7 @@ public class RelatorioController {
             horizontalBarModel.addSeries(chartSeriesAtivo);
         }
 
-        horizontalBarModel.setTitle("Matrículas Ativas");
+        horizontalBarModel.setTitle("Matrículas");
         horizontalBarModel.setAnimate(true);
         horizontalBarModel.setLegendPosition("ne");
 
