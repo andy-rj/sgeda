@@ -299,6 +299,20 @@ public class Aluno implements java.io.Serializable {
         }
         return false;
     }
+    
+    public boolean existeSimuladoParaCorrecao(Integer turma) {
+        if (alunoSimulados == null) {
+            return false;
+        }
+        for (AlunoSimulado alunoSimulado : alunoSimulados) {
+            if(alunoSimulado.getTurmaSimulado().getTurma().getIdTurma().equals(turma)){
+                if (!alunoSimulado.isCorrigido()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     public BigDecimal notaSimulado(TurmaSimulado simulado) {
         if (alunoSimulados == null && !simulado.isSimuladoAberto()) {

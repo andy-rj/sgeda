@@ -175,7 +175,7 @@
                                 </b:column>
                             </b:row>
 
-                            <b:row>;
+                            <b:row>
                                 <b:column colSm="4">
                                     <h:outputLabel value="Matrícula:" />
                                 </b:column>
@@ -366,7 +366,7 @@
                                                         <h:outputText value="#{aluno.aluno.pessoa.nome}"/>
                                                     </p:column>
                                                     <p:column style="width: 120px; text-align: center">
-                                                        <b:label text="Atenção" rendered="#{aluno.aluno.existeSimuladoParaCorrecao()}" severity="warning"/>
+                                                        <b:label text="Atenção" rendered="#{aluno.aluno.existeSimuladoParaCorrecao(turma.idTurma)}" severity="warning"/>
                                                     </p:column>
                                                     <p:column style="width: 75px;text-align: center">
                                                         <p:commandLink update=":#{p:component('detalheAluno')}" action="#{turmaController.detalheAluno(aluno.aluno, turma)}" oncomplete="PF('modalDetalhe').show();" title="Detalhes"  style="margin-right: 5px;">
