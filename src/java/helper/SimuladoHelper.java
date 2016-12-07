@@ -296,7 +296,7 @@ public class SimuladoHelper {
         try {
             tx.begin();
             Criteria crit = session.createCriteria(Simulado.class).createAlias("professor", "professor").createAlias("professor.pessoa", "pessoa");
-
+            crit.createAlias("simuladoQuestaos", "simuladoQ").createAlias("simuladoQ.questao", "questao").createAlias("questao.disciplina", "disciplina");
             if (string != null && !string.isEmpty()) {
                 crit.add(Restrictions.disjunction()
                         .add(Restrictions.ilike("disciplina.nome", "%" + string + "%"))

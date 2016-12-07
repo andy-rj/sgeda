@@ -24,7 +24,7 @@
         <h:form id="cadastro">
 
             <p:dialog header="Questões" modal="true" resizable="false"  draggable="false" widgetVar="modalQuestao"
-                      minimizable="true" maximizable="true" width="900" height="500">
+                      minimizable="true" maximizable="true" width="1100" height="500">
                 <b:row>
                     <b:column>
                         <font color ='red' >*</font><h:outputText style="font-size: 14px;color: red;" value="Utilize o botão direito do mouse para selecionar." />
@@ -87,7 +87,7 @@
                             </p:column>
                             <p:column style="text-align: center;" filterBy="#{questao.professor.pessoa.nome}" filterMatchMode="in">
                                 <f:facet name="filter">
-                                    <p:selectCheckboxMenu label="professore" onchange="PF('tableQuestoes').filter()" panelStyle="width:270px" scrollHeight="150">
+                                    <p:selectCheckboxMenu label="professor" onchange="PF('tableQuestoes').filter()" panelStyle="width:270px" scrollHeight="150">
                                         <f:selectItems value="#{simuladoController.professores}" />
                                     </p:selectCheckboxMenu>
                                 </f:facet>
@@ -144,92 +144,90 @@
 
                 <div id="page-content-wrapper">
                     <b:container id="container">
-                        <b:row style="margin-left: -45px; margin-right: -45px;">
+                        <b:row style="margin-top: -50px;margin-bottom: 40px;">
+                            <h:outputText value="Novo simulado:" style="font-size: 30px;margin-left: 10px;"/>
+                        </b:row>
+                        <b:row>
                             <b:column>
-                                <b:panel title="Cadastro de Simulado" collapsible="false" look="info">
-                                    <b:row>
-                                        <b:column>
-                                            <font color ='red' >*</font><h:outputText style="font-size: 12px;color: red;" value="Preenchimento Obrigatório." />
-                                        </b:column>
-                                    </b:row>
-                                    <br/>
-
-                                    <b:row>
-                                        <b:column colSm="2">
-                                            <h:outputLabel value="Título" ><font color ='red' >*</font></h:outputLabel>
-                                        </b:column>
-                                        <b:column colSm="7">
-                                            <p:inputText id="titulo" value="#{simuladoController.nome}" maxlength="50" validatorMessage="Nome é obrigatório e deve ter até 50 caracteres" >
-                                                <f:validateRequired />
-                                            </p:inputText>
-                                        </b:column>
-                                        <b:column colSm="3">
-                                            <b:message for="titulo"  />
-                                        </b:column>
-                                    </b:row>
-                                    <b:row>
-                                        <b:column colSm="2">
-                                            <h:outputLabel value="Descrição"/>
-                                        </b:column>
-                                        <b:column colSm="7">
-                                            <p:inputText id="descricao" value="#{simuladoController.descricao}" maxlength="254"/>
-                                        </b:column>
-                                    </b:row>
-                                    <b:row>
-                                        <b:column colSm="2">
-                                            <p:commandButton onclick="PF('modalQuestao').show();" id="escolherQuestoesButton" type="button" value="Escolher Questões"/>
-                                        </b:column>
-                                    </b:row>
-                                    <b:row id="questaoTableRow">
-                                        <b:column rendered="#{not empty simuladoController.questoesSelecionadas}" col-sm="12">
-                                            <hr style= "border-top: 1px solid #999999;"/>
-                                            <strong style="color: #999999;">Questões</strong>
-                                        </b:column>
-
-                                        <b:column rendered="#{not empty simuladoController.questoesSelecionadas}">
-                                            <p:dataTable var="questao" value="#{simuladoController.questoesSelecionadas}">
-                                                <p:column width="65" style="text-align:center;" headerText="Código">
-                                                    <h:outputText value="#{questao.questao.idQuestao}"/>
-                                                </p:column>
-
-                                                <p:column headerText="Enunciado">
-                                                    <h:outputText value="#{questao.questao.enunciado}" escape="false"/>
-                                                </p:column>
-
-                                                <p:column width="70" style="text-align:center;" headerText="Nota">
-                                                    <p:inplace id="nota" editor="true">
-                                                        <f:facet name="output">
-                                                            <h:outputText value="#{empty questao.valorQuestao ? 'digite a nota' : questao.valorQuestao}"/>
-                                                        </f:facet>
-                                                        <f:facet name="input">
-                                                            <p:inputNumber value="#{questao.valorQuestao}">
-                                                                <p:ajax update=":#{p:component('questaoTableRow')}"/>
-                                                            </p:inputNumber>
-                                                        </f:facet>
-                                                    </p:inplace>
-                                                </p:column>
-
-                                                <p:column width="125" style="text-align:center;" headerText="">
-                                                    <p:commandButton value="Excluir" ajax="true" immediate="true" update=":#{p:component('questaoTableRow')}" action="#{simuladoController.excluirQuestao(questao)}"/>
-                                                </p:column>
-                                                <f:facet name="footer">
-                                                    Total de questões: #{fn:length(simuladoController.questoesSelecionadas)}.
-                                                    <br/>Valor do simulado: #{simuladoController.notaTotal} pontos.
-                                                </f:facet>
-
-                                            </p:dataTable> 
-                                        </b:column>
-                                    </b:row>
-                                    <b:row>
-                                        <br/>
-                                        <b:column>
-                                            <p:commandButton value="Cadastrar" process="@this titulo descricao" update="container info" action="#{simuladoController.cadastrar}"/>
-                                            <p:commandButton value="Limpar" action="#{simuladoController.limparFormularioCadastro}" immediate="true"/>
-                                        </b:column>
-                                    </b:row>
-
-                                </b:panel>
+                                <font color ='red' >*</font><h:outputText style="font-size: 12px;color: red;" value="Preenchimento Obrigatório." />
                             </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:panel styleClass="painelCentral">
+                                <b:row class="rowMarginBotton">
+                                    <b:column colSm="6">
+                                        <p:inputText style="width: 100%" placeholder="Título*" id="titulo" value="#{simuladoController.nome}" maxlength="50" validatorMessage="Nome é obrigatório e deve ter até 50 caracteres" >
+                                            <f:validateRequired />
+                                        </p:inputText>
+                                    </b:column>
+                                    <b:column colSm="6">
+                                        <b:message for="titulo"  />
+                                    </b:column>
+                                </b:row>
+                                <b:row class="rowMarginBotton">
+                                    <b:column colSm="12">
+                                        <p:inputText id="descricao" style="width: 100%" placeholder="Descrição" value="#{simuladoController.descricao}" maxlength="254"/>
+                                    </b:column>
+                                </b:row>
+                                <b:row class="rowMarginBotton">
+                                    <b:column colSm="2">
+                                        <p:commandButton class="dbotaoPadrao" onclick="PF('modalQuestao').show();" id="escolherQuestoesButton" type="button" value="Questões"/>
+                                    </b:column>
+                                </b:row>
+                                <b:row id="questaoTableRow">
+                                    <b:column rendered="#{not empty simuladoController.questoesSelecionadas}" col-sm="12">
+                                        <hr style= "border-top: 1px solid #999999;"/>
+                                        <strong style="color: #999999;">Questões</strong>
+                                    </b:column>
+
+                                    <b:column rendered="#{not empty simuladoController.questoesSelecionadas}">
+                                        <p:dataTable var="questao" value="#{simuladoController.questoesSelecionadas}">
+                                            <p:column width="65" style="text-align:center;" headerText="Código">
+                                                <h:outputText value="#{questao.questao.idQuestao}"/>
+                                            </p:column>
+
+                                            <p:column headerText="Enunciado">
+                                                <h:outputText value="#{questao.questao.enunciado}" escape="false"/>
+                                            </p:column>
+
+                                            <p:column width="70" style="text-align:center;" headerText="Nota">
+                                                <p:inplace id="nota" editor="true">
+                                                    <f:facet name="output">
+                                                        <h:outputText value="#{empty questao.valorQuestao ? 'digite a nota' : questao.valorQuestao}"/>
+                                                    </f:facet>
+                                                    <f:facet name="input">
+                                                        <p:inputNumber value="#{questao.valorQuestao}">
+                                                            <p:ajax update=":#{p:component('questaoTableRow')}"/>
+                                                        </p:inputNumber>
+                                                    </f:facet>
+                                                </p:inplace>
+                                            </p:column>
+
+                                            <p:column width="125" style="text-align:center;" headerText="">
+                                                <p:commandButton value="Excluir" ajax="true" immediate="true" update=":#{p:component('questaoTableRow')}" action="#{simuladoController.excluirQuestao(questao)}"/>
+                                            </p:column>
+                                            <f:facet name="footer">
+                                                Total de questões: #{fn:length(simuladoController.questoesSelecionadas)}.
+                                                <br/>Valor do simulado: #{simuladoController.notaTotal} pontos.
+                                            </f:facet>
+
+                                        </p:dataTable> 
+                                    </b:column>
+                                </b:row>
+                                <b:row>
+                                    <b:column>
+                                        <hr style= "border-top: 1px solid #999999;"/>
+                                        <br/>
+                                    </b:column>
+                                </b:row>
+                                <b:row>
+                                    <b:column offset="9" colSm="12">
+                                        <p:commandLink class="dbotaoAzul" style="display: inline;" value="Cadastrar" process="@this titulo descricao" update="info container" action="#{simuladoController.cadastrar}"/>
+                                        <p:commandLink class="dbotaoLaranja" style="display: inline; margin-left: 10px;" value="Limpar" action="#{simuladoController.limparFormularioCadastro}" immediate="true"/>
+                                    </b:column>
+                                </b:row>
+                                <br/>
+                            </b:panel>
                         </b:row>
                     </b:container>
                 </div>

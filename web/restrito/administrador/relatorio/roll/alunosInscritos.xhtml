@@ -61,7 +61,7 @@
                 <f:facet name="footer">
                     <b:row>
                         <b:column colSm="2">
-                            <b:commandButton value="Filtrar" update=":#{p:component('container')}" action="#{relatorioController.gerarRelatorioMatriculaRoll}" oncomplete="PF('modalFiltro').hide();" look="info"/>
+                            <b:commandButton class="botaoPadrao" value="Filtrar" update=":#{p:component('container')}" action="#{relatorioController.gerarRelatorioMatriculaRoll}" oncomplete="PF('modalFiltro').hide();" look="info"/>
                         </b:column>
                     </b:row>
                 </f:facet>
@@ -77,9 +77,11 @@
 
                 <div id="page-content-wrapper">
                     <b:container id="container">
-                        <b:row style="margin-left: -45px; margin-right: -45px;">
-                            <b:column>
-                                <b:panel title="Relátorio de Alunos Inscritos" collapsible="false" look="info">
+                        <b:row style="margin-top: -50px;margin-bottom: 40px;">
+                            <h:outputText value="Relátorio de alunos inscritos:" style="font-size: 30px;margin-left: 10px;"/>
+                        </b:row>
+                        <b:row>
+                            <b:panel styleClass="painelCentral">
                                     <b:row>
                                         <b:column colSm="2">
                                             <h:outputLabel rendered="#{not empty relatorioController.dataInicio}" value="Data Inicial:"/>
@@ -140,7 +142,6 @@
                                         </b:column>
                                     </b:row>
                                 </b:panel>
-                            </b:column>
                         </b:row>
                     </b:container>
                 </div>

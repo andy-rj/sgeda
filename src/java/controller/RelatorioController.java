@@ -392,8 +392,9 @@ public class RelatorioController {
             ChartSeries chartSeries = new ChartSeries();
             chartSeries.setLabel(professor.getPessoa().getNome());
             desempenho = new BigDecimal(BigInteger.ZERO);
-            quantidadeTurmas = 0;
             for (int ano = menorAno; ano <= maiorAno; ano++) {
+                desempenho = new BigDecimal(BigInteger.ZERO);
+                quantidadeTurmas = 0;
                 if (professor.getTurmas() != null) {
                     for (Turma turma : professor.getTurmas()) {
                         if (turma.getDataFim().getYear() + 1900 == ano) {
@@ -424,6 +425,7 @@ public class RelatorioController {
         Axis yAxis = lineModel.getAxis(AxisType.Y);
         yAxis.setLabel("Média das turmas");
         yAxis.setMin(0);
+        yAxis.setMax(10);
     }
 
     private void createHorizontalBarModel(List<Aluno> alunos, Integer inicio, Integer fim) {
@@ -558,7 +560,7 @@ public class RelatorioController {
             int countAp = 0;
             int countApTotal = 0;
 
-            int totalAlunosApRe = totalAlunosAprovadosReprovados(alunos);
+            int totalAlunosApRe = alunos.size();
 
             int anofim = alunos.get(alunos.size() - 1).getDataInscricao().getYear() + 1900;
             for (int ano = alunos.get(0).getDataInscricao().getYear() + 1900; ano <= anofim; ano++) {
@@ -568,7 +570,7 @@ public class RelatorioController {
                         if (aluno.getAprovado() == 1) {
                             countAp++;
                             countApTotal++;
-                        } else if (aluno.getAprovado() == 0) {
+                        } else {
                             countNAp++;
                         }
                     }
@@ -595,6 +597,7 @@ public class RelatorioController {
 
         Axis yAxis = horizontalBarModel.getAxis(AxisType.Y);
         yAxis.setLabel("Quantidade de Alunos");
+        pieModelDesistentes.setShowDataLabels(true);
 
     }
 
@@ -1122,7 +1125,7 @@ public class RelatorioController {
         pdf.setPageSize(PageSize.A4);
 
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-        String logo = externalContext.getRealPath("") + File.separator + "resource" + File.separator + "imagens" + File.separator + "idealizarRelatorio.png";
+        String logo = externalContext.getRealPath("") + File.separator + "resource" + File.separator + "imagens" + File.separator + "logoFundoCinza.png";
 
         pdf.add(Image.getInstance(logo));
     }

@@ -13,6 +13,23 @@
     </h:head>
     <h:body style="background-color: #ebeff2">
         <h:form>
+
+            <p:dialog style="background: transparent;box-shadow: none;" styleClass="transparentHeader"  visible="#{turmaController.simuladoAberto(loginController.usuarioLogado.pessoa.idPessoa)}" modal="true" draggable="false" width="400" height="400" widgetVar="modalDetalhe" resizable="false">
+                <p:outputPanel styleClass="painelCentral" style="padding: 10px 10px 10px 10px;margin-bottom: 10px; width: 96%; box-shadow: 0 5px 10px rgba(0,0,0,0.8);" id="conteudoDetalhe">
+                    <b:row>
+                        <b:column>
+                            <div class="thumbnail">
+                                <h:graphicImage value="/resource/imagens/aleta.png" style="width:100%"/>
+                                <div class="caption" style="text-align: center">
+                                    <h3>Simulados Abertos </h3>
+                                    <p></p>
+                                    <b:commandButton class="botaoPadrao" look="primary" value = "Verificar" action="#{turmaController.novaConsultaAluno(loginController.usuarioLogado.pessoa.idPessoa)}" style="margin-top:20px;margin-left: 4px;"/>
+                                </div>
+                            </div>
+                        </b:column>
+                    </b:row>                </p:outputPanel>
+            </p:dialog>
+
             <div id="wrapper">
                 <!-- Sidebar -->
                 <ui:insert name="navbar">
@@ -29,29 +46,13 @@
                             <b:column colSm="3">
                                 <div class="rcorners shadow">
                                     <h:graphicImage value="/resource/imagens/turma.png" style="width: 105px; height: 105px;"/>
-                                    <p:commandLink styleClass="dbotaoAzul" value = "Turmas" action="#{alunoController.novoCadastro}" style="margin-top:20px;margin-left: 4px;"/>
+                                    <p:commandLink styleClass="dbotaoAzul" value = "Turmas" action="#{turmaController.novaConsultaAluno(loginController.usuarioLogado.pessoa.idPessoa)}" style="margin-top:20px;margin-left: 4px;"/>
                                 </div>
                             </b:column>
                             <b:column colSm="3">
                                 <div class="rcorners shadow">
                                     <h:graphicImage value="/resource/imagens/simulado.png" style="width: 105px; height: 105px;"/>
-                                    <p:commandLink styleClass="dbotaoLaranja" value = "Simulados" action="#{alunoController.novoCadastro}" style="margin-top:20px;margin-left: 4px;"/>
-                                </div>
-                            </b:column>
-
-                        </b:row>
-                        <b:row style="margin-top: 10px;margin-bottom: 40px;">
-                            <h:outputText value="Alertas:" style="font-size: 30px;margin-left: 10px;"/>
-                        </b:row>
-                        <b:row>
-                            <b:column colSm="4">
-                                <div class="thumbnail">
-                                    <h:graphicImage value="/resource/imagens/aleta.png" style="width:100%"/>
-                                    <div class="caption">
-                                        <h3>Simulados Abertos </h3>
-                                        <p></p>
-                                        <p></p>
-                                    </div>
+                                    <p:commandLink styleClass="dbotaoLaranja" value = "Simulados" action="#{turmaController.novaConsultaSimuladoAluno(loginController.usuarioLogado.pessoa.idPessoa)}" style="margin-top:20px;margin-left: 4px;"/>
                                 </div>
                             </b:column>
                         </b:row>

@@ -19,7 +19,7 @@
             }
         </style>
     </h:head>
-    <h:body>
+    <h:body style="background-color: #ebeff2">
 
         <h:form id="consulta">
 
@@ -28,7 +28,7 @@
                         ***************************-->
             <p:dialog header="Detalhes" modal="true" resizable="false"  draggable="false" widgetVar="modalDetalhe"
                       minimizable="true" maximizable="true" width="800" height="500">
-                <p:outputPanel id="detalheSimulado">
+                <p:outputPanel styleClass="painelCentral" style="padding: 10px 10px 10px 10px;margin-bottom: 10px; width: 96%;" id="detalheSimulado">
 
                     <b:row>
                         <b:column colSm="2">
@@ -78,6 +78,18 @@
                             </b:column>
                         </b:row>
                         <b:row>
+                            <b:column>
+                                <h:outputLabel value="Disciplina: "/>
+                                <h:outputText value=" #{questao.questao.disciplina.nome}"/>
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:column>
+                                <h:outputLabel value="Tipo: "/>
+                                <h:outputText value=" #{questao.questao.tipo}"/>
+                            </b:column>
+                        </b:row>
+                        <b:row>
                             <b:column colSm="2">
                                 <h:outputLabel value="Nota: "/>
                                 <h:outputText value=" #{questao.valorQuestao}">
@@ -100,7 +112,9 @@
                 </p:outputPanel>
                 <f:facet name="footer">
                     <b:row id="footer">
-                        <p:commandButton value="Fechar" onclick="PF('modalDetalhe').hide();" />
+                        <b:column>
+                            <p:commandButton class="dbotaoPadrao" value="Fechar" onclick="PF('modalDetalhe').hide();" />
+                        </b:column>
                     </b:row>
                 </f:facet>
             </p:dialog>
@@ -114,21 +128,25 @@
                 </ui:insert>
 
                 <div id="page-content-wrapper">
-                    <b:container>
-                        <b:row style="margin-left: -45px; margin-right: -45px;">
-                            <b:column >
-                                <b:panel title="Consulta de Simulado" style="min-height: 200px;" collapsible="false" look="info">
-                                    <b:row>
-                                        <b:column colSm="5" offset="2">
-                                            <p:inputText id="entradaConsulta" placeholder="Nome ou Professor" value="#{simuladoController.stringConsulta}" maxlength="50" style="width: 100%"/>
-                                        </b:column>
-                                        <b:column colSm="5">
-                                            <p:commandButton update="resultado info" process="@this entradaConsulta" value="Buscar" action="#{simuladoController.consultar}" icon=" ui-icon-search "/>
-                                            <p:commandButton global="false" value="Limpar" update="entradaConsulta resultado" action="#{simuladoController.limparFormularioConsulta}" immediate="true"/>
-                                        </b:column>
-                                    </b:row>
-                                    <b:row id="resultado">
-                                        <b:column>
+                    <b:container id="container">
+                        <b:row style="margin-top: -50px;margin-bottom: 40px;">
+                            <h:outputText value="Consultar simulado:" style="font-size: 30px;margin-left: 10px;"/>
+                        </b:row>
+                        <b:row>
+                            <b:panel styleClass="painelCentral">
+                                <b:row>
+                                    <b:column colSm="5" offset="2">
+                                        <p:inputText id="entradaConsulta" placeholder="Disciplina" value="#{simuladoController.stringConsulta}" maxlength="50" style="width: 100%"/>
+                                    </b:column>
+                                    <b:column colSm="5">
+                                        <p:commandButton process="@this entradaConsulta" update="resultado info" value="Buscar" style="background-image: url('/sgeda/faces/resource/imagens/detalhe.png')!important;" styleClass="dbotaoPadraoIcon" action="#{simuladoController.consultar}" icon=" ui-icon-search "/>
+                                        <p:commandButton styleClass="dbotaoDark" value="Limpar" update="entradaConsulta resultado" action="#{simuladoController.limparFormularioConsulta}" immediate="true"/>
+                                    </b:column>
+                                </b:row>
+                                <b:row id="resultado">
+                                    <b:column>
+                                        <br/>
+                                        <div class="tabelaWrapper">
                                             <p:dataTable rendered="#{not empty simuladoController.resultadoConsulta}" value="#{simuladoController.resultadoConsulta}" var="simulado" id="datatable" styleClass="table table-striped table-bordered"
                                                          style="width:100%; margin-top: 20px;"
                                                          rows="10"
@@ -151,10 +169,10 @@
                                                     </p:commandLink>
                                                 </p:column>
                                             </p:dataTable>
-                                        </b:column>
-                                    </b:row>
-                                </b:panel>
-                            </b:column>
+                                        </div>
+                                    </b:column>
+                                </b:row>
+                            </b:panel>
                         </b:row>
                     </b:container>
                 </div>

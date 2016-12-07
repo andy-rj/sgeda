@@ -31,34 +31,35 @@
                 </ui:insert>
 
                 <div id="page-content-wrapper">
-                    <b:container >
-                        <b:row style="margin-left: -45px; margin-right: -45px;">
-                            <b:column >
-                                <b:panel title="Correção de Simulado" style="min-height: 200px;" collapsible="false" look="info">
-                                    <b:row>
-                                        <b:column>
-                                            <p:dataTable var="resposta" value="#{professorController.alunoSimuladoCorrigir.respostas}">
-                                                <p:column headerText="Enunciado">
-                                                    <h:outputText escape="false" value="#{resposta.questao.enunciado}"/>
-                                                </p:column>
-                                                <p:column headerText="Resposta Padrão">
-                                                    <h:outputText rendered="#{not empty resposta.questao.disciplina}" value="#{resposta.questao.discursiva.respostaPadrao}"/>
-                                                    <h:outputText rendered="#{not empty resposta.questao.objetiva}" value="#{resposta.questao.objetiva.opcaoCorreta}) #{resposta.questao.objetiva.textoOpcaoCorreta}"/>
-                                                </p:column>
-                                                <p:column headerText="Resposta do Aluno">
-                                                    <h:outputText value="#{resposta.resposta}"/>
-                                                </p:column>
-                                                <p:column headerText="Nota Máxima">
-                                                    <h:outputText value="#{resposta.notaMaximaQuestao}"/>
-                                                </p:column>
-                                                <p:column headerText="Nota">
-                                                    <p:inputText value="#{resposta.nota}"/>
-                                                </p:column>
-                                            </p:dataTable>
-                                        </b:column>
-                                    </b:row>
-                                </b:panel>
-                            </b:column>
+                    <b:container id="container">
+                        <b:row style="margin-top: -50px;margin-bottom: 40px;">
+                            <h:outputText value="Correção de simulado:" style="font-size: 30px;margin-left: 10px;"/>
+                        </b:row>
+                        <b:row>
+                            <b:panel styleClass="painelCentral">
+                                <b:row>
+                                    <b:column>
+                                        <p:dataTable var="resposta" value="#{professorController.alunoSimuladoCorrigir.respostas}">
+                                            <p:column headerText="Enunciado">
+                                                <h:outputText escape="false" value="#{resposta.questao.enunciado}"/>
+                                            </p:column>
+                                            <p:column headerText="Resposta Padrão">
+                                                <h:outputText rendered="#{not empty resposta.questao.disciplina}" value="#{resposta.questao.discursiva.respostaPadrao}"/>
+                                                <h:outputText rendered="#{not empty resposta.questao.objetiva}" value="#{resposta.questao.objetiva.opcaoCorreta}) #{resposta.questao.objetiva.textoOpcaoCorreta}"/>
+                                            </p:column>
+                                            <p:column headerText="Resposta do Aluno">
+                                                <h:outputText value="#{resposta.resposta}"/>
+                                            </p:column>
+                                            <p:column headerText="Nota Máxima">
+                                                <h:outputText value="#{resposta.notaMaximaQuestao}"/>
+                                            </p:column>
+                                            <p:column headerText="Nota">
+                                                <p:inputText value="#{resposta.nota}"/>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </b:column>
+                                </b:row>
+                            </b:panel>
                         </b:row>
                     </b:container>
                 </div>

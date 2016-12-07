@@ -16,6 +16,9 @@ import helper.DisciplinaHelper;
 import helper.ProfessorHelper;
 import helper.SimuladoHelper;
 import helper.TurmaHelper;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -23,11 +26,16 @@ import java.util.List;
 import java.util.Set;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
+import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
+import org.primefaces.model.chart.Axis;
+import org.primefaces.model.chart.AxisType;
+import org.primefaces.model.chart.BarChartModel;
+import org.primefaces.model.chart.ChartSeries;
 
 @ManagedBean
 @SessionScoped
@@ -86,6 +94,11 @@ public class TurmaController {
     private String turno;
     private String turnoAlterar;
     private Aluno alunoDetalhe;
+    private BarChartModel modeloBarraTurma;
+
+    public BarChartModel getModeloBarraTurma() {
+        return modeloBarraTurma;
+    }
 
     public Aluno getAlunoDetalhe() {
         return alunoDetalhe;
@@ -105,11 +118,121 @@ public class TurmaController {
         this.alunoTurmaDetalhe = alunoTurmaDetalhe;
     }
     
+    public boolean isNotaAzul(){
+        if(turmaAlunoDetalhe==null)return false;
+        if (turmaAlunoDetalhe.getAluno().media(turmaAlunoDetalhe.getTurma()).compareTo(turmaAlunoDetalhe.getTurma().media())>=0){
+            return true;
+        }
+        return false;
+    }
+    private BarChartModel modeloBarraAluno;
+
+    public BarChartModel getModeloBarraAluno() {
+        return modeloBarraAluno;
+    }
+    
     public void detalheAluno(Aluno aluno, Turma turma){
         this.alunoDetalhe = alunoHelper.getByIdEagerAlunoSimulado(aluno.getIdAluno());
         this.alunoTurmaDetalhe = turmaHelper.getTurmaEager(turma.getIdTurma());
+        modeloBarraAluno = null;
+        if(alunoTurmaDetalhe.getTurmaSimulados()!=null&&!alunoTurmaDetalhe.getTurmaSimulados().isEmpty()){
+            criarModeloGrafico();
+        }
     }
 
+    private void criarModeloGrafico(){
+        modeloBarraAluno = new BarChartModel();
+        modeloBarraAluno.setTitle("Desempenho");
+        int i = 0;
+        for (TurmaSimulado simulado : alunoTurmaDetalhe.getTurmaSimuladosListOrd()) {
+            ChartSeries chartSeries = new ChartSeries();
+            chartSeries.setLabel(simulado.getSimulado().getNome());
+            BigDecimal nota = alunoDetalhe.notaSimulado(simulado);
+            if(nota != null){
+                chartSeries.set(i, nota);
+                i++;
+                modeloBarraAluno.addSeries(chartSeries);
+            }
+        }
+        modeloBarraAluno.setAnimate(true);
+
+        Axis xAxis = modeloBarraAluno.getAxis(AxisType.X);
+        xAxis.setLabel("simulado");
+        xAxis.setMin(0);
+        xAxis.setTickInterval("1");
+        xAxis.setTickFormat("%d");
+
+        Axis yAxis = modeloBarraAluno.getAxis(AxisType.Y);
+        yAxis.setLabel("nota");
+        yAxis.setTickFormat("%.1f");
+        yAxis.setMax(10);
+    }
+    
+    private void criarModeloGraficoTurmaAluno(Turma turma){
+        modeloBarraAluno = new BarChartModel();
+        modeloBarraAluno.setTitle("Desempenho");
+        int i = 0;
+        for (TurmaSimulado simulado : turma.getTurmaSimuladosListOrd()) {
+            ChartSeries chartSeries = new ChartSeries();
+            chartSeries.setLabel(simulado.getSimulado().getNome());
+            BigDecimal nota = turmaAlunoDetalhe.getAluno().notaSimulado(simulado);
+            if(nota != null){
+                chartSeries.set(i, nota);
+                i++;
+                modeloBarraAluno.addSeries(chartSeries);
+            }
+        }
+        modeloBarraAluno.setAnimate(true);
+
+        Axis xAxis = modeloBarraAluno.getAxis(AxisType.X);
+        xAxis.setLabel("simulado");
+        xAxis.setMin(0);
+        xAxis.setTickInterval("1");
+        xAxis.setTickFormat("%d");
+
+        Axis yAxis = modeloBarraAluno.getAxis(AxisType.Y);
+        yAxis.setLabel("nota");
+        yAxis.setTickFormat("%.1f");
+        yAxis.setMax(10);
+    }
+    
+    private void criarModeloGraficoTurma(){
+        modeloBarraTurma = new BarChartModel();
+        modeloBarraTurma.setTitle("Desempenho");
+        int j = 0;
+        for(TurmaSimulado simulado:turmaProfessorDetalhe.getTurmaSimuladosListOrd()){
+            BigDecimal media = new BigDecimal(BigInteger.ZERO);
+            int i = 0;
+            for(TurmaAluno aluno:turmaProfessorDetalhe.getTurmaAlunos()){
+                BigDecimal nota = aluno.getAluno().notaSimulado(simulado);
+                if(nota!=null){
+                    media = media.add(nota);
+                    i++;
+                }
+            }
+            if(i!=0){
+                media = media.divide(new BigDecimal(i),1,RoundingMode.DOWN);
+            }
+            ChartSeries chartSeries = new ChartSeries();
+            chartSeries.setLabel(simulado.getSimulado().getNome());
+            chartSeries.set(j, media);
+            modeloBarraTurma.addSeries(chartSeries);
+            j++;
+        }
+        
+        modeloBarraTurma.setAnimate(true);
+
+        Axis xAxis = modeloBarraTurma.getAxis(AxisType.X);
+        xAxis.setLabel("simulado");
+        xAxis.setMin(0);
+
+        Axis yAxis = modeloBarraTurma.getAxis(AxisType.Y);
+        yAxis.setLabel("media");
+        yAxis.setTickFormat("%.1f");
+        yAxis.setMax(10);
+
+    }
+    
     public TurmaController() {
         simuladoHelper = new SimuladoHelper();
         cursoHelper = new CursoHelper();
@@ -292,11 +415,19 @@ public class TurmaController {
     }
 
     public void detalheTurmaAluno(TurmaAluno turmaAluno) {
-        turmaAlunoDetalhe = turmaAluno;
+        turmaAlunoDetalhe = turmaHelper.getTurmasAlunoById(turmaAluno.getId());
+        Turma turma = turmaHelper.getTurmaEager2(turmaAluno.getTurma().getIdTurma());
+        if(turma.getTurmaSimulados()!=null&&!turma.getTurmaSimulados().isEmpty()){
+            criarModeloGraficoTurmaAluno(turma);
+        }
     }
 
     public void detalheTurmaProfessor(Turma turma) {
-        turmaProfessorDetalhe = turmaHelper.getTurmaEager(turma.getIdTurma());
+        turmaProfessorDetalhe = turmaHelper.getTurmaEager2(turma.getIdTurma());
+        modeloBarraTurma = null;
+        if(turmaProfessorDetalhe.getTurmaSimulados()!=null&&!turmaProfessorDetalhe.getTurmaSimulados().isEmpty()){
+            criarModeloGraficoTurma();
+        }
     }
 
     public void excluirTurma(Turma turma) {
@@ -554,7 +685,18 @@ public class TurmaController {
 
     public String novaConsultaAluno(Integer idAluno) {
         alunoOnline = alunoHelper.getByIdEagerAlunoSimulado(idAluno);
+        turmaAlunoDetalhe = null;
         return "/restrito/aluno/consulta/turma?faces-redirect=true";
+    }
+    
+    public boolean simuladoAberto(Integer idAluno) {
+        alunoOnline = alunoHelper.getByIdEagerAlunoSimulado(idAluno);
+        for(TurmaAluno turma :alunoOnline.getTurmaAlunos()){
+            if(!turma.getTurma().isSimuladosAbertosRealizados(alunoOnline) && turma.getTurma().isSimuladoAberto()){
+             return true;
+            }
+        }
+        return false;
     }
     
     public String novaConsultaSimuladoAluno(Integer idAluno) {

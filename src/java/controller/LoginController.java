@@ -72,7 +72,7 @@ public class LoginController {
             wrapper.setNomeCurso(curso.getNome());
             for (Turma turma : curso.getTurmas()) {
                 //tester fim da turma
-                if (turma.getDataFim().after(new Date(now.getTime() - 1296000000)) && turma.getDataInicio().before(now)) {
+                if (turma.getDataFim().after(new Date(now.getTime() - new Long(2592000000L))) && turma.getDataInicio().before(now)) {
                     String str = turma.getTurno() + "-" + format.format(turma.getDataInicio());
                     if (!wrapper.contains(str)) {
                         temTurma = true;

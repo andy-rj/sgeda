@@ -660,6 +660,14 @@ public class QuestaoController {
     public String limparFormularioCadastroObjetiva() {
         return novoCadastroObjetiva(idProfessorAtual);
     }
+    
+    public String limparFormularioCadastroDiscursiva() {
+        return novoCadastroDiscursiva(idProfessorAtual);
+    }
+    
+    public String limparFormularioCadastroRedacao() {
+        return novoCadastroRedacao(idProfessorAtual);
+    }
 
     public void limparFormularioConsulta() {
         stringConsulta = null;

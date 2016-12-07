@@ -23,7 +23,7 @@
         <h:form id="consulta">
             <p:dialog modal="true" draggable="false" width="700" height="300" header="Realizar Simulado" closable="false"
                       widgetVar="modalRealizarSimulado" resizable="false" footer="" onHide="PF('modalDetalheTurma').show();">
-                <p:outputPanel id="conteudoRealizarSimulado">
+                <p:outputPanel styleClass="painelCentral" style="padding: 10px 10px 10px 10px;margin-bottom: 10px; width: 96%;" id="conteudoRealizarSimulado">
                     <b:row style="text-align: center; padding-left: 15px;padding-right: 15px;">
                         <b:alert severity="warning" title="Atenção!">
                             <h:outputText value = "Ao clicar em \'Começar\' você terá " />
@@ -35,68 +35,84 @@
                     </b:row>
                     <b:row style="text-align: center">
                         <br/>
-                        <p:commandButton value="Começar" process="@this" action="#{alunoSimuladoController.iniciarRealizacaoSimulado(loginController.usuarioLogado.pessoa.idPessoa)}"/>
-                        <p:commandButton value="Voltar" process="@this"  action="#{alunoSimuladoController.fecharConfirmacaoSimulado()}" oncomplete="PF('modalRealizarSimulado').hide();"/>
+                        <p:commandLink style="margin-left: 36%;" class="dbotaoPadrao" value="Começar" ajax="false" update=":#{p:component('info')}" action="#{alunoSimuladoController.iniciarRealizacaoSimulado(loginController.usuarioLogado.pessoa.idPessoa)}" target="_blank"/>
+                        <p:commandButton class="dbotaoPadrao" value="Voltar" process="@this"  action="#{alunoSimuladoController.fecharConfirmacaoSimulado()}" oncomplete="PF('modalRealizarSimulado').hide();"/>
                     </b:row>
                 </p:outputPanel>
             </p:dialog>
 
             <p:dialog modal="true" draggable="false" width="700" height="400" header="Detalhes"
                       maximizable="true" widgetVar="modalDetalheTurma" resizable="false" footer="">
-                <p:outputPanel id="conteudoDetalhe">
+                <p:outputPanel styleClass="painelCentral" style="padding: 10px 10px 10px 10px;margin-bottom: 10px; width: 96%;" id="conteudoDetalhe">
                     <b:row>
-                        <b:column colSm="2">
-                            <h:outputText value="Código:"/> 
+                        <b:column colSm="6">
+                            <b:row>
+                                <b:column colSm="3">
+                                    <h:outputText value="Disciplina:"/> 
+                                </b:column>
+                                <b:column colSm="9">
+                                    <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.disciplina.nome}"/> 
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column colSm="3">
+                                    <h:outputText value="Descrição:"/> 
+                                </b:column>
+                                <b:column colSm="9">
+                                    <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.descricao}"/> 
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column colSm="3">
+                                    <h:outputText value="Professor:"/> 
+                                </b:column>
+                                <b:column colSm="9">
+                                    <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.professor.pessoa.nome}"/> 
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column colSm="3">
+                                    <h:outputText value="Turno:"/> 
+                                </b:column>
+                                <b:column colSm="9">
+                                    <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.turno}"/> 
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column colSm="3">
+                                    <h:outputText value="Curso:"/> 
+                                </b:column>
+                                <b:column colSm="9">
+                                    <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.curso.nome}"/> 
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                        <b:column colSm="6">
+                            <h:outputText value="Média:"/> 
                         </b:column>
-                        <b:column colSm="4">
-                            <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.nome}"/> 
+                        <b:column colSm="6">
+                            <h:outputText rendered="#{turmaController.notaAzul}" style="font-weight: bold; color: #4777e6" value="#{turmaController.turmaAlunoDetalhe.aluno.media(turmaController.turmaAlunoDetalhe.turma)}"/> 
+                            <h:outputText rendered="#{not turmaController.notaAzul}" style="font-weight: bold; color: #ff1501" value="#{turmaController.turmaAlunoDetalhe.aluno.media(turmaController.turmaAlunoDetalhe.turma)}"/> 
                         </b:column>
-                        <!--                    <b:column colSm="6">
-                                                <p:chart type="line" model="#{relatorioAlunoController.lineModel2}" style="height:200px;"/>
-                                            </b:column>-->
                     </b:row>
                     <b:row>
-                        <b:column colSm="2">
-                            <h:outputText value="Disciplina:"/> 
+                        <b:column colSm="6">
+                            <h:outputText value="Média da turma:"/> 
                         </b:column>
-                        <b:column colSm="4">
-                            <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.disciplina.nome}"/> 
-                        </b:column>
-                    </b:row>
-                    <b:row>
-                        <b:column colSm="2">
-                            <h:outputText value="Descrição:"/> 
-                        </b:column>
-                        <b:column colSm="4">
-                            <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.descricao}"/> 
+                        <b:column colSm="6">
+                            <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.media()}"/> 
                         </b:column>
                     </b:row>
-                    <b:row>
-                        <b:column colSm="2">
-                            <h:outputText value="Professor:"/> 
                         </b:column>
-                        <b:column colSm="4">
-                            <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.professor.pessoa.nome}"/> 
-                        </b:column>
-                    </b:row>
-                    <b:row>
-                        <b:column colSm="2">
-                            <h:outputText value="Turno:"/> 
-                        </b:column>
-                        <b:column colSm="4">
-                            <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.turno}"/> 
-                        </b:column>
-                    </b:row>
-                    <b:row>
-                        <b:column colSm="2">
-                            <h:outputText value="Curso:"/> 
-                        </b:column>
-                        <b:column colSm="4">
-                            <h:outputText value="#{turmaController.turmaAlunoDetalhe.turma.curso.nome}"/> 
+                        <b:column colSm="6">
+                            <p:chart type="bar" rendered="#{not empty turmaController.modeloBarraAluno}" model="#{turmaController.modeloBarraAluno}" style="width:100%; height: 100%"/>
                         </b:column>
                     </b:row>
 
-                    <b:row style="margin-top: 85px;">
+                    
+                    
+
+                    <b:row>
                         <b:column>
                             <p:separator/> 
                         </b:column>
@@ -104,46 +120,47 @@
 
                     <b:row>
                         <b:column>
-                            <p:dataTable emptyMessage="Não existem simulados para essa turma" var="simulado" value="#{turmaController.turmaAlunoDetalhe.turma.turmaSimuladosListOrd}">
+                            <p:dataTable rowIndexVar="row" emptyMessage="Não existem simulados para essa disciplina" var="simulado" value="#{turmaController.turmaAlunoDetalhe.turma.turmaSimuladosListOrd}">
                                 <f:facet name="header">
                                     <h:outputText value="Simulados"/>
                                 </f:facet>
-                                <p:column headerText="Código">
-                                    <h:outputText value="#{simulado.simulado.nome}"/>
+                                <p:column style="width: 50px;">
+                                    <h:outputText value="#{row+1}"/>
                                 </p:column>
-                                <p:column headerText="Descrição">
-                                    <h:outputText value="#{simulado.simulado.descricao}"/>
+                                <p:column headerText="Abertura">
+                                    <h:outputText value="#{simulado.dataAbertura}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                    </h:outputText>
                                 </p:column>
-                                <!--                            <p:column headerText="Abertura">
-                                                                <h:outputText value="#{simulado.dataAbertura}">
-                                                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
-                                                                </h:outputText>
-                                                            </p:column>-->
                                 <p:column headerText="Encerramento">
                                     <h:outputText value="#{simulado.dataEncerramento}">
                                         <f:convertDateTime pattern="dd/MM/yyyy"/>
                                     </h:outputText>
                                 </p:column>
-                                <p:column headerText="Duração">
+                                <p:column headerText="Duração" style="width: 90px;">
                                     <h:outputText value="#{simulado.duracao}">
                                         <f:convertDateTime pattern="HH:mm:ss"/>
                                     </h:outputText>
                                 </p:column>
-                                <p:column style="text-align: center ;width:100px" headerText="">
+                                <p:column style="text-align: center ;width:110px" headerText="">
                                     <b:label rendered="#{not turmaController.turmaAlunoDetalhe.aluno.simuladoRealizado(simulado) and simulado.simuladoAberto}" text="aberto" severity="danger"/>
                                     <b:label rendered="#{turmaController.turmaAlunoDetalhe.aluno.simuladoRealizado(simulado)}" text="realizado" severity="info"/>
                                     <b:label rendered="#{not turmaController.turmaAlunoDetalhe.aluno.simuladoRealizado(simulado) and not simulado.simuladoAberto}" text="fora do prazo" severity="danger"/>
                                 </p:column>
 
                                 <p:column style="width: 115px;" headerText="">
-                                    <p:commandButton rendered="#{not turmaController.turmaAlunoDetalhe.aluno.simuladoRealizado(simulado) and simulado.simuladoAberto}" value="Realizar" process="@this" update=":#{p:component('conteudoRealizarSimulado')}" oncomplete="PF('modalRealizarSimulado').show();PF('modalDetalheTurma').hide();" action="#{alunoSimuladoController.realizarSimulado(simulado)}"/>
+                                    <p:commandButton class="dbotaoPadrao" rendered="#{not turmaController.turmaAlunoDetalhe.aluno.simuladoRealizado(simulado) and simulado.simuladoAberto}" value="Realizar" process="@this" update=":#{p:component('conteudoRealizarSimulado')}" oncomplete="PF('modalRealizarSimulado').show();PF('modalDetalheTurma').hide();" action="#{alunoSimuladoController.realizarSimulado(simulado)}"/>
                                 </p:column>
                             </p:dataTable> 
                         </b:column>
                     </b:row>
                 </p:outputPanel>
                 <f:facet name="footer">
-                    <b:commandButton onclick="PF('modalDetalheTurma').hide();" value="Fechar" look="info"/>
+                    <b:row>
+                        <b:column>
+                            <b:commandButton class="dbotaoPadrao" onclick="PF('modalDetalheTurma').hide();" value="Fechar" look="info"/>
+                        </b:column>
+                    </b:row>
                 </f:facet>
             </p:dialog>
 
@@ -157,39 +174,40 @@
                 </ui:insert>
 
                 <div id="page-content-wrapper">
-                    <b:container >
-                        <b:row style="margin-left: -45px; margin-right: -45px;">
-                            <b:column >
-                                <b:panel title="Turmas" style="min-height: 200px;" collapsible="false" look="info">
-                                    <b:row>
-                                        <b:column>
-                                            <p:dataTable var="turma" value="#{turmaController.alunoOnline.turmaAlunosOrd}" >
+                    <b:container id="container">
+                        <b:row style="margin-top: -50px;margin-bottom: 40px;">
+                            <h:outputText value="Disciplinas:" style="font-size: 30px;margin-left: 10px;"/>
+                        </b:row>
+                        <b:row>
+                            <b:panel styleClass="painelCentral">
+                                <b:row>
+                                    <b:column>
+                                        <p:dataTable var="turma" value="#{turmaController.alunoOnline.turmaAlunosOrd}" >
 
-                                                <p:column style="width: 125px;" headerText="Código">
-                                                    <h:outputText value="#{turma.turma.nome}"/>
-                                                </p:column>
-                                                <p:column headerText="Descrição">
-                                                    <h:outputText value="#{turma.turma.descricao}"/>
-                                                </p:column>
-                                                <p:column headerText="Disciplina">
-                                                    <h:outputText value="#{turma.turma.disciplina.nome}"/>
-                                                </p:column>
-                                                <p:column headerText="Professor">
-                                                    <h:outputText value="#{turma.turma.professor.pessoa.nome}"/>
-                                                </p:column>
-                                                <p:column style="width: 140px;text-align: center" headerText="">
-                                                    <b:label style="margin-left: 3px;" rendered="#{not turma.turma.isSimuladosAbertosRealizados(turmaController.alunoOnline) and turma.turma.simuladoAberto}" text="Simulado aberto" severity="danger"/>
-                                                </p:column>
-                                                <p:column style="width: 75px;text-align: center">
-                                                    <p:commandLink update=":#{p:component('conteudoDetalhe')}" action="#{turmaController.detalheTurmaAluno(turma)}" oncomplete="PF('modalDetalheTurma').show();" title="Detalhes"  style="margin-right: 5px;">
-                                                        <h:graphicImage url="/resource/imagens/detalhe.png" width="24" height="24"/>
-                                                    </p:commandLink>
-                                                </p:column>
-                                            </p:dataTable>
-                                        </b:column>
-                                    </b:row>
-                                </b:panel>
-                            </b:column>
+                                            <p:column style="width: 125px;" headerText="Código">
+                                                <h:outputText value="#{turma.turma.idTurma}"/>
+                                            </p:column>
+                                            <p:column headerText="Descrição">
+                                                <h:outputText value="#{turma.turma.descricao}"/>
+                                            </p:column>
+                                            <p:column headerText="Disciplina">
+                                                <h:outputText value="#{turma.turma.disciplina.nome}"/>
+                                            </p:column>
+                                            <p:column headerText="Professor">
+                                                <h:outputText value="#{turma.turma.professor.pessoa.nome}"/>
+                                            </p:column>
+                                            <p:column style="width: 140px;text-align: center" headerText="">
+                                                <b:label style="margin-left: 3px;" rendered="#{not turma.turma.isSimuladosAbertosRealizados(turmaController.alunoOnline) and turma.turma.simuladoAberto}" text="Simulado aberto" severity="danger"/>
+                                            </p:column>
+                                            <p:column style="width: 75px;text-align: center">
+                                                <p:commandLink update=":#{p:component('conteudoDetalhe')}" action="#{turmaController.detalheTurmaAluno(turma)}" oncomplete="PF('modalDetalheTurma').show();" title="Detalhes"  style="margin-right: 5px;">
+                                                    <h:graphicImage url="/resource/imagens/detalhe.png" width="24" height="24"/>
+                                                </p:commandLink>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </b:column>
+                                </b:row>
+                            </b:panel>
                         </b:row>
                     </b:container>
                 </div>

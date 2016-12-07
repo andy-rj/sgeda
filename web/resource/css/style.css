@@ -523,3 +523,36 @@ border: none !important;
 .table-bordered {
     border: 0px solid #ddd !important;
 }
+
+.ui-tabs-nav {
+    background: transparent !important;
+    border: none !important;
+}
+
+.ui-tabs.ui-tabs-top .ui-tabs-nav li.ui-tabs-selected{
+    border-radius: 0px !important;
+    background: none !important;
+    border-bottom: 1px solid #000 !important;
+        border-top: none !important;
+        border-right: none !important;
+        border-left: none !important;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected a{
+        color: black !important;
+    text-shadow: none !important;
+}
+
+.ui-tabs.ui-tabs-top > .ui-tabs-nav li {
+    border-radius: 0px !important;
+    background: none !important;
+    border: none !important;
+}
+
+.transparentHeader > .ui-dialog-titlebar {
+    background: transparent !important;
+}
+
+.label-info {
+    background-color: #1b3768 !important;
+}

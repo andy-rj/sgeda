@@ -326,5 +326,20 @@ public class Aluno implements java.io.Serializable {
     public void setDesistente(Boolean desistente) {
         this.desistente = desistente;
     }
+    
+    public BigDecimal media(Turma turma){
+        int i = 0;
+        BigDecimal media = new BigDecimal(BigInteger.ZERO);
+        for(TurmaSimulado simulado:turma.getTurmaSimulados()){
+            if(!simulado.isSimuladoAberto()){
+                media = media.add(notaSimulado(simulado));
+                i++;
+            }
+        }
+        if(i!=0){
+            media = media.divide(new BigDecimal(i),1,RoundingMode.CEILING);
+        }
+        return media;
+    }
 
 }

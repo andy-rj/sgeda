@@ -157,7 +157,9 @@ public class QuestaoHelper {
             if(questao!=null){
                 questao.getFiguras().size();
                 questao.getAssuntos().size();
-                questao.getObjetiva().getOpcaos().size();
+                if(questao.getObjetiva()!=null){
+                    questao.getObjetiva().getOpcaos().size();
+                }
             }
             tx.commit();
             return questao;

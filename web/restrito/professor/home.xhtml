@@ -21,28 +21,64 @@
                 <div id="page-content-wrapper">
 
                     <b:container>
-                        <b:row style="margin-top: -50px;margin-bottom: 10px;">
+                        <b:row style="margin-top: -50px;margin-bottom: 40px;">
                             <h:outputText value="Inserir novo cadastro:" style="font-size: 30px;margin-left: 10px;"/>
                         </b:row>
                         <b:row>
                             <b:column colSm="3">
+                                <div class="rcorners shadow">
+                                    <h:graphicImage value="/resource/imagens/objetiva.png" style="width: 105px; height: 105px;"/>
+                                    <p:commandLink styleClass="dbotaoAzul" value = "Nova Questão Objetiva" action="#{questaoController.novoCadastroObjetiva(loginController.usuarioLogado.pessoa.idPessoa)}" style="width: auto; height: auto; margin-top:20px;margin-left: 4px;"/>
+                                </div>
 
                             </b:column>
                             <b:column colSm="3">
-
+                                <div class="rcorners shadow">
+                                    <h:graphicImage value="/resource/imagens/discursiva.png" style="width: 105px; height: 105px;"/>
+                                    <p:commandLink styleClass="dbotaoLaranja" value = "Nova Questão Discursiva" action="#{questaoController.novoCadastroDiscursiva(loginController.usuarioLogado.pessoa.idPessoa)}" style="width: auto; height: auto; margin-top:20px;margin-left: 4px;"/>
+                                </div>
                             </b:column>
                             <b:column colSm="3">
-
+                                <div class="rcorners shadow">
+                                    <h:graphicImage value="/resource/imagens/redacao.png" style="width: 105px; height: 105px;"/>
+                                    <p:commandLink styleClass="dbotaoRosa" value = "Nova Redação" action="#{questaoController.novoCadastroRedacao(loginController.usuarioLogado.pessoa.idPessoa)}" style="margin-top:20px;margin-left: 4px;"/>
+                                </div>
                             </b:column>
                             <b:column colSm="3">
-
+                                <div class="rcorners shadow">
+                                    <h:graphicImage value="/resource/imagens/simulado.png" style="width: 105px; height: 105px;"/>
+                                    <p:commandLink styleClass="dbotaoVerde" value = "Novo Simulado" action="#{simuladoController.novoCadastro}" style="margin-top:20px;margin-left: 4px;"/>
+                                </div>
                             </b:column>
                         </b:row>
-                        <b:row style="margin-top: 10px;margin-bottom: 10px;">
+                        <b:row style="margin-top: 10px;margin-bottom: 40px;">
                             <h:outputText value="Andamento das turmas:" style="font-size: 30px;margin-left: 10px;"/>
                         </b:row>
                         <b:row>
-
+                            <b:column colSm="8">
+                                <ui:repeat var="curso" value="#{professorController.cursosEmAndamento(loginController.usuarioLogado.pessoa.idPessoa)}">
+                                    <b:row>
+                                        <b:column>
+                                            <h:outputLabel value="#{curso.nomeCurso}"/><br/>
+                                        </b:column>
+                                    </b:row>
+                                    <ui:repeat var="turma" value="#{curso.turmas}">
+                                        <b:row>
+                                            <b:column>
+                                                <h:outputText value="#{turma.nome}"/>
+                                            </b:column>
+                                        </b:row>
+                                        <b:row>
+                                            <b:column col-sm="12">
+                                                <b:progressBar value="#{turma.progresso}" striped="true" look="#{turma.look}"/>
+                                            </b:column>
+<!--                                            <b:column colSm="3">
+                                                <b:commandButton style="margin-top: -18px;" class="botaoPadrao" look="primary" value="Gerenciar" />
+                                            </b:column>-->
+                                        </b:row>
+                                    </ui:repeat>
+                                </ui:repeat>
+                            </b:column>
                         </b:row>
                     </b:container>
                 </div>

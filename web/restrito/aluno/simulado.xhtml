@@ -18,9 +18,9 @@
 
         </style>
     </h:head>
-    <h:body style="background-color: #e3e3e3" >      
+    <h:body style="background-color: #273238">
         <h:form id="consulta">
-            
+
             <p:dialog id="modalAviso" header="Aviso" widgetVar="modalAviso" height="40">
                 <h:outputText value="Finalize o simulado antes de navegar!"/>
             </p:dialog>
@@ -30,7 +30,7 @@
                        ***************************-->
             <p:dialog header="Aviso" modal="true" resizable="false"  draggable="false" widgetVar="modalMensagensCronometro"
                       minimizable="false" maximizable="false" width="500" height="300" closable="false">
-                <p:outputPanel>
+                <p:outputPanel styleClass="painelCentral" style="padding: 10px 10px 10px 10px;margin-bottom: 10px; width: 96%;">
                     <b:row>
                         Tempo Esgotado! Simulado foi salvo!
                     </b:row>
@@ -40,109 +40,120 @@
                     <p:commandButton process="@this" action="#{alunoSimuladoController.fecharPaginaSimulado}"  value="Fechar" />
                 </f:facet>
             </p:dialog>
-            
+
             <!--        ***************************
                        modal de detalhes
                        ***************************-->
-            <p:dialog id="modalMensagensAviso" header="Aviso" modal="true" resizable="false"  draggable="false" widgetVar="modalMensagens"
-                      minimizable="false" maximizable="false" width="500" height="300" closable="false">
+            <p:dialog id="modalMensagensAviso" header="Aviso" closable="true" modal="true" resizable="false"  draggable="false" widgetVar="modalMensagens"
+                      minimizable="false" maximizable="false" width="500" height="300" >
                 <p:outputPanel id="painelAviso">
                     <b:row>
-                        <b:messages/>
+                        <b:column>
+                            <b:messages />
+                        </b:column>
                     </b:row>
                 </p:outputPanel>
 
-                <f:facet id="footer" name="footer">
-                    <p:commandButton rendered="#{alunoSimuladoController.finalizado}" process="@this" action="#{alunoSimuladoController.fecharPaginaSimulado}"  value="Fechar" />
-                    <p:commandButton rendered="#{not alunoSimuladoController.finalizado}"  value="Fechar" onclick="PF('modalMesagens').hide();" />
-                    <p:commandButton rendered="#{not alunoSimuladoController.finalizado}" process="@this" action="#{alunoSimuladoController.forcarFinalizarSimulado}" update=":#{p:component('modalMensagensAviso')}" value="Forçar finalização"/>
+                <f:facet  name="footer">
+                    <b:row id="footer">
+                        <b:column>
+                            <p:commandButton rendered="#{alunoSimuladoController.finalizado}" process="@this" onclick="window.close();"  value="Fechar" />
+                            <p:commandButton rendered="#{not alunoSimuladoController.finalizado}" process="@this" action="#{alunoSimuladoController.forcarFinalizarSimulado}" update=":#{p:component('painelAviso')} :#{p:component('footer')}" value="Forçar finalização"/>                        </b:column>
+                    </b:row>
                 </f:facet>
             </p:dialog>
 
             <p:growl  globalOnly="true" id="info"  />
             <b:fetchBeanInfos/>
-            <b:container >
-                <b:row style="margin-left: -45px; margin-right: -45px;">
-                    <b:column >
-                        <b:panel rendered="#{not empty alunoSimuladoController.simuladoAtual}" title="Simulado" style="min-height: 200px;" collapsible="false" look="info">
-                            <b:row >
-                                <b:column>
-                                    <h:outputText value="Professor: #{alunoSimuladoController.simuladoAtual.turma.professor.pessoa.nome}"/>
-                                </b:column>
-                            </b:row>
-                            <b:row>
-                                <b:column>
-                                    <h:outputText value="Simulado: #{alunoSimuladoController.simuladoAtual.simulado.nome}"/>
-                                </b:column>
-                            </b:row>
-                            <b:row id="rowCronometro" style="text-align: right; padding-right: 10px;">
-                                <p:poll widgetVar="poll" interval="1" listener="#{alunoSimuladoController.atualizaCronometro}" update="@this :#{p:component('cronometro')}"  />
-                                <b:label text="Tempo Restante: #{alunoSimuladoController.horasRestante}:#{alunoSimuladoController.minutosRestante}:#{alunoSimuladoController.segundosRestante}" style="font-size: 15px;" id="cronometro" severity="#{alunoSimuladoController.severidadeCronometro}"/>
-                            </b:row>
-                            <b:row style="margin-top: 10px;">
-                                <b:column>
-                                    <p:panel id="painelQuestoes" header="Questão #{alunoSimuladoController.indiceQuestaoAtual+1} de #{alunoSimuladoController.numeroQuestoes}">
-                                        <b:row>
-                                            <b:column>
-                                                <h:outputText value="#{alunoSimuladoController.questaoAtual.questao.enunciado}" escape="false"/>
-                                            </b:column>
-                                        </b:row>
-                                        <b:row>
-                                            <b:column>
-                                                <br/>
-                                            </b:column>
-                                        </b:row>
-                                        <b:row>
-                                            <b:column rendered="#{not empty alunoSimuladoController.questaoAtual.questao.objetiva}"> 
-                                                <p:selectOneRadio layout="custom" id="radioOpcoes" value="#{alunoSimuladoController.opcaoAtualSelecionada}" >
-                                                    <f:selectItems value="#{alunoSimuladoController.questaoAtual.questao.objetiva.opcoesList}" var="opcao"  itemLabel="#{opcao.opcao} - #{opcao.descricao}" itemValue="#{opcao.opcao}" />
-                                                </p:selectOneRadio>
-                                                <ui:repeat varStatus="status" value="#{alunoSimuladoController.questaoAtual.questao.objetiva.opcoesList}" var="ordem" >
-                                                    <p:outputPanel>
-                                                        <p:radioButton id="radio" for=":#{p:component('radioOpcoes')}" itemIndex="#{status.index}" />
-                                                        <h:outputLabel for="radio" value="#{ordem.opcao}) #{ordem.descricao}" />
-                                                    </p:outputPanel>
-                                                </ui:repeat>
-                                            </b:column>
-                                            <b:column rendered="#{empty alunoSimuladoController.questaoAtual.questao.objetiva}"> 
-                                                <p:inputTextarea style="width:100%" value="#{alunoSimuladoController.respostaAtual}" autoResize="true" maxlength="2999"/>
-                                            </b:column>
-
-                                        </b:row>
-                                        <b:row>
-                                            <b:column>
-                                                <p:separator/>
-                                            </b:column>
-                                        </b:row>
-                                        <b:row>
-                                            <b:column style="text-align: center">
-                                                <b:commandButton ajax="true" process=":#{p:component('painelQuestoes')}" update=":#{p:component('painelQuestoes')}" action="#{alunoSimuladoController.questaoAnterior}" disabled="#{alunoSimuladoController.indiceQuestaoAtual == 0}" look="info" value="&lt; Anterior"/>
-                                                <b:commandButton rendered="#{not alunoSimuladoController.questaoAtual.marcadaRevisao}" ajax="true" process="@this" update=":#{p:component('painelQuestoes')}" action="#{alunoSimuladoController.marcarRevisao}" style="margin-left: 5px;" look="warning" value="Marcar para revisão"/>
-                                                <b:commandButton rendered="#{alunoSimuladoController.questaoAtual.marcadaRevisao}" ajax="true" process="@this" update=":#{p:component('painelQuestoes')}" action="#{alunoSimuladoController.desmarcarRevisao()}" style="margin-left: 5px;" look="warning" value="Desmarcar revisão"/>
-                                                <b:commandButton ajax="true" process=":#{p:component('painelQuestoes')}" update=":#{p:component('painelQuestoes')}" action="#{alunoSimuladoController.proximaQuestao}" disabled="#{alunoSimuladoController.indiceQuestaoAtual+1 == alunoSimuladoController.numeroQuestoes}" style="margin-left: 5px;" look="info" value="Próxima &gt;"/>
-                                            </b:column>
-                                        </b:row>
-                                        <b:row>
-                                            <b:column>
-                                                <p:panel style="margin-top: 10px;" header="Questões" id="botoesQuestoes">
-                                                    <ui:repeat varStatus="status" value="#{alunoSimuladoController.respostas}" var="resposta" >
-                                                        <p:commandLink style="display: inline" ajax="true" process="@this :#{p:component('painelQuestoes')}" update=":#{p:component('painelQuestoes')}" action="#{alunoSimuladoController.escolherQuestao(status.index)}">
-                                                            <b:label style="margin-right: 5px;" text="#{status.index + 1}" severity="#{resposta.marcadaRevisao?'warning':(empty resposta.resposta?'danger':'success')}"/>
-                                                        </p:commandLink>
-                                                    </ui:repeat>
-                                                </p:panel>
-                                            </b:column>
-                                        </b:row>
-                                        <b:row>
-                                            <b:column style="text-align: center">
-                                                <b:commandButton style="margin-top: 10px;" ajax="true" process="@this :#{p:component('painelQuestoes')}" update=":#{p:component('painelQuestoes')} :#{p:component('modalMensagensAviso')}" action="#{alunoSimuladoController.finalizarSimulado()}" look="success" oncomplete="PF('modalMensagens').show()" value="Finalizar"/>
-                                            </b:column>
-                                        </b:row>
-                                    </p:panel>
-                                </b:column>
-                            </b:row>
-                        </b:panel>
+            <b:container id="container">
+                <b:row>
+                    <b:column colSm="4"></b:column>
+                    <b:column colSm="4" style="text-align: center">
+                        <b:image style="width:250px;" value="/resource/imagens/idealizarNovo.png"/>
                     </b:column>
+                    <b:column colSm="4"></b:column>
+                </b:row>
+                <b:row >
+                    <br/>
+                    <br/>
+                    <b:panel styleClass="painelCentral" rendered="#{not empty alunoSimuladoController.simuladoAtual}" style="min-height: 200px;">
+                        <b:row >
+                            <b:column>
+                                <h:outputText value="Professor: #{alunoSimuladoController.simuladoAtual.turma.professor.pessoa.nome}"/>
+                            </b:column>
+                        </b:row>
+                        <b:row >
+                            <b:column>
+                                <h:outputText value="Disciplina: #{alunoSimuladoController.simuladoAtual.turma.disciplina.nome}"/>
+                            </b:column>
+                        </b:row>
+                        <b:row id="rowCronometro" style="text-align: right; padding-right: 10px;">
+                            <p:poll widgetVar="poll" interval="1" listener="#{alunoSimuladoController.atualizaCronometro}" update="@this :#{p:component('cronometro')}"  />
+                            <b:label text="Tempo Restante: #{alunoSimuladoController.horasRestante}:#{alunoSimuladoController.minutosRestante}:#{alunoSimuladoController.segundosRestante}" style="font-size: 15px;" id="cronometro" severity="#{alunoSimuladoController.severidadeCronometro}"/>
+                        </b:row>
+                        <b:row style="margin-top: 10px;">
+                            <b:column>
+                                <p:panel id="painelQuestoes" header="Questão #{alunoSimuladoController.indiceQuestaoAtual+1} de #{alunoSimuladoController.numeroQuestoes}">
+                                    <b:row>
+                                        <b:column>
+                                            <h:outputText value="#{alunoSimuladoController.questaoAtual.questao.enunciado}" escape="false"/>
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <b:column>
+                                            <br/>
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <b:column rendered="#{not empty alunoSimuladoController.questaoAtual.questao.objetiva}"> 
+                                            <p:selectOneRadio layout="custom" id="radioOpcoes" value="#{alunoSimuladoController.opcaoAtualSelecionada}" >
+                                                <f:selectItems value="#{alunoSimuladoController.questaoAtual.questao.objetiva.opcoesList}" var="opcao"  itemLabel="#{opcao.opcao} - #{opcao.descricao}" itemValue="#{opcao.opcao}" />
+                                            </p:selectOneRadio>
+                                            <ui:repeat varStatus="status" value="#{alunoSimuladoController.questaoAtual.questao.objetiva.opcoesList}" var="ordem" >
+                                                <p:outputPanel>
+                                                    <p:radioButton id="radio" for=":#{p:component('radioOpcoes')}" itemIndex="#{status.index}" />
+                                                    <h:outputLabel for="radio" value="#{ordem.opcao}) #{ordem.descricao}" />
+                                                </p:outputPanel>
+                                            </ui:repeat>
+                                        </b:column>
+                                        <b:column rendered="#{empty alunoSimuladoController.questaoAtual.questao.objetiva}"> 
+                                            <p:inputTextarea style="width:100%" value="#{alunoSimuladoController.respostaAtual}" autoResize="true" maxlength="2999"/>
+                                        </b:column>
+
+                                    </b:row>
+                                    <b:row>
+                                        <b:column>
+                                            <p:separator/>
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <b:column style="text-align: center">
+                                            <b:commandButton ajax="true" process=":#{p:component('painelQuestoes')}" update=":#{p:component('painelQuestoes')}" action="#{alunoSimuladoController.questaoAnterior}" disabled="#{alunoSimuladoController.indiceQuestaoAtual == 0}" look="info" value="&lt; Anterior"/>
+                                            <b:commandButton rendered="#{not alunoSimuladoController.questaoAtual.marcadaRevisao}" ajax="true" process="@this" update=":#{p:component('painelQuestoes')}" action="#{alunoSimuladoController.marcarRevisao}" style="margin-left: 5px;" look="warning" value="Marcar para revisão"/>
+                                            <b:commandButton rendered="#{alunoSimuladoController.questaoAtual.marcadaRevisao}" ajax="true" process="@this" update=":#{p:component('painelQuestoes')}" action="#{alunoSimuladoController.desmarcarRevisao()}" style="margin-left: 5px;" look="warning" value="Desmarcar revisão"/>
+                                            <b:commandButton ajax="true" process=":#{p:component('painelQuestoes')}" update=":#{p:component('painelQuestoes')}" action="#{alunoSimuladoController.proximaQuestao}" disabled="#{alunoSimuladoController.indiceQuestaoAtual+1 == alunoSimuladoController.numeroQuestoes}" style="margin-left: 5px;" look="info" value="Próxima &gt;"/>
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <b:column>
+                                            <p:panel style="margin-top: 10px;" header="Questões" id="botoesQuestoes">
+                                                <ui:repeat varStatus="status" value="#{alunoSimuladoController.respostas}" var="resposta" >
+                                                    <p:commandLink style="display: inline" ajax="true" process="@this :#{p:component('painelQuestoes')}" update=":#{p:component('painelQuestoes')}" action="#{alunoSimuladoController.escolherQuestao(status.index)}">
+                                                        <b:label style="margin-right: 5px;" text="#{status.index + 1}" severity="#{resposta.marcadaRevisao?'warning':(empty resposta.resposta?'danger':'success')}"/>
+                                                    </p:commandLink>
+                                                </ui:repeat>
+                                            </p:panel>
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <b:column style="text-align: center">
+                                            <b:commandButton style="margin-top: 10px;" ajax="true" process="@this :#{p:component('painelQuestoes')}" update=":#{p:component('painelQuestoes')} :#{p:component('modalMensagensAviso')} :#{p:component('footer')}" action="#{alunoSimuladoController.finalizarSimulado()}" look="success" oncomplete="PF('modalMensagens').show()" value="Finalizar"/>
+                                        </b:column>
+                                    </b:row>
+                                </p:panel>
+                            </b:column>
+                        </b:row>
+                    </b:panel>
                 </b:row>
             </b:container>
         </h:form>

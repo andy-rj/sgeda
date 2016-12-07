@@ -25,7 +25,7 @@
 
             <p:dialog modal="true" draggable="false" width="700" height="500" header="Corrigir Simulado"
                       maximizable="true" widgetVar="modalCorrigir" resizable="false" footer="" onHide="PF('modalDetalhe').show()">
-                <p:outputPanel id="detalheCorrigir">
+                <p:outputPanel styleClass="painelCentral" style="padding: 10px 10px 10px 10px;margin-bottom: 10px; width: 96%;" id="detalheCorrigir">
                     <b:row>
                         <b:column>
                             <b:row id="notaTotal">
@@ -91,14 +91,18 @@
                     </b:row>
                 </p:outputPanel>
                 <f:facet name="footer">
-                    <p:commandButton value="Salvar" process="@this :#{p:component('detalheCorrigir')}" update=":#{p:component('detalheAluno')} :#{p:component('detalheCorrigir')} :#{p:component('info')}" action="#{professorController.salvarNotaSimulado}" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('modalCorrigir').hide()" />
-                    <p:commandButton value="Fechar" onclick="PF('modalCorrigir').hide()" />
+                    <b:row>
+                        <b:column>
+                            <p:commandButton class="dbotaoPadrao" value="Salvar" process="@this :#{p:component('detalheCorrigir')}" update=":#{p:component('detalheAluno')} :#{p:component('resultados')} :#{p:component('detalheCorrigir')} :#{p:component('info')}" action="#{professorController.salvarNotaSimulado(loginController.usuarioLogado.pessoa.idPessoa)}" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('modalCorrigir').hide()" />
+                            <p:commandButton class="dbotaoPadrao" value="Fechar" onclick="PF('modalCorrigir').hide()" />
+                        </b:column>
+                    </b:row>
                 </f:facet>
             </p:dialog>
 
             <p:dialog modal="true" draggable="false" width="700" height="500" header="Detalhe Simulado"
                       maximizable="true" widgetVar="modalSimulado" resizable="false" footer="" onHide="PF('modalDetalhe').show()">
-                <p:outputPanel id="detalheSimulado">
+                <p:outputPanel styleClass="painelCentral" style="padding: 10px 10px 10px 10px;margin-bottom: 10px; width: 96%;" id="detalheSimulado">
                     <b:row>
                         <b:column>
                             <p:repeat value="#{professorController.alunoSimuladoCorrigir.respostasList}" var="resposta" offset="0" varStatus="status" size="#{professorController.alunoSimuladoCorrigir.respostas.size()}" step="1">
@@ -149,55 +153,66 @@
                     </b:row>
                 </p:outputPanel>
                 <f:facet name="footer">
-                    <p:commandButton value="Fechar" onclick="PF('modalSimulado').hide()" />
+                    <b:row>
+                        <b:column>
+                            <p:commandButton class="dbotaoPadrao" value="Fechar" onclick="PF('modalSimulado').hide()" />
+                        </b:column>
+                    </b:row>
                 </f:facet>
             </p:dialog>
 
             <p:dialog modal="true" draggable="false" width="700" height="500" header="Detalhes"
                       maximizable="true" widgetVar="modalDetalhe" resizable="false" footer="">
-                <p:outputPanel id="detalheAluno">
+                <p:outputPanel styleClass="painelCentral" style="padding: 10px 10px 10px 10px;margin-bottom: 10px; width: 96%;" id="detalheAluno">
                     <b:row>
-                        <b:column colSm="3">
-                            <h:outputLabel value="Cadastro ativo:" />
-                        </b:column>
-                        <b:column colSm="9">
-                            <h:outputText id="ativo" value="#{turmaController.alunoDetalhe.pessoa.ativo ? 'Sim' : 'Não'}" />   
-                        </b:column>
-                    </b:row>
+                        <b:column colSm="6">
+                            <b:row>
+                                <b:column colSm="4">
+                                    <h:outputLabel value="Cadastro ativo:" />
+                                </b:column>
+                                <b:column colSm="8">
+                                    <h:outputText id="ativo" value="#{turmaController.alunoDetalhe.pessoa.ativo ? 'Sim' : 'Não'}" />   
+                                </b:column>
+                            </b:row>
 
-                    <b:row>
-                        <b:column colSm="2">
-                            <h:outputLabel value="Matrícula:" />
+                            <b:row>;
+                                <b:column colSm="4">
+                                    <h:outputLabel value="Matrícula:" />
+                                </b:column>
+                                <b:column colSm="8">
+                                    <h:outputText id="matricula" value="#{turmaController.alunoDetalhe.pessoa.matricula}" />   
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column colSm="4">
+                                    <h:outputLabel value="Nome:" />
+                                </b:column>
+                                <b:column colSm="8">
+                                    <h:outputText id="nome" value="#{turmaController.alunoDetalhe.pessoa.nome}" />   
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column colSm="4">
+                                    <h:outputLabel value="Data de Nascimento:" />
+                                </b:column>
+                                <b:column colSm="8">
+                                    <h:outputText id="dataNascimento" value="#{turmaController.alunoDetalhe.pessoa.dataNascimento}" >
+                                        <f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+                                    </h:outputText>
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column colSm="4">
+                                    <h:outputLabel value="Sexo:" />
+                                </b:column>
+                                <b:column colSm="8">
+                                    <h:outputText id="sexo1" rendered="#{turmaController.alunoDetalhe.pessoa.sexo == 'M'}" value="Masculino" />
+                                    <h:outputText id="sexo2" rendered="#{turmaController.alunoDetalhe.pessoa.sexo != 'M'}" value="Feminino" />
+                                </b:column>
+                            </b:row>
                         </b:column>
-                        <b:column colSm="10">
-                            <h:outputText id="matricula" value="#{turmaController.alunoDetalhe.pessoa.matricula}" />   
-                        </b:column>
-                    </b:row>
-                    <b:row>
-                        <b:column colSm="2">
-                            <h:outputLabel value="Nome:" />
-                        </b:column>
-                        <b:column colSm="10">
-                            <h:outputText id="nome" value="#{turmaController.alunoDetalhe.pessoa.nome}" />   
-                        </b:column>
-                    </b:row>
-                    <b:row>
-                        <b:column colSm="2">
-                            <h:outputLabel value="Data de Nascimento:" />
-                        </b:column>
-                        <b:column colSm="10">
-                            <h:outputText id="dataNascimento" value="#{turmaController.alunoDetalhe.pessoa.dataNascimento}" >
-                                <f:convertDateTime pattern="dd/MM/yyyy" type="date" />
-                            </h:outputText>
-                        </b:column>
-                    </b:row>
-                    <b:row>
-                        <b:column colSm="2">
-                            <h:outputLabel value="Sexo:" />
-                        </b:column>
-                        <b:column colSm="10">
-                            <h:outputText id="sexo1" rendered="#{turmaController.alunoDetalhe.pessoa.sexo == 'M'}" value="Masculino" />
-                            <h:outputText id="sexo2" rendered="#{turmaController.alunoDetalhe.pessoa.sexo != 'M'}" value="Feminino" />
+                        <b:column colSm="6">
+                            <p:chart type="bar" rendered="#{not empty turmaController.modeloBarraAluno}" model="#{turmaController.modeloBarraAluno}" style="width:100%; height: 100%"/>
                         </b:column>
                     </b:row>
                     <b:row>
@@ -282,7 +297,7 @@
                     </b:row>
                     <b:row>
                         <b:column colSm="12">
-                            <p:dataTable  var="simulado" value="#{turmaController.alunoTurmaDetalhe.turmaSimulados}">
+                            <p:dataTable  var="simulado" value="#{turmaController.alunoTurmaDetalhe.turmaSimuladosListOrd}">
                                 <p:column headerText="Codigo">
                                     <h:outputText value="#{simulado.simulado.nome}" />
                                 </p:column>
@@ -315,7 +330,11 @@
                     </b:row>
                 </p:outputPanel>
                 <f:facet name="footer">
-                    <p:commandButton value="Fechar" onclick="PF('modalDetalhe').hide()" />
+                    <b:row>
+                        <b:column>
+                            <p:commandButton class="dbotaoPadrao" value="Fechar" onclick="PF('modalDetalhe').hide()" />
+                        </b:column>
+                    </b:row>
                 </f:facet>
             </p:dialog>
 
@@ -329,36 +348,37 @@
                 </ui:insert>
 
                 <div id="page-content-wrapper">
-                    <b:container >
-                        <b:row style="margin-left: -45px; margin-right: -45px;">
-                            <b:column >
-                                <b:panel title="Alunos" style="min-height: 200px;" collapsible="false" look="info">
-                                    <b:row>
-                                        <b:column>
-                                            <p:tabView var="turma" value="#{turmaController.turmasProfessor}" >
-                                                <p:tab title="#{turma.curso.nome} - #{turma.disciplina.nome} - #{turma.turno}">
-                                                    <p:dataTable emptyMessage="Não existem alunos matriculados nessa turma!" var="aluno" value="#{turma.turmaAlunos}">
-                                                        <p:column style="width: 125px;" headerText="Matrícula">
-                                                            <h:outputText value="#{aluno.aluno.pessoa.matricula}"/>
-                                                        </p:column>
-                                                        <p:column headerText="Nome">
-                                                            <h:outputText value="#{aluno.aluno.pessoa.nome}"/>
-                                                        </p:column>
-                                                        <p:column style="width: 120px; text-align: center">
-                                                            <b:label text="Atenção" rendered="#{aluno.aluno.existeSimuladoParaCorrecao()}" severity="warning"/>
-                                                        </p:column>
-                                                        <p:column style="width: 75px;text-align: center">
-                                                            <p:commandLink update=":#{p:component('detalheAluno')}" action="#{turmaController.detalheAluno(aluno.aluno, turma)}" oncomplete="PF('modalDetalhe').show();" title="Detalhes"  style="margin-right: 5px;">
-                                                                <h:graphicImage url="/resource/imagens/detalhe.png" width="24" height="24"/>
-                                                            </p:commandLink>
-                                                        </p:column>
-                                                    </p:dataTable>
-                                                </p:tab>
-                                            </p:tabView>
-                                        </b:column>
-                                    </b:row>
-                                </b:panel>
-                            </b:column>
+                    <b:container id="container">
+                        <b:row style="margin-top: -50px;margin-bottom: 40px;">
+                            <h:outputText value="Gerenciar aluno:" style="font-size: 30px;margin-left: 10px;"/>
+                        </b:row>
+                        <b:row>
+                            <b:panel styleClass="painelCentral">
+                                <b:row id="resultados">
+                                    <b:column>
+                                        <p:tabView var="turma" value="#{turmaController.turmasProfessor}" >
+                                            <p:tab title="#{turma.curso.nome} - #{turma.disciplina.nome} - #{turma.turno}">
+                                                <p:dataTable emptyMessage="Não existem alunos matriculados nessa turma!" var="aluno" value="#{turma.turmaAlunosOrd}">
+                                                    <p:column style="width: 125px;" headerText="Matrícula">
+                                                        <h:outputText value="#{aluno.aluno.pessoa.matricula}"/>
+                                                    </p:column>
+                                                    <p:column headerText="Nome">
+                                                        <h:outputText value="#{aluno.aluno.pessoa.nome}"/>
+                                                    </p:column>
+                                                    <p:column style="width: 120px; text-align: center">
+                                                        <b:label text="Atenção" rendered="#{aluno.aluno.existeSimuladoParaCorrecao()}" severity="warning"/>
+                                                    </p:column>
+                                                    <p:column style="width: 75px;text-align: center">
+                                                        <p:commandLink update=":#{p:component('detalheAluno')}" action="#{turmaController.detalheAluno(aluno.aluno, turma)}" oncomplete="PF('modalDetalhe').show();" title="Detalhes"  style="margin-right: 5px;">
+                                                            <h:graphicImage url="/resource/imagens/detalhe.png" width="24" height="24"/>
+                                                        </p:commandLink>
+                                                    </p:column>
+                                                </p:dataTable>
+                                            </p:tab>
+                                        </p:tabView>
+                                    </b:column>
+                                </b:row>
+                            </b:panel>
                         </b:row>
                     </b:container>
                 </div>

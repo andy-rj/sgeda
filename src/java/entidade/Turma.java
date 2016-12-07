@@ -83,6 +83,24 @@ public class Turma implements java.io.Serializable {
         return media;
     }
 
+    public BigDecimal media() {
+        BigDecimal media = new BigDecimal(BigInteger.ZERO);
+        int i = 0;
+        if (this.turmaAlunos != null) {
+            for (TurmaAluno turmaAluno : turmaAlunos) {
+                if (turmaAluno.getAluno().getPessoa().getAtivo()) {
+                    media = media.add(turmaAluno.getAluno().getMedia(turmaSimulados));
+                    i++;
+                }
+            }
+            if (i != 0) {
+                media = media.divide(new BigDecimal(i), 1, RoundingMode.CEILING);
+            }
+        }
+        
+        return media;
+    }
+
     @Id
     @GeneratedValue(strategy = IDENTITY)
 
@@ -174,6 +192,17 @@ public class Turma implements java.io.Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "turma")
     public Set<TurmaAluno> getTurmaAlunos() {
         return this.turmaAlunos;
+    }
+
+    @Transient
+    public List<TurmaAluno> getTurmaAlunosOrd() {
+        List<TurmaAluno> lista = new ArrayList<>(turmaAlunos);
+        Collections.sort(lista, new Comparator<TurmaAluno>() {
+            public int compare(TurmaAluno obj1, TurmaAluno obj2) {
+                return obj1.getAluno().getPessoa().getNome().compareTo(obj2.getAluno().getPessoa().getNome());
+            }
+        });
+        return lista;
     }
 
     public void setTurmaAlunos(Set<TurmaAluno> turmaAlunos) {

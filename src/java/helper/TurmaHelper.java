@@ -7,6 +7,7 @@ import entidade.Professor;
 import entidade.Telefone;
 import entidade.Turma;
 import entidade.TurmaAluno;
+import entidade.TurmaAlunoId;
 import entidade.TurmaSimulado;
 import hibernate.HibernateUtil;
 import java.util.ArrayList;
@@ -63,6 +64,44 @@ public class TurmaHelper {
 
             if (retorno != null) {
                 retorno.getTurmaAlunos().size();
+                retorno.getTurmaSimulados().size();
+                retorno.getDisciplina().getProfessors().size();
+            }
+
+            session.flush();
+            tx.commit();
+            return retorno;
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return null;
+    }
+    
+    public Turma getTurmaEager2(Integer idTurma) {
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.getTransaction();
+        try {
+            tx.begin();
+            Criteria crit = session.createCriteria(Turma.class);
+
+            crit.add(Restrictions.eq("idTurma", idTurma));
+
+            Turma retorno = (Turma) crit.uniqueResult();
+
+            if (retorno != null) {
+                retorno.getTurmaAlunos().size();
+                for(TurmaAluno turmaAluno: retorno.getTurmaAlunos()){
+                    turmaAluno.getAluno().getAlunoSimulados().size();
+                    for(AlunoSimulado alunoSimulado: turmaAluno.getAluno().getAlunoSimulados()){
+                        alunoSimulado.getRespostas().size();
+                    }
+                }
                 retorno.getTurmaSimulados().size();
                 retorno.getDisciplina().getProfessors().size();
             }
@@ -263,6 +302,50 @@ public class TurmaHelper {
         }
         return null;
     }
+    
+    public TurmaAluno getTurmasAlunoById(TurmaAlunoId id) {
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.getTransaction();
+        try {
+            tx.begin();
+            Criteria crit = session.createCriteria(TurmaAluno.class);
+
+            if (id != null) {
+                crit.add(Restrictions.conjunction()
+                        .add(Restrictions.eq("id", id))
+                );
+            }
+
+            TurmaAluno retorno = (TurmaAluno)crit.uniqueResult();
+            if(retorno != null){
+                retorno.getAluno().getAlunoSimulados().size();
+                for(AlunoSimulado simulado:retorno.getAluno().getAlunoSimulados()){
+                    simulado.getRespostas().size();
+                }
+                retorno.getTurma().getTurmaAlunos().size();
+                for(TurmaAluno aluno:retorno.getTurma().getTurmaAlunos()){
+                    aluno.getAluno().getAlunoSimulados().size();
+                    for(AlunoSimulado simulado:aluno.getAluno().getAlunoSimulados()){
+                        simulado.getRespostas().size();
+                    }
+                }
+                retorno.getTurma().getTurmaSimulados().size();
+            }
+            
+            session.flush();
+            tx.commit();
+            return retorno;
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return null;
+    }
 
     public List<Turma> getTurmasByIdProfessor(Integer idProfessor) {
         session = HibernateUtil.getSessionFactory().openSession();
@@ -275,6 +358,8 @@ public class TurmaHelper {
             crit.add(Restrictions.conjunction()
                     .add(Restrictions.eq("professor.idProfessor", idProfessor))
             );
+            
+            crit.add(Restrictions.ge("dataFim", new Date(new Date().getTime() - new Long(2592000000L))));
 
             crit.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
@@ -312,6 +397,8 @@ public class TurmaHelper {
             crit.add(Restrictions.conjunction()
                     .add(Restrictions.eq("professor.idProfessor", idProfessor))
             );
+            
+            crit.add(Restrictions.ge("dataFim", new Date(new Date().getTime() - new Long(2592000000L))));
 
             crit.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 

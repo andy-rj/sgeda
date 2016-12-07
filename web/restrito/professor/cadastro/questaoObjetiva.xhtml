@@ -21,7 +21,7 @@
     </h:head>
     <h:body style="background-color: #ebeff2">
         <h:form id="cadastro">
-
+            
             <p:dialog header="Inserir Figura" widgetVar="modalFigura" modal="true" height="500" width="526" draggable="false" resizable="false">
                 <b:row>
                     <b:column id="figuraColumn">
@@ -35,7 +35,7 @@
                 <b:row>
                     <br/>
                     <b:column id="botaoIncluirFigura">
-                        <p:commandButton update="figuraColumn botaoIncluirFigura :#{p:component('editorColumn')}" rendered="#{questaoController.uploaded}" action="#{questaoController.incluirFigura}" style="display:table; margin: 0px auto;" process="@this editorColumn" value="Salvar" onclick="PF('modalFigura').hide();"/>
+                        <p:commandButton class="dbotaoPadrao" update="figuraColumn botaoIncluirFigura :#{p:component('editorColumn')}" rendered="#{questaoController.uploaded}" action="#{questaoController.incluirFigura}" style="display:table; margin: 0px auto;margin-left: 203px;" process="@this :#{p:component('editorColumn')}" value="Salvar" onclick="PF('modalFigura').hide();"/>
                     </b:column>
                 </b:row>
                 <b:row>
@@ -57,201 +57,160 @@
 
                 <div id="page-content-wrapper">
                     <b:container id="container">
-                        <b:row style="margin-left: -45px; margin-right: -45px;">
+                        <b:row style="margin-top: -50px;margin-bottom: 40px;">
+                            <h:outputText value="Nova questão objetiva:" style="font-size: 30px;margin-left: 10px;"/>
+                        </b:row>
+                        <b:row>
                             <b:column>
-                                <b:panel title="Cadastro de Questão Objetiva" collapsible="false" look="info">
-                                    <b:row>
-                                        <b:column>
-                                            <font color ='red' >*</font><h:outputText style="font-size: 12px;color: red;" value="Preenchimento Obrigatório." />
-                                        </b:column>
-                                    </b:row>
-                                    <br/>
-                                    <b:row>
-                                        <b:column col-sm="12">
-                                            <hr style= "border-top: 1px solid #999999;"/>
-                                        </b:column>
-                                    </b:row>
-                                    <b:row>
-                                        <b:column colSm="2">
-                                            <h:outputLabel value="Instituição" ></h:outputLabel>
-                                        </b:column>
-                                        <b:column colSm="7">
-                                            <p:inputText id="instituicaoQuestao" value="#{questaoController.instituicao}" maxlength="10" />
-                                        </b:column>
-                                        <b:column colSm="3">
-                                            <b:message for="instituicaoQuestao"  />
-                                        </b:column>
-                                    </b:row>
-                                    <b:row>
-                                        <b:column colSm="2">
-                                            <h:outputLabel value="Ano" ></h:outputLabel>
-                                        </b:column>
-                                        <b:column colSm="7">
-                                            <p:inputMask id="ano" value="#{questaoController.ano}" mask="9999" />
-                                        </b:column>
-                                        <b:column colSm="3">
-                                            <b:message for="ano"  />
-                                        </b:column>
-                                    </b:row>
-                                    <b:row>
-                                        <b:column colSm="2">
-                                            <h:outputLabel value="Nível" ></h:outputLabel>
-                                        </b:column>
-                                        <b:column colSm="7">
-                                            <p:selectOneMenu id="nivelQuestao" value="#{questaoController.nivel}" style="width:100%" required="true">
-                                                <f:selectItem itemLabel="Selecione a disciplina" itemValue="0" noSelectionOption="true" />
-                                                <f:selectItem itemLabel="Ensino Fundamental" itemValue="Ensino Fundamental" />
-                                                <f:selectItem itemLabel="Ensino Médio" itemValue="Ensino Médio" />
-                                                <f:selectItem itemLabel="Ensino Superior" itemValue="Ensino Superior" />
-                                            </p:selectOneMenu>
-                                        </b:column>
-                                        <b:column colSm="3">
-                                            <b:message for="nivelQuestao"  />
-                                        </b:column>
-                                    </b:row>
-                                    <b:row id="disciplinas">
-                                        <b:column colSm="2">
-                                            <h:outputLabel for="disciplina" value="Disciplina"/>
-                                        </b:column>
-                                        <b:column colSm="7">
-                                            <p:selectOneMenu id="disciplina" value="#{questaoController.disciplinaSelecionada}" style="width:100%" required="true">
-                                                <p:ajax process="@this" update="assuntos" />
-                                                <f:selectItem itemLabel="Selecione a disciplina" itemValue="0" noSelectionOption="true" />
-                                                <f:selectItems value="#{questaoController.disciplinasDisponiveis}" var="disciplina" itemLabel="#{disciplina.codigo} - #{disciplina.nome}" itemValue="#{disciplina.idDisciplina}" />
-                                            </p:selectOneMenu>
-                                        </b:column>
-                                        <b:column colSm="3">
-                                            <b:message for="disciplina"/>
-                                        </b:column>
-                                    </b:row>
-                                    <b:row>
-                                        <b:column colSm="2">
-                                            <h:outputLabel value="Dificuldade" ></h:outputLabel>
-                                        </b:column>
-                                        <b:column colSm="7">
-                                            <p:rating stars="3" cancel="false" id="dificuldade" value="#{questaoController.dificuldade}" requiredMessage="Nível de dificuldade é obrigatório, selecione!">
-                                                <f:validateRequired/>
-                                            </p:rating>
-                                        </b:column>
-                                        <b:column colSm="3">
-                                            <b:message for="dificuldade"  />
-                                        </b:column>
-                                    </b:row>
-                                    <b:row>
-                                        <b:column colSm="2">
-                                            <h:outputLabel value="Assuntos" ></h:outputLabel>
-                                        </b:column>
-                                        <b:column colSm="7">
-                                            <p:autoComplete id="assuntos" multiple="true" value="#{questaoController.assuntosSelecionados}" completeMethod="#{questaoController.completarAssuntos}"
-                                                            var="assunto" itemLabel="#{assunto}" itemValue="#{assunto}">
-                                                <p:column style="width:10%">
-                                                    <h:outputText styleClass="ui-theme ui-theme-#{assunto}" />
-                                                </p:column>
-
-                                                <p:column>
-                                                    <h:outputText value="#{assunto}" />
-                                                </p:column>
-                                            </p:autoComplete>
-                                        </b:column>
-                                        <b:column colSm="3">
-                                            <b:message for="assuntos"  />
-                                        </b:column>
-                                    </b:row>
-                                    <b:row>
-                                        <b:column col-sm="12">
-                                            <strong style="color: #999999;">Enunciado</strong>
-                                            <hr style= "border-top: 1px solid #999999;"/>
-                                        </b:column>
-                                    </b:row>
-                                    <b:row>
-                                        <b:column id="editorColumn">
-                                            <p:editor id="editor" controls="bold italic underline subscript superscript font size style color highlight bullets numbering alignleft center alignright justify undo redo cut copy paste" widgetVar="editorWidget" value="#{questaoController.enunciado}" maxlength="3000"/>
-                                        </b:column>
-                                    </b:row>
-                                    <b:row>
-                                        <br/>
-                                        <b:column colSm="2">
-                                            <h:outputLabel value="Figura"/>
-                                        </b:column>
-                                        <b:column colSm="7">
-                                            <p:commandButton process="@this" onclick="PF('modalFigura').show();" value="Inserir"/>
-                                        </b:column>
-                                    </b:row>
-                                    <b:row>
-                                        <b:column col-sm="12">
-                                            <hr style= "border-top: 1px solid #999999;"/>
-                                        </b:column>
-                                    </b:row>
-                                    <b:row>
-                                        <b:column colSm="2">
-                                            <h:outputLabel for="resposta" value="Resposta" />
-                                        </b:column>
-                                        <b:column col-sm="7">
-                                            <p:inputTextarea id="resposta" value="#{questaoController.resposta}" rows="3" cols="30" counter="display" maxlength="1000" counterTemplate="{0} caracteres restantes." autoResize="false" style="width:100%" required="true" requiredMessage="Texto da resposta é obrigatório!" />
-                                            <h:outputText id="display" />
-                                        </b:column>
-                                        <b:column col-sm="3">
-                                            <b:message for="resposta"/>
-                                        </b:column>
-                                    </b:row>
-                                    <b:row id="opcaoRow">
-                                        <b:column colSm="2">
-                                            <h:outputLabel for="opcao" value="Opção Correta" />
-                                        </b:column>
-                                        <b:column col-sm="7">
-                                            <p:selectBooleanButton id="opcao" value="#{questaoController.opcaoCorreta}" onLabel="Sim" offLabel="Não" onIcon="ui-icon-check" offIcon="ui-icon-close"  />
-                                        </b:column>
-                                        <b:column col-sm="3">
-                                            <b:message for="opcao"/>
-                                        </b:column>
-                                    </b:row>
-                                    <b:row id="incluirRespostaRow">
-                                        <b:column colSm="2">
-                                            <p:commandButton id="incluirRespostaButton" process="@this opcaoRow resposta" update="opcaoRow resposta tabelaResposta incluirRespostaRow" action="#{questaoController.incluirResposta}" value="Inserir Resposta"/>
-                                        </b:column>
-                                        <b:column colSm="7">
-                                            <b:message for="incluirRespostaButton"/>
-                                        </b:column>
-                                    </b:row>
-                                    <b:row id="tabelaResposta">
-                                        <br/>
-                                        <b:column colSm="9">
-                                            <p:dataTable   rendered="#{not empty questaoController.opcoes}" var="opcao" value="#{questaoController.opcoes}">
-                                                <p:column headerText="Resposta">
-                                                    <p:inplace id="enunciadoResposta" editor="true">
-                                                        <p:inputTextarea value="#{opcao.descricao}" required="true"/>
-                                                    </p:inplace>
-                                                </p:column>
-
-                                                <p:column headerText="Correta">
-                                                    <p:inplace id="opcaoCorretaTabela" editor="true">
-                                                        <f:facet name="output">
-                                                            <h:outputText rendered="#{opcao.correta}" value="Sim"/>
-                                                            <h:outputText rendered="#{not opcao.correta}" value="Não"/>
-                                                        </f:facet>
-                                                        <f:facet name="input">
-                                                            <p:selectBooleanButton value="#{opcao.correta}" onLabel="Sim" offLabel="Não" onIcon="ui-icon-check" offIcon="ui-icon-close"  />
-                                                        </f:facet>
-                                                    </p:inplace>
-                                                </p:column>
-
-                                                <p:column headerText="">
-                                                    <p:commandButton value="Excluir" ajax="true" immediate="true" update=":#{p:component('tabelaResposta')}" action="#{questaoController.excluirResposta(opcao)}"/>
-                                                </p:column>
-                                            </p:dataTable> 
-                                        </b:column>
-                                    </b:row>
-
-                                    <b:row>
-                                        <br/>
-                                        <b:column>
-                                            <p:commandButton value="Cadastrar" process="@this dificuldade nivelQuestao instituicaoQuestao ano disciplina editor assuntos" update="info container" action="#{questaoController.cadastrarObjetiva}"/>
-                                            <p:commandButton value="Limpar" action="#{questaoController.limparFormularioCadastroObjetiva}" immediate="true"/>
-                                        </b:column>
-                                    </b:row>
-
-                                </b:panel>
+                                <font color ='red' >*</font><h:outputText style="font-size: 12px;color: red;" value="Preenchimento Obrigatório." />
                             </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:panel styleClass="painelCentral">
+                                <b:row>
+                                    <b:column colSm="6">
+                                        <b:row styleClass="rowMarginBotton">
+                                            <b:column colSm="6">
+                                                <p:inputText placeholder="Instituição" id="instituicaoQuestao" style="width:100%" value="#{questaoController.instituicao}" maxlength="10" />
+                                            </b:column>
+                                            <b:column colSm="6">
+                                                <p:inputMask id="ano" placeholder="Ano" value="#{questaoController.ano}" mask="9999" style="width: 100%"/>
+                                            </b:column>
+                                        </b:row>
+                                        <b:row styleClass="rowMarginBotton">
+                                            <b:column colSm="6">
+                                                <p:selectOneMenu id="nivelQuestao" value="#{questaoController.nivel}" style="width:100%" required="true">
+                                                    <f:selectItem itemLabel="Selecione o nível" itemValue="0" noSelectionOption="true" />
+                                                    <f:selectItem itemLabel="Ensino Fundamental" itemValue="Ensino Fundamental" />
+                                                    <f:selectItem itemLabel="Ensino Médio" itemValue="Ensino Médio" />
+                                                    <f:selectItem itemLabel="Ensino Superior" itemValue="Ensino Superior" />
+                                                </p:selectOneMenu>
+                                            </b:column>
+                                            <b:column id="disciplinas" colSm="6">
+                                                <p:selectOneMenu id="disciplina" value="#{questaoController.disciplinaSelecionada}" style="width:100%" required="true">
+                                                    <p:ajax process="@this" update="assuntos" />
+                                                    <f:selectItem itemLabel="Selecione a disciplina" itemValue="0" noSelectionOption="true" />
+                                                    <f:selectItems value="#{questaoController.disciplinasDisponiveis}" var="disciplina" itemLabel="#{disciplina.codigo} - #{disciplina.nome}" itemValue="#{disciplina.idDisciplina}" />
+                                                </p:selectOneMenu>
+                                            </b:column>
+                                        </b:row >
+                                    </b:column>
+                                    <b:column colSm="6">
+                                        <b:row styleClass="rowMarginBotton">
+                                            <b:column colSm="2">
+                                                <h:outputLabel value="Dificuldade*" ></h:outputLabel>
+                                            </b:column>
+                                            <b:column colSm="7">
+                                                <p:rating stars="3" cancel="false" id="dificuldade" value="#{questaoController.dificuldade}" requiredMessage="Nível de dificuldade é obrigatório, selecione!">
+                                                    <f:validateRequired/>
+                                                </p:rating>
+                                            </b:column>
+                                        </b:row>
+                                        <b:row styleClass="rowMarginBotton">
+                                            <b:column>
+                                                <p:autoComplete placeholder="Assuntos" id="assuntos" multiple="true" value="#{questaoController.assuntosSelecionados}" completeMethod="#{questaoController.completarAssuntos}"
+                                                                var="assunto" itemLabel="#{assunto}" itemValue="#{assunto}">
+                                                    <p:column style="width:10%">
+                                                        <h:outputText styleClass="ui-theme ui-theme-#{assunto}" />
+                                                    </p:column>
+                                                    <p:column>
+                                                        <h:outputText value="#{assunto}" />
+                                                    </p:column>
+                                                </p:autoComplete>
+                                            </b:column>
+                                        </b:row>
+                                    </b:column>
+                                </b:row>
+                                <b:row>
+                                    <b:column>
+                                        <b:message for="instituicaoQuestao"  />
+                                        <b:message for="ano"  />
+                                        <b:message for="nivelQuestao"  />
+                                        <b:message for="disciplina"/>
+                                        <b:message for="dificuldade"  />
+                                        <b:message for="assuntos"  />
+                                        <b:message for="resposta"/>
+                                        <b:message for="opcao"/>
+                                        <b:message for="incluirRespostaButton"/>
+                                    </b:column>
+                                </b:row>
+                                <b:row>
+                                    <b:column col-sm="12">
+                                        <strong style="color: #999999;">Enunciado*</strong>
+                                        <hr style= "border-top: 1px solid #999999;"/>
+                                    </b:column>
+                                </b:row>
+                                <b:row styleClass="rowMarginBotton">
+                                    <b:column id="editorColumn">
+                                        <p:editor id="editor" controls="bold italic underline subscript superscript font size style color highlight bullets numbering alignleft center alignright justify undo redo cut copy paste" widgetVar="editorWidget" value="#{questaoController.enunciado}" maxlength="3000"/>
+                                    </b:column>
+                                </b:row>
+                                <b:row styleClass="rowMarginBotton">
+                                    <br/>
+                                    <b:column>
+                                        <p:commandButton class="dbotaoPadrao" process="@this" onclick="PF('modalFigura').show();" value="Inserir figura"/>
+                                    </b:column>
+                                </b:row>
+                                <b:row styleClass="rowMarginBotton">
+                                    <b:column col-sm="12">
+                                        <hr style= "border-top: 1px solid #999999;"/>
+                                    </b:column>
+                                </b:row>
+                                <b:row styleClass="rowMarginBotton">
+                                    <b:column colSm="7">
+                                        <p:inputTextarea id="resposta" placeholder="Resposta*" value="#{questaoController.resposta}" rows="3" cols="30" counter="display" maxlength="1000" counterTemplate="{0} caracteres restantes." autoResize="false" style="width:100%" required="true" requiredMessage="Texto da resposta é obrigatório!" />
+                                        <h:outputText id="display" />
+                                    </b:column>
+                                    <b:column id="opcaoRow" colSm="2">
+                                        <h:outputText value="Correta?: " />
+                                        <p:selectBooleanCheckbox id="opcao" value="#{questaoController.opcaoCorreta}"/>
+                                    </b:column>
+                                    <b:column id="incluirRespostaRow" colSm="3">
+                                        <p:commandButton class="dbotaoPadrao" id="incluirRespostaButton" process="@this opcaoRow resposta" update="opcaoRow resposta tabelaResposta incluirRespostaRow" action="#{questaoController.incluirResposta}" value="Inserir"/>
+                                    </b:column>
+                                </b:row>
+                                <b:row id="tabelaResposta">
+                                    <br/>
+                                    <b:column colSm="9">
+                                        <p:dataTable   rendered="#{not empty questaoController.opcoes}" var="opcao" value="#{questaoController.opcoes}">
+                                            <p:column headerText="Resposta">
+                                                <p:inplace id="enunciadoResposta" editor="true">
+                                                    <p:inputTextarea value="#{opcao.descricao}" required="true"/>
+                                                </p:inplace>
+                                            </p:column>
+
+                                            <p:column headerText="Correta">
+                                                <p:inplace id="opcaoCorretaTabela" editor="true">
+                                                    <f:facet name="output">
+                                                        <h:outputText rendered="#{opcao.correta}" value="Sim"/>
+                                                        <h:outputText rendered="#{not opcao.correta}" value="Não"/>
+                                                    </f:facet>
+                                                    <f:facet name="input">
+                                                        <p:selectBooleanButton value="#{opcao.correta}" onLabel="Sim" offLabel="Não" onIcon="ui-icon-check" offIcon="ui-icon-close"  />
+                                                    </f:facet>
+                                                </p:inplace>
+                                            </p:column>
+
+                                            <p:column headerText="">
+                                                <p:commandButton class="dbotaoPadrao" value="Excluir" ajax="true" immediate="true" update=":#{p:component('tabelaResposta')}" action="#{questaoController.excluirResposta(opcao)}"/>
+                                            </p:column>
+                                        </p:dataTable> 
+                                    </b:column>
+                                </b:row>
+                                <b:row>
+                                    <b:column>
+                                        <hr style= "border-top: 1px solid #999999;"/>
+                                        <br/>
+                                    </b:column>
+                                </b:row>
+                                <b:row>
+                                    <b:column offset="9" colSm="12">
+                                        <p:commandLink class="dbotaoAzul" style="display: inline;" value="Cadastrar" process="@this dificuldade nivelQuestao instituicaoQuestao ano disciplina editor assuntos" update="info container" action="#{questaoController.cadastrarObjetiva}"/>
+                                        <p:commandLink class="dbotaoLaranja" style="display: inline; margin-left: 10px;" value="Limpar" action="#{questaoController.limparFormularioCadastroObjetiva}" immediate="true"/>
+                                    </b:column>
+                                </b:row>
+                                <br/>
+                            </b:panel>
                         </b:row>
                     </b:container>
                 </div>
