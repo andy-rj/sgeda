@@ -82,6 +82,34 @@ public class SimuladoHelper {
         }
         return true;
     }
+
+    public boolean excluir(AlunoSimuladoId id) {
+        session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.getTransaction();
+        try {
+            tx.begin();
+            AlunoSimulado simulado = (AlunoSimulado) session.createCriteria(AlunoSimulado.class).add(Restrictions.eq("id", id)).uniqueResult();
+            if(simulado!=null){
+                simulado.getRespostas().size();
+                for(Resposta resposta:simulado.getRespostas()){
+                    session.delete(resposta);
+                }
+                session.delete(simulado);
+            }
+            
+            tx.commit();
+        } catch (HibernateException e){
+            if(tx != null){
+                tx.rollback();
+                return false;
+            }
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+        return true;
+    }
     
     public List<Questao> getQuestoes(String string){
         session = HibernateUtil.getSessionFactory().openSession();

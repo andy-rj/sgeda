@@ -324,6 +324,10 @@
                                     <p:commandLink rendered="#{turmaController.alunoDetalhe.simuladoRealizado(simulado) and not turmaController.alunoDetalhe.simuladoCorrigido(simulado)}" update=":#{p:component('detalheCorrigir')}" action="#{professorController.corrigirSimulado(turmaController.alunoDetalhe,simulado)}" oncomplete="PF('modalCorrigir').show();PF('modalDetalhe').hide()" title="Corrigir Simulado" >
                                         <h:graphicImage url="/resource/imagens/corrigir.png" width="24" height="24"/>
                                     </p:commandLink>
+                                </p:column><p:column headerText="" style=" width: 75px;">
+                                    <p:commandLink rendered="#{turmaController.alunoDetalhe.simuladoRealizado(simulado)}"  update=":#{p:component('detalheSimulado')} :#{p:component('info')}" action="#{professorController.excluirSimulado(turmaController.alunoDetalhe,simulado)}" onstart="return confirm('Confirma Exclusão do Simulado?');" oncomplete="PF('modalDetalhe').hide()"   title="Excluir Simulado"  style="margin-right: 5px;">
+                                        <h:graphicImage url="/resource/imagens/delete.png" width="24" height="24"/>
+                                    </p:commandLink>
                                 </p:column>
                             </p:dataTable> 
                         </b:column>

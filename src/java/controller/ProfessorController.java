@@ -362,6 +362,20 @@ public class ProfessorController {
             }
         }
     }
+    
+    public void excluirSimulado(Aluno aluno, TurmaSimulado simulado) {
+        for(AlunoSimulado alunoSimulado: aluno.getAlunoSimulados()){
+            if(alunoSimulado.getTurmaSimulado().getId().equals(simulado.getId())){
+                //alunoSimuladoCorrigir = simuladoHelper.getAlunoSimuladoByIdEager(alunoSimulado.getId());
+                if(!simuladoHelper.excluir(alunoSimulado.getId())){
+                   addMessage(null, FacesMessage.SEVERITY_ERROR, "Erro ao Excluir Simulado, Tente novamente!");
+                    return;  
+                }
+                addMessage(null, FacesMessage.SEVERITY_INFO, "Simulado Excluido com Sucesso!");
+                break;
+            }
+        }
+    }
 
     public List<CursoTurmaWrapper> cursosEmAndamento(Integer idProfessor) {
         List<Curso> cursos = cursoHelper.getCursosDisponiveisEager();
